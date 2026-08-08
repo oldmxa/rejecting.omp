@@ -50,6 +50,7 @@ public LoadMap(playerid, loadtime, bool:silent)
 forward Unfreeze(playerid);
 public Unfreeze(playerid)
 {
+	if(!IsPlayerConnected(playerid)) return true;
 	if(User[playerid][isFrozen]) return true;
 
 	TogglePlayerControllable(playerid,true);

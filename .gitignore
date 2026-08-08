@@ -1,6 +1,4 @@
 start-server.bat
 _downloads/
 log.txt
-logs/
-bans.json
 *.log
