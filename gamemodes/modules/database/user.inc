@@ -115,7 +115,7 @@ public OnLoginVerify(playerid, bool:success)
 
 			if(!strcmp(User[playerid][dc_username], "-1", true))
 			{
-				SendClientMessage(playerid, -1, fmat_return("{MAIN}**{FFFFFF} Discord: {7289da}Not Linked\n", User[playerid][userName]));
+				SendClientMessage(playerid, -1, "{MAIN}**{FFFFFF} Discord: {7289da}Not Linked");
 			}
 			else
 			{

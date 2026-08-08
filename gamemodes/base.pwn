@@ -20,8 +20,6 @@
 #include <requests>
 #include <discord-connector>
 
-// backend de sync do weapon-config. tem que vir ANTES dele: se nenhum estiver
-// definido, o weapon-config puxa SKY primeiro, e SKY nao tem build para open.mp
 #include <Pawn.RakNet>
 
 // YSI
@@ -50,9 +48,6 @@ new RequestsClient:client;
 
 main()
 {
-	SendRconCommand("rcon_password "SERVER_RCON);
-    SendRconCommand("gamemodetext "SERVER_MODE);
-	SendRconCommand("mapname "SERVER_MAP);
-	SendRconCommand("weburl "SERVER_WEBSITE);
-    SendRconCommand("language "SERVER_LANGUAGE);
+	// no open.mp estas chaves vivem no config.json (rcon.password, game.mode,
+	// game.map, website, language). manda-las por RCON gera aviso de chave legada.
 }

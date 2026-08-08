@@ -50,6 +50,7 @@
         User[playerid][userName],
         User[targetid][userName],
         reason,
+        playerid,
         playerid);
 
     SendDiscordEmbed(logs_report, "New Report", string, DISCORD_COLOR_WARNING);

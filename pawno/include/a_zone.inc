@@ -661,7 +661,7 @@ stock agz_GangZoneCreateFirstNumber(gzid, gznum, Float:centposx, Float:centposy,
 		new Float:gsdisy = 20.0*numsize;
 
         zGangZones[gzid][npart][0] = GangZoneCreate(centposx-gsdisx-gztk, centposy-gsdisy-gztk, centposx+gsdisx+gztk, centposy-gsdisy+gztk); // Down of 0
-		zGangZones[gzid][npart][1] = GangZoneCreate(centposx-gsdisx-gztk, centposy+gsdisy+gztk, centposx+gsdisx+gztk, centposy+gsdisy-gztk); // Up of 0
+		zGangZones[gzid][npart][1] = GangZoneCreate(centposx-gsdisx-gztk, centposy+gsdisy-gztk, centposx+gsdisx+gztk, centposy+gsdisy+gztk); // Up of 0
         zGangZones[gzid][npart][2] = GangZoneCreate(centposx-gsdisx-gztk, centposy-gsdisy+gztk, centposx-gsdisx+gztk, centposy+gsdisy-gztk); // Left of 0
         zGangZones[gzid][npart][3] = GangZoneCreate(centposx+gsdisx-gztk, centposy-gsdisy+gztk, centposx+gsdisx+gztk, centposy+gsdisy-gztk); // Right of 0
 	  }
