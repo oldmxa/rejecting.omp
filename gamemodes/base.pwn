@@ -10,7 +10,6 @@
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 88
 
-// plugins
 #include <sscanf2>
 #include <samp_bcrypt>
 #include <a_mysql>
@@ -22,7 +21,6 @@
 
 #include <Pawn.RakNet>
 
-// YSI
 #include <YSI_Coding/y_va>
 #include <YSI_Coding/y_inline>
 #include <YSI_Extra/y_inline_timers>
@@ -31,7 +29,6 @@
 #include <YSI_Visual/y_commands>
 #include <YSI_Data/y_iterate>
 
-// libraries
 #include <weapon-config>
 #include <zmessage>
 #include <sort-inline>
@@ -48,6 +45,4 @@ new RequestsClient:client;
 
 main()
 {
-	// no open.mp estas chaves vivem no config.json (rcon.password, game.mode,
-	// game.map, website, language). manda-las por RCON gera aviso de chave legada.
 }

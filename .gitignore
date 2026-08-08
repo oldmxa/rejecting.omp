@@ -1,10 +1,5 @@
-# token do bot fica aqui, nunca versionar
 start-server.bat
-
-# pacotes baixados na montagem do servidor
 _downloads/
-
-# runtime
 log.txt
 logs/
 bans.json
