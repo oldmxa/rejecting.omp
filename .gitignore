@@ -1,4 +1,5 @@
 start-server.bat
 _downloads/
 log.txt
+base.amx
 *.log
