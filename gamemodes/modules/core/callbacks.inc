@@ -31,6 +31,7 @@ public OnGameModeInit()
 			);
 
 	initDatabase();
+	StartTicketWatcher();
 	LoadServerConfig();
 	LoadCustomArenasMaps();
 

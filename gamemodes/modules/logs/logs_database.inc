@@ -25,6 +25,13 @@ LogChatMessage(user_id, const username[], const channel[], const message[])
     return 1;
 }
 
+forward OnIngameTicketInserted();
+public OnIngameTicketInserted()
+{
+    TicketSkipAdd(cache_insert_id());
+    return 1;
+}
+
 LogTicket(user_id, const accused_name[], const reason[])
 {
     new query[1024];
@@ -32,6 +39,6 @@ LogTicket(user_id, const accused_name[], const reason[])
         "INSERT INTO `tickets` (`user_id`, `subject`, `description`, `accused_name`, `ticket_type`, `priority`) VALUES (%d, 'Player Report', '%e', '%e', 'report', 'medium')",
         user_id, reason, accused_name);
 
-    mysql_tquery(dbHandle, query);
+    mysql_tquery(dbHandle, query, "OnIngameTicketInserted");
     return 1;
 }
