@@ -171,7 +171,7 @@
 
 // WELCOME
 
-#define PLAYER_WELCOME_MSG1	"{MAIN}**{FFFFFF} Welcome again, {6B54B6}%s!"
+#define PLAYER_WELCOME_MSG1	"{MAIN}**{FFFFFF} Welcome again, %s{FFFFFF}!"
 #define PLAYER_WELCOME_MSG2	"{MAIN}**{FFFFFF} Your account is that of a %s."
 #define PLAYER_WELCOME_MSG3	"{MAIN}**{FFFFFF} You are a member of the %s{FFFFFF} clan."
 #define PLAYER_WELCOME_MSG4	"{MAIN}**{FFFFFF} Your last login was at: {MAIN}%s."

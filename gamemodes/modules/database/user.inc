@@ -110,7 +110,11 @@ public OnLoginVerify(playerid, bool:success)
 
 		if(!User[playerid][hideWelcomeMsg])
 		{
-			va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG1, User[playerid][userName]);
+			new coloredNick[MAX_PLAYER_NAME + 16];
+			format(coloredNick, sizeof(coloredNick), "{%06x}%s",
+				GetPlayerDisplayColour(playerid), User[playerid][userName]);
+
+			va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG1, coloredNick);
 			va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG2, rearrangedAdminLevel);
 
 			if(!strcmp(User[playerid][dc_username], "-1", true))

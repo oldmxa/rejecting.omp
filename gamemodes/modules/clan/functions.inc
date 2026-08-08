@@ -445,6 +445,14 @@ stock SendMessageToClan(clanid, color, const message[])
     return 1;
 }
 
+stock GetPlayerDisplayColour(playerid)
+{
+    if (IsValidClanID(User[playerid][clanID]))
+        return (ClanInfo[User[playerid][clanID]][clanColor] >>> 8);
+
+    return 0xB2ACAC;
+}
+
 stock SetClanColor(playerid)
 {
     if (GetPVarInt(playerid, "HideTab") == 1)
