@@ -1,0 +1,4 @@
+Logger:
+  discord-connector:
+    LogLevel: [Debug, Verbose, Warning, Error, Fatal]
+    PrintToConsole: true

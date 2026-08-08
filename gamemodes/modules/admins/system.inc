@@ -1,0 +1,403 @@
+
+@cmd() interiors(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 1)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    if(User[playerid][int_InteriorSelecionado] != 0)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are already viewing an interior! Type /exitint to exit.");
+
+    User[playerid][int_VW] = GetPlayerVirtualWorld(playerid);
+    User[playerid][int_PInterior] = GetPlayerInterior(playerid);
+    GetPlayerPos(playerid, User[playerid][int_PosX], User[playerid][int_PosY], User[playerid][int_PosZ]);
+    GetPlayerFacingAngle(playerid, User[playerid][int_PosFA]);
+
+    SetPlayerVirtualWorld(playerid, playerid + 100);
+    ShowInteriorsMenu(playerid);
+    return true;
+}
+
+@cmd() exitint(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 1)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    if(User[playerid][int_InteriorSelecionado] == 0)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not viewing an interior!");
+
+    ClearChat(playerid, 100);
+    SendClientMessage(playerid, -1, "{MAIN}[INTERIOR] {FFFFFF}You exited the interior viewing mode and returned to the original world.");
+    SetPlayerVirtualWorld(playerid, User[playerid][int_VW]);
+    SetPlayerPos(playerid, User[playerid][int_PosX], User[playerid][int_PosY], User[playerid][int_PosZ]);
+    SetPlayerFacingAngle(playerid, User[playerid][int_PosFA]);
+    SetPlayerInterior(playerid, User[playerid][int_PInterior]);
+    User[playerid][int_InteriorSelecionado] = 0;
+    return true;
+}
+
+@cmd() saveint(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 1)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    if(User[playerid][int_InteriorSelecionado] == 0)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not viewing an interior!");
+
+    new Float:Pos[3], Float:PFA, IntA;
+    GetPlayerPos(playerid, Pos[0], Pos[1], Pos[2]);
+    GetPlayerFacingAngle(playerid, PFA);
+    IntA = GetPlayerInterior(playerid);
+
+    new File:Arquivo = fopen("Interiors.txt", io_append);
+    if(Arquivo)
+    {
+        new stringcat[300];
+        format(stringcat, sizeof(stringcat), "SetPlayerPos(playerid, %f, %f, %f); // %s\r\n", Pos[0], Pos[1], Pos[2], params);
+        fwrite(Arquivo, stringcat);
+        format(stringcat, sizeof(stringcat), "SetPlayerFacingAngle(playerid, %f); // %s\r\n", PFA, params);
+        fwrite(Arquivo, stringcat);
+        format(stringcat, sizeof(stringcat), "SetPlayerInterior(playerid, %d); // %s \r\n\r\n", IntA, params);
+        fwrite(Arquivo, stringcat);
+        fclose(Arquivo);
+        SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Coordinates successfully saved to {00EEFE}Interiors.txt{FFFFFF}.");
+    }
+    else
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Could not open the file to save!");
+    }
+    return true;
+}
+
+@cmd() setlounge(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 1)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    new targetid, reason[128];
+    if (sscanf(params, "us[128]", targetid, reason))
+        return SendClientMessage(playerid, -1, ADM_TAG_NORM"/setlounge [id] [reason]");
+
+    if (!IsPlayerConnected(targetid))
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    if (targetid == playerid)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
+
+    if (User[targetid][isAfk])
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}This player is already in the lounge.");
+
+    va_SendClientMessageToAll(-1, "{MAIN}[LOUNGE] {FFFFFF}Admin %s[%d] sent %s[%d] to the lounge. Reason: %s", User[playerid][userName], playerid, User[targetid][userName], targetid, reason);
+    va_SendClientMessage(targetid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been sent to the lounge by Admin %s. Reason: %s", User[playerid][userName], reason);
+
+    setAfk(targetid);
+    updatePlayerHud(targetid);
+
+    format(msgdiscord, sizeof(msgdiscord), "**Admin:** %s\n**Target:** %s\n**Reason:** %s", User[playerid][userName], User[targetid][userName], reason);
+    utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
+    SendDiscordEmbed(adminchat, "Set Lounge", msgencoded, DISCORD_COLOR_ADMIN);
+
+    return true;
+}
+
+@cmd() changearena(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 2)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    if(changeArenaDelay > gettime() &&  User[playerid][adminLevel] < 4)
+        return va_SendClientMessage(playerid, -1, CHANGEARENA_DELAY, convertTime(changeArenaDelay - gettime()));
+
+    new location = User[playerid][locationId];
+    if(location < 0 || location >= MAX_LOCATIONS || location == ARENA_AFK)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be inside an arena to use this command.");
+
+    new arenaid;
+    if(sscanf(params, "i", arenaid))
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_NUMERIC);
+
+    if(arenaid < 0 || arenaid >= MAX_ZONES)
+        return va_SendClientMessage(playerid, -1, NOT_VALID_ARENA, MAX_ZONES-1);
+
+    foreach(new i : Player)
+    {
+        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;
+        GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
+    }
+
+    GetRoundRank(location);
+    new oldArenaId = arenaInfo[location][arenaId];
+    arenaInfo[location][arenaId] = arenaid;
+    PrepareChangeArena(location, oldArenaId);
+
+    foreach(new i : Player)
+    {
+        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE) || User[i][adminLevel] > 0)
+            va_SendClientMessage(i, -1, CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[arenaid][arenaName], arenaid);
+    }
+
+    if(User[playerid][adminLevel] < 4)
+        changeArenaDelay = gettime()+(3*60);
+    return true;
+}
+
+@cmd() maplist(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 2)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    DeletePVar(playerid, "playerCurrentPage");
+    DeletePVar(playerid, "pageItems");
+    showMapListDialog(playerid);
+
+    if(User[playerid][adminLevel] < 4)
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Maplist was shown.");
+    return true;
+}
+
+@cmd() randomchangearena(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 2)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    if(changeArenaDelay > gettime() &&  User[playerid][adminLevel] < 4)
+        return va_SendClientMessage(playerid, -1, CHANGEARENA_DELAY, convertTime(changeArenaDelay - gettime()));
+
+    new location = User[playerid][locationId];
+    if(location < 0 || location >= MAX_LOCATIONS || location == ARENA_AFK)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be inside an arena to use this command.");
+
+    foreach(new i : Player)
+    {
+        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;
+        GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
+    }
+
+    GetRoundRank(location);
+    new oldArenaId = arenaInfo[location][arenaId];
+    new newArenaId = determineArenaID(location);
+    arenaInfo[location][arenaId] = newArenaId;
+    PrepareChangeArena(location, oldArenaId);
+
+    foreach(new i : Player)
+    {
+        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE) || User[i][adminLevel] > 0)
+            va_SendClientMessage(i, -1, RANDOM_CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[newArenaId][arenaName], newArenaId);
+    }
+
+    if(User[playerid][adminLevel] < 4)
+        changeArenaDelay = gettime()+(3*60);
+
+    return true;
+}
+
+@cmd() saveaccounts(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 4)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    foreach(new i : Player)
+    {
+        if(User[i][isLogged])
+            UpdatePlayerData(i);
+    }
+    va_SendClientMessageToAll(-1, ADM_TAG_NORM"%s saved the account of all players online.", User[playerid][userName]);
+    printf("[ADMIN] %s saved every online account.", User[playerid][userName]);
+    return true;
+}
+
+@cmd() gmx(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 4)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+    for(new i; i < 20; i++)
+        SendClientMessageToAll(randomcolor[random(sizeof(randomcolor))], "Server restarting, back in a few seconds.");
+
+    foreach(new i : Player)
+    {
+        if(User[i][isLogged])
+            UpdatePlayerData(i);
+    }
+
+    SendRconCommand("gmx");
+    return true;
+}
+
+@cmd() count(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+    
+    AdminCountdown(5);
+    return true;
+}
+
+forward AdminCountdown(count);
+public AdminCountdown(count)
+{
+    new str[32];
+    if(count > 0)
+    {
+        format(str, sizeof(str), "~w~%d", count);
+        GameTextForAll(str, 1000, 3);
+        SetTimerEx("AdminCountdown", 1000, false, "i", count - 1);
+    }
+    else
+    {
+        GameTextForAll("~g~GO GO GO!", 2000, 3);
+    }
+    return 1;
+}
+
+@cmd() avtn(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+    new text[128], str[144];
+    if(sscanf(params, "s[128]", text)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/avtn [text]");
+    format(str, sizeof(str), "~w~%s: ~y~%s", User[playerid][userName], text);
+    GameTextForAll(str, 5000, 3);
+    return true;
+}
+
+@cmd() cnn(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+    new text[128], str[144];
+    if(sscanf(params, "s[128]", text)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Use: /cnn [text]");
+    format(str, sizeof(str), "# ~p~%s~p~: ~w~%s #", User[playerid][userName], text);
+    GameTextForAll(str, 4000, 3);
+    return true;
+}
+
+@cmd() hostname(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+    if(isnull(params)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/hostname [new name]");
+
+    new str[144];
+    format(str, sizeof(str), "hostname %s", params);
+    SendRconCommand(str);
+    
+    va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s changed the server hostname to: %s", User[playerid][userName], params);
+    return true;
+}
+
+@cmd(.alts = {"kickall"}) deslogarall(playerid, params[], help)
+{
+	if(User[playerid][adminLevel] < 4 || !IsPlayerAdmin(playerid))
+		return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ and RCON login required.");
+
+	CheckAdminAuth(playerid);
+
+	new count = 0;
+	foreach(new i : Player)
+	{
+		if(i != playerid)
+		{
+			if(User[i][isLogged])
+			{
+				UpdatePlayerData(i);
+			}
+			SendClientMessage(i, -1, "{MAIN}[SERVER] {FFFFFF}You have been disconnected from the server by administrator.");
+			KickEx(i, 500);
+			count++;
+		}
+	}
+
+	va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You disconnected all players from the server (%d players kicked).", count);
+
+	new log_details[128];
+	format(log_details, sizeof(log_details), "Admin %s executed /deslogarall (%d players kicked)", User[playerid][userName], count);
+	LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "auth", "DeslogarAll", log_details);
+
+	return 1;
+}
+
+@cmd() lockserver(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 4 || !IsPlayerAdmin(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need level 4 + RCON to use this command.");
+
+    CheckAdminAuth(playerid);
+
+    if(isnull(params))
+        return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/lockserver [password]");
+
+    new str[64];
+    format(str, sizeof(str), "password %s", params);
+    SendRconCommand(str);
+    ServerLocked = true;
+    
+    va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s locked the server.", User[playerid][userName]);
+    return true;
+}
+
+@cmd() unlockserver(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 4 || !IsPlayerAdmin(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need level 4 + RCON to use this command.");
+
+    CheckAdminAuth(playerid);
+
+    SendRconCommand("password 0");
+    ServerLocked = false;
+    va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s unlocked the server.", User[playerid][userName]);
+    return true;
+}
+
+@cmd() players(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 1)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    new str[4096], count;
+    strcat(str, "Name\tRatio\tAccuracy\tArena Kills\tArena Deaths\n");
+
+    foreach(new i : Player)
+    {
+        if(!User[i][isLogged]) continue;
+
+        new Float:kd = ratio(User[i][playerKills], User[i][playerDeaths]);
+        new Float:acc = 0.0;
+        new aKills = 0, aDeaths = 0;
+
+        if(0 <= User[i][locationId] < MAX_LOCATIONS)
+        {
+            acc = GetPlayerAccuracy(i, User[i][locationId]);
+            aKills = playerArenaInfo[User[i][locationId]][i][arenaKills];
+            aDeaths = playerArenaInfo[User[i][locationId]][i][arenaDeaths];
+        }
+
+        strcat(str, sprintf("{36cf85}%s (%d)\t{BEBEBE}%.2f\t{BEBEBE}%.1f%%\t{BEBEBE}%d\t{BEBEBE}%d\n", User[i][userName], i, kd, acc, aKills, aDeaths));
+        count++;
+    }
+
+    Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{FF4500}Online Players (%d)", count), str, "Close", "");
+    return true;
+}
