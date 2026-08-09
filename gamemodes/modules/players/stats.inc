@@ -369,18 +369,10 @@ ChangeSkin(playerid, skinid)
 ChangeFight(playerid)
 {
 	new fightstr[512];
+	fightstr[0] = '\0';
 
     for(new i; i < sizeof(fightStyles); i++)
-    {
-        if(User[playerid][fightStyle] == fightStyles[i][styleid])
-        {
-            strcat(fightstr, fmat_return("{MAIN}> {FFFFFF}%s {00FF00}(Selected)\n", fightStyles[i][fightname]));
-        }
-        else
-        {
-            strcat(fightstr, fmat_return("{FFFFFF}%s\n", fightStyles[i][fightname]));
-        }
-    }
+        AppendStyleRow(fightstr, fightStyles[i][fightname], (User[playerid][fightStyle] == fightStyles[i][styleid]));
 
     new title[64];
     format(title, sizeof(title), "{MAIN}Select Fighting Style");

@@ -259,10 +259,10 @@ stock ShowPlayerLifeTypesList(playerid)
     if (!IsPlayerConnected(playerid)) return 0;
 
     new string[1024];
-    strcopy(string, STYLE_PICKER_HEADER);
+    string[0] = '\0';
 
     for (new i = 0; i < MAX_LIFE_TYPES; i++)
-        AppendStyleRow(string, i, LifeStyle[i][lsLabel], (User[playerid][lifeType] == i));
+        AppendStyleRow(string, LifeStyle[i][lsLabel], (User[playerid][lifeType] == i));
 
     return ShowStylePicker(playerid, DIALOG_LIFE_TYPE, "{MAIN}Life Styles", string);
 }

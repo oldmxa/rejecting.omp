@@ -131,14 +131,19 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 14: { ShowHitSoundDialog(playerid); }
-        case 15: { ShowKillSoundDialog(playerid); }
-        case 16: {
+        case 14: {
+            User[playerid][showHeadshot] = !User[playerid][showHeadshot];
+            SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+            ShowPersonalizationMenu(playerid);
+        }
+        case 15: { ShowHitSoundDialog(playerid); }
+        case 16: { ShowKillSoundDialog(playerid); }
+        case 17: {
             User[playerid][hideWelcomeMsg] = !User[playerid][hideWelcomeMsg];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 17: { ShowPlayerLifeTypesList(playerid); }
+        case 18: { ShowPlayerLifeTypesList(playerid); }
     }
     return 1;
 }

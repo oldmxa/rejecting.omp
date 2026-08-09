@@ -473,7 +473,6 @@ enum e_USER
     // Booleans
 
     bool:ForcedR2,
-    bool:hitSound,
     bool:showHeadshot,
     bool:showConnectMsg,
     bool:hideGlobalMsg,

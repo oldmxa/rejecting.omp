@@ -157,12 +157,6 @@ ShowSettingsMenu(playerid)
     strcat(setStr, "Change my username\t \n");
     strcat(setStr, "Change my password\t \n");
     strcat(setStr, fmat_return("Incoming messages\t%s\n", (User[playerid][blockPM]) ? ("{FF0000}OFF") : ("{00FF00}ON")));
-    strcat(setStr, fmat_return("Bell\t%s\n", (User[playerid][hitSound]) ? ("{00FF00}ON") : ("{FF0000}OFF")));
-    strcat(setStr, fmat_return("ServerHud\t%s\n", (User[playerid][showPlayerHud]) ? ("{00FF00}ON") : ("{FF0000}OFF")));
-    
-    format(setStr, sizeof(setStr), "%sDamage Informer\t{447DBF}%s\n", setStr, GetDamageStyleName(User[playerid][dmgInformerStyle]));
-
-    strcat(setStr, fmat_return("Headshot text\t%s\n", (User[playerid][showHeadshot]) ? ("{00FF00}ON") : ("{FF0000}OFF")));
     strcat(setStr, fmat_return("Connect info\t%s\n", (User[playerid][showConnectMsg]) ? ("{00FF00}ON") : ("{FF0000}OFF")));
     strcat(setStr, fmat_return("Global messages\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Locked") : ("{23C552}Unlocked")));
     format_MainColor(playerid, setStr);
@@ -208,32 +202,10 @@ public DIALOG_HELP_SETTINGS(playerid, dialogid, response, listitem, string:input
         }
         case 3:
         {
-            User[playerid][hitSound] = !User[playerid][hitSound];
-            ShowSettingsMenu(playerid);
-        }
-        case 4:
-        {
-            User[playerid][showPlayerHud] = !User[playerid][showPlayerHud];
-            if(User[playerid][showPlayerHud]) {
-                hidePlayerTextdraw(playerid);
-                showPlayerTextDraw(playerid);
-            } else {
-                hidePlayerTextdraw(playerid);
-            }
-            ShowSettingsMenu(playerid);
-        }
-        case 5: ShowDamageStyleDialog(playerid, APPEARANCE_SRC_SETTINGS);
-        case 6:
-        {
-            User[playerid][showHeadshot] = !User[playerid][showHeadshot];
-            ShowSettingsMenu(playerid);
-        }
-        case 7:
-        {
             User[playerid][showConnectMsg] = !User[playerid][showConnectMsg];
             ShowSettingsMenu(playerid);
         }
-        case 8:
+        case 4:
         {
             User[playerid][hideGlobalMsg] = !User[playerid][hideGlobalMsg];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
@@ -305,6 +277,7 @@ ShowPersonalizationMenu(playerid)
     format(pStr, sizeof(pStr), "%s{B4B5B7}HUD Style\t{FFFFFF}%s\n", pStr, HUD_TYPES[hudTypeIdx]);
     format(pStr, sizeof(pStr), "%s{B4B5B7}3D Death Tag\t%s\n", pStr, (User[playerid][show3DDeathTag]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
     format(pStr, sizeof(pStr), "%s{B4B5B7}Random Death Tags\t%s\n", pStr, (User[playerid][showRandomDeathTags]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+    format(pStr, sizeof(pStr), "%s{B4B5B7}Headshot Text\t%s\n", pStr, (User[playerid][showHeadshot]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
     format(pStr, sizeof(pStr), "%s{B4B5B7}Hit Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID]));
     format(pStr, sizeof(pStr), "%s{B4B5B7}Kill Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][killSoundID], GetSoundName(User[playerid][killSoundID]));
     format(pStr, sizeof(pStr), "%s{B4B5B7}Welcome Messages\t%s\n", pStr, (User[playerid][hideWelcomeMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));

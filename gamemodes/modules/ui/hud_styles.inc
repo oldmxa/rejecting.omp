@@ -79,10 +79,10 @@ stock ShowPlayerHudTypesList(playerid)
     if (!IsPlayerConnected(playerid)) return 0;
 
     new string[1024];
-    strcopy(string, STYLE_PICKER_HEADER);
+    string[0] = '\0';
 
     for (new i = 0; i < sizeof(HUD_TYPES); i++)
-        AppendStyleRow(string, i, HUD_TYPES[i], (User[playerid][hudType] == i));
+        AppendStyleRow(string, HUD_TYPES[i], (User[playerid][hudType] == i));
 
     return ShowStylePicker(playerid, DIALOG_HUD_TYPE, "{MAIN}HUD Styles", string);
 }
