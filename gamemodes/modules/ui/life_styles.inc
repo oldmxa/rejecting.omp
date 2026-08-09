@@ -22,10 +22,8 @@ enum
     #define DIALOG_LIFE_TYPE 14501
 #endif
 
-// Calibrated with /lifez. Changing lsSegments resizes the block and needs a new
-// value.
 #define LIFE_LABEL_Z_DEFAULT 0.20
-#define LIFE_LABEL_DISTANCE  NAMETAG_DRAW_DISTANCE
+#define LIFE_LABEL_DISTANCE  NT_DISTANCE
 
 #define LIFE_COL_HEALTH  "{FFFFFF}"
 #define LIFE_COL_ARMOUR  "{FF4444}"
@@ -64,8 +62,6 @@ stock bool:UsesCustomLifeStyle(playerid)
     return (IsValidLifeStyle(User[playerid][lifeType]) && User[playerid][lifeType] != LIFE_NATIVE);
 }
 
-// HideTab is what admin camouflage sets to drop a player from TAB, radar and
-// the nametag. A label here would put the bars back over their head.
 stock bool:CanShowLifeLabel(targetid)
 {
     if (!User[targetid][isLogged]) return false;
@@ -182,9 +178,11 @@ stock RefreshLifeLabel(viewerid, targetid)
 
     if (LifeLabel[viewerid][targetid] == PlayerText3D:INVALID_3DTEXT_ID)
     {
+        // testLOS on: hidden behind walls, like the native nametag, which keeps
+        // its line-of-sight check because DisableNameTagLOS() is never called.
         LifeLabel[viewerid][targetid] = CreatePlayer3DTextLabel(
             viewerid, text, -1, 0.0, 0.0, g_LifeLabelZ, LIFE_LABEL_DISTANCE,
-            targetid, INVALID_VEHICLE_ID, false
+            targetid, INVALID_VEHICLE_ID, true
         );
     }
     else
@@ -228,7 +226,6 @@ stock RefreshLifeLabelForAll(targetid)
     return 1;
 }
 
-// Nametag included: for when the target enters play, not for health updates.
 stock SyncLifeLabelTarget(targetid)
 {
     foreach (new viewerid : Player)
@@ -242,7 +239,6 @@ stock SyncLifeLabelTarget(targetid)
     return 1;
 }
 
-// The label position is fixed at creation, so a height change means recreating.
 stock RebuildAllLifeLabels()
 {
     foreach (new viewerid : Player)
@@ -322,9 +318,6 @@ hook OnPlayerSpawn(playerid)
     return 1;
 }
 
-// SA-MP drops the per-pair nametag state when a player streams out, so hiding it
-// once at spawn is not enough: without this the native bar comes back next time
-// the target walks into range and shows up alongside the custom one.
 hook OnPlayerStreamIn(playerid, forplayerid)
 {
     if (!UsesCustomLifeStyle(forplayerid)) return 1;

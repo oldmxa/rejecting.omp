@@ -1,3 +1,5 @@
+// Shared by SetNameTagDrawDistance() and the custom life labels, so both fade
+// out at the same range.
 #define NT_DISTANCE 40.0
 
 //Colors
@@ -145,7 +147,6 @@
 
 #define MAX_LOCATIONS		3
 
-#define NAMETAG_DRAW_DISTANCE	40.0
 
 #define IsPlayerAndroid(%0)                 GetPVarInt(%0, "NotAndroid") == 0
 
