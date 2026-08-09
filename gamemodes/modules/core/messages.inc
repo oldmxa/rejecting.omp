@@ -51,7 +51,6 @@
 #define FREEZE_MSG          ADM_TAG_PUN"Admin %s froze you."
 #define UNFREEZE_MSG_ADM    ADM_TAG_NORM"Admin %s unfroze you."
 #define RETARD 				"{MAIN}**{FFFFFF} YOU ARE A FUCKING RETARD!!!"
-#define SKIN_HELP			"{MAIN}[ERROR] {FFFFFF}/changeskin [ID]"
 #define SKIN_HELP2			"{MAIN}**{FFFFFF} Select a number between 2 and 311."
 #define IS_NOT_NUMERIC		"{MAIN}**{FFFFFF} Insert the number."
 #define WEATHER_HELP		"{MAIN}[ERROR] {FFFFFF}/weather [id weather]"

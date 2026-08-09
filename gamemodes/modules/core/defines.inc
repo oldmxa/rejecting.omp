@@ -102,6 +102,7 @@
 #define APPEARANCE_SRC_MENU     (0)   // /menu
 #define APPEARANCE_SRC_PERSONAL (1)   // /help > My Account > Personalization
 #define APPEARANCE_SRC_SETTINGS (2)   // /help > My Account > Settings
+#define APPEARANCE_SRC_NONE     (3)   // chat command: there is no menu to go back to
 
 #define GIVE_MONEY_ONDEATH		300
 #define VOTEKICK_MIN_VOTES		3

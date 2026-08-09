@@ -34,11 +34,11 @@
 
 @cmd(.alts = {"ss", "skin"}) changeskin(playerid, params[], help)
 {
-    new skinid = strval(params);
-    if(IsNull(params)) return SendClientMessage(playerid, -1, "%s", SKIN_HELP);
+    // No id given opens the picker, matching /fight.
+    if(IsNull(params)) return ShowSkinDialog(playerid, APPEARANCE_SRC_NONE);
     if(!IsNumeric(params)) return SendClientMessage(playerid,-1, "%s", IS_NOT_NUMERIC);
 
-    ChangeSkin(playerid, skinid);
+    ChangeSkin(playerid, strval(params));
     return true;
 }
 
@@ -117,7 +117,7 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
         case 5: ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 6: ShowHudColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 7: ShowChatColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 8: { strcopy(cmd, "/skin"); Command_ReProcess(playerid, cmd, 0); }
+        case 8: ShowSkinDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 9: { strcopy(cmd, "/fight"); Command_ReProcess(playerid, cmd, 0); }
         case 10: { strcopy(cmd, "/gunmenu"); Command_ReProcess(playerid, cmd, 0); }
         case 11: { ShowPlayerHudTypesList(playerid); }
@@ -167,14 +167,14 @@ stock ShowHitSoundDialog(playerid)
     new title[64] = "{MAIN}Personalization - Hit Sound Selection";
     format_MainColor(playerid, title);
 
-    new str[1200] = "{MAIN}ID\t{MAIN}Sound Name\t{MAIN}Status\n";
+    new str[1200] = "{MAIN}ID\t{MAIN}Sound Name\n";
     for(new i = 0; i < sizeof(g_SoundList); i++)
     {
-        format(str, sizeof(str), "%s{FFFFFF}%d\t{FFFFFF}%s\t%s\n", 
-            str, 
-            g_SoundList[i][soundID], 
-            g_SoundList[i][soundName], 
-            (User[playerid][hitSoundID] == g_SoundList[i][soundID]) ? ("{00FF00}Selected") : ("{BEBEBE}Select")
+        format(str, sizeof(str), "%s{FFFFFF}%d\t%s{FFFFFF}%s\n",
+            str,
+            g_SoundList[i][soundID],
+            STYLE_MARK(User[playerid][hitSoundID] == g_SoundList[i][soundID]),
+            g_SoundList[i][soundName]
         );
     }
     format_MainColor(playerid, str);
@@ -207,14 +207,14 @@ stock ShowKillSoundDialog(playerid)
     new title[64] = "{MAIN}Personalization - Kill Sound Selection";
     format_MainColor(playerid, title);
 
-    new str[1200] = "{MAIN}ID\t{MAIN}Sound Name\t{MAIN}Status\n";
+    new str[1200] = "{MAIN}ID\t{MAIN}Sound Name\n";
     for(new i = 0; i < sizeof(g_SoundList); i++)
     {
-        format(str, sizeof(str), "%s{FFFFFF}%d\t{FFFFFF}%s\t%s\n", 
-            str, 
-            g_SoundList[i][soundID], 
-            g_SoundList[i][soundName], 
-            (User[playerid][killSoundID] == g_SoundList[i][soundID]) ? ("{00FF00}Selected") : ("{BEBEBE}Select")
+        format(str, sizeof(str), "%s{FFFFFF}%d\t%s{FFFFFF}%s\n",
+            str,
+            g_SoundList[i][soundID],
+            STYLE_MARK(User[playerid][killSoundID] == g_SoundList[i][soundID]),
+            g_SoundList[i][soundName]
         );
     }
     format_MainColor(playerid, str);

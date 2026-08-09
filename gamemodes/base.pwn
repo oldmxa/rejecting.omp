@@ -29,6 +29,10 @@
 #include <YSI_Visual/y_commands>
 #include <YSI_Data/y_iterate>
 
+// After y_dialog: both hook ShowPlayerDialog through ALS, and this one has to
+// sit on top so normal styles fall through to YSI.
+#include <PreviewModelDialog>
+
 #include <weapon-config>
 #include <zmessage>
 #include <sort-inline>

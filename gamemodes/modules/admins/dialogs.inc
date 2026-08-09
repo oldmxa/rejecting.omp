@@ -136,11 +136,12 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HUD style.");
 
                 new string[512];
-                strcopy(string, "ID\tHUD Style\tStatus\n");
+                strcopy(string, "ID\tHUD Style\n");
                 for (new i = 0; i < sizeof(HUD_TYPES); i++)
                 {
-                    strcat(string, fmat_return("%d\t%s\t%s\n", i, HUD_TYPES[i], (ServerDefaultHud == i) ? ("{00FF00}Selected") : ("{FFFFFF}Select")));
+                    strcat(string, fmat_return("%d\t%s{FFFFFF}%s\n", i, STYLE_MARK(ServerDefaultHud == i), HUD_TYPES[i]));
                 }
+                format_MainColor(playerid, string);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default Server HUD", string, "Select", "Back");
             }
             case 15: // Default HUD Color
@@ -148,7 +149,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 if(User[playerid][adminLevel] < 5)
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HUD color.");
 
-                new body[2048] = "Name\tColor 1\tColor 2\tStatus\n";
+                new body[2048] = "Name\tColor 1\tColor 2\n";
                 for(new i; i < sizeof(hudPersonalization); i++)
                 {
                     new name[24], hex1[7], hex2[7];
@@ -160,10 +161,10 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     hex1 = GetColorHexTag(hudPersonalization[i][colorOne]);
                     hex2 = GetColorHexTag(hudPersonalization[i][colorTwo]);
 
-                    strcat(body, fmat_return("{%s}%s\t{%s}Preview\t{%s}Preview\t%s\n",
-                        CoresDoBglh[i], name, hex1, hex2,
-                        (ServerDefaultHudColor == i) ? ("{00FF00}Selected") : ("{FFFFFF}Select")), sizeof(body));
+                    strcat(body, fmat_return("%s{%s}%s\t{%s}Preview\t{%s}Preview\n",
+                        STYLE_MARK(ServerDefaultHudColor == i), CoresDoBglh[i], name, hex1, hex2), sizeof(body));
                 }
+                format_MainColor(playerid, body);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUDCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default HUD Color", body, "Select", "Back");
             }
         }

@@ -28,19 +28,7 @@ public WEATHER(playerid, dialogid, response, listitem, string:inputtext[])
     return true;
 }
 
-forward SKIN(playerid, dialogid, response, listitem, string:inputtext[]);
-public SKIN(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    if(!response)
-        return 1;
-    else
-    {
-        new skinid = strval(inputtext);
-        ChangeSkin(playerid, skinid);
-        ShowMenu(playerid);
-    }
-    return true;
-}
+// The skin picker is a model-preview grid: modules/ui/skin_picker.inc
 
 // Dialogs /menu, Settings e Personalization.
 
@@ -61,6 +49,7 @@ ReturnToAppearanceSource(playerid)
     {
         case APPEARANCE_SRC_PERSONAL: ShowPersonalizationMenu(playerid);
         case APPEARANCE_SRC_SETTINGS: ShowSettingsMenu(playerid);
+        case APPEARANCE_SRC_NONE: {} // opened from chat, nothing to reopen
         default: ShowMenu(playerid);
     }
     return 1;
@@ -70,7 +59,7 @@ ShowHudColorDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
 
-    new body[3500] = "Name\tColor 1\tColor 2\tStatus\n";
+    new body[3500] = "Name\tColor 1\tColor 2\n";
     for(new i; i < sizeof(hudPersonalization); i++)
     {
         new name[24], hex1[7], hex2[7];
@@ -82,13 +71,13 @@ ShowHudColorDialog(playerid, source)
         hex1 = GetColorHexTag(hudPersonalization[i][colorOne]);
         hex2 = GetColorHexTag(hudPersonalization[i][colorTwo]);
 
-        strcat(body, fmat_return("{%s}%s\t{%s}Preview\t{%s}Preview\t%s\n",
-            CoresDoBglh[i], name, hex1, hex2,
-            (User[playerid][hudColor] == i) ? ("{00FF00}Selected") : ("{FFFFFF}Select")), sizeof(body));
+        strcat(body, fmat_return("%s{%s}%s\t{%s}Preview\t{%s}Preview\n",
+            STYLE_MARK(User[playerid][hudColor] == i), CoresDoBglh[i], name, hex1, hex2), sizeof(body));
     }
 
     new title[64] = "{MAIN}Personalization - HUD Color";
     format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
 
     return Dialog_ShowCallback(playerid, using public HUD_COLORS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
 }
@@ -142,9 +131,9 @@ ShowChatColorSelectionDialog(playerid, color_type, source)
     else GetPlayerChatTextColorHex(playerid, curHex);
 
     new body[2048];
-    format(body, sizeof(body), "Color Name\tSample Text\tStatus\n");
+    format(body, sizeof(body), "Color Name\tSample Text\n");
 
-    strcat(body, fmat_return("{MAIN}Custom HEX Color\t{%s}#%s\t{FFFFFF}Select\n", curHex, curHex), sizeof(body));
+    strcat(body, fmat_return("{MAIN}Custom HEX Color\t{%s}#%s\n", curHex, curHex), sizeof(body));
 
     for(new i; i < sizeof(chatPersonalization); i++)
     {
@@ -158,9 +147,9 @@ ShowChatColorSelectionDialog(playerid, color_type, source)
             if(User[playerid][chatColor] == i) isSelected = true;
         }
 
-        strcat(body, fmat_return("{%s}%s\t{%s}Sample Chat Text\t%s\n",
-            chatPersonalization[i][chatColorHex], chatPersonalization[i][chatColorName], chatPersonalization[i][chatColorHex],
-            isSelected ? ("{00FF00}Selected") : ("{FFFFFF}Select")), sizeof(body));
+        strcat(body, fmat_return("%s{%s}%s\t{%s}Sample Chat Text\n",
+            STYLE_MARK(isSelected), chatPersonalization[i][chatColorHex], chatPersonalization[i][chatColorName],
+            chatPersonalization[i][chatColorHex]), sizeof(body));
     }
 
     new title[64];
@@ -199,14 +188,22 @@ ShowDamageStyleDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
 
-    new body[256];
-    strcat(body, "Dynamic (Moving numbers)\n", sizeof(body));
-    strcat(body, "Numbers (Static numbers)\n", sizeof(body));
-    strcat(body, "Dot (*)\n", sizeof(body));
-    strcat(body, "X (X)", sizeof(body));
+    new const damageStyles[][] = {
+        "Dynamic (Moving numbers)",
+        "Numbers (Static numbers)",
+        "Dot (*)",
+        "X (X)"
+    };
+
+    new body[384];
+    body[0] = '\0';
+
+    for(new i; i < sizeof(damageStyles); i++)
+        AppendStyleRow(body, damageStyles[i], (User[playerid][dmgInformerStyle] == i));
 
     new title[64] = "{MAIN}Damage Informer Style";
     format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
 
     return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_LIST, title, body, "Select", "Back");
 }
@@ -393,7 +390,7 @@ public DIALOG_MENU(playerid, dialogid, response, listitem, string:inputtext[])
             case 4: ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_MENU);
             case 5: ShowHudColorDialog(playerid, APPEARANCE_SRC_MENU);
             case 6: ShowChatColorDialog(playerid, APPEARANCE_SRC_MENU);
-            case 7: Dialog_ShowCallback(playerid, using public SKIN<iiiis>, DIALOG_STYLE_INPUT, "Skin", "Change skin by id", "Continue", "Cancel");
+            case 7: ShowSkinDialog(playerid, APPEARANCE_SRC_MENU);
             case 8: ChangeFight(playerid);
             case 9: ShowGunMenu(playerid);
         }

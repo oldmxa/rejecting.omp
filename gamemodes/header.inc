@@ -10,6 +10,7 @@
 #include "modules/ui/style_picker.inc"
 #include "modules/ui/hud_styles.inc"
 #include "modules/ui/life_styles.inc"
+#include "modules/ui/skin_picker.inc"
 #include "modules/ui/textdraws.inc"
 #include "modules/ui/login.inc"
 
