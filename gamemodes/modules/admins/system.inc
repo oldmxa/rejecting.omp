@@ -131,8 +131,6 @@
     if(arenaid < 0 || arenaid >= MAX_ZONES)
         return va_SendClientMessage(playerid, -1, NOT_VALID_ARENA, MAX_ZONES-1);
 
-    // A custom arena outside its room would break: the pool rotation would drop
-    // it on the next round, and its interior belongs to the Custom Room.
     if(IsCustomArena(arenaid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}That arena belongs to the Custom Room.");
 
