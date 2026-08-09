@@ -34,27 +34,26 @@ stock SetupPlayerVehicle(vehicleid)
     return true;
 }
 
-@cmd() car(playerid, params[], help)
+stock CanSpawnLoungeVehicle(playerid)
 {
     if (User[playerid][isLogged] == false)
-        return SendClientMessage(playerid, -1, "%s", CANNOT_DO_THIS);
+    {
+        SendClientMessage(playerid, -1, "%s", CANNOT_DO_THIS);
+        return 0;
+    }
+
     if (User[playerid][isAfk] == false)
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
-
-    new vehicle, vehiclestr[30], color1 = -1, color2 = -1;
-    if (sscanf(params, "s[30]D(-1)D(-1)", vehiclestr, color1, color2))
-        return SendClientMessage(playerid, -1, "%s", VEHICLE_SPAWN_HELP);
-
-    if (IsNumeric(vehiclestr))
     {
-        vehicle = strval(vehiclestr);
-    }
-    else
-    {
-        vehicle = GetVehicleModelIDFromName(vehiclestr);
+        SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
+        return 0;
     }
 
-    if (vehicle > 611 || vehicle < 400)
+    return 1;
+}
+
+stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
+{
+    if (vehicle < VEHICLE_ID_MIN || vehicle > VEHICLE_ID_MAX)
         return SendClientMessage(playerid, -1, "%s", INVALID_VEHICLE_MSG);
 
     new Float:x, Float:y, Float:z;
@@ -70,10 +69,35 @@ stock SetupPlayerVehicle(vehicleid)
     PutPlayerInVehicle(playerid, pVehicle[playerid], 0);
 
     SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}When you exit the vehicle it will be automatically deleted!");
-    
-    va_SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}You created the vehicle {FFFFFF}'{0CB80C}%s{FFFFFF}' {13A9F6}ID {FFFFFF}'{0CB80C}%d{FFFFFF}' !", VehicleNames[vehicle - 400], vehicle);
+
+    va_SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}You created the vehicle {FFFFFF}'{0CB80C}%s{FFFFFF}' {13A9F6}ID {FFFFFF}'{0CB80C}%d{FFFFFF}' !", VehicleNames[vehicle - VEHICLE_ID_MIN], vehicle);
 
     return true;
+}
+
+@cmd() car(playerid, params[], help)
+{
+    if (!CanSpawnLoungeVehicle(playerid))
+        return true;
+
+    // No argument opens the preview grid, matching /skin.
+    if (IsNull(params))
+        return ShowVehicleDialog(playerid);
+
+    new vehicle, vehiclestr[30], color1 = -1, color2 = -1;
+    if (sscanf(params, "s[30]D(-1)D(-1)", vehiclestr, color1, color2))
+        return SendClientMessage(playerid, -1, "%s", VEHICLE_SPAWN_HELP);
+
+    if (IsNumeric(vehiclestr))
+    {
+        vehicle = strval(vehiclestr);
+    }
+    else
+    {
+        vehicle = GetVehicleModelIDFromName(vehiclestr);
+    }
+
+    return SpawnLoungeVehicle(playerid, vehicle, color1, color2);
 }
 
 @cmd() getgun(playerid, params[], help)

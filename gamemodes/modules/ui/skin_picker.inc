@@ -13,7 +13,6 @@
 #define SKIN_ID_MIN 2
 #define SKIN_ID_MAX 311
 
-// Ids in range that have no usable model. ChangeSkin() rejects them too.
 static const InvalidSkins[] = {74, 86, 270, 271};
 
 static bool:IsSelectableSkin(skinid)
@@ -48,16 +47,8 @@ stock ShowSkinDialog(playerid, source)
     return ShowPlayerDialog(playerid, DIALOG_SKIN_PREVIEW, DIALOG_STYLE_PREVIEW_MODEL, title, body, "Select", "Back");
 }
 
-/*
- * Fired by PreviewModelDialog.inc, not by SA-MP: a preview dialog is drawn with
- * textdraws and never reaches the native dialog callback. inputtext carries the
- * model id of the clicked item, which is the skin id here.
- */
-forward OnPreviewModelResponse(playerid, dialogid, response, listitem, inputtext[]);
-public OnPreviewModelResponse(playerid, dialogid, response, listitem, inputtext[])
+stock HandleSkinPreviewResponse(playerid, response, const inputtext[])
 {
-    if (dialogid != DIALOG_SKIN_PREVIEW) return 0;
-
     if (response)
     {
         new skinid = strval(inputtext);

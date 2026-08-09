@@ -4,7 +4,7 @@
     "cdn": "",
     "enable": true,
     "models_path": "models",
-    "port": 7777,
+    "port": 7778,
     "web_server_bind": ""
   },
   "banners": {
