@@ -25,7 +25,7 @@ enum
 // Calibrated with /lifez. Changing lsSegments resizes the block and needs a new
 // value.
 #define LIFE_LABEL_Z_DEFAULT 0.20
-#define LIFE_LABEL_DISTANCE  20.0
+#define LIFE_LABEL_DISTANCE  NAMETAG_DRAW_DISTANCE
 
 #define LIFE_COL_HEALTH  "{FFFFFF}"
 #define LIFE_COL_ARMOUR  "{FF4444}"

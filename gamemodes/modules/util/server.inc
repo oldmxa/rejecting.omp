@@ -499,7 +499,7 @@ public AutomaticGMX()
 
 initializeServer(const gamemodeName[])
 {
-	SetNameTagDrawDistance(40.0);
+	SetNameTagDrawDistance(NAMETAG_DRAW_DISTANCE);
 	SetGameModeText(gamemodeName);
 
 	DisableInteriorEnterExits();

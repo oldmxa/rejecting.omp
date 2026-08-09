@@ -145,6 +145,8 @@
 
 #define MAX_LOCATIONS		3
 
+#define NAMETAG_DRAW_DISTANCE	40.0
+
 #define IsPlayerAndroid(%0)                 GetPVarInt(%0, "NotAndroid") == 0
 
 #define IsPlayerFakingNick(%0)              (strcmp(getPlayerName(%0), User[%0][userName], false) != 0)
