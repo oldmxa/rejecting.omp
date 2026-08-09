@@ -121,12 +121,20 @@
     if(location < 0 || location >= MAX_LOCATIONS || location == ARENA_AFK)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be inside an arena to use this command.");
 
+    if(location == ARENA_CUSTOM)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The Custom Room has its own map list. Use {MAIN}/clist{FFFFFF}.");
+
     new arenaid;
     if(sscanf(params, "i", arenaid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_NUMERIC);
 
     if(arenaid < 0 || arenaid >= MAX_ZONES)
         return va_SendClientMessage(playerid, -1, NOT_VALID_ARENA, MAX_ZONES-1);
+
+    // A custom arena outside its room would break: the pool rotation would drop
+    // it on the next round, and its interior belongs to the Custom Room.
+    if(IsCustomArena(arenaid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}That arena belongs to the Custom Room.");
 
     foreach(new i : Player)
     {
@@ -150,12 +158,28 @@
     return true;
 }
 
+@cmd() clist(playerid, params[], help)
+{
+    if (User[playerid][adminLevel] < 2)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    if (User[playerid][locationId] != ARENA_CUSTOM)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be in the Custom Room to use this command.");
+
+    return ShowCustomMapListDialog(playerid);
+}
+
 @cmd() maplist(playerid, params[], help)
 {
     if (User[playerid][adminLevel] < 2)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
+
+    if (User[playerid][locationId] == ARENA_CUSTOM)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The Custom Room has its own map list. Use {MAIN}/clist{FFFFFF}.");
 
     DeletePVar(playerid, "playerCurrentPage");
     DeletePVar(playerid, "pageItems");
@@ -179,6 +203,9 @@
     new location = User[playerid][locationId];
     if(location < 0 || location >= MAX_LOCATIONS || location == ARENA_AFK)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be inside an arena to use this command.");
+
+    if(location == ARENA_CUSTOM)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The Custom Room has its own map list. Use {MAIN}/clist{FFFFFF}.");
 
     foreach(new i : Player)
     {
@@ -383,7 +410,9 @@ public AdminCountdown(count)
     {
         if(!User[i][isLogged]) continue;
 
-        new Float:kd = ratio(User[i][playerKills], User[i][playerDeaths]);
+        new kd[8];
+        FormatRatio(User[i][playerKills], User[i][playerDeaths], kd);
+
         new Float:acc = 0.0;
         new aKills = 0, aDeaths = 0;
 
@@ -394,7 +423,7 @@ public AdminCountdown(count)
             aDeaths = playerArenaInfo[User[i][locationId]][i][arenaDeaths];
         }
 
-        strcat(str, sprintf("{36cf85}%s (%d)\t{BEBEBE}%.2f\t{BEBEBE}%.1f%%\t{BEBEBE}%d\t{BEBEBE}%d\n", User[i][userName], i, kd, acc, aKills, aDeaths));
+        strcat(str, sprintf("{36cf85}%s (%d)\t{BEBEBE}%s\t{BEBEBE}%.1f%%\t{BEBEBE}%d\t{BEBEBE}%d\n", User[i][userName], i, kd, acc, aKills, aDeaths));
         count++;
     }
 

@@ -57,7 +57,21 @@ new const arenaData[MAX_ZONES][arenaa] =
 	{"Wedding Chapel", {2419.0, 1220.5, 2625.0, 1608.5}, ARENA_CATEGORY_BIG},
 	{"Palomino Creek", {2219.5, -69.5, 2543.5, 154.5}, ARENA_CATEGORY_BIG},
 	{"Willowfield", {2314.5, -2044.5, 2577.5, -1901.5}, ARENA_CATEGORY_MEDIUM},
-	{"Ocean Flats", {-2807.5, -71.5, -2600.5, 42.5}, ARENA_CATEGORY_MEDIUM}
+	{"Ocean Flats", {-2807.5, -71.5, -2600.5, 42.5}, ARENA_CATEGORY_MEDIUM},
+
+	/*
+	 * Object-built arenas from modules/arena/maps/, rotating only among
+	 * themselves in the Custom Room. Each one carries its own interior, and a
+	 * spawn ceiling above its roof - the default 700.0 would start the raycast
+	 * underneath the map and find nothing.
+	 *
+	 *                                                          category                ceiling  interior
+	 */
+	{"Chinese Garden", {3457.0, -19.5, 3525.0, 20.0},      ARENA_CATEGORY_CUSTOM, 1100.0, 4},
+	{"Desert",         {3437.5, 957.5, 3530.0, 1055.0},    ARENA_CATEGORY_CUSTOM, 1100.0, 2},
+	{"Egypt",          {3425.0, 1920.5, 3559.0, 2056.5},   ARENA_CATEGORY_CUSTOM, 1100.0, 3},
+	{"Urbex",          {-61.0, 2472.5, 14.0, 2518.0},      ARENA_CATEGORY_CUSTOM, 1100.0, 5},
+	{"Zoo",            {3475.0, -1012.5, 3529.0, -978.5},  ARENA_CATEGORY_CUSTOM, 1100.0, 13}
 };
 
 new Iterator:ArenaCategory<MAX_ARENA_CATEGORIES, MAX_ZONES>;

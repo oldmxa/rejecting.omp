@@ -1,10 +1,20 @@
 
+stock GetLocationDisplaySlot(location)
+{
+	for (new slot; slot < sizeof(LOCATION_DISPLAY_ORDER); slot ++)
+		if (LOCATION_DISPLAY_ORDER[slot] == location) return slot;
+
+	return location;
+}
+
 showLocationSelectDialog(playerid)
 {
 	new dialogBody[1500] = "ID\tArena Mode\tCurrent Arena\tPlayers\n";
 
-	for (new i; i < sizeof(ROOM_NAME); i ++)
+	for (new slot; slot < sizeof(LOCATION_DISPLAY_ORDER); slot ++)
 	{
+        new i = LOCATION_DISPLAY_ORDER[slot];
+
         new mapName[48], slots[32], pCount = getLocationPlayers(i), mCount = arenaInfo[i][maxPlayers];
         new zoneid = arenaInfo[i][arenaId];
 
@@ -21,7 +31,7 @@ showLocationSelectDialog(playerid)
             pCount, (pCount >= mCount) ? ("{F84F31}") : ("{23C552}"), mCount);
 
 		strcat(dialogBody, fmat_return("{MAIN}#%02d\t%s\t%s\t%s\n",
-            i + 1, ROOM_NAME[i][E_ROOM_NAME_SERVER], mapName, slots), sizeof(dialogBody));
+            slot + 1, ROOM_NAME[i][E_ROOM_NAME_SERVER], mapName, slots), sizeof(dialogBody));
 	}
 
     new dialogTitle[64] = "{MAIN}Changemode - Arena Selection";
@@ -31,13 +41,64 @@ showLocationSelectDialog(playerid)
 	Dialog_ShowCallback(playerid, using public Location<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, dialogTitle, dialogBody, "Select", "Close");
 }
 
+stock IsCustomArena(zone)
+{
+    return (0 <= zone < MAX_ZONES && _:arenaData[zone][category] == ARENA_CATEGORY_CUSTOM);
+}
+
+stock GetCustomArenaByIndex(index)
+{
+    if (index < 0) return -1;
+
+    new count = 0;
+
+    for (new i; i < MAX_ZONES; i++)
+    {
+        if (!IsCustomArena(i)) continue;
+        if (count == index) return i;
+
+        count++;
+    }
+
+    return -1;
+}
+
+stock ApplyArenaChange(playerid, location, zone)
+{
+    foreach(new i : Player)
+    {
+        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;
+        GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
+    }
+
+    GetRoundRank(location);
+
+    new oldArenaId = arenaInfo[location][arenaId];
+    arenaInfo[location][arenaId] = zone;
+    PrepareChangeArena(location, oldArenaId);
+
+    foreach(new i : Player)
+    {
+        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE) || User[i][adminLevel] > 0)
+            va_SendClientMessage(i, -1, CHANGED_ARENA_MSG, User[playerid][userName], arenaData[zone][arenaName], zone);
+    }
+
+    if(User[playerid][adminLevel] < 4)
+        changeArenaDelay = gettime()+(3*60);
+
+    return 1;
+}
 
 determineArenaID(location)
 {
 	new const LOCATION_PLAYERS = getLocationPlayers(location);
 	new type, rand;
 
-	if (LOCATION_PLAYERS >= HIGH_ARENA_PLAYERS_COUNT)
+	if (location == ARENA_CUSTOM)
+	{
+		type = ARENA_CATEGORY_CUSTOM;
+	}
+	else if (LOCATION_PLAYERS >= HIGH_ARENA_PLAYERS_COUNT)
 	{
 		type = ARENA_CATEGORY_BIG;
 	}
@@ -151,9 +212,11 @@ public initArena()
 		arenaInfo[i][maxPlayers] = MAX_PLAYERS_LOCATION;
 		arenaInfo[i][roundMints] = RoundTime;
 		arenaInfo[i][isRunningArena] = true;
-		arenaInfo[i][arenaId] = Iter_Random(ArenaQueue<ARENA_CATEGORY_SMALL>);
 
-		Iter_Remove(ArenaQueue<ARENA_CATEGORY_SMALL>, arenaInfo[i][arenaId]);
+		new poolCategory = (i == ARENA_CUSTOM) ? ARENA_CATEGORY_CUSTOM : ARENA_CATEGORY_SMALL;
+
+		arenaInfo[i][arenaId] = Iter_Random(ArenaQueue<poolCategory>);
+		Iter_Remove(ArenaQueue<poolCategory>, arenaInfo[i][arenaId]);
 	}
 
 	arenaInfo[ARENA_AFK][isRunningArena] = false;
@@ -176,6 +239,18 @@ getLocationPlayers(location)
 #define SPAWN_MIN_DISTANCE (25.0)
 // how many points to test before accepting the best one found
 #define SPAWN_MAX_ATTEMPTS (15)
+
+// Default raycast start for arenas on the real map; overridden per arena by
+// arenaSpawnCeiling.
+#define SPAWN_RAYCAST_CEILING (700.0)
+
+// How far under the ceiling the arena floor can still be. Anything lower is
+// something else entirely - sea floor, terrain under the map.
+#define SPAWN_ARENA_DEPTH (250.0)
+
+// Drop height used when no ground was found at all, so the player lands on the
+// arena instead of being placed under it.
+#define SPAWN_FALLBACK_DROP (30.0)
 
 // synchronize with other players 500ms
 #define SPAWN_PROTECT_TIME (500)
@@ -208,13 +283,27 @@ spawnOnLocation(playerid)
 	new Float:posX, Float:posY, Float:posZ;
 	new Float:bestX, Float:bestY, Float:bestZ, Float:bestClearance = -1.0;
 
+	new customArena = IsCustomArena(zone);
+
+	new Float:ceiling = arenaData[zone][arenaSpawnCeiling];
+	if(ceiling <= 0.0) ceiling = SPAWN_RAYCAST_CEILING;
+
+	new Float:floorLimit = ceiling - SPAWN_ARENA_DEPTH;
+
 	for(new attempt = 0; attempt < SPAWN_MAX_ATTEMPTS; attempt++)
 	{
 		posX = RandomFloat(arenaData[zone][arenaPos][0], arenaData[zone][arenaPos][2]);
 		posY = RandomFloat(arenaData[zone][arenaPos][1], arenaData[zone][arenaPos][3]);
 
-		new modelid = CA_RayCastLine(posX, posY, 700.0, posX, posY, -1000.0, posX, posY, posZ);
-		if(modelid == WATER_OBJECT || IsModelBuilding(modelid)) continue;
+		new modelid = CA_RayCastLine(posX, posY, ceiling, posX, posY, -1000.0, posX, posY, posZ);
+
+		if(!modelid || modelid == WATER_OBJECT) continue;
+
+		if(customArena)
+		{
+			if(posZ < floorLimit) continue;
+		}
+		else if(IsModelBuilding(modelid)) continue;
 
 		new Float:clearance = GetSpawnClearance(playerid, posX, posY, posZ);
 
@@ -231,12 +320,16 @@ spawnOnLocation(playerid)
 
 	if(bestClearance < 0.0)
 	{
-		bestX = posX;
-		bestY = posY;
-		bestZ = posZ;
+		bestX = (arenaData[zone][arenaPos][0] + arenaData[zone][arenaPos][2]) / 2.0;
+		bestY = (arenaData[zone][arenaPos][1] + arenaData[zone][arenaPos][3]) / 2.0;
+
+		new fallbackModel = CA_RayCastLine(bestX, bestY, ceiling, bestX, bestY, -1000.0, bestX, bestY, bestZ);
+
+		if(!fallbackModel || fallbackModel == WATER_OBJECT || (customArena && bestZ < floorLimit))
+			bestZ = ceiling - SPAWN_FALLBACK_DROP;
 	}
 
-	SetPlayerInterior(playerid, 0);
+	SetPlayerInterior(playerid, arenaData[zone][arenaInterior]);
 	SetPlayerPos(playerid, bestX, bestY, bestZ + 1.0);
 	SetPlayerFacingAngle(playerid, RandomFloat(0.0, 360.0));
 	SetCameraBehindPlayer(playerid);
@@ -396,7 +489,7 @@ PrepareChangeArena(location, finishingArenaId)
 			format(name,sizeof(name),"%s", getPlayerName(playerId));
 			format(damage, sizeof(damage), "%.0f", playerArenaInfo[location][playerId][arenaDMG]);
 			format(kills, sizeof(kills), "%d", playerArenaInfo[location][playerId][arenaKills]);
-			format(kdr, sizeof(kdr), "%.2f", ratio(playerArenaInfo[location][playerId][arenaKills], playerArenaInfo[location][playerId][arenaDeaths]));
+			FormatRatio(playerArenaInfo[location][playerId][arenaKills], playerArenaInfo[location][playerId][arenaDeaths], kdr, sizeof(kdr));
 		}
 		else
 		{

@@ -115,7 +115,8 @@
 #define MAX_LOGIN_ATTEMPTS 3
 #define MAX_ACCOUNT_LOCKTIME 2
 
-#define MAX_ZONES 58
+// 58 arenas on the real map + 5 object-built ones in modules/arena/maps/
+#define MAX_ZONES 63
 
 #define MAX_LINES 			6
 #define BACKGROUND_COLOR	"30"
@@ -146,7 +147,8 @@
 #define MAX_PLAYERS_LOCATION	25
 #define MAX_PLAYERS_AFK	88
 
-#define MAX_LOCATIONS		3
+// DM Room 1, DM Room 2, Lounge, Custom Room
+#define MAX_LOCATIONS		4
 
 
 #define IsPlayerAndroid(%0)                 GetPVarInt(%0, "NotAndroid") == 0

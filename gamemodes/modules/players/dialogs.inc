@@ -696,7 +696,10 @@ public DIALOG_MAPLIST(playerid, dialogid, response, listitem, string:inputtext[]
             if(location < 0 || location >= MAX_LOCATIONS || location == ARENA_AFK)
                 return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be inside an arena to use this command.");
 
-            if(listitemm < 0 || listitemm >= MAX_ZONES)
+            if(location == ARENA_CUSTOM)
+                return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The Custom Room has its own map list. Use {MAIN}/clist{FFFFFF}.");
+
+            if(listitemm < 0 || listitemm >= MAX_ZONES || IsCustomArena(listitemm))
                 return va_SendClientMessage(playerid, -1, NOT_VALID_ARENA, MAX_ZONES-1);
 
             foreach(new i : Player)

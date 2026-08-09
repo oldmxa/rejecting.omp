@@ -35,6 +35,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/freeze [id]", "Freezes a player.", 2},
     {"/unfreeze [id]", "Unfreeze a player.", 2},
     {"/maplist", "List of the current arenas.", 2},
+    {"/clist", "Map list of the Custom Room (used in place of /maplist there).", 2},
     {"/randomchangearena", "Change to a random id arena.", 2},
     {"/go [id]", "Go on a player position.", 3},
     {"/get [id]", "Pull a player in their position.", 3},

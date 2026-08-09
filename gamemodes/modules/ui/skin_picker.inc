@@ -41,10 +41,8 @@ stock ShowSkinDialog(playerid, source)
         strcat(body, fmat_return("%s%d\t%d", (body[0] == EOS) ? ("") : ("\n"), skinid, skinid), sizeof(body));
     }
 
-    new title[64] = "{MAIN}Personalization - Character Skin";
-    format_MainColor(playerid, title);
-
-    return ShowPlayerDialog(playerid, DIALOG_SKIN_PREVIEW, DIALOG_STYLE_PREVIEW_MODEL, title, body, "Select", "Back");
+    return ShowPlayerDialog(playerid, DIALOG_SKIN_PREVIEW, DIALOG_STYLE_PREVIEW_MODEL,
+        "Personalization - Character Skin", body, "Select", "Back");
 }
 
 stock HandleSkinPreviewResponse(playerid, response, const inputtext[])

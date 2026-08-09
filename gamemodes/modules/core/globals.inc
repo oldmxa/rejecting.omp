@@ -15,7 +15,8 @@ enum
 {
     ARENA_DM_1,
     ARENA_DM_2,
-    ARENA_AFK
+    ARENA_AFK,
+    ARENA_CUSTOM
 }
 
 enum playerArena
@@ -49,13 +50,16 @@ enum
     ARENA_CATEGORY_SMALL,
     ARENA_CATEGORY_MEDIUM,
     ARENA_CATEGORY_BIG,
+    ARENA_CATEGORY_CUSTOM,
     MAX_ARENA_CATEGORIES
 }
 
 enum arenaa{
 	arenaName[30 + 1],
 	Float:arenaPos[4],
-    category
+    category,
+    Float:arenaSpawnCeiling,
+    arenaInterior
 };
 
 
@@ -869,7 +873,16 @@ new const ROOM_NAME[MAX_LOCATIONS][E_ROOM_NAME] =
 {
     {"{B4B5B7}DM Room",         "DM Room 1"},
     {"{B4B5B7}DM Room",         "DM Room 2"},
-    {"{B4B5B7}Lounge Room",     "Lounge Room"}
+    {"{B4B5B7}Lounge Room",     "Lounge Room"},
+    {"{B4B5B7}Custom Room",     "Custom Room"}
+};
+
+new const LOCATION_DISPLAY_ORDER[MAX_LOCATIONS] =
+{
+    ARENA_DM_1,
+    ARENA_DM_2,
+    ARENA_CUSTOM,
+    ARENA_AFK
 };
 
 #define AC_REASON_LEN (64)

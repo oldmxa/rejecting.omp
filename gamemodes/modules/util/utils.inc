@@ -212,6 +212,16 @@ Float:ratio(value1, value2)
     return float(value1) / float(value2);
 }
 
+FormatRatio(value1, value2, destination[], len = sizeof(destination))
+{
+    if(value1 <= 0 && value2 <= 0)
+        format(destination, len, "NaN");
+    else
+        format(destination, len, "%.2f", ratio(value1, value2));
+
+    return 1;
+}
+
 GetVehicleModelIDFromName(const vname[])
 {
 	if(isnull(vname)) return -1;

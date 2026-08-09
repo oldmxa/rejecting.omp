@@ -500,6 +500,8 @@ public AutomaticGMX()
 initializeServer(const gamemodeName[])
 {
 	SetNameTagDrawDistance(NT_DISTANCE);
+
+	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 1500);
 	SetGameModeText(gamemodeName);
 
 	DisableInteriorEnterExits();

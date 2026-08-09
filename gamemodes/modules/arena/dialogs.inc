@@ -17,8 +17,10 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
         return false;
     }
 
-    if(listitem < 0 || listitem >= MAX_LOCATIONS)
+    if(listitem < 0 || listitem >= sizeof(LOCATION_DISPLAY_ORDER))
         return true;
+
+    listitem = LOCATION_DISPLAY_ORDER[listitem];
 
     if(listitem == User[playerid][locationId])
     {
@@ -64,7 +66,7 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
     }
 
     new selectMessage[64];
-    format(selectMessage, sizeof(selectMessage), JOINED_ROOM_MSG, listitem + 1);
+    format(selectMessage, sizeof(selectMessage), JOINED_ROOM_MSG, GetLocationDisplaySlot(listitem) + 1);
     SendClientMessage(playerid, 0xa4aba7ff, "%s", selectMessage);
 
     if(User[playerid][locationId] != ARENA_AFK)
@@ -132,3 +134,43 @@ public NewArenaName(playerid, dialogid, response, listitem, string:inputtext[])
     return ClearPlayerNewArenaData(playerid);
 }
 
+ShowCustomMapListDialog(playerid)
+{
+    new dialogStr[768];
+    strcat(dialogStr, "ID\tArena Name\tArea\n");
+
+    for(new i; i < MAX_ZONES; i++)
+    {
+        if(!IsCustomArena(i)) continue;
+
+        new Float:arenaarea = (arenaData[i][arenaPos][0] - arenaData[i][arenaPos][2]) * (arenaData[i][arenaPos][1] - arenaData[i][arenaPos][3]);
+        if(arenaarea < 0) arenaarea *= -1;
+
+        strcat(dialogStr, sprintf("%d\t%s%s\t%0.1fm\n",
+            i,
+            (arenaInfo[ARENA_CUSTOM][arenaId] == i) ? ("{23C552}") : ("{FFFFFF}"),
+            arenaData[i][arenaName],
+            arenaarea));
+    }
+
+    Dialog_ShowCallback(playerid, using public DIALOG_CUSTOM_MAPLIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "SELECT CUSTOM MAP", dialogStr, "Select", "Close");
+    return 1;
+}
+
+forward DIALOG_CUSTOM_MAPLIST(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_CUSTOM_MAPLIST(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response) return true;
+
+    if(User[playerid][adminLevel] < 2)
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    if(changeArenaDelay > gettime() && User[playerid][adminLevel] < 4)
+        return va_SendClientMessage(playerid, -1, CHANGEARENA_DELAY, convertTime(changeArenaDelay - gettime()));
+
+    new zone = GetCustomArenaByIndex(listitem);
+    if(zone == -1)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid custom arena.");
+
+    return ApplyArenaChange(playerid, ARENA_CUSTOM, zone);
+}

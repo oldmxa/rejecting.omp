@@ -26,10 +26,8 @@ stock ShowVehicleDialog(playerid)
             (body[0] == EOS) ? ("") : ("\n"), vehicle, VehicleNames[vehicle - VEHICLE_ID_MIN]), sizeof(body));
     }
 
-    new title[64] = "{MAIN}Lounge - Vehicle";
-    format_MainColor(playerid, title);
-
-    return ShowPlayerDialog(playerid, DIALOG_VEHICLE_PREVIEW, DIALOG_STYLE_PREVIEW_MODEL, title, body, "Spawn", "Cancel");
+    return ShowPlayerDialog(playerid, DIALOG_VEHICLE_PREVIEW, DIALOG_STYLE_PREVIEW_MODEL,
+        "Lounge - Vehicle", body, "Spawn", "Cancel");
 }
 
 /*

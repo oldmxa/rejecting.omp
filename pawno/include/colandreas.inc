@@ -449,7 +449,10 @@ static stock CA_ObjectList[MAX_CA_OBJECTS][CAOBJECTINFO];
 #if defined STREAMER_TYPE_OBJECT
 
 	// Static collision object functions (The index is not returned these can not be deleted!)
-	stock STREAMER_TAG_OBJECT:CA_CreateDynamicObjectEx_SC(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, worlds[] = { -1 }, interiors[] = { -1 }, players[] = { -1 }, STREAMER_TAG_AREA:areas[] = { STREAMER_TAG_AREA:-1 }, priority = 0, maxworlds = sizeof worlds, maxinteriors = sizeof interiors, maxplayers = sizeof players, maxareas = sizeof areas)
+	// LOCAL CHANGE - not upstream. Re-apply if this file is ever updated.
+	// `const` added to the four array parameters, same as on the _DC variant
+	// below: they are only forwarded, never written.
+	stock STREAMER_TAG_OBJECT:CA_CreateDynamicObjectEx_SC(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, const worlds[] = { -1 }, const interiors[] = { -1 }, const players[] = { -1 }, const STREAMER_TAG_AREA:areas[] = { STREAMER_TAG_AREA:-1 }, priority = 0, maxworlds = sizeof worlds, maxinteriors = sizeof interiors, maxplayers = sizeof players, maxareas = sizeof areas)
 	{
 		new STREAMER_TAG_OBJECT:id = CreateDynamicObjectEx(modelid, x, y, z, rx, ry, rz, streamdistance, drawdistance, worlds, interiors, players, areas, priority, maxworlds, maxinteriors, maxplayers, maxareas);
 		CA_CreateObject(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);
@@ -471,7 +474,12 @@ static stock CA_ObjectList[MAX_CA_OBJECTS][CAOBJECTINFO];
 	}
 
 	// Dynamic collision object functions (Removable)
-	stock CA_CreateDynamicObjectEx_DC(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, worlds[] = { -1 }, interiors[] = { -1 }, players[] = { -1 }, STREAMER_TAG_AREA:areas[] = { STREAMER_TAG_AREA:-1 }, priority = 0, maxworlds = sizeof worlds, maxinteriors = sizeof interiors, maxplayers = sizeof players, maxareas = sizeof areas)
+	// LOCAL CHANGE - not upstream. Re-apply if this file is ever updated.
+	// `const` added to the four array parameters: they are only forwarded to
+	// CreateDynamicObjectEx(), never written. Without it a `static const` array
+	// is an "argument type mismatch", and the compiler warns about the missing
+	// const on every build (warning 214).
+	stock CA_CreateDynamicObjectEx_DC(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, const worlds[] = { -1 }, const interiors[] = { -1 }, const players[] = { -1 }, const STREAMER_TAG_AREA:areas[] = { STREAMER_TAG_AREA:-1 }, priority = 0, maxworlds = sizeof worlds, maxinteriors = sizeof interiors, maxplayers = sizeof players, maxareas = sizeof areas)
 	{
 		new index = -1;
 		#if defined _Y_ITERATE_LOCAL_VERSION

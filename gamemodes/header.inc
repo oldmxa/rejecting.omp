@@ -23,6 +23,14 @@
 // arenas the arenaData table is used by the dialogs.
 #include "modules/arena/data.inc"
 
+// object-built arenas: each file self-registers through hook OnGameModeInit()
+#include "modules/arena/arena_object.inc"
+#include "modules/arena/maps/chinese-garden.inc"
+#include "modules/arena/maps/desert.inc"
+#include "modules/arena/maps/egypt.inc"
+#include "modules/arena/maps/urbex.inc"
+#include "modules/arena/maps/zoo.inc"
+
 // clan: enums e globais sao usados por quase todos os modulos abaixo.
 #include "modules/clan/clan.inc"
 

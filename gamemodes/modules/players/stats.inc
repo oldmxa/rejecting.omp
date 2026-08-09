@@ -393,7 +393,8 @@ showMapListDialog(playerid)
     for(new i; i < 16; i++)
     {
         arenaiddd = i+(currentPage*16);
-        if(arenaiddd >= MAX_ZONES)
+
+        if(arenaiddd >= MAX_ZONES || IsCustomArena(arenaiddd))
         {
             SetPVarInt(playerid, "pageItems", i);
             break;
