@@ -1,28 +1,34 @@
--- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost    Database: rejecting.files
--- ------------------------------------------------------
--- Server version	10.4.32-MariaDB
+-- Host: 127.0.0.1
+-- Generation Time: Aug 09, 2026 at 09:03 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Database: `rejecting.files`
+--
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `accounts`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `accounts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `username` varchar(24) NOT NULL,
   `password` varchar(61) NOT NULL,
   `regip` varchar(17) DEFAULT NULL,
@@ -41,6 +47,7 @@ CREATE TABLE `accounts` (
   `chat_color` int(11) NOT NULL DEFAULT 0,
   `chat_id_color` int(11) NOT NULL DEFAULT 0,
   `hud_type` int(11) NOT NULL DEFAULT 0,
+  `life_type` int(11) NOT NULL DEFAULT 0,
   `adminlevel` int(11) NOT NULL DEFAULT 0,
   `skin_id` int(11) NOT NULL DEFAULT 12,
   `fighting_style` int(11) NOT NULL DEFAULT 4,
@@ -122,81 +129,63 @@ CREATE TABLE `accounts` (
   `hide_custom_tag` tinyint(1) NOT NULL DEFAULT 0,
   `custom_tag` varchar(32) NOT NULL DEFAULT '',
   `custom_tag_perm` tinyint(1) NOT NULL DEFAULT 0,
-  `spawn_safehouse` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `username` (`username`),
-  KEY `kills` (`kills`),
-  KEY `kills_semanais` (`kills_semanais`),
-  KEY `damage_semanal` (`damage_semanal`),
-  KEY `clanid` (`clanid`),
-  KEY `regip` (`regip`),
-  KEY `dc_username` (`dc_username`),
-  KEY `dc_uid` (`dc_uid`)
+  `spawn_safehouse` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `admin_logs`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admin_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `admin_name` varchar(24) NOT NULL,
   `target_name` varchar(24) DEFAULT NULL,
   `action` varchar(255) NOT NULL,
   `details` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `admin_notes`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admin_notes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `target_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
   `note` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `target_id` (`target_id`),
-  KEY `admin_id` (`admin_id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `arena_logs`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `arena_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `arena_id` int(11) NOT NULL,
   `arena_name` varchar(64) NOT NULL,
   `winner_name` varchar(24) DEFAULT NULL,
   `winner_clan` varchar(24) DEFAULT NULL,
   `total_kills` int(11) NOT NULL DEFAULT 0,
   `total_damage` int(11) NOT NULL DEFAULT 0,
-  `timestamp` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `timestamp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `banimentos`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `banimentos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `username` varchar(25) NOT NULL,
   `ip` varchar(30) DEFAULT NULL,
   `admin` varchar(50) NOT NULL,
@@ -205,39 +194,30 @@ CREATE TABLE `banimentos` (
   `reason` varchar(64) NOT NULL,
   `country` varchar(50) DEFAULT NULL,
   `isp` varchar(100) DEFAULT NULL,
-  `gpci` varchar(41) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `username` (`username`),
-  KEY `ip` (`ip`),
-  KEY `gpci` (`gpci`)
+  `gpci` varchar(41) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `chat_logs`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `chat_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `username` varchar(24) NOT NULL,
   `channel` varchar(20) NOT NULL,
   `message` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `channel_idx` (`channel`),
-  KEY `created_at_idx` (`created_at`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `clans`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `clans` (
   `clan_id` int(11) NOT NULL,
   `clan_leader` int(11) NOT NULL,
@@ -248,129 +228,108 @@ CREATE TABLE `clans` (
   `clan_kills` int(11) NOT NULL DEFAULT 0,
   `clan_color` int(11) NOT NULL DEFAULT -1,
   `clan_created_at` int(11) NOT NULL DEFAULT 0,
-  `clan_avatar` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`clan_id`),
-  KEY `clan_tag` (`clan_tag`),
-  KEY `clan_name` (`clan_name`)
+  `clan_avatar` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPACT;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `ip_whitelist`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ip_whitelist` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `ip` varchar(18) NOT NULL,
-  `username` varchar(24) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `username` varchar(24) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `ispsbanidas`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ispsbanidas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `isp` varchar(150) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `isp` (`isp`)
+  `id` int(11) NOT NULL,
+  `isp` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `name_changes`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `name_changes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL,
+  `id` int(11) NOT NULL,
+  `uid` int(10) UNSIGNED NOT NULL,
   `old_name` varchar(20) NOT NULL,
   `new_name` varchar(20) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `new_arena`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `new_arena` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `authorid` int(10) unsigned NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `authorid` int(10) UNSIGNED NOT NULL,
   `name` varchar(30) NOT NULL,
   `minx` float NOT NULL,
   `miny` float NOT NULL,
   `maxx` float NOT NULL,
-  `maxy` float NOT NULL,
-  PRIMARY KEY (`id`)
+  `maxy` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `outposts`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `outposts` (
   `zoneid` int(11) NOT NULL,
   `outpostid` int(11) NOT NULL,
-  `clanid` int(11) NOT NULL,
-  PRIMARY KEY (`zoneid`,`outpostid`)
+  `clanid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `paisesbanidos`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `paisesbanidos` (
-  `country_name` varchar(35) NOT NULL,
-  UNIQUE KEY `country_name` (`country_name`) USING BTREE
+  `country_name` varchar(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `player_daily_stats`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `player_daily_stats` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `kills` int(11) NOT NULL DEFAULT 0,
   `deaths` int(11) NOT NULL DEFAULT 0,
   `arenas_won` int(11) NOT NULL DEFAULT 0,
   `zone_points` int(11) NOT NULL DEFAULT 0,
-  `date` date NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_user_date` (`user_id`,`date`),
-  KEY `idx_user_date` (`user_id`,`date`)
+  `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `player_match_history`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `player_match_history` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `arena_id` int(11) NOT NULL,
   `arena_name` varchar(64) NOT NULL DEFAULT '',
@@ -384,57 +343,17 @@ CREATE TABLE `player_match_history` (
   `placement` int(11) NOT NULL DEFAULT 0,
   `participants` int(11) NOT NULL DEFAULT 0,
   `player_level` int(11) NOT NULL DEFAULT 0,
-  `played_at` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_user_arena_round` (`user_id`,`arena_id`,`played_at`),
-  KEY `idx_user_played` (`user_id`,`played_at`)
+  `played_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `safehouse_config`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `safehouse_config` (
-  `key` varchar(32) NOT NULL,
-  `value` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `safehouse_logs`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `safehouse_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `safehouse_id` int(11) NOT NULL DEFAULT 0,
-  `zone_id` int(11) NOT NULL DEFAULT -1,
-  `clan_id` int(11) NOT NULL DEFAULT -1,
-  `user_id` int(11) NOT NULL DEFAULT 0,
-  `player_name` varchar(24) NOT NULL DEFAULT '',
-  `action` varchar(32) NOT NULL DEFAULT '',
-  `detail` varchar(160) NOT NULL DEFAULT '',
-  `ip` varchar(46) NOT NULL DEFAULT '',
-  `created_at` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `safehouse` (`safehouse_id`),
-  KEY `clan` (`clan_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `safehouses`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `safehouses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `zone_id` int(11) NOT NULL,
   `clan_id` int(11) NOT NULL DEFAULT -1,
   `name` varchar(32) NOT NULL DEFAULT '',
@@ -457,20 +376,47 @@ CREATE TABLE `safehouses` (
   `expires_at` int(11) NOT NULL DEFAULT 0,
   `next_charge` int(11) NOT NULL DEFAULT 0,
   `last_charge` int(11) NOT NULL DEFAULT 0,
-  `status` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `zone` (`zone_id`)
+  `status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `safehouse_config`
+--
+
+CREATE TABLE `safehouse_config` (
+  `key` varchar(32) NOT NULL,
+  `value` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `safehouse_logs`
+--
+
+CREATE TABLE `safehouse_logs` (
+  `id` int(11) NOT NULL,
+  `safehouse_id` int(11) NOT NULL DEFAULT 0,
+  `zone_id` int(11) NOT NULL DEFAULT -1,
+  `clan_id` int(11) NOT NULL DEFAULT -1,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `player_name` varchar(24) NOT NULL DEFAULT '',
+  `action` varchar(32) NOT NULL DEFAULT '',
+  `detail` varchar(160) NOT NULL DEFAULT '',
+  `ip` varchar(46) NOT NULL DEFAULT '',
+  `created_at` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `server_logs`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `server_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
   `category` varchar(50) DEFAULT NULL,
@@ -478,65 +424,50 @@ CREATE TABLE `server_logs` (
   `ticket_id` int(11) DEFAULT NULL,
   `panel` varchar(100) DEFAULT NULL,
   `details` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `server_stats`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `server_stats` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `online_count` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `server_stats`
+--
+
+INSERT INTO `server_stats` (`id`, `online_count`, `created_at`) VALUES
+(1, 0, '2026-08-09 07:01:40');
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `server_status`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `server_status` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `current_arena_id` int(11) DEFAULT -1,
   `current_arena_name` varchar(64) DEFAULT 'Lounge',
   `players_online` int(11) DEFAULT 0,
-  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`)
+  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `ticket_messages`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ticket_messages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ticket_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `message` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `tickets`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tickets` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `description` text NOT NULL,
@@ -544,19 +475,31 @@ CREATE TABLE `tickets` (
   `status` enum('open','closed','pending') DEFAULT 'open',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `accused_name` varchar(100) DEFAULT NULL,
-  `ticket_type` varchar(50) DEFAULT 'support',
-  PRIMARY KEY (`id`)
+  `ticket_type` varchar(50) DEFAULT 'support'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_messages`
+--
+
+CREATE TABLE `ticket_messages` (
+  `id` int(11) NOT NULL,
+  `ticket_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `training_records`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `training_records` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `arena_id` int(11) NOT NULL DEFAULT 0,
   `arena_name` varchar(32) NOT NULL DEFAULT '',
@@ -564,53 +507,362 @@ CREATE TABLE `training_records` (
   `best_hits` int(11) NOT NULL DEFAULT 0,
   `best_shots` int(11) NOT NULL DEFAULT 0,
   `best_damage` int(11) NOT NULL DEFAULT 0,
-  `set_at` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_arena` (`user_id`,`arena_name`)
+  `set_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `videos`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `videos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `video_id` varchar(50) NOT NULL,
   `participants` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `zones`
 --
 
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `zones` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `zoneid` int(11) NOT NULL,
   `clanid` int(11) NOT NULL,
   `dmg` int(11) NOT NULL,
-  `clancolor` varchar(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `clancolor` varchar(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `accounts`
+--
+ALTER TABLE `accounts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `username` (`username`),
+  ADD KEY `kills` (`kills`),
+  ADD KEY `kills_semanais` (`kills_semanais`),
+  ADD KEY `damage_semanal` (`damage_semanal`),
+  ADD KEY `clanid` (`clanid`),
+  ADD KEY `regip` (`regip`),
+  ADD KEY `dc_username` (`dc_username`),
+  ADD KEY `dc_uid` (`dc_uid`);
+
+--
+-- Indexes for table `admin_logs`
+--
+ALTER TABLE `admin_logs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `admin_notes`
+--
+ALTER TABLE `admin_notes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `target_id` (`target_id`),
+  ADD KEY `admin_id` (`admin_id`);
+
+--
+-- Indexes for table `arena_logs`
+--
+ALTER TABLE `arena_logs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `banimentos`
+--
+ALTER TABLE `banimentos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `username` (`username`),
+  ADD KEY `ip` (`ip`),
+  ADD KEY `gpci` (`gpci`);
+
+--
+-- Indexes for table `chat_logs`
+--
+ALTER TABLE `chat_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `channel_idx` (`channel`),
+  ADD KEY `created_at_idx` (`created_at`);
+
+--
+-- Indexes for table `clans`
+--
+ALTER TABLE `clans`
+  ADD PRIMARY KEY (`clan_id`),
+  ADD KEY `clan_tag` (`clan_tag`),
+  ADD KEY `clan_name` (`clan_name`);
+
+--
+-- Indexes for table `ip_whitelist`
+--
+ALTER TABLE `ip_whitelist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ispsbanidas`
+--
+ALTER TABLE `ispsbanidas`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `isp` (`isp`);
+
+--
+-- Indexes for table `name_changes`
+--
+ALTER TABLE `name_changes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `new_arena`
+--
+ALTER TABLE `new_arena`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `outposts`
+--
+ALTER TABLE `outposts`
+  ADD PRIMARY KEY (`zoneid`,`outpostid`);
+
+--
+-- Indexes for table `paisesbanidos`
+--
+ALTER TABLE `paisesbanidos`
+  ADD UNIQUE KEY `country_name` (`country_name`) USING BTREE;
+
+--
+-- Indexes for table `player_daily_stats`
+--
+ALTER TABLE `player_daily_stats`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_user_date` (`user_id`,`date`),
+  ADD KEY `idx_user_date` (`user_id`,`date`);
+
+--
+-- Indexes for table `player_match_history`
+--
+ALTER TABLE `player_match_history`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_user_arena_round` (`user_id`,`arena_id`,`played_at`),
+  ADD KEY `idx_user_played` (`user_id`,`played_at`);
+
+--
+-- Indexes for table `safehouses`
+--
+ALTER TABLE `safehouses`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `zone` (`zone_id`);
+
+--
+-- Indexes for table `safehouse_config`
+--
+ALTER TABLE `safehouse_config`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Indexes for table `safehouse_logs`
+--
+ALTER TABLE `safehouse_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `safehouse` (`safehouse_id`),
+  ADD KEY `clan` (`clan_id`);
+
+--
+-- Indexes for table `server_logs`
+--
+ALTER TABLE `server_logs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `server_stats`
+--
+ALTER TABLE `server_stats`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `server_status`
+--
+ALTER TABLE `server_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tickets`
+--
+ALTER TABLE `tickets`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_messages`
+--
+ALTER TABLE `ticket_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `training_records`
+--
+ALTER TABLE `training_records`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_arena` (`user_id`,`arena_name`);
+
+--
+-- Indexes for table `videos`
+--
+ALTER TABLE `videos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `zones`
+--
+ALTER TABLE `zones`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `accounts`
+--
+ALTER TABLE `accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `admin_logs`
+--
+ALTER TABLE `admin_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `admin_notes`
+--
+ALTER TABLE `admin_notes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `arena_logs`
+--
+ALTER TABLE `arena_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `banimentos`
+--
+ALTER TABLE `banimentos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `chat_logs`
+--
+ALTER TABLE `chat_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ip_whitelist`
+--
+ALTER TABLE `ip_whitelist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ispsbanidas`
+--
+ALTER TABLE `ispsbanidas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `name_changes`
+--
+ALTER TABLE `name_changes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `new_arena`
+--
+ALTER TABLE `new_arena`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `player_daily_stats`
+--
+ALTER TABLE `player_daily_stats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `player_match_history`
+--
+ALTER TABLE `player_match_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `safehouses`
+--
+ALTER TABLE `safehouses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `safehouse_logs`
+--
+ALTER TABLE `safehouse_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `server_logs`
+--
+ALTER TABLE `server_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `server_stats`
+--
+ALTER TABLE `server_stats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `server_status`
+--
+ALTER TABLE `server_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tickets`
+--
+ALTER TABLE `tickets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ticket_messages`
+--
+ALTER TABLE `ticket_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `training_records`
+--
+ALTER TABLE `training_records`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `videos`
+--
+ALTER TABLE `videos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `zones`
+--
+ALTER TABLE `zones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2026-08-07 22:57:21
