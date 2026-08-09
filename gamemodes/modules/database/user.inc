@@ -244,6 +244,7 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][locationId] = ARENA_AFK;
     User[playerid][lastLocation] = ARENA_AFK;
     User[playerid][hudType] = ServerDefaultHud;
+    User[playerid][lifeType] = LIFE_DEFAULT;
     User[playerid][hudColor] = ServerDefaultHudColor;
     User[playerid][weather] = 32;
     User[playerid][time] = 7;
@@ -463,6 +464,7 @@ public OnPlayerJoin(playerid)
 		cache_get_value_int(0, "showplayerhud", User[playerid][showPlayerHud]);
 		cache_get_value_bool(0, "show_clan_hud", User[playerid][showClanHud]);
 		cache_get_value_int(0, "hud_type", User[playerid][hudType]);
+		cache_get_value_int(0, "life_type", User[playerid][lifeType]);
 		RecreatePlayerFpsPingTd(playerid);
         cache_get_value_bool(0, "show_headshot", User[playerid][showHeadshot]);
         cache_get_value_bool(0, "show_connect_msg", User[playerid][showConnectMsg]);
@@ -665,6 +667,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		`chat_color`=%d,\
 		`chat_id_color`=%d,\
 		`hud_type`=%d,\
+		`life_type`=%d,\
 		`adminlevel`=%d,\
 		`skin_id`=%d, \
 		`fighting_style`=%d, \
@@ -746,6 +749,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][chatColor],
 		User[playerid][chatIDColor],
 		User[playerid][hudType],
+		User[playerid][lifeType],
 		User[playerid][adminLevel],
 		GetPlayerSkin(playerid),
 		User[playerid][fightStyle],

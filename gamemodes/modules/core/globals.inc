@@ -494,6 +494,7 @@ enum e_USER
     hitSoundID,
     killSoundID,
     hudType,
+    lifeType,
     bool:showPlayerHud,
     bool:showClanHud,
     bool:blockPM,

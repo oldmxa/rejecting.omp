@@ -401,3 +401,23 @@ public AdminCountdown(count)
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{FF4500}Online Players (%d)", count), str, "Close", "");
     return true;
 }
+
+@cmd() lifez(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 5)
+        return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+    CheckAdminAuth(playerid);
+
+    new Float:value;
+    if(sscanf(params, "f", value))
+        return SendClientMessage(playerid, -1, fmat_return("{MAIN}[LIFE] {FFFFFF}Use: /lifez [height] {BEBEBE}(current: %.2f | default: %.2f)", g_LifeLabelZ, LIFE_LABEL_Z_DEFAULT));
+
+    if(value < -2.0 || value > 3.0)
+        return SendClientMessage(playerid, -1, "{MAIN}[LIFE] {FFFFFF}Out of the useful range (-2.00 to 3.00).");
+
+    g_LifeLabelZ = value;
+    RebuildAllLifeLabels();
+
+    return SendClientMessage(playerid, -1, fmat_return("{MAIN}[LIFE] {FFFFFF}Bar height set to {MAIN}%.2f{FFFFFF}. Write it into LIFE_LABEL_Z_DEFAULT once it looks right.", g_LifeLabelZ));
+}

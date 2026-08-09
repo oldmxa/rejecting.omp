@@ -20,8 +20,8 @@ enum
 
 new const HUD_TYPES[MAX_HUD_TYPES][] =
 {
-    "hud_rejecting",
-    "hud_underline"
+    "Rejecting",
+    "Underline"
 };
 
 static const g_monthNameTD[13][7] = {
@@ -79,13 +79,12 @@ stock ShowPlayerHudTypesList(playerid)
     if (!IsPlayerConnected(playerid)) return 0;
 
     new string[1024];
-    strcopy(string, "ID\tHUD Style\tStatus\n");
-    for (new i = 0; i < sizeof(HUD_TYPES); i++)
-    {
-        strcat(string, fmat_return("%d\t%s\t%s\n", i, HUD_TYPES[i], (User[playerid][hudType] == i) ? ("{00FF00}Selected") : ("{FFFFFF}Select")));
-    }
+    strcopy(string, STYLE_PICKER_HEADER);
 
-    return ShowPlayerDialog(playerid, DIALOG_HUD_TYPE, DIALOG_STYLE_TABLIST_HEADERS, "{MAIN}HUD Styles", string, "Select", "Cancel");
+    for (new i = 0; i < sizeof(HUD_TYPES); i++)
+        AppendStyleRow(string, i, HUD_TYPES[i], (User[playerid][hudType] == i));
+
+    return ShowStylePicker(playerid, DIALOG_HUD_TYPE, "{MAIN}HUD Styles", string);
 }
 
 #include <YSI_Coding/y_hooks>

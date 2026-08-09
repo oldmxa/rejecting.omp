@@ -307,7 +307,11 @@ ShowPersonalizationMenu(playerid)
     format(pStr, sizeof(pStr), "%s{B4B5B7}Random Death Tags\t%s\n", pStr, (User[playerid][showRandomDeathTags]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
     format(pStr, sizeof(pStr), "%s{B4B5B7}Hit Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID]));
     format(pStr, sizeof(pStr), "%s{B4B5B7}Kill Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][killSoundID], GetSoundName(User[playerid][killSoundID]));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Welcome Messages\t%s", pStr, (User[playerid][hideWelcomeMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));
+    format(pStr, sizeof(pStr), "%s{B4B5B7}Welcome Messages\t%s\n", pStr, (User[playerid][hideWelcomeMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));
+
+    new lifeName[24];
+    GetLifeStyleName(User[playerid][lifeType], lifeName);
+    format(pStr, sizeof(pStr), "%s{B4B5B7}Life Style\t{FFFFFF}%s", pStr, lifeName);
 
     new pTitle[64] = "{MAIN}Personalization Menu";
     format_MainColor(playerid, pTitle);

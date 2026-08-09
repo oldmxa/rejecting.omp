@@ -138,6 +138,7 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
+        case 17: { ShowPlayerLifeTypesList(playerid); }
     }
     return 1;
 }

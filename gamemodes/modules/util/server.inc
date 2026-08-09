@@ -509,6 +509,7 @@ initializeServer(const gamemodeName[])
 	SetDisableSyncBugs(true);
 	SetTimer("OnScriptUpdate", 1000, true);
 	SetTimer("UpdateFastHUD", 200, true);
+	SetTimer("UpdateLifeLabels", 400, true);
 	SetTimer("UpdateServerStats", 120000, true);
 	SetTimer("RewardClanTerritories", (5 * 60000), true);
 	SetTimer("deleteDuplicateRows", (30*60000), true);
