@@ -315,7 +315,7 @@ public OnScriptUpdate()
 					if(User[p][locationId] != i || GetPVarInt(p, "DuelS_State") != DUELS_STATE_NONE)
 						continue;
 
-					format(strm, sizeof(strm), ARENA_ENDED_MSG ,  i+1, arenaData[arenaInfo[i][arenaId]][arenaName], arenaInfo[i][arenaId],	arenaData[nextArena][arenaName], nextArena);
+					format(strm, sizeof(strm), ARENA_ENDED_MSG , GetLocationDisplaySlot(i)+1, arenaData[arenaInfo[i][arenaId]][arenaName], arenaInfo[i][arenaId],	arenaData[nextArena][arenaName], nextArena);
 					SendClientMessage(p, -1, "%s", strm);
 					GangZoneStopPulseForPlayer(p, e_ZONE_PULSE_ZONE, arenaInfo[i][arenaId]);
 				}

@@ -1,0 +1,5 @@
+Chinese Garden spawns=144 floor=1000.00 | cobertura X 3458.1..3525.8 (arena 3452.0..3532.0) Y -16.4..16.9 (arena -19.5..20.0)
+Desert spawns=144 floor=999.00 | cobertura X 3444.1..3522.8 (arena 3437.0..3530.0) Y 963.7..1032.7 (arena 957.5..1039.0)
+Egypt spawns=144 floor=1002.00 | cobertura X 3431.3..3551.1 (arena 3420.5..3562.0) Y 1923.6..2045.8 (arena 1912.5..2057.0)
+Urbex spawns=144 floor=991.00 | cobertura X -55.2..8.2 (arena -61.0..14.0) Y 2476.0..2514.5 (arena 2472.5..2518.0)
+Zoo spawns=144 floor=999.00 | cobertura X 3471.4..3531.5 (arena 3466.0..3537.0) Y -1015.3..-975.6 (arena -1019.0..-972.0)

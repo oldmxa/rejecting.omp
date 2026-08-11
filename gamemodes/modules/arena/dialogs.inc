@@ -165,6 +165,9 @@ public DIALOG_CUSTOM_MAPLIST(playerid, dialogid, response, listitem, string:inpu
     if(User[playerid][adminLevel] < 2)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
+    if(User[playerid][locationId] != ARENA_CUSTOM)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be in the Custom Room to use this command.");
+
     if(changeArenaDelay > gettime() && User[playerid][adminLevel] < 4)
         return va_SendClientMessage(playerid, -1, CHANGEARENA_DELAY, convertTime(changeArenaDelay - gettime()));
 
