@@ -28,8 +28,6 @@ public WEATHER(playerid, dialogid, response, listitem, string:inputtext[])
     return true;
 }
 
-// The skin picker is a model-preview grid: modules/ui/skin_picker.inc
-
 // Dialogs /menu, Settings e Personalization.
 
 SetAppearanceSource(playerid, source)

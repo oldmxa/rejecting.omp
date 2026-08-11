@@ -178,8 +178,6 @@ stock RefreshLifeLabel(viewerid, targetid)
 
     if (LifeLabel[viewerid][targetid] == PlayerText3D:INVALID_3DTEXT_ID)
     {
-        // testLOS on: hidden behind walls, like the native nametag, which keeps
-        // its line-of-sight check because DisableNameTagLOS() is never called.
         LifeLabel[viewerid][targetid] = CreatePlayer3DTextLabel(
             viewerid, text, -1, 0.0, 0.0, g_LifeLabelZ, LIFE_LABEL_DISTANCE,
             targetid, INVALID_VEHICLE_ID, true
@@ -212,8 +210,6 @@ stock ApplyLifeStyle(viewerid)
     return 1;
 }
 
-// Labels only: this runs on every health change, and the nametag state does not
-// change with it.
 stock RefreshLifeLabelForAll(targetid)
 {
     foreach (new viewerid : Player)

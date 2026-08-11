@@ -1,5 +1,3 @@
-// Shared by SetNameTagDrawDistance() and the custom life labels, so both fade
-// out at the same range.
 #define NT_DISTANCE 40.0
 
 //Colors
@@ -115,7 +113,6 @@
 #define MAX_LOGIN_ATTEMPTS 3
 #define MAX_ACCOUNT_LOCKTIME 2
 
-// 58 arenas on the real map + 5 object-built ones in modules/arena/maps/
 #define MAX_ZONES 63
 
 #define MAX_LINES 			6
@@ -147,7 +144,6 @@
 #define MAX_PLAYERS_LOCATION	25
 #define MAX_PLAYERS_AFK	88
 
-// DM Room 1, DM Room 2, Lounge, Custom Room
 #define MAX_LOCATIONS		4
 
 

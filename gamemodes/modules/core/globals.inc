@@ -58,7 +58,7 @@ enum arenaa{
 	arenaName[30 + 1],
 	Float:arenaPos[4],
     category,
-    Float:arenaSpawnCeiling,
+    Float:arenaFloorZ, // 0.0 = arena on the real map
     arenaInterior
 };
 

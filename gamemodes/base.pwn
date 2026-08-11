@@ -1,3 +1,16 @@
+/*
+
+                 88           88
+                 88           88
+                 88           88
+     ,adPPYba,   88   ,adPPYb,88  88,dPPYba,,dPPYba,  8b,     ,d8   ,adPPYba,
+    a8"     "8a  88  a8"    `Y88  88P'   "88"    "8a   `Y8, ,8P'    ""     `Y8
+    8b       d8  88  8b       88  88      88      88     )888(     ,adPPPPP88
+    "8a,   ,a8"  88  "8a,   ,d88  88      88      88   ,d8" "8b,   88,    ,88
+     `"YbbdP"'   88   `"8bbdP"Y8  88      88      88  8P'     `Y8  `"8bbdP"Y8
+
+*/
+
 #pragma dynamic 16384
 
 #include <a_samp>

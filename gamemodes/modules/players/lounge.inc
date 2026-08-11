@@ -80,7 +80,6 @@ stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
     if (!CanSpawnLoungeVehicle(playerid))
         return true;
 
-    // No argument opens the preview grid, matching /skin.
     if (IsNull(params))
         return ShowVehicleDialog(playerid);
 

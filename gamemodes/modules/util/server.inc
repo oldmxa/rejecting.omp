@@ -501,7 +501,7 @@ initializeServer(const gamemodeName[])
 {
 	SetNameTagDrawDistance(NT_DISTANCE);
 
-	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 1500);
+	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 1000);
 	SetGameModeText(gamemodeName);
 
 	DisableInteriorEnterExits();
@@ -516,6 +516,7 @@ initializeServer(const gamemodeName[])
 	SetTimer("RewardClanTerritories", (5 * 60000), true);
 	SetTimer("deleteDuplicateRows", (30*60000), true);
 	SetTimer("CheckTime", 1000, true); // DATE/TIME SYSTEM
+	SetTimer("WarmCustomSpawns", 1000, false);
 	SetTimer("AutomaticGMX", 1000, true);
 	LastWeeklyCheck = LastGmxCheck = gettime();
 	SetWeaponDamage(WEAPON_SNIPER, DAMAGE_TYPE_STATIC, 40.0);

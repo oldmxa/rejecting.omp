@@ -30,13 +30,6 @@ stock ShowVehicleDialog(playerid)
         "Lounge - Vehicle", body, "Spawn", "Cancel");
 }
 
-/*
- * Dispatched from modules/ui/preview_dialog.inc. inputtext carries the model id
- * of the clicked item.
- *
- * The lounge check runs again here: the grid stays open while the player moves,
- * so being in the lounge when it opened does not mean they still are.
- */
 stock HandleVehiclePreviewResponse(playerid, response, const inputtext[])
 {
     if (!response) return 1;

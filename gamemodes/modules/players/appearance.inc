@@ -34,7 +34,6 @@
 
 @cmd(.alts = {"ss", "skin"}) changeskin(playerid, params[], help)
 {
-    // No id given opens the picker, matching /fight.
     if(IsNull(params)) return ShowSkinDialog(playerid, APPEARANCE_SRC_NONE);
     if(!IsNumeric(params)) return SendClientMessage(playerid,-1, "%s", IS_NOT_NUMERIC);
 
