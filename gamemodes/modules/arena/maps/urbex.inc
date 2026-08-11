@@ -2,7 +2,7 @@
 
 static const
     URBEX_WORLD_ID[] = {-1},
-    URBEX_INTERIOR_ID[] = {5};
+    URBEX_INTERIOR_ID[] = {0};
 
 void:CreateUrbexArena()
 {

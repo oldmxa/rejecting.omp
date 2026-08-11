@@ -70,6 +70,7 @@ StartChangeMode(playerid)
 
     User[playerid][locationId] = -1;
     User[playerid][isAlreadySpawned] = false;
+    SetPlayerInterior(playerid, 0);
     SetPlayerPos(playerid, -1504.1549, 595.7162, 42.6563);
     SetPlayerFacingAngle(playerid, 200.5717);
     InterpolateCameraPos(playerid, -1489.660888, 556.384155, 47.324314, -1502.70, 590.56, 42.74, 4000);

@@ -58,11 +58,11 @@ new const arenaData[MAX_ZONES][arenaa] =
 	{"Palomino Creek", {2219.5, -69.5, 2543.5, 154.5}, ARENA_CATEGORY_BIG},
 	{"Willowfield", {2314.5, -2044.5, 2577.5, -1901.5}, ARENA_CATEGORY_MEDIUM},
 	{"Ocean Flats", {-2807.5, -71.5, -2600.5, 42.5}, ARENA_CATEGORY_MEDIUM},
-	{"Chinese Garden", {3452.0, -19.5, 3532.0, 20.0},      ARENA_CATEGORY_CUSTOM, 1001.0, 4},
-	{"Desert",         {3437.0, 957.5, 3530.0, 1039.0},    ARENA_CATEGORY_CUSTOM, 1000.0, 2},
-	{"Egypt",          {3420.5, 1912.5, 3562.0, 2057.0},   ARENA_CATEGORY_CUSTOM, 1003.0, 3},
-	{"Urbex",          {-61.0, 2472.5, 14.0, 2518.0},      ARENA_CATEGORY_CUSTOM, 992.0,  5},
-	{"Zoo",            {3466.0, -1019.0, 3537.0, -972.0},  ARENA_CATEGORY_CUSTOM, 1000.0, 13}
+	{"Chinese Garden", {3452.0, -19.5, 3532.0, 20.0},      ARENA_CATEGORY_CUSTOM, 1001.0, 0},
+	{"Desert",         {3437.0, 957.5, 3530.0, 1039.0},    ARENA_CATEGORY_CUSTOM, 1000.0, 0},
+	{"Egypt",          {3420.5, 1912.5, 3562.0, 2057.0},   ARENA_CATEGORY_CUSTOM, 1003.0, 0},
+	{"Urbex",          {-61.0, 2472.5, 14.0, 2518.0},      ARENA_CATEGORY_CUSTOM, 992.0,  0},
+	{"Zoo",            {3466.0, -1019.0, 3537.0, -972.0},  ARENA_CATEGORY_CUSTOM, 1000.0, 0}
 };
 
 new Iterator:ArenaCategory<MAX_ARENA_CATEGORIES, MAX_ZONES>;

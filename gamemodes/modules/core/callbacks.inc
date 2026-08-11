@@ -430,6 +430,7 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 
 public OnPlayerRequestClass(playerid, classid)
 {
+	SetPlayerInterior(playerid, 0);
     SetPlayerPos(playerid, -1504.1549,595.7162,42.6563);
 	SetPlayerFacingAngle(playerid, 200.5717);
 	User[playerid][isAlreadySpawned] = false;

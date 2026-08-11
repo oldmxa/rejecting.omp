@@ -2,7 +2,7 @@
 
 static const
     DESERT_WORLD_ID[] = {-1},
-    DESERT_INTERIOR_ID[] = {2};
+    DESERT_INTERIOR_ID[] = {0};
 
 void:CreateDesertArena()
 {

@@ -4,7 +4,7 @@ const Float:CHINESE_GARDEN_Y_OFFSET = -1000.0;
 
 static const
     CHINESE_GARDEN_WORLD_ID[] = {-1},
-    CHINESE_GARDEN_INTERIOR_ID[] = {4};
+    CHINESE_GARDEN_INTERIOR_ID[] = {0};
 
 void:CreateChineseGardenArena()
 {

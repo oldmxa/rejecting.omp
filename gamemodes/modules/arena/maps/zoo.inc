@@ -4,7 +4,7 @@ const Float:ZOO_Y_OFFSET = -2000.0;
 
 static const
     ZOO_WORLD_ID[] = {-1},
-    ZOO_INTERIOR_ID[] = {13};
+    ZOO_INTERIOR_ID[] = {0};
 
 void:CreateZooArena()
 {

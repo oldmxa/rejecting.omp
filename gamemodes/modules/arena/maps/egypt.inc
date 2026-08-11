@@ -4,7 +4,7 @@ const Float:EGYPT_Y_OFFSET = 1000.0;
 
 static const
     EGYPT_WORLD_ID[] = {-1},
-    EGYPT_INTERIOR_ID[] = {3};
+    EGYPT_INTERIOR_ID[] = {0};
 
 void:CreateEgyptArena()
 {
