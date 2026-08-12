@@ -736,8 +736,14 @@ new changeArenaDelay = -1;
 
 new g_Object;
 
-new bool:R2KickEnabled = true;
+new bool:R2KickEnabled = false;
 forward IsR2KickEnabled();
+
+new bool:ACPunishEnabled = true;
+
+new bool:ACNoFallDamage = true;
+new bool:ACNoFallAnimation = true;
+new bool:ACFastStuns = false;
 
 new bool:ServerLocked = false;
 new ServerMaxPing = MAX_PING;
@@ -894,7 +900,11 @@ enum e_AC_SUSPECT
     ac_lastReason[AC_REASON_LEN],
     ac_weaponFlags,
     ac_lastWeapon[AC_WEAPON_LEN],
-    ac_lastTime
+    ac_lastTime,
+
+    ac_cheatFlags,
+    ac_lastCheat[AC_REASON_LEN],
+    ac_lastCheatTime
 };
 
 new ACSuspect[MAX_PLAYERS][e_AC_SUSPECT];

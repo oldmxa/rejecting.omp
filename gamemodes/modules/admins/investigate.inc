@@ -362,13 +362,19 @@ static stock AppendACSuspects(dest[], size)
     foreach(new i : Player)
     {
         if(!User[i][isLogged]) continue;
-        if(ACSuspect[i][ac_rejectedHits] < 1 && ACSuspect[i][ac_weaponFlags] < 1) continue;
+        if(ACSuspect[i][ac_rejectedHits] < 1 && ACSuspect[i][ac_weaponFlags] < 1 && ACSuspect[i][ac_cheatFlags] < 1) continue;
 
-        new elapsed = gettime() - ACSuspect[i][ac_lastTime];
+        new elapsed = gettime() - ((ACSuspect[i][ac_cheatFlags] > 0) ? ACSuspect[i][ac_lastCheatTime] : ACSuspect[i][ac_lastTime]);
         if(elapsed < 60) format(ageStr, sizeof(ageStr), "%ds ago", elapsed);
         else format(ageStr, sizeof(ageStr), "%dm ago", elapsed / 60);
 
-        if(ACSuspect[i][ac_weaponFlags] > 0)
+        if(ACSuspect[i][ac_cheatFlags] > 0)
+        {
+            format(reason, sizeof(reason), "{F84F31}Client");
+            format(details, sizeof(details), "{BEBEBE}%dx %s (%s)",
+                ACSuspect[i][ac_cheatFlags], ACSuspect[i][ac_lastCheat], ageStr);
+        }
+        else if(ACSuspect[i][ac_weaponFlags] > 0)
         {
             format(reason, sizeof(reason), "{FF0000}Weapon");
 

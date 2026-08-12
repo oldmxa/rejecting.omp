@@ -299,8 +299,6 @@ public OnPlayerDeath(playerid, killerid, reason)
 				ClanInfo[User[killerid][clanID]][clanArenaKills][killerLoc]++;
 		}
 
-		SetPlayerScore(killerid, User[killerid][playerKills]);
-
 		if(killerLocOk)
 		{
 			playerArenaInfo[killerLoc][killerid][arenaKills]++;
@@ -509,7 +507,7 @@ public OnPlayerSpawn(playerid)
 			ZoneNumberFlashForPlayer(playerid, zoneid, 0xCC0000FF);
 		}
 
-		SetPlayerScore(playerid, User[playerid][playerKills]);
+		SetPlayerScore(playerid, SCOREBOARD_SCORE);
 
 		CancelSelectTextDraw(playerid);
 		DeletePVar(playerid, "firstSpawn");
@@ -740,9 +738,10 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 
 	if(weapon == WEAPON_COLLISION)
 	{
-		ClearAnimations(playerid, 1);
-		return false;
+		if(ACNoFallAnimation) ClearAnimations(playerid, 1);
+		if(ACNoFallDamage) return false;
 	}
+	else if(ACFastStuns) ClearAnimations(playerid, 1);
 
 	if(weapon != WEAPON_FIST && weapon != WEAPON_DEAGLE && weapon != WEAPON_SHOTGUN && weapon != WEAPON_SNIPER && weapon != WEAPON_M4 && weapon != WEAPON_GRENADE && weapon != WEAPON_KATANA)
 		return false;

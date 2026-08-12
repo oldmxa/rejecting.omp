@@ -1,0 +1,236 @@
+#if defined _ac_memory_included
+    #endinput
+#endif
+#define _ac_memory_included
+
+#define AC_PRESSED(%0) (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
+
+#include <YSI_Coding\y_hooks>
+
+static enum E_AC_PROBE
+{
+    E_AC_PROBE_MEMORY_ADDRESS,
+    E_AC_PROBE_BYTE_COUNT,
+    E_AC_PROBE_RETN_DATA,
+
+    E_AC_PROBE_CODE,
+    E_AC_PROBE_FALLBACK
+}
+
+static const AC_PROBE[][E_AC_PROBE] =
+{
+    {0x5E8606,  2,  204,    E_REJECTING_AC_S0BEIT,          E_REJECTING_AC_UNKNOWN},
+    {0x520190,  4,  8,      E_REJECTING_AC_SAMPFUNCS,       E_REJECTING_AC_UNKNOWN},
+    {0x4667DB,  4,  192,    E_REJECTING_AC_CLEO,            E_REJECTING_AC_UNKNOWN},
+    {0x743C60,  2,  196,    E_REJECTING_AC_IMPROVEDDEAGLE,  E_REJECTING_AC_UNKNOWN},
+
+    {0x5407F0,  4,  64,     E_REJECTING_AC_SPRINTHOOK,      E_REJECTING_AC_UNKNOWN},
+
+    {0x4B3FC0,  4,  8,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_OTHER_CHEATS},
+    {0x521500,  4,  4,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_OTHER_CHEATS},
+    {0x712E40,  4,  8,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_OTHER_CHEATS},
+    {0x541E2C,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+
+    // {0x6FF420,  4,  204,    E_REJECTING_AC_STEALTH},
+    {0x73FF11,  4,  200,    E_REJECTING_AC_STEALTH,         E_REJECTING_AC_UNKNOWN},
+
+    {0x60F289,  2,  0,      E_REJECTING_AC_BYPASS,          E_REJECTING_AC_UNKNOWN},
+    {0x60F29D,  2,  0,      E_REJECTING_AC_BYPASS,          E_REJECTING_AC_UNKNOWN},
+
+    {0x58A330,  2,  76,     E_REJECTING_AC_FAKE_FPS,        E_REJECTING_AC_UNKNOWN},
+
+    {0x6E9E23,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x6EFBD8,  4,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}
+};
+
+static const AC_SIGNATURE[][3] =
+{
+    {0x4B3FC0, 128, E_REJECTING_AC_1337},
+    {0x4B3FC0, 140, E_REJECTING_AC_1337},
+    {0x4B3FC0, 204, E_REJECTING_AC_ARCANE},
+
+    {0x521500,  76, E_REJECTING_AC_1337},
+    {0x521500,  12, E_REJECTING_AC_ARCANE},
+    {0x521500, 132, E_REJECTING_AC_ARCANE},
+    {0x521500, 204, E_REJECTING_AC_UNKNOWN},
+
+    {0x712E40, 136, E_REJECTING_AC_1337},
+    {0x712E40, 128, E_REJECTING_AC_ARCANE},
+
+    {0x541E2C,  72, E_REJECTING_AC_EXTREMECHEATS},
+    {0x541E2C,  76, E_REJECTING_AC_EXTREMECHEATS},
+
+    {0x6E9E23,  64, E_REJECTING_AC_VENOM},
+
+    {0x6EFBD8,  12, E_REJECTING_AC_VENOM},
+    {0x6EFBD8, 204, E_REJECTING_AC_VENOM}
+};
+
+static
+    ACSweepTick[MAX_PLAYERS],
+    ACFullSweepTick[MAX_PLAYERS],
+    ACSprintProbeTick[MAX_PLAYERS],
+
+    bool:ACProbeSupport[MAX_PLAYERS char],
+    ACHasCleo[MAX_PLAYERS],
+    ACHasSampfuncs[MAX_PLAYERS];
+
+static ACProbeRand[MAX_PLAYERS][sizeof(AC_PROBE)];
+
+static AC_SendProbe(playerid, index)
+{
+    new rand = random(256);
+
+    ACProbeRand[playerid][index] = rand;
+
+    SendClientCheck(playerid, 5, AC_PROBE[index][E_AC_PROBE_MEMORY_ADDRESS] - rand, rand, AC_PROBE[index][E_AC_PROBE_BYTE_COUNT]);
+    return 1;
+}
+
+static AC_ProbeIndexFromAddress(playerid, memaddr)
+{
+    for (new i; i < sizeof(AC_PROBE); i++)
+    {
+        if (ACProbeRand[playerid][i] < 0) continue;
+        if (AC_PROBE[i][E_AC_PROBE_MEMORY_ADDRESS] - ACProbeRand[playerid][i] != memaddr) continue;
+
+        ACProbeRand[playerid][i] = -1;
+        return i;
+    }
+    return -1;
+}
+
+static AC_ClearProbes(playerid)
+{
+    for (new i; i < sizeof(AC_PROBE); i++) ACProbeRand[playerid][i] = -1;
+
+    return 1;
+}
+
+static bool:AC_SendProbes(playerid, bool:onlyInjections = false)
+{
+    if (!ACProbeSupport{playerid}) return false;
+
+    for (new i = (onlyInjections ? (E_REJECTING_AC_1337) : 0); i < sizeof(AC_PROBE); i++)
+    {
+        AC_SendProbe(playerid, i);
+    }
+
+    return true;
+}
+
+stock IsPlayerUsingCleo(playerid)
+{
+    if (!IsPlayerConnected(playerid)) return 0;
+    return ACHasCleo[playerid];
+}
+
+stock IsPlayerUsingSampfuncs(playerid)
+{
+    if (!IsPlayerUsingCleo(playerid)) return 0;
+    return ACHasSampfuncs[playerid];
+}
+
+hook OnPlayerConnect(playerid)
+{
+    ACHasCleo[playerid] =
+    ACHasSampfuncs[playerid] = -1;
+
+    ACSweepTick[playerid] =
+    ACFullSweepTick[playerid] =
+    ACSprintProbeTick[playerid] = GetTickCount();
+
+    AC_ClearProbes(playerid);
+
+    new version[24 + 1];
+    GetPlayerVersion(playerid, version);
+    #if defined IsPlayerUsingOmp
+        ACProbeSupport{playerid} = !strequal(version, "0.3.7") || IsPlayerUsingOmp(playerid);
+    #else
+        ACProbeSupport{playerid} = !strequal(version, "0.3.7");
+    #endif
+
+    AC_SendProbes(playerid);
+
+    return 1;
+}
+
+static AC_ResolveProbe(index, retndata)
+{
+    new code = AC_PROBE[index][E_AC_PROBE_CODE];
+
+    if (code != E_REJECTING_AC_UNKNOWN) return code;
+
+    new address = AC_PROBE[index][E_AC_PROBE_MEMORY_ADDRESS];
+
+    for (new i; i < sizeof(AC_SIGNATURE); i++)
+    {
+        if (AC_SIGNATURE[i][0] != address || AC_SIGNATURE[i][1] != retndata) continue;
+
+        return AC_SIGNATURE[i][2];
+    }
+
+    return AC_PROBE[index][E_AC_PROBE_FALLBACK];
+}
+
+hook OnClientCheckResponse(playerid, actionid, memaddr, retndata)
+{
+    if (actionid != 5) return 1;
+
+    new index = AC_ProbeIndexFromAddress(playerid, memaddr);
+
+    if (index == -1) return 1;
+
+    new bool:mismatch = (retndata != AC_PROBE[index][E_AC_PROBE_RETN_DATA]);
+
+    if (mismatch)
+    {
+        new code = AC_ResolveProbe(index, retndata);
+        new name[32];
+
+        AC_GetDetectionName(code, name, sizeof(name));
+
+        AC_Debug(playerid, (code == E_REJECTING_AC_UNKNOWN) ? E_REJECTING_AC_OTHER_CHEATS : code,
+            "probe 0x%x returned %d, expected %d, resolved as %s",
+            AC_PROBE[index][E_AC_PROBE_MEMORY_ADDRESS], retndata, AC_PROBE[index][E_AC_PROBE_RETN_DATA], name);
+
+        if (code != E_REJECTING_AC_UNKNOWN)
+            CallRemoteFunction("OnRejectingACDetection", "ii", playerid, code);
+    }
+
+    switch (AC_PROBE[index][E_AC_PROBE_CODE])
+    {
+        case E_REJECTING_AC_CLEO:      ACHasCleo[playerid] = _:mismatch;
+        case E_REJECTING_AC_SAMPFUNCS: ACHasSampfuncs[playerid] = _:mismatch;
+    }
+    return 1;
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
+{
+    if (!ACProbeSupport{playerid}) return 1;
+
+    new const tickCount = GetTickCount();
+
+    if (AC_PRESSED(KEY_SPRINT))
+    {
+        if (tickCount - ACSprintProbeTick[playerid] > 5_000)
+        {
+            ACSprintProbeTick[playerid] = tickCount;
+
+            AC_SendProbe(playerid, E_REJECTING_AC_SPRINTHOOK);
+        }
+    }
+    else if (tickCount - ACFullSweepTick[playerid] > 30_000)
+    {
+        ACFullSweepTick[playerid] = ACSweepTick[playerid] = tickCount;
+        AC_SendProbes(playerid);
+    }
+    else if (tickCount - ACSweepTick[playerid] > 5_000)
+    {
+        ACSweepTick[playerid] = tickCount;
+        AC_SendProbes(playerid, true);
+    }
+
+    return 1;
+}

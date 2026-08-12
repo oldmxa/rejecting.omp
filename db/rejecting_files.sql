@@ -112,6 +112,29 @@ CREATE TABLE `accounts` (
   `spawn_safehouse` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `ac_detections` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `username` varchar(24) NOT NULL DEFAULT '',
+  `code` int(11) NOT NULL DEFAULT 0,
+  `action` int(11) NOT NULL DEFAULT 0,
+  `ip` varchar(46) NOT NULL DEFAULT '',
+  `gpci` varchar(41) NOT NULL DEFAULT '',
+  `created_at` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ac_config` (
+  `key` varchar(32) NOT NULL,
+  `value` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ac_detection_totals` (
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `code` int(11) NOT NULL DEFAULT 0,
+  `hits` int(11) NOT NULL DEFAULT 0,
+  `last_seen` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `admin_logs` (
   `id` int(11) NOT NULL,
   `admin_name` varchar(24) NOT NULL,
@@ -380,6 +403,18 @@ ALTER TABLE `accounts`
   ADD KEY `dc_username` (`dc_username`),
   ADD KEY `dc_uid` (`dc_uid`);
 
+ALTER TABLE `ac_detections`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user` (`user_id`),
+  ADD KEY `code` (`code`);
+
+ALTER TABLE `ac_config`
+  ADD PRIMARY KEY (`key`);
+
+ALTER TABLE `ac_detection_totals`
+  ADD PRIMARY KEY (`user_id`,`code`),
+  ADD KEY `code` (`code`);
+
 ALTER TABLE `admin_logs`
   ADD PRIMARY KEY (`id`);
 
@@ -474,6 +509,9 @@ ALTER TABLE `zones`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `ac_detections`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `admin_logs`

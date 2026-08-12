@@ -12,6 +12,7 @@
 #define CH_LOGS_ARENA       "1466540934689853480"
 #define CH_LOGS_ADMIN_CMDS  "1477802174938615990"
 #define CH_LOGS_TICKETS     "1535689360286949488"
+#define CH_LOGS_AC          "1536842134156615711"
 #define CH_COMANDOS         "1460838135045951796"
 #define CH_GAMECHAT         "1461088854185480296"
 #define CH_ADMINCHAT        "1461088997668290581"
@@ -30,6 +31,7 @@ new
     DCC_Channel:adminchat,
     DCC_Channel:logs_admin_cmds,
     DCC_Channel:logs_tickets,
+    DCC_Channel:logs_ac,
     DCC_Channel:PMPlayer;
 
 stock InitLogChannels()
@@ -45,6 +47,7 @@ stock InitLogChannels()
     logs_arena      = DCC_FindChannelById(CH_LOGS_ARENA);
     logs_admin_cmds = DCC_FindChannelById(CH_LOGS_ADMIN_CMDS);
     logs_tickets    = DCC_FindChannelById(CH_LOGS_TICKETS);
+    logs_ac         = DCC_FindChannelById(CH_LOGS_AC);
     comandos        = DCC_FindChannelById(CH_COMANDOS);
     gamechat        = DCC_FindChannelById(CH_GAMECHAT);
     adminchat       = DCC_FindChannelById(CH_ADMINCHAT);

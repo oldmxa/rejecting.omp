@@ -365,7 +365,7 @@ playertextdraws(playerid)
 		PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][1], MAIN_BACKGROUND_COLOUR);
 	#endif
 
-	InfoStats[playerid][2] = CreatePlayerTextDraw(playerid, 578.000000, 56.000000, "_"); //hud bdm data, hora, tempo etc...
+	InfoStats[playerid][2] = CreatePlayerTextDraw(playerid, 578.000000, 56.000000, "_"); 
 	PlayerTextDrawFont(playerid, InfoStats[playerid][2], 1);
 	PlayerTextDrawLetterSize(playerid, InfoStats[playerid][2], 0.180000, 0.800000);
 	PlayerTextDrawSetProportional(playerid, InfoStats[playerid][2], true);

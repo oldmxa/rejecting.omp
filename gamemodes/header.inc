@@ -1,12 +1,16 @@
-// constantes, variaveis globais e hooks everything depends on this block. Nothing enters before it.
+// Constants, globals and hooks. Everything depends on this block, nothing enters before it.
 #include "modules/core/defines.inc"
 #include "modules/core/globals.inc"
 #include "modules/core/hooks.inc"
 
+// anti cheat: hooks ALS
+#tryinclude "modules/AC/early.inc"
+#tryinclude "modules/AC/detect/nops.inc"
+
 // logs
 #include "modules/logs/logs_entry.inc"
 
-// interface: HUD, textdraws e tela de login ---
+// Interface: HUD, textdraws and the login screen.
 #include "modules/ui/style_picker.inc"
 #include "modules/ui/hud_styles.inc"
 #include "modules/ui/life_styles.inc"
@@ -20,7 +24,7 @@
 #include "modules/core/messages.inc"
 #include "modules/util/buildings.inc"
 
-// arenas the arenaData table is used by the dialogs.
+// Arenas: the arenaData table is used by the dialogs.
 #include "modules/arena/data.inc"
 
 // object-built arenas: each file self-registers through hook OnGameModeInit()
@@ -31,7 +35,7 @@
 #include "modules/arena/maps/urbex.inc"
 #include "modules/arena/maps/zoo.inc"
 
-// clan: enums e globais sao usados por quase todos os modulos abaixo.
+// Clan: its enums and globals are used by almost every module below.
 #include "modules/clan/clan.inc"
 
 // dialogs. they all go here, in the position the single file previously occupied,
@@ -65,6 +69,9 @@
 #include "modules/outposts/core.inc"
 #include "modules/interiors/core.inc"
 #include "modules/admins/auth.inc"
+
+// anti cheat
+#tryinclude "modules/AC/entry.inc"
 #include "modules/training/training.pwn"
 
 // duel and random_death_tag hook OnPlayerDeath via ALS:

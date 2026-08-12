@@ -1,5 +1,7 @@
 #define NT_DISTANCE 40.0
 
+#define SCOREBOARD_SCORE (1337)
+
 //Colors
 
 #define COLOR_WHITE (0xFFFFFFFF)
