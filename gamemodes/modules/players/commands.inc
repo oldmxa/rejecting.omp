@@ -458,7 +458,8 @@ ShowCommandCategory(playerid, catid)
     new creditsStr[2048];
     strcat(creditsStr, "{00CED1}Main Information:\n");
     strcat(creditsStr, fmat_return("{FFFFFF}\x95 {08A3FD}GameMode: {FFFFFF}%s %s\n", ServerHostname, SERVER_MODE));
-    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Developers: {FFFFFF}oldmxa & underline\n\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Developers: {FFFFFF}oldmxa & underline\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Anticheat: {FFFFFF}RAC - oldmxa\n\n");
 
     strcat(creditsStr, "{00CED1}Special Thanks:\n");
     strcat(creditsStr, fmat_return("{FFFFFF}\x95 {08A3FD}%s{FFFFFF} - For playing with us and helping the server grow!\n", getPlayerName(playerid)));

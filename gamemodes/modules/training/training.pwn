@@ -22,6 +22,7 @@
 #include "modules/training/arenas/skinhit_commerce.inc"
 #include "modules/training/arenas/skinhit_marina.inc"
 #include "modules/training/arenas/skinhit_lv.inc"
+#include "modules/training/arenas/skinhit_ganton.inc"
 #include "modules/training/arenas/reflex_bayside.inc"
 
 // Hooks
@@ -38,6 +39,7 @@ hook OnGameModeInit()
     Init_SkinhitCommerce();
     Init_SkinhitMarina();
     Init_SkinhitLV();
+    Init_SkinhitGanton();
     Init_ReflexBayside();
 
     InitTrainingRecords();

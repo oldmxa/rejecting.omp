@@ -246,6 +246,7 @@ ShowStats(playerid, targetid)
     format(strstts, sizeof(strstts), "%s{BEBEBE}Best Arena Damage\t{23C552}%d DMG\n", strstts, User[targetid][maxDamage]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Arenas Won (MVP)\t{23C552}%d arenas\n", strstts, User[targetid][wonArenas]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Duel Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, User[targetid][duelWins], User[targetid][duelLosses], ratio(User[targetid][duelWins], User[targetid][duelLosses]));
+    format(strstts, sizeof(strstts), "%s{BEBEBE}2v2 Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, User[targetid][duel2v2Wins], User[targetid][duel2v2Losses], ratio(User[targetid][duel2v2Wins], User[targetid][duel2v2Losses]));
 
     // Section 3: Clan
     strcat(strstts, "{MAIN}> Clan Information\t \n");
