@@ -9,6 +9,7 @@ enum Arena
 }
 
 new arenaInfo[MAX_LOCATIONS][Arena];
+new lastArenaId[MAX_LOCATIONS] = {-1, ...};
 new ServerHostname[64] = "rejecting.files";
 
 enum

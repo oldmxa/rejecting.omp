@@ -81,6 +81,8 @@
 #define ADM_TAG_NORM      COL_ADM_CMD"[Admin] "
 #define ADM_TAG_PUN       COL_ADM_PUNISH"[Admin] "
 
+#define RDM_TAG           "{MAIN}[RDM] "
+
 #define ban_message_color "{e83333}"
 
 #define MAIN_BACKGROUND_COLOUR (0x0000004B)

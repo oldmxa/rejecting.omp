@@ -122,6 +122,11 @@ determineArenaID(location)
 		}
 	}
 
+	if (Iter_Count(ArenaQueue<type>) > 1 && Iter_Contains(ArenaQueue<type>, lastArenaId[location]))
+	{
+		Iter_Remove(ArenaQueue<type>, lastArenaId[location]);
+	}
+
 	rand = Iter_Random(ArenaQueue<type>);
 	Iter_Remove(ArenaQueue<type>, rand);
 
@@ -629,6 +634,8 @@ SendDeathMessageToRoom(killer, killed, weapon, roomid)
 
 PrepareChangeArena(location, finishingArenaId)
 {
+	lastArenaId[location] = finishingArenaId;
+
 	new g_PlayerArray<playersTop>;
 
 	sortPlayersInline playersTop => (R = l > r)

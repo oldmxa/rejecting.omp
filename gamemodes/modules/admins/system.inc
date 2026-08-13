@@ -134,6 +134,9 @@
     if(IsCustomArena(arenaid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}That arena belongs to the Custom Room.");
 
+    if(arenaid == lastArenaId[location])
+        return va_SendClientMessage(playerid, -1, ARENA_JUST_PLAYED, arenaData[arenaid][arenaName]);
+
     foreach(new i : Player)
     {
         if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;

@@ -198,13 +198,15 @@
 #define FREEZE_HELP			"{MAIN}[ERROR] {FFFFFF} /freeze [name/id]"
 #define UNFREEZE_HELP		"{MAIN}[ERROR] {FFFFFF}  /unfreeze [name/id]"
 
+#define ARENA_JUST_PLAYED   "{MAIN}[ERROR] {FFFFFF}%s {FFFFFF}was the last arena played. Wait for the current one to finish."
+
 // SPREE
 
-#define FIRST_BLOOD			"{MAIN}[SPREE] {FFFFFF}FIRST BLOOD {%06x}%s {FFFFFF}was the first to kill this round!"
-#define END_KILLSPREE		"{MAIN}[SPREE] Your {MAIN}KILLING SPREE {FFFFFF}was knocked down! killed {MAIN}%d players {FFFFFF}within {MAIN}%s seconds!"
-#define KILL_MACHINE		"{MAIN}[SPREE] {%06x}%s {FFFFFF}is a {MAIN}KILLING MACHINE {FFFFFF}killed {MAIN}6 players {FFFFFF}within {MAIN}8 seconds!"
-#define REACHED_RAMPAGE		"{MAIN}[SPREE] {%06x}%s {FFFFFF}has reached {MAIN}RAMPAGE {FFFFFF}spree!"
-#define DOWN_SPREE_MSG		"{MAIN}[SPREE] {FFFFFF}{B4B3B3}{%06x}%s {FFFFFF}has ended the kill-streak of  {B4B3B3}{%06x}%s {MAIN}(%d kills)" //killername, pname, kills
+#define FIRST_BLOOD			RDM_TAG"{FFFFFF}First blood! {%06x}%s {FFFFFF}opened the round."
+#define END_KILLSPREE		RDM_TAG"{FFFFFF}Your spree is over. You killed {MAIN}%d {FFFFFF}players in {MAIN}%s {FFFFFF}seconds."
+#define KILL_MACHINE		RDM_TAG"{%06x}%s {FFFFFF}is on a {MAIN}killing machine {FFFFFF}run!"
+#define REACHED_RAMPAGE		RDM_TAG"{%06x}%s {FFFFFF}reached a {MAIN}rampage{FFFFFF}!"
+#define DOWN_SPREE_MSG		RDM_TAG"{%06x}%s {FFFFFF}has ended the kill-streak of {%06x}%s {MAIN}(%d kills)"
 
 
 // ACHIEVEMENTS

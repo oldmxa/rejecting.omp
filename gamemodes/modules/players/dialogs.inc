@@ -700,6 +700,9 @@ public DIALOG_MAPLIST(playerid, dialogid, response, listitem, string:inputtext[]
             if(listitemm < 0 || listitemm >= MAX_ZONES || IsCustomArena(listitemm))
                 return va_SendClientMessage(playerid, -1, NOT_VALID_ARENA, MAX_ZONES-1);
 
+            if(listitemm == lastArenaId[location])
+                return va_SendClientMessage(playerid, -1, ARENA_JUST_PLAYED, arenaData[listitemm][arenaName]);
+
             foreach(new i : Player)
             {
                 if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;
