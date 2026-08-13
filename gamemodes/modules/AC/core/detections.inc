@@ -37,22 +37,22 @@ static AC_GetAction(code)
     return action;
 }
 
-static AC_Alert(playerid, const detection[], const action[])
+static AC_Alert(playerid, code, const detection[], const action[])
 {
     new weaponid = GetPlayerWeapon(playerid), weapon[24], context[40];
 
     if (weaponid > 0)
     {
         GetWeaponName(weaponid, weapon, sizeof(weapon));
-        format(context, sizeof(context), " with %s", weapon);
+        format(context, sizeof(context), "{B4B5B7}with {3CCFFA}%s ", weapon);
     }
     else format(weapon, sizeof(weapon), "none");
 
     foreach (new i : Player)
     {
         if (User[i][adminLevel] > 0)
-            va_SendClientMessage(i, -1, AC_TAG_PUN"%s[%d] {FFFFFF}is probably using %s%s{e83333} (%s)",
-                User[playerid][userName], playerid, detection, context, action);
+            va_SendClientMessage(i, -1, AC_TAG_PUN": %s[%d] {B4B5B7}suspect of using {3CCFFA}%s %s{B4B5B7}code: {3CCFFA}#%02d{B4B5B7}.",
+                User[playerid][userName], playerid, detection, context, code + 1);
     }
 
     new pip[18], details[400];
@@ -164,7 +164,7 @@ static AC_ShowKickScreen(playerid, code)
         "{FFFFFF}%s, you have reason for suspected of cheating.\n\n\
         "COL_GRAY"Date & Time: {FFFFFF}%02d.%02d.%d - %02d:%02d:%02d\n\
         "COL_GRAY"FPS: {FFFFFF}%d   "COL_GRAY"PING: {FFFFFF}%d   "COL_GRAY"PL: {FFFFFF}%.2f%%\n\
-        "COL_GRAY"Code: {F84F31}#%02d\n\n\
+        "COL_GRAY"Code: {FF0000}#%02d\n\n\
         "COL_GRAY"If you think this is an error, please contact us:\n{MAIN}%s",
         User[playerid][userName],
         day, month, year, hour, minute, second,
@@ -215,20 +215,20 @@ public OnRejectingACDetection(playerid, code)
     switch (action)
     {
         case AC_ACTION_IGNORE: return 1;
-        case AC_ACTION_REPORT: AC_Alert(playerid, detection, "reported");
+        case AC_ACTION_REPORT: AC_Alert(playerid, code, detection, "reported");
         case AC_ACTION_KICK:
         {
-            AC_Alert(playerid, detection, "kicked");
+            AC_Alert(playerid, code, detection, "kicked");
             AC_KickPlayer(playerid, code, detection);
         }
         case AC_ACTION_GTEMP:
         {
-            AC_Alert(playerid, detection, "gtemp");
+            AC_Alert(playerid, code, detection, "gtemp");
             AC_GtempPlayer(playerid, detection);
         }
         case AC_ACTION_BAN:
         {
-            AC_Alert(playerid, detection, "banned");
+            AC_Alert(playerid, code, detection, "banned");
             AC_BanPlayer(playerid, code, detection);
         }
     }

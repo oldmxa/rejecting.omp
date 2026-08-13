@@ -79,11 +79,11 @@ new const AC_ACTION_HELP[][] =
 
 new const AC_ACTION_COLOR[][] =
 {
-    "{BEBEBE}",
+    "{B4B5B7}",
     "{DEAD10}",
     "{FFA500}",
     "{f1802d}",
-    "{F84F31}"
+    "{FF0000}"
 };
 
 #define AC_DAMAGER            (15)

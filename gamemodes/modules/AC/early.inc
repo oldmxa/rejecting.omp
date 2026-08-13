@@ -83,7 +83,7 @@ stock AC_Debug(playerid, code, const fmt[], va_args<>)
     {
         if (!ACDebugOn[i]) continue;
 
-        va_SendClientMessage(i, -1, "{BEBEBE}[RAC] %s[%d] {FFFFFF}#%02d {BEBEBE}%s",
+        va_SendClientMessage(i, -1, "{B4B5B7}[RAC] %s[%d] {FFFFFF}#%02d {B4B5B7}%s",
             User[playerid][userName], playerid, code + 1, text);
     }
 

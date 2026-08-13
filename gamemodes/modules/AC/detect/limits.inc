@@ -27,7 +27,7 @@ static AC_LimitKick(playerid, type, const detail[])
 
     for (new i; i < MAX_AC_LIMITS; i++) ACLimitStrike[playerid][i] = 0;
 
-    va_SendClientMessage(playerid, -1, "{MAIN}[RAC] {FFFFFF}You were kicked for %s: {F84F31}%s{FFFFFF}.", REASON[type], detail);
+    va_SendClientMessage(playerid, -1, "{MAIN}[RAC] {FFFFFF}You were kicked for %s: {FF0000}%s{FFFFFF}.", REASON[type], detail);
 
     foreach (new i : Player)
     {
