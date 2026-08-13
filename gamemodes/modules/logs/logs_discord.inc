@@ -53,6 +53,7 @@ stock InitLogChannels()
     adminchat       = DCC_FindChannelById(CH_ADMINCHAT);
 
     StartConsoleLog();
+    StartConsoleTail();
     return 1;
 }
 

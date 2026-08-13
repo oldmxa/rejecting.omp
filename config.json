@@ -49,7 +49,7 @@
     "language": "English",
     "logging": {
         "enable": true,
-        "file": "log.txt",
+        "file": "scriptfiles/log.txt",
         "log_chat": false,
         "log_connection_messages": true,
         "log_cookies": false,

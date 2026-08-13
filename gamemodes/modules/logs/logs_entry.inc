@@ -5,4 +5,5 @@
 
 #include "modules/logs/logs_discord.inc"
 #include "modules/logs/logs_console.inc"
+#include "modules/logs/logs_tail.inc"
 #include "modules/logs/logs_database.inc"

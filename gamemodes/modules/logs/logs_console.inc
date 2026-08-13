@@ -16,11 +16,26 @@ new g_ConsoleQueue[CONSOLE_QUEUE_SIZE][CONSOLE_LINE_LEN];
 new g_ConsoleHead, g_ConsoleCount, g_ConsoleDropped;
 new bool:g_ConsoleFlushing = false;
 
-stock ConsoleLog(const line[])
-{
-    if(logs_console == DCC_INVALID_CHANNEL)
-        print(line);
+#define CONSOLE_ECHO_SIZE       (32)
 
+new g_ConsoleEcho[CONSOLE_ECHO_SIZE][CONSOLE_LINE_LEN];
+new g_ConsoleEchoHead;
+
+stock bool:ConsoleEchoMatch(const line[])
+{
+    for(new i = 0; i < CONSOLE_ECHO_SIZE; i++)
+    {
+        if(g_ConsoleEcho[i][0] == EOS) continue;
+        if(strcmp(g_ConsoleEcho[i], line)) continue;
+
+        g_ConsoleEcho[i][0] = EOS;
+        return true;
+    }
+    return false;
+}
+
+stock ConsoleQueuePush(const line[])
+{
     if(g_ConsoleCount >= CONSOLE_QUEUE_SIZE)
     {
         g_ConsoleHead = (g_ConsoleHead + 1) % CONSOLE_QUEUE_SIZE;
@@ -33,6 +48,25 @@ stock ConsoleLog(const line[])
     g_ConsoleCount++;
 
     return 1;
+}
+
+stock ConsolePrintLine(const line[])
+{
+    if(logs_console != DCC_INVALID_CHANNEL)
+        print(line);
+
+    return ConsoleLog(line);
+}
+
+stock ConsoleLog(const line[])
+{
+    if(logs_console == DCC_INVALID_CHANNEL)
+        print(line);
+
+    strcopy(g_ConsoleEcho[g_ConsoleEchoHead], line, CONSOLE_LINE_LEN);
+    g_ConsoleEchoHead = (g_ConsoleEchoHead + 1) % CONSOLE_ECHO_SIZE;
+
+    return ConsoleQueuePush(line);
 }
 
 forward FlushConsoleLog();

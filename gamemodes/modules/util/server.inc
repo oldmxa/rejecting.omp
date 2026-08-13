@@ -1,29 +1,30 @@
 // server configuration, GMX, statistics, logs, and automatic punishments
 
-PrintServerBanner()
+forward PrintServerBanner();
+public PrintServerBanner()
 {
-	print("  +------------------------------------------------------------+");
-	print("  |                                                            |");
-	print("  |    _     _                                                 |");
-	print("  |   (c).-.(c)                                                |");
-	print("  |    / ._. \\     __________  _____  _________                |");
-	print("  |  __\\( Y )/__   \\______   \\ /  _  \\ \\_   ___ \\              |");
-	print("  | (_.-/'-'\\-._)   |       _/ /  /_\\  \\/    \\  \\/             |");
-	print("  |    ||   ||      |    |   \\ /    |    \\     \\____           |");
-	print("  |  _.' `-' '._    |____|_  / \\____|__  /\\______  /           |");
-	print("  | (.-./`-'\\.-.)          \\/          \\/        \\/            |");
-	print("  |   `-'     `-'                                              |");
-	print("  |                                                            |");
-	print("  |  _____          __   __        __                   __     |");
-	print("  | /  _  \\   _____/  |_|__| ____ |  |__   __________ _/  |_   |");
-	print("  | /  /_\\  \\ /    \\   __|  _/ ___\\|  |  \\_/ __ \\___  \\\\   __\\ |");
-	print("  | /    |    \\   |  \\  | |  \\  |___|   Y  \\  ___/ / __ \\|  |  |");
-	print("  | \\____|__  /___|  /__| |__|\\___  |___|  /\\___ \\(____  /__|  |");
-	print("  |         \\/     \\/             \\/     \\/     \\/     \\/      |");
-	print("  |                                                            |");
-	print("  |                                       oldmxa               |");
-	print("  |                                                            |");
-	print("  +------------------------------------------------------------+");
+	ConsolePrintLine("  +------------------------------------------------------------+");
+	ConsolePrintLine("  |                                                            |");
+	ConsolePrintLine("  |    _     _                                                 |");
+	ConsolePrintLine("  |   (c).-.(c)                                                |");
+	ConsolePrintLine("  |    / ._. \\     __________  _____  _________                |");
+	ConsolePrintLine("  |  __\\( Y )/__   \\______   \\ /  _  \\ \\_   ___ \\              |");
+	ConsolePrintLine("  | (_.-/'-'\\-._)   |       _/ /  /_\\  \\/    \\  \\/             |");
+	ConsolePrintLine("  |    ||   ||      |    |   \\ /    |    \\     \\____           |");
+	ConsolePrintLine("  |  _.' `-' '._    |____|_  / \\____|__  /\\______  /           |");
+	ConsolePrintLine("  | (.-./`-'\\.-.)          \\/          \\/        \\/            |");
+	ConsolePrintLine("  |   `-'     `-'                                              |");
+	ConsolePrintLine("  |                                                            |");
+	ConsolePrintLine("  |  _____          __   __        __                   __     |");
+	ConsolePrintLine("  | /  _  \\   _____/  |_|__| ____ |  |__   __________ _/  |_   |");
+	ConsolePrintLine("  | /  /_\\  \\ /    \\   __|  _/ ___\\|  |  \\_/ __ \\___  \\\\   __\\ |");
+	ConsolePrintLine("  | /    |    \\   |  \\  | |  \\  |___|   Y  \\  ___/ / __ \\|  |  |");
+	ConsolePrintLine("  | \\____|__  /___|  /__| |__|\\___  |___|  /\\___ \\(____  /__|  |");
+	ConsolePrintLine("  |         \\/     \\/             \\/     \\/     \\/     \\/      |");
+	ConsolePrintLine("  |                                                            |");
+	ConsolePrintLine("  |                                       oldmxa               |");
+	ConsolePrintLine("  |                                                            |");
+	ConsolePrintLine("  +------------------------------------------------------------+");
 	return 1;
 }
 

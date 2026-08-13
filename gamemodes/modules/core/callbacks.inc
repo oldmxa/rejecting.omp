@@ -7,7 +7,7 @@ static rejectedHitSkipped[MAX_PLAYERS];
 
 public OnGameModeInit()
 {
-	PrintServerBanner();
+	SetTimer("PrintServerBanner", 1200, false);
 
 	CA_Init();
 	SetWeaponMaxRange(WEAPON_SNIPER, 450.0);
