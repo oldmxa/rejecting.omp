@@ -29,6 +29,9 @@ stock ResetPracticeState(playerid)
     g_Practice[playerid][pracNpcFight]   = false;
     g_Practice[playerid][pracNpcWeapon]  = 0;
     g_Practice[playerid][pracNpcId]      = INVALID_NPC_ID;
+    g_Practice[playerid][pracRecording]  = false;
+    g_Practice[playerid][pracRecPending] = false;
+    g_Practice[playerid][pracRecordId]   = -1;
     g_Practice[playerid][pracSpeed]    = PRACTICE_SPEED_DEFAULT;
     g_Practice[playerid][pracHeight]   = PRACTICE_HEIGHT_DEFAULT;
     g_Practice[playerid][pracTolerance]  = PRACTICE_TOLERANCE_DEFAULT;
@@ -240,6 +243,11 @@ stock EnterPractice(playerid)
 stock EndPracticeSession(playerid)
 {
     if (!g_Practice[playerid][pracActive]) return 0;
+
+    if (g_Practice[playerid][pracRecording]) StopRecordingPlayerData(playerid);
+    g_Practice[playerid][pracRecording] = false;
+
+    PracticeDropRecord(playerid);
 
     DestroyPracticeTarget(playerid);
     g_Practice[playerid][pracActive] = false;

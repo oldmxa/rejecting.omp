@@ -12,6 +12,7 @@ enum
     PRAC_ROW_SPEED,
     PRAC_ROW_HEIGHT,
     PRAC_ROW_TOLERANCE,
+    PRAC_ROW_RECORD,
     PRAC_ROW_MOVING,
     PRAC_ROW_POS1,
     PRAC_ROW_POS2,
@@ -66,6 +67,17 @@ stock ShowPracticeDialog(playerid)
     else strcat(body, fmat_return("{FFFFFF}\x95 Speed\t{BEBEBE}%.1f\n", g_Practice[playerid][pracSpeed]));
     strcat(body, fmat_return("{FFFFFF}\x95 Height\t{BEBEBE}%.1f\n", g_Practice[playerid][pracHeight]));
     strcat(body, fmat_return("{FFFFFF}\x95 Hit Tolerance\t{BEBEBE}%d ms\n", g_Practice[playerid][pracTolerance]));
+
+    new recLabel[44] = "{7F7F7F}NPC target only";
+    if (isNpc)
+    {
+        if (g_Practice[playerid][pracRecording])       format(recLabel, sizeof(recLabel), "{FFA500}Recording... select to stop");
+        else if (g_Practice[playerid][pracRecPending]) format(recLabel, sizeof(recLabel), "{FFA500}Processing...");
+        else if (PracticeHasRecord(playerid))          format(recLabel, sizeof(recLabel), "{23C552}Playing - select to record again");
+        else                                           format(recLabel, sizeof(recLabel), "{BEBEBE}None - select to record");
+    }
+
+    strcat(body, fmat_return("{FFFFFF}\x95 NPC Record\t%s\n", recLabel));
 
     strcat(body, fmat_return("{FFFFFF}\x95 Movement\t%s\n",
         g_Practice[playerid][pracMoving] ? ("{23C552}Moving") : ("{F84F31}Static")));
@@ -212,6 +224,22 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 g_Practice[playerid][pracTolerance], PRACTICE_TOLERANCE_MIN, PRACTICE_TOLERANCE_MAX);
 
             return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_TOLERANCE<iiiis>, DIALOG_STYLE_INPUT, "Practice - Hit Tolerance", body, "Confirm", "Back");
+        }
+
+        case PRAC_ROW_RECORD:
+        {
+            if (g_Practice[playerid][pracTargetType] != PRACTICE_TYPE_NPC)
+            {
+                SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Recording only works with the NPC target.");
+                return ShowPracticeDialog(playerid);
+            }
+
+            if (g_Practice[playerid][pracRecPending]) return ShowPracticeDialog(playerid);
+
+            if (g_Practice[playerid][pracRecording]) PracticeStopRecording(playerid);
+            else PracticeStartRecording(playerid);
+
+            return ShowPracticeDialog(playerid);
         }
 
         case PRAC_ROW_MOVING:

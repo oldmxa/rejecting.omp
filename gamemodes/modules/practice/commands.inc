@@ -84,6 +84,21 @@ static SetPracticePoint(playerid, slot)
         return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You left the practice world.");
     }
 
+    if (!strcmp(sub, "rec", true))
+    {
+        if (!IsPracticeActive(playerid))
+            return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Use {MAIN}/prac {FFFFFF}first to enter the practice world.");
+
+        if (g_Practice[playerid][pracTargetType] != PRACTICE_TYPE_NPC)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Recording only works with the NPC target.");
+
+        if (g_Practice[playerid][pracRecPending])
+            return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Wait, the last recording is still being processed.");
+
+        if (g_Practice[playerid][pracRecording]) return PracticeStopRecording(playerid);
+        return PracticeStartRecording(playerid);
+    }
+
     if (!strcmp(sub, "pos1", true) || !strcmp(sub, "pos2", true))
     {
         if (!IsPracticeActive(playerid))
@@ -94,6 +109,7 @@ static SetPracticePoint(playerid, slot)
 
     SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac {B4B5B7}- open the settings dialog");
     SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac pos1 {B4B5B7}/ {FFFFFF}/prac pos2 {B4B5B7}- set the two movement points");
+    SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac rec {B4B5B7}- record / stop recording the NPC movement");
     SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac exit {B4B5B7}- leave the practice world");
     return 1;
 }

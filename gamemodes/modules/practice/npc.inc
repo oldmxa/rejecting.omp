@@ -102,8 +102,9 @@ stock PracticeNPCApply(playerid)
 
     g_Practice[playerid][pracWaypoint] = 0;
 
-    if (PracticeCanMove(playerid))
-        PracticeNPCStartMove(playerid);
+    // a gravacao tem prioridade sobre a patrulha entre os dois pontos
+    if (PracticeHasRecord(playerid)) PracticePlayRecord(playerid);
+    else if (PracticeCanMove(playerid)) PracticeNPCStartMove(playerid);
 
     return 1;
 }
@@ -161,6 +162,16 @@ public OnPracticeNPCRespawn(playerid)
     if (g_Practice[playerid][pracTargetType] != PRACTICE_TYPE_NPC) return 1;
 
     return EnsurePracticeNPC(playerid);
+}
+
+public OnNPCPlaybackEnd(npcid, recordid)
+{
+    new owner = PracticeNPCOwner(npcid);
+    if (owner == INVALID_PLAYER_ID) return 1;
+
+    // reinicia fora do callback para nao chamar playback dentro do proprio fim
+    SetTimerEx("OnPracticeRecordLoop", 100, false, "i", owner);
+    return 1;
 }
 
 public OnNPCFinishMove(npcid)

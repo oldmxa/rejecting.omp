@@ -7,6 +7,7 @@
 
 #include "modules/practice/definitions.inc"
 #include "modules/practice/core.inc"
+#include "modules/practice/record.inc"
 #include "modules/practice/npc.inc"
 #include "modules/practice/dialogs.inc"
 #include "modules/practice/commands.inc"
@@ -14,11 +15,15 @@
 hook OnPlayerConnect(playerid)
 {
     ResetPracticeState(playerid);
+    PracticeDropRecordFile(playerid);
     return 1;
 }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
+    if (g_Practice[playerid][pracRecording]) StopRecordingPlayerData(playerid);
+
+    PracticeDropRecord(playerid);
     DestroyPracticeTarget(playerid);
     ResetPracticeState(playerid);
     return 1;
@@ -27,7 +32,10 @@ hook OnPlayerDisconnect(playerid, reason)
 hook OnGameModeExit()
 {
     for (new i = 0; i < MAX_PLAYERS; i++)
+    {
+        PracticeDropRecordFile(i);
         DestroyPracticeTarget(i);
+    }
 
     return 1;
 }
