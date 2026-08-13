@@ -309,8 +309,6 @@ stock HandlePracticeShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hit
     new obj = g_Practice[playerid][pracObject];
     if (obj == INVALID_STREAMER_ID || !IsValidDynamicObject(obj)) return 1;
 
-    g_Practice[playerid][pracShots]++;
-
     new Float:objX, Float:objY, Float:objZ;
     GetDynamicObjectPos(obj, objX, objY, objZ);
 
@@ -385,7 +383,7 @@ stock HandlePracticeShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hit
 
     if (g_Practice[playerid][pracHealth] <= 0.0)
     {
-        DestroyPracticeTarget(playerid);
+        DestroyPracticeBall(playerid);
         SetTimerEx("OnPracticeRespawn", PRACTICE_RESPAWN_DELAY, false, "i", playerid);
     }
     return 1;

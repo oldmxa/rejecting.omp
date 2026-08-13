@@ -612,7 +612,14 @@ public OnPlayerJoin(playerid)
 		GetPlayerIp(playerid, current_ip, sizeof(current_ip));
 		new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
 
-		if(User[playerid][autoLogin] && isLinked && strequal(current_ip, User[playerid][user_regip]) && strequal(current_gpci, User[playerid][user_gpci]))
+		// o IP residencial muda com o tempo: aceita tambem o da ultima sessao,
+		// senao quem registrou num IP antigo nunca mais faz auto login
+		new stored_lastip[18];
+		cache_get_value_name(0, "lastip", stored_lastip, sizeof(stored_lastip));
+
+		new bool:ipMatches = (strequal(current_ip, User[playerid][user_regip]) || strequal(current_ip, stored_lastip));
+
+		if(User[playerid][autoLogin] && isLinked && ipMatches && strequal(current_gpci, User[playerid][user_gpci]))
 		{
 			KillTimer(User[playerid][loginTimer]);
 			HideLoginScreen(playerid);

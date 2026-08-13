@@ -60,8 +60,12 @@ hook OnPlayerSpawn(playerid)
 
 hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-    if (g_Practice[playerid][pracActive])
-        HandlePracticeShot(playerid, weaponid, hittype, hitid, fX, fY, fZ);
+    if (!PracticeValidateWorld(playerid)) return 1;
+
+    // conta o disparo para os dois tipos de alvo; o acerto no NPC vem por callback
+    g_Practice[playerid][pracShots]++;
+
+    HandlePracticeShot(playerid, weaponid, hittype, hitid, fX, fY, fZ);
 
     return 1;
 }

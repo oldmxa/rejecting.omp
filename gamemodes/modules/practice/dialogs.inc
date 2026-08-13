@@ -15,6 +15,7 @@ enum
     PRAC_ROW_MOVING,
     PRAC_ROW_POS1,
     PRAC_ROW_POS2,
+    PRAC_ROW_STATS,
     PRAC_ROW_RESTART,
     PRAC_ROW_EXIT,
 
@@ -74,6 +75,13 @@ stock ShowPracticeDialog(playerid)
 
     strcat(body, fmat_return("{FFFFFF}\x95 Position 2\t%s\n",
         g_Practice[playerid][pracHasPos2] ? ("{23C552}Defined") : ("{F84F31}Not set {BEBEBE}(/prac pos2)")));
+
+    new Float:acc = 0.0;
+    if (g_Practice[playerid][pracShots] > 0)
+        acc = (float(g_Practice[playerid][pracHits]) / float(g_Practice[playerid][pracShots])) * 100.0;
+
+    strcat(body, fmat_return("{FFFFFF}\x95 Accuracy\t{BEBEBE}%d/%d {B4B5B7}(%.1f%%) - select to reset\n",
+        g_Practice[playerid][pracHits], g_Practice[playerid][pracShots], acc));
 
     strcat(body, "{FFFFFF}\x95 Respawn Target\t{BEBEBE}Apply changes\n");
     strcat(body, "{F84F31}\x95 Exit Practice\t{BEBEBE}Leave the private world\n");
@@ -222,6 +230,15 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
             va_SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Stand where you want the point and type {MAIN}/prac pos%d{FFFFFF}.",
                 (listitem == PRAC_ROW_POS1) ? 1 : 2);
 
+            return ShowPracticeDialog(playerid);
+        }
+
+        case PRAC_ROW_STATS:
+        {
+            g_Practice[playerid][pracHits]  = 0;
+            g_Practice[playerid][pracShots] = 0;
+
+            SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Accuracy counters reset.");
             return ShowPracticeDialog(playerid);
         }
 
