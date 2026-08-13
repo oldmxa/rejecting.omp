@@ -22,7 +22,7 @@
 
 // Target Ball Details
 #define SKINHIT_GANTON_TARGET_MODEL (19063)
-#define SKINHIT_GANTON_SPEED        (12.0)
+#define SKINHIT_GANTON_SPEED        (8.5)
 
 // Waypoint Start
 #define SKINHIT_GANTON_START_X      (2439.6333)
