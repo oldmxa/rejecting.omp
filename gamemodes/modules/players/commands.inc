@@ -389,6 +389,9 @@ ShowCommandCategory(playerid, catid)
     if(!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
+    if(!ServerAdminsCmd && User[playerid][adminLevel] < 1)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}This command is currently disabled.");
+
     new dialogStr[2048];
     strcat(dialogStr, "{FFFFFF}Name\t{FFFFFF}Rank\t{FFFFFF}Location\n");
 

@@ -25,6 +25,9 @@
 #define AC_ACTION_GTEMP  (3)
 #define AC_ACTION_BAN    (4)
 
+#define AC_TAG_NORM COL_ADM_CMD"[RAC] "
+#define AC_TAG_PUN  COL_ADM_PUNISH"[RAC] "
+
 #define AC_MIN_ADMIN_LEVEL (5)
 
 #define AC_BAN_HOURS (9999)

@@ -740,6 +740,15 @@ new g_Object;
 new bool:R2KickEnabled = false;
 forward IsR2KickEnabled();
 
+new playerAccounts[MAX_PLAYERS];
+
+new ServerMaxWarnings = 5;
+new ServerMaxLoginAttempts = MAX_LOGIN_ATTEMPTS;
+new ServerMaxAccountsPerIP = 3;
+new bool:ServerAntiSpam = true;
+new bool:ServerAntiCapslock = true;
+new bool:ServerAdminsCmd = true;
+
 new bool:ACPunishEnabled = true;
 
 new bool:ACNoFallDamage = true;

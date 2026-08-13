@@ -91,7 +91,7 @@ IRPC:AC_RPC_DAMAGE(playerid, BitStream:bs)
     if (((IsMeleeWeapon(WEAPON:weaponid) && weaponid != _:WEAPON_PISTOLWHIP) || IsBulletWeapon(WEAPON:weaponid))
        && (
             (!giveOrTake && weaponid != _:ACWeapon[playerid][GetWeaponSlot(WEAPON:weaponid)])
-            || (giveOrTake && targetid != INVALID_PLAYER_ID && weaponid != _:ACWeapon[targetid][GetWeaponSlot(WEAPON:weaponid)])
+            || (giveOrTake && 0 <= targetid < MAX_PLAYERS && weaponid != _:ACWeapon[targetid][GetWeaponSlot(WEAPON:weaponid)])
        )
     )
     {

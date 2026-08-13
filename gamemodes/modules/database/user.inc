@@ -166,7 +166,7 @@ public OnLoginVerify(playerid, bool:success)
  	else
 	{
         User[playerid][loginAttempts]++;
-        if(User[playerid][loginAttempts] >= MAX_LOGIN_ATTEMPTS)
+        if(User[playerid][loginAttempts] >= ServerMaxLoginAttempts)
         {
             va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You have been banned for %d minutes due to excessive login failures.", MAX_ACCOUNT_LOCKTIME);
 
@@ -181,7 +181,7 @@ public OnLoginVerify(playerid, bool:success)
         }
         else
         {
-            va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Incorrect password. Attempt {FFFFFF}%d{FFFFFF}/{FF0000}%d.", User[playerid][loginAttempts], MAX_LOGIN_ATTEMPTS);
+            va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Incorrect password. Attempt {FFFFFF}%d{FFFFFF}/{FF0000}%d.", User[playerid][loginAttempts], ServerMaxLoginAttempts);
  		    showAutorizationDialog(playerid);
         }
  	}
@@ -193,6 +193,9 @@ public REGISTER(playerid, dialogid, response, listitem, string:inputtext[])
 {
 	if(response)
 	{
+		if(ServerMaxAccountsPerIP > 0 && playerAccounts[playerid] >= ServerMaxAccountsPerIP)
+			return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}This connection already has %d accounts registered.", ServerMaxAccountsPerIP);
+
 		if (IsValidPassword(inputtext))
 		{
 			bcrypt_hash(playerid, "OnRegisterHash", inputtext, BCRYPT_COST);
@@ -205,6 +208,26 @@ public REGISTER(playerid, dialogid, response, listitem, string:inputtext[])
 
 	SelectTextDraw(playerid, 0x00BFFFFF);
 	return true;
+}
+
+forward CountPlayerAccounts(playerid);
+public CountPlayerAccounts(playerid)
+{
+	if(cache_num_rows()) cache_get_value_name_int(0, "total", playerAccounts[playerid]);
+	return 1;
+}
+
+CheckAccountLimit(playerid)
+{
+	new pip[18];
+	GetPlayerIp(playerid, pip, sizeof(pip));
+
+	playerAccounts[playerid] = 0;
+
+	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
+		"SELECT COUNT(*) AS `total` FROM `accounts` WHERE `regip` = '%e' OR `gpci` = '%e'", pip, ReturnCI(playerid));
+	mysql_tquery(dbHandle, queryGlobal, "CountPlayerAccounts", "i", playerid);
+	return 1;
 }
 
 forward OnRegisterHash(playerid, accountname[]);

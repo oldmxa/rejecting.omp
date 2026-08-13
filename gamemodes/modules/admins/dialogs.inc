@@ -82,6 +82,57 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 ShowAdminConfig(playerid);
                 PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
             }
+            case 16: // Max Warnings
+            {
+                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXWARN<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Warnings", "{FFFFFF}Warnings before an automatic ban:", "Update", "Back");
+            }
+            case 17: // Max Login Attempts
+            {
+                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXLOGIN<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Login Attempts", "{FFFFFF}Wrong passwords before the account is locked:", "Update", "Back");
+            }
+            case 18: // Max Accounts per IP/GPCI
+            {
+                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXACC<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Accounts", "{FFFFFF}Accounts allowed per IP or serial (0 = no limit):", "Update", "Back");
+            }
+            case 19: // Anti Spam
+            {
+                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+                ServerAntiSpam = !ServerAntiSpam;
+                SaveServerConfig();
+
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the anti spam.", User[playerid][userName], (ServerAntiSpam) ? ("enabled") : ("disabled"));
+
+                ShowAdminConfig(playerid);
+                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            }
+            case 20: // Anti Capslock
+            {
+                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+                ServerAntiCapslock = !ServerAntiCapslock;
+                SaveServerConfig();
+
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the anti capslock.", User[playerid][userName], (ServerAntiCapslock) ? ("enabled") : ("disabled"));
+
+                ShowAdminConfig(playerid);
+                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            }
+            case 21: // /admins command
+            {
+                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+                ServerAdminsCmd = !ServerAdminsCmd;
+                SaveServerConfig();
+
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the /admins command.", User[playerid][userName], (ServerAdminsCmd) ? ("enabled") : ("disabled"));
+
+                ShowAdminConfig(playerid);
+                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            }
             case 6: // See PMs
             {
                 User[playerid][acfg_pm] = !User[playerid][acfg_pm];
@@ -172,8 +223,67 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
 
     return true;
 }
-
+forward DIALOG_ADM_MAXWARN(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_ADM_MAXPING(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_MAXWARN(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response && !isnull(inputtext))
+    {
+        new value = strval(inputtext);
+        if(value < 1 || value > 50)
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid value. Choose between 1 and 50.");
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+        ServerMaxWarnings = value;
+        SaveServerConfig();
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Max Warnings updated to %d.", ServerMaxWarnings);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_MAXLOGIN(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_MAXLOGIN(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response && !isnull(inputtext))
+    {
+        new value = strval(inputtext);
+        if(value < 1 || value > 20)
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid value. Choose between 1 and 20.");
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+        ServerMaxLoginAttempts = value;
+        SaveServerConfig();
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Max Login Attempts updated to %d.", ServerMaxLoginAttempts);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_MAXACC(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_MAXACC(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response && !isnull(inputtext))
+    {
+        new value = strval(inputtext);
+        if(value < 0 || value > 50)
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid value. Choose between 0 and 50.");
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+        ServerMaxAccountsPerIP = value;
+        SaveServerConfig();
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Max Accounts per IP/GPCI updated to %d.", ServerMaxAccountsPerIP);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
 public DIALOG_ADM_MAXPING(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(response && !isnull(inputtext))
@@ -293,9 +403,9 @@ public DIALOG_ADM_MAXPLAYERS(playerid, dialogid, response, listitem, string:inpu
             return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ and RCON login required.");
 
         new slots = strval(inputtext);
-        if(slots < 1 || slots > 1000)
+        if(slots < 1 || slots > MAX_PLAYERS)
         {
-            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid slots amount. Please enter a value between 1 and 1000.");
+            va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid slots amount. Please enter a value between 1 and %d.", MAX_PLAYERS);
             ShowAdminConfig(playerid);
             return 1;
         }

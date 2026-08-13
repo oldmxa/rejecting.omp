@@ -59,35 +59,35 @@ ShowMenu(playerid)
 
 ShowAdminConfig(playerid)
 {
-    new strb[1024], count = 0, actions[20];
+    new strb[3072], count = 0, actions[32];
 
-    format(strb, sizeof(strb), "{A29582}Category / Setting\t{A29582}Status / Value\n");
-    
+    format(strb, sizeof(strb), "{A29582}Setting\t{A29582}Status\t{A29582}Info\n");
+
     if(User[playerid][adminLevel] >= 4)
     {
-        strcat(strb, "{MAIN}\xBB Performance\t \n");
+        strcat(strb, "{MAIN}\xBB Performance\t \t \n");
         actions[count++] = 0;
 
-        format(strb, sizeof(strb), "%s{418cb0}Max Ping\t{FFFFFF}%d ms\n", strb, ServerMaxPing);
+        format(strb, sizeof(strb), "%s{FFFFFF}Max Ping\t{BEBEBE}%d ms\t{BEBEBE}Kicks anyone above this ping\n", strb, ServerMaxPing);
         actions[count++] = 2; // Max Ping
 
-        format(strb, sizeof(strb), "%s{418cb0}Max Packetloss\t{FFFFFF}%.2f%%\n", strb, ServerMaxPacketLoss);
+        format(strb, sizeof(strb), "%s{FFFFFF}Max Packetloss\t{BEBEBE}%.2f%%\t{BEBEBE}Kicks anyone above this loss\n", strb, ServerMaxPacketLoss);
         actions[count++] = 3; // Max PL
 
-        format(strb, sizeof(strb), "%s{418cb0}Min FPS\t{FFFFFF}%d FPS\n", strb, ServerMinFPS);
+        format(strb, sizeof(strb), "%s{FFFFFF}Min FPS\t{BEBEBE}%d FPS\t{BEBEBE}Kicks anyone below this framerate\n", strb, ServerMinFPS);
         actions[count++] = 4; // Min FPS
 
-        format(strb, sizeof(strb), "%s{418cb0}Max FPS\t{FFFFFF}%d FPS\n", strb, ServerMaxFPS);
+        format(strb, sizeof(strb), "%s{FFFFFF}Max FPS\t{BEBEBE}%d FPS\t{BEBEBE}Kicks anyone above this framerate\n", strb, ServerMaxFPS);
         actions[count++] = 12; // Max FPS
 
         if(User[playerid][adminLevel] >= 5)
         {
-            strcat(strb, "{MAIN}\xBB Gameplay & Interface\t \n");
+            strcat(strb, "{MAIN}\xBB Gameplay & Interface\t \t \n");
             actions[count++] = 0;
 
             new hudName[32];
             format(hudName, sizeof(hudName), "%s", (0 <= ServerDefaultHud < MAX_HUD_TYPES) ? HUD_TYPES[ServerDefaultHud] : "Unknown");
-            format(strb, sizeof(strb), "%s{418cb0}Default Server HUD\t{FFFFFF}%s\n", strb, hudName);
+            format(strb, sizeof(strb), "%s{FFFFFF}Default Server HUD\t{BEBEBE}%s\t{BEBEBE}HUD new players start with\n", strb, hudName);
             actions[count++] = 14; // Default Server HUD
 
             new colorName[32];
@@ -95,45 +95,66 @@ ShowAdminConfig(playerid)
                 format(colorName, sizeof(colorName), "%s", hudPersonalization[ServerDefaultHudColor][lineInfo]);
             else
                 format(colorName, sizeof(colorName), "Default");
-            format(strb, sizeof(strb), "%s{418cb0}Default HUD Color\t{FFFFFF}%s\n", strb, colorName);
+            format(strb, sizeof(strb), "%s{FFFFFF}Default HUD Color\t{BEBEBE}%s\t{BEBEBE}Colour new players start with\n", strb, colorName);
             actions[count++] = 15; // Default HUD Color
+
+            strcat(strb, "{MAIN}\xBB Moderation\t \t \n");
+            actions[count++] = 0;
+
+            format(strb, sizeof(strb), "%s{FFFFFF}Max. Warnings\t{BEBEBE}%d warnings\t{BEBEBE}Warnings before an automatic ban\n", strb, ServerMaxWarnings);
+            actions[count++] = 16;
+
+            format(strb, sizeof(strb), "%s{FFFFFF}Max. Login Attempts\t{BEBEBE}%d attempts\t{BEBEBE}Wrong passwords before locking the account\n", strb, ServerMaxLoginAttempts);
+            actions[count++] = 17;
+
+            format(strb, sizeof(strb), "%s{FFFFFF}Max. Accounts IP-GPCI\t{BEBEBE}%d accounts\t{BEBEBE}Accounts allowed per IP or serial\n", strb, ServerMaxAccountsPerIP);
+            actions[count++] = 18;
+
+            format(strb, sizeof(strb), "%s{FFFFFF}Toggle Anti Spam\t%s\t{BEBEBE}Kicks chat and command flood\n", strb, (ServerAntiSpam) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+            actions[count++] = 19;
+
+            format(strb, sizeof(strb), "%s{FFFFFF}Toggle Anti Capslock\t%s\t{BEBEBE}Lowercases messages shouted in caps\n", strb, (ServerAntiCapslock) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+            actions[count++] = 20;
+
+            format(strb, sizeof(strb), "%s{FFFFFF}Toggle '/Admins' Command\t%s\t{BEBEBE}Lets players list the online staff\n", strb, (ServerAdminsCmd) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+            actions[count++] = 21;
         }
 
-        strcat(strb, "{MAIN}\xBB Server & Security\t \n");
+        strcat(strb, "{MAIN}\xBB Server & Security\t \t \n");
         actions[count++] = 0;
 
-        format(strb, sizeof(strb), "%s{418cb0}R2 Client Kick\t%s\n", strb, (R2KickEnabled) ? ("{23C552}Enable") : ("{F84F31}Disabled"));
+        format(strb, sizeof(strb), "%s{FFFFFF}R2 Client Kick\t%s\t{BEBEBE}Kicks clients faking their version\n", strb, (R2KickEnabled) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
         actions[count++] = 13; // R2 Kick
 
-        format(strb, sizeof(strb), "%s{418cb0}Server Lock\t%s\n", strb, (ServerLocked) ? ("{F84F31}Locked") : ("{23C552}Unlocked"));
+        format(strb, sizeof(strb), "%s{FFFFFF}Server Lock\t%s\t{BEBEBE}Requires a password to join\n", strb, (ServerLocked) ? ("{F84F31}Locked") : ("{23C552}Unlocked"));
         actions[count++] = 5; // Lock
 
         if(IsPlayerAdmin(playerid))
         {
-            format(strb, sizeof(strb), "%s{418cb0}Server Name\t{BEBEBE}Change launcher name\n", strb);
+            format(strb, sizeof(strb), "%s{FFFFFF}Server Name\t{BEBEBE}%s\t{BEBEBE}Name shown in the launcher\n", strb, ServerHostname);
             actions[count++] = 10; // Hostname
 
-            format(strb, sizeof(strb), "%s{418cb0}Max Slots\t{FFFFFF}%d slots\n", strb, GetMaxPlayers());
+            format(strb, sizeof(strb), "%s{FFFFFF}Max Slots\t{BEBEBE}%d slots\t{BEBEBE}How many players fit at once\n", strb, GetMaxPlayers());
             actions[count++] = 11; // Max Players
         }
 
-        format(strb, sizeof(strb), "%s{418cb0}Restart Server\t{F84F31}Reboot gamemode\n", strb);
+        format(strb, sizeof(strb), "%s{FFFFFF}Restart Server\t{F84F31}Reboot\t{BEBEBE}Reloads the gamemode right now\n", strb);
         actions[count++] = 1; // Restart
     }
 
-    strcat(strb, "{MAIN}\xBB Chat & Spy Permissions\t \n");
+    strcat(strb, "{MAIN}\xBB Chat & Spy Permissions\t \t \n");
     actions[count++] = 0;
 
-    format(strb, sizeof(strb), "%s{BEBEBE}See PM's\t%s\n", strb, (User[playerid][acfg_pm]) ? ("{23C552}Enable") : ("{F84F31}Disabled"));
+    format(strb, sizeof(strb), "%s{FFFFFF}See PM's\t%s\t{BEBEBE}Watch private messages\n", strb, (User[playerid][acfg_pm]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
     actions[count++] = 6;
 
-    format(strb, sizeof(strb), "%s{BEBEBE}See Clan Chat\t%s\n", strb, (User[playerid][acfg_clanpm]) ? ("{23C552}Enable") : ("{F84F31}Disabled"));
+    format(strb, sizeof(strb), "%s{FFFFFF}See Clan Chat\t%s\t{BEBEBE}Watch clan chat\n", strb, (User[playerid][acfg_clanpm]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
     actions[count++] = 7;
 
-    format(strb, sizeof(strb), "%s{BEBEBE}See Commands\t%s\n", strb, (User[playerid][acfg_cmds]) ? ("{23C552}Enable") : ("{F84F31}Disabled"));
+    format(strb, sizeof(strb), "%s{FFFFFF}See Commands\t%s\t{BEBEBE}Watch commands players run\n", strb, (User[playerid][acfg_cmds]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
     actions[count++] = 8;
 
-    format(strb, sizeof(strb), "%s{BEBEBE}See Local Chat\t%s", strb, (User[playerid][acfg_local]) ? ("{23C552}Enable") : ("{F84F31}Disabled"));
+    format(strb, sizeof(strb), "%s{FFFFFF}See Local Chat\t%s\t{BEBEBE}Watch local chat", strb, (User[playerid][acfg_local]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
     actions[count++] = 9;
 
     for(new i = 0; i < count; i++)

@@ -32,7 +32,7 @@ static AC_LimitKick(playerid, type, const detail[])
     foreach (new i : Player)
     {
         if (User[i][adminLevel] > 0)
-            va_SendClientMessage(i, -1, ADM_TAG_NORM"[RAC] %s[%d] kicked for %s (%s).", User[playerid][userName], playerid, REASON[type], detail);
+            va_SendClientMessage(i, -1, AC_TAG_NORM"%s[%d] kicked for %s (%s).", User[playerid][userName], playerid, REASON[type], detail);
     }
 
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "kicks", "Rejecting AC", detail);

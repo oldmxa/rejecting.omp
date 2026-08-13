@@ -79,6 +79,7 @@ public OnPlayerConnect(playerid)
 	GetPlayerVersion(playerid, User[playerid][playerVersion]);
 
 	CheckISP(playerid);
+	CheckAccountLimit(playerid);
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
 	"SELECT `username`, `forcedr2` FROM `accounts` WHERE `username` = '%e' and `forcedr2` = 1", User[playerid][userName]);
@@ -912,6 +913,8 @@ public OnPlayerText(playerid, text[])
 		va_SendClientMessage(playerid, -1, IS_MUTED);
 		return false;
 	}
+
+	if(ServerAntiCapslock) StripCapslock(text);
 
 	if(votingInfo[isRunningVote] && !playerVoteInfo[playerid][alreadyVoted] && strlen(text) == 1)
 	{

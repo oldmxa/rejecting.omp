@@ -21,7 +21,7 @@
 #define YSI_NO_HEAP_MALLOC
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS 88
+#define MAX_PLAYERS 100
 
 #include <sscanf2>
 #include <samp_bcrypt>

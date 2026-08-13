@@ -32,6 +32,12 @@ stock LoadServerConfig()
         else if(!strcmp(key, "MinFPS", true)) ServerMinFPS = strval(val);
         else if(!strcmp(key, "MaxFPS", true)) ServerMaxFPS = strval(val);
         else if(!strcmp(key, "R2Kick", true)) R2KickEnabled = (strval(val) != 0);
+        else if(!strcmp(key, "MaxWarnings", true)) ServerMaxWarnings = strval(val);
+        else if(!strcmp(key, "MaxLoginAttempts", true)) ServerMaxLoginAttempts = strval(val);
+        else if(!strcmp(key, "MaxAccountsPerIP", true)) ServerMaxAccountsPerIP = strval(val);
+        else if(!strcmp(key, "AntiSpam", true)) ServerAntiSpam = (strval(val) != 0);
+        else if(!strcmp(key, "AntiCapslock", true)) ServerAntiCapslock = (strval(val) != 0);
+        else if(!strcmp(key, "AdminsCmd", true)) ServerAdminsCmd = (strval(val) != 0);
         else if(!strcmp(key, "DefaultHud", true))
         {
             ServerDefaultHud = strval(val);
@@ -72,6 +78,14 @@ stock SaveServerConfig()
     fwrite(file, str);
 
     format(str, sizeof(str), "DefaultHudColor=%d\r\n", ServerDefaultHudColor);
+    fwrite(file, str);
+
+    format(str, sizeof(str), "MaxWarnings=%d\r\nMaxLoginAttempts=%d\r\nMaxAccountsPerIP=%d\r\n",
+        ServerMaxWarnings, ServerMaxLoginAttempts, ServerMaxAccountsPerIP);
+    fwrite(file, str);
+
+    format(str, sizeof(str), "AntiSpam=%d\r\nAntiCapslock=%d\r\nAdminsCmd=%d\r\n",
+        _:ServerAntiSpam, _:ServerAntiCapslock, _:ServerAdminsCmd);
     fwrite(file, str);
 
     fclose(file);
@@ -194,6 +208,8 @@ KickEx(playerid, delayms = 1000)
 
 AntiSpam(playerid, const var_name[], const flood_var[])
 {
+	if(!ServerAntiSpam) return true;
+
 	if(User[playerid][adminLevel] < 1)
 	{
 		if(gettime() <= GetPVarInt(playerid, var_name))

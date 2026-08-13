@@ -51,7 +51,7 @@ static AC_Alert(playerid, const detection[], const action[])
     foreach (new i : Player)
     {
         if (User[i][adminLevel] > 0)
-            va_SendClientMessage(i, -1, ADM_TAG_PUN"[RAC] %s[%d] {FFFFFF}is probably using %s%s{e83333} (%s)",
+            va_SendClientMessage(i, -1, AC_TAG_PUN"%s[%d] {FFFFFF}is probably using %s%s{e83333} (%s)",
                 User[playerid][userName], playerid, detection, context, action);
     }
 

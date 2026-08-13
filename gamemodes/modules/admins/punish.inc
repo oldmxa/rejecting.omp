@@ -424,18 +424,20 @@
     User[targetid][warnings]++;
     
     new log_details[256];
-    format(log_details, sizeof(log_details), "Gave warning to %s [%d/5]. Reason: %s", User[targetid][userName], User[targetid][warnings], reason);
+    format(log_details, sizeof(log_details), "Gave warning to %s [%d/%d]. Reason: %s", User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "warns", "Warn", log_details);
 
-    va_SendClientMessageToAll(-1, ADM_TAG_PUN"Admin %s gave a warning to %s [%d/5]. reason: %s", User[playerid][userName], User[targetid][userName], User[targetid][warnings], reason);
+    va_SendClientMessageToAll(-1, ADM_TAG_PUN"Admin %s gave a warning to %s [%d/%d]. reason: %s", User[playerid][userName], User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
     
-    if(User[targetid][warnings] >= 5)
+    if(User[targetid][warnings] >= ServerMaxWarnings)
     {
         User[targetid][warnings] = 0;
 
         new hours = 9999;
         mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT * FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[targetid][userName]);
-        mysql_tquery(dbHandle, queryGlobal, "BanPlayer", "ddsdd", playerid, targetid, "Exceeded warning limit. (5/5)", hours, gettime()+hours*3600);
+        new warnReason[48];
+        format(warnReason, sizeof(warnReason), "Exceeded warning limit. (%d/%d)", ServerMaxWarnings, ServerMaxWarnings);
+        mysql_tquery(dbHandle, queryGlobal, "BanPlayer", "ddsdd", playerid, targetid, warnReason, hours, gettime()+hours*3600);
     }
 
     UpdatePlayerData(targetid);
