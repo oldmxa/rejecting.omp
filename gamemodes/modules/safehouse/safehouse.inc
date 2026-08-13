@@ -80,7 +80,7 @@ public RestoreSafehouseSpawn(playerid)
     return 1;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if (!PRESSED(KEY_SECONDARY_ATTACK)) return 1;
     if (!User[playerid][isLogged]) return 1;

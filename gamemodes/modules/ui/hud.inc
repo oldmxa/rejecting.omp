@@ -17,10 +17,10 @@ stock ShowMoneyTextDraw(playerid, const text[], Float:x = 615.0, Float:y = 56.0)
         PlayerTextDrawDestroy(playerid, killsandexpii[playerid]);
 
     killsandexpii[playerid] = CreatePlayerTextDraw(playerid, x, y, text);
-    PlayerTextDrawFont(playerid, killsandexpii[playerid], 1);
+    PlayerTextDrawFont(playerid, killsandexpii[playerid], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, killsandexpii[playerid], 0.179167, 0.750000);
     PlayerTextDrawSetOutline(playerid, killsandexpii[playerid], 1);
-    PlayerTextDrawAlignment(playerid, killsandexpii[playerid], 1);
+    PlayerTextDrawAlignment(playerid, killsandexpii[playerid], TEXT_DRAW_ALIGN_LEFT);
     PlayerTextDrawColor(playerid, killsandexpii[playerid], -1);
     PlayerTextDrawBackgroundColor(playerid, killsandexpii[playerid], 80);
     PlayerTextDrawBoxColor(playerid, killsandexpii[playerid], 50);

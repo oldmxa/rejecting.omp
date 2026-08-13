@@ -421,7 +421,7 @@ enum e_USER
     playerExp,
     playerLevel,
     playerSkin,
-    fightStyle,
+    FIGHT_STYLE:fightStyle,
     adminLevel,
     playerMoney,
     playerCoins,

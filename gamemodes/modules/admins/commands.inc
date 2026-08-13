@@ -11,6 +11,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/reports", "List the latest reports with the accused player's live status.", 1},
     {"/giveach [id] [ach id]", "Grant an exclusive achievement (server owner only).", 4},
     {"/setcoins [id/name] [amount]", "Set the Coins balance of an account (works offline).", 5},
+    {"/eaccount [id/name]", "Edit every stat of an online account, and the clan if they own one.", 5},
     {"/lifez [height]", "Calibrate the height of the custom life bar above the head.", 5},
     {"/givecustomtag [id]", "Toggle custom tag permission for a player.", 5},
     {"/editsafehouse", "Open the safehouse panel: create, place, edit and configure bases.", 5},

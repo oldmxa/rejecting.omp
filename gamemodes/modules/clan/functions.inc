@@ -304,6 +304,7 @@ stock EditRoleName(playerid, clanid, roleid, const rolename[])
 
     format(ClanRoles[clanid][roleid], CLAN_ROLE_LEN, "%s", clean);
     UpdateRoles(clanid);
+    va_SendClientMessage(playerid, -1, CLAN_ROLE_CHANGED, clean);
     return 1;
 }
 
@@ -323,6 +324,7 @@ stock EditClanName(playerid, clanid, const name[])
             format(ClanInfo[clanid][clanName], CLAN_NAME_LEN, "%s", clean);
             UpdateClan(clanid);
             RefreshClanColor(clanid);
+            va_SendClientMessage(playerid, -1, CLAN_NAME_CHANGED, clean);
         }
     }
     CheckClanText(playerid, "", clean, clanid, using inline OnNameChecked);
@@ -346,6 +348,7 @@ stock EditClanTag(playerid, clanid, const tag[])
             format(ClanInfo[clanid][clanTag], CLAN_TAG_LEN, "%s", clean);
             UpdateClan(clanid);
             RefreshClanColor(clanid);
+            va_SendClientMessage(playerid, -1, CLAN_TAG_CHANGED, clean);
         }
     }
     CheckClanText(playerid, clean, "", clanid, using inline OnTagChecked);

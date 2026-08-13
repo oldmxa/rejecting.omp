@@ -391,7 +391,7 @@ hook OnPlayerExitVehicle(playerid, vehicleid)
     return 1;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if((newkeys & KEY_FIRE) && IsPlayerInAnyVehicle(playerid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
     {

@@ -17,7 +17,7 @@ SyncPlayer(playerid, bool:playercalled = true)
 	if(GetPlayerVehicleID(playerid))
 		return false;
 
-	ClearAnimations(playerid, 1);
+	ClearAnimations(playerid, SYNC_ALL);
 
 	if(playercalled)
 		SetPVarInt(playerid, "player_flood_tick_sync", gettime() + 1);
@@ -347,13 +347,13 @@ givePlayerWeapons(playerid)
 	}
 
 	if(playerWeapon[0] != 0)
-		SetPlayerArmedWeapon(playerid, playerWeapon[0]);
+		SetPlayerArmedWeapon(playerid, WEAPON:playerWeapon[0]);
 	else if(playerWeapon[1] != 0)
-		SetPlayerArmedWeapon(playerid, playerWeapon[1]);
+		SetPlayerArmedWeapon(playerid, WEAPON:playerWeapon[1]);
 	else if(playerWeapon[2] != 0)
-		SetPlayerArmedWeapon(playerid, playerWeapon[2]);
+		SetPlayerArmedWeapon(playerid, WEAPON:playerWeapon[2]);
 	else if(playerWeapon[3] != 0)
-		SetPlayerArmedWeapon(playerid, playerWeapon[3]);
+		SetPlayerArmedWeapon(playerid, WEAPON:playerWeapon[3]);
 }
 
 levelGoal(level)

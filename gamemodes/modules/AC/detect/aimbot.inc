@@ -69,7 +69,7 @@ static AC_CheckAntiAim(playerid)
         return 1;
     }
 
-    new keys, updown, leftright;
+    new KEY:keys, updown, leftright;
     GetPlayerKeys(playerid, keys, updown, leftright);
 
     if (!(keys & KEY_HANDBRAKE))
@@ -178,7 +178,7 @@ stock AC_DebugBullet(playerid, hitType)
         hitType, _:ACAimSet[playerid]);
 }
 
-stock AC_CheckSilentAim(playerid, hitType, hitid, Float:ox, Float:oy, Float:oz, Float:hx, Float:hy, Float:hz)
+stock AC_CheckSilentAim(playerid, BULLET_HIT_TYPE:hitType, hitid, Float:ox, Float:oy, Float:oz, Float:hx, Float:hy, Float:hz)
 {
     if (hitType != BULLET_HIT_TYPE_PLAYER) return 1;
     if (!User[playerid][isLogged]) return 1;

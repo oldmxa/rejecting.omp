@@ -108,7 +108,7 @@ hook OnPlayerSpawn(playerid)
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     AC_ResetAmmoTracking(playerid);
     return 1;

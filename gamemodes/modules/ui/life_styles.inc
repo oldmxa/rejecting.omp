@@ -67,7 +67,7 @@ stock bool:CanShowLifeLabel(targetid)
     if (!User[targetid][isLogged]) return false;
     if (GetPVarInt(targetid, "HideTab") == 1) return false;
 
-    new playerState = GetPlayerState(targetid);
+    new PLAYER_STATE:playerState = GetPlayerState(targetid);
 
     return (playerState != PLAYER_STATE_WASTED && playerState != PLAYER_STATE_NONE);
 }
@@ -201,7 +201,7 @@ stock ApplyLifeStyle(viewerid)
     {
         if (targetid == viewerid) continue;
 
-        ShowPlayerNameTagForPlayer(viewerid, targetid, custom ? 0 : 1);
+        ShowPlayerNameTagForPlayer(viewerid, targetid, !custom);
 
         if (custom) RefreshLifeLabel(viewerid, targetid);
         else        DestroyLifeLabel(viewerid, targetid);
@@ -229,7 +229,7 @@ stock SyncLifeLabelTarget(targetid)
         if (viewerid == targetid) continue;
         if (!UsesCustomLifeStyle(viewerid)) continue;
 
-        ShowPlayerNameTagForPlayer(viewerid, targetid, 0);
+        ShowPlayerNameTagForPlayer(viewerid, targetid, false);
         RefreshLifeLabel(viewerid, targetid);
     }
     return 1;
@@ -318,12 +318,12 @@ hook OnPlayerStreamIn(playerid, forplayerid)
 {
     if (!UsesCustomLifeStyle(forplayerid)) return 1;
 
-    ShowPlayerNameTagForPlayer(forplayerid, playerid, 0);
+    ShowPlayerNameTagForPlayer(forplayerid, playerid, false);
     RefreshLifeLabel(forplayerid, playerid);
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     foreach (new viewerid : Player)
     {

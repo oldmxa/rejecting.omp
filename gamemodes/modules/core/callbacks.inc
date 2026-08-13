@@ -207,12 +207,12 @@ public OnPlayerPrepareDeath(playerid, animlib[32], animname[32], &anim_lock, &re
 	return true;
 }
 
-public OnPlayerDeath(playerid, killerid, reason)
+public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     SetClanColor(playerid);
 	new iString[100];
 	new oldMoney = GetPlayerMoney(playerid);
-	if(reason == 255) reason = 53;
+	if(reason == REASON_SUICIDE) reason = WEAPON_DROWN;
 
 	Ach_OnPlayerDied(playerid);
 
@@ -552,7 +552,7 @@ public OnPlayerSpawn(playerid)
 	return true;
 }
 
-public OnPlayerClickPlayer(playerid, clickedplayerid, source)
+public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
 {
     if(!User[playerid][isLogged]) return false;
     if(!User[clickedplayerid][isLogged]) return false;
@@ -708,7 +708,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, STREAMER_TAG_ACTOR:actorid, Floa
 	return true;
 }
 
-public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
+public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &bodypart)
 {
 	if (
 		(issuerid == INVALID_PLAYER_ID || playerid == INVALID_PLAYER_ID) ||
@@ -741,10 +741,10 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 
 	if(weapon == WEAPON_COLLISION)
 	{
-		if(ACNoFallAnimation) ClearAnimations(playerid, 1);
+		if(ACNoFallAnimation) ClearAnimations(playerid, SYNC_ALL);
 		if(ACNoFallDamage) return false;
 	}
-	else if(ACFastStuns) ClearAnimations(playerid, 1);
+	else if(ACFastStuns) ClearAnimations(playerid, SYNC_ALL);
 
 	if(weapon != WEAPON_FIST && weapon != WEAPON_DEAGLE && weapon != WEAPON_SHOTGUN && weapon != WEAPON_SNIPER && weapon != WEAPON_M4 && weapon != WEAPON_GRENADE && weapon != WEAPON_KATANA)
 		return false;
@@ -755,7 +755,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 	if(User[playerid][isAfk] || User[issuerid][isAfk])
 		return false;
 
-	if(weapon == 24)
+	if(weapon == WEAPON_DEAGLE)
 	{
 		switch(bodypart)
 		{
@@ -773,7 +773,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 		}
 	}
     
-    if(weapon == 34 && bodypart == 9)
+    if(weapon == WEAPON_SNIPER && bodypart == 9)
     {
         amount = 48.0;
         if(User[issuerid][showHeadshot]) GameTextForPlayer(issuerid, "~r~~h~HEADSHOT~n~~g~~h~SNIPER", 2000, 1);
@@ -788,7 +788,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS);
 
 	// Only track hits for firearms that were counted in OnPlayerWeaponShot
-	if(loc_issuer_ok && (weapon == 24 || weapon == 25 || weapon == 31 || weapon == 34))
+	if(loc_issuer_ok && (weapon == WEAPON_DEAGLE || weapon == WEAPON_SHOTGUN || weapon == WEAPON_M4 || weapon == WEAPON_SNIPER))
 	{
 		if(GetPVarInt(issuerid, "LastHitedShotId") != GetPVarInt(issuerid, "CurrentShotId"))
 		{
@@ -878,14 +878,14 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 	return true;
 }
 
-public OnPlayerWeaponShot(playerid, weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
+public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
 	if(User[playerid][isLogged])
 	{
 		if(User[playerid][locationId] >= 0 && User[playerid][locationId] < MAX_LOCATIONS)
 		{
 			// Only count accuracy for primary weapons
-			if(weaponid == 24 || weaponid == 25 || weaponid == 31 || weaponid == 34)
+			if(weaponid == WEAPON_DEAGLE || weaponid == WEAPON_SHOTGUN || weaponid == WEAPON_M4 || weaponid == WEAPON_SNIPER)
 			{
 				new loc = User[playerid][locationId];
 				playerArenaInfo[loc][playerid][firedShots]++;

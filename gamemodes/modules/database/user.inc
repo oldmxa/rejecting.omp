@@ -473,7 +473,9 @@ public OnPlayerJoin(playerid)
 		cache_get_value_int(0, "vip_expire", User[playerid][vipExpire]);
 		cache_get_value_int(0, "vip_head_tag", User[playerid][vipHeadTag]);
 		cache_get_value_int(0, "hitmarkcolor", User[playerid][hitmarkColor]);
-		cache_get_value_int(0, "fighting_style", User[playerid][fightStyle]);
+		new fightingStyle;
+		cache_get_value_int(0, "fighting_style", fightingStyle);
+		User[playerid][fightStyle] = FIGHT_STYLE:fightingStyle;
 		cache_get_value_int(0, "skin_id", User[playerid][playerSkin]);
 		cache_get_value_int(0, "last_login", User[playerid][lastLogin]);
 		cache_get_value_int(0, "won_arenas", User[playerid][wonArenas]);
@@ -775,7 +777,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][lifeType],
 		User[playerid][adminLevel],
 		GetPlayerSkin(playerid),
-		User[playerid][fightStyle],
+		_:User[playerid][fightStyle],
 		User[playerid][muteTimestamp],
 		gettime(),
 		User[playerid][blockPM],

@@ -395,7 +395,7 @@ public CheckOutpostCapture()
     return 1;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(newkeys & KEY_YES)
     {

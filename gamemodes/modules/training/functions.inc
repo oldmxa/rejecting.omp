@@ -232,11 +232,11 @@ stock CreateChallengeTimerTD(playerid)
         return 1;
 
     g_TrainingTimerTD[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 415.000000, "~w~00:00");
-    PlayerTextDrawFont(playerid, g_TrainingTimerTD[playerid], 1);
+    PlayerTextDrawFont(playerid, g_TrainingTimerTD[playerid], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, g_TrainingTimerTD[playerid], 0.220000, 0.950000);
     PlayerTextDrawSetOutline(playerid, g_TrainingTimerTD[playerid], 1);
     PlayerTextDrawSetShadow(playerid, g_TrainingTimerTD[playerid], 0);
-    PlayerTextDrawAlignment(playerid, g_TrainingTimerTD[playerid], 2);
+    PlayerTextDrawAlignment(playerid, g_TrainingTimerTD[playerid], TEXT_DRAW_ALIGN_CENTRE);
     PlayerTextDrawColor(playerid, g_TrainingTimerTD[playerid], -1);
     PlayerTextDrawBackgroundColor(playerid, g_TrainingTimerTD[playerid], MAIN_BACKGROUND_COLOUR);
     PlayerTextDrawSetProportional(playerid, g_TrainingTimerTD[playerid], true);
@@ -258,9 +258,9 @@ stock ShowTrainingCountdownTD(playerid, const text[])
     if (g_TrainingCountdownTD[playerid] == PlayerText:INVALID_TEXT_DRAW)
     {
         g_TrainingCountdownTD[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 160.000000, text);
-        PlayerTextDrawFont(playerid, g_TrainingCountdownTD[playerid], 1);
+        PlayerTextDrawFont(playerid, g_TrainingCountdownTD[playerid], TEXT_DRAW_FONT_1);
         PlayerTextDrawLetterSize(playerid, g_TrainingCountdownTD[playerid], 0.400000, 1.600000);
-        PlayerTextDrawAlignment(playerid, g_TrainingCountdownTD[playerid], 2);
+        PlayerTextDrawAlignment(playerid, g_TrainingCountdownTD[playerid], TEXT_DRAW_ALIGN_CENTRE);
         PlayerTextDrawColor(playerid, g_TrainingCountdownTD[playerid], -1);
         PlayerTextDrawSetOutline(playerid, g_TrainingCountdownTD[playerid], 1);
         PlayerTextDrawSetShadow(playerid, g_TrainingCountdownTD[playerid], 0);
@@ -450,7 +450,7 @@ stock GiveArenaWeapons(playerid, arenaid)
         new wep = g_TrainingArenas[arenaid][tArena_Weapons][i];
         if (wep > 0)
         {
-            GivePlayerWeapon(playerid, wep, 9999);
+            GivePlayerWeapon(playerid, WEAPON:wep, 9999);
         }
     }
     return 1;

@@ -173,7 +173,7 @@ hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hiti
     return 1;
 }
 
-hook OnPlayerClickPlayer(playerid, clickedplayerid, source)
+hook OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
 {
     AC_CountCallback(playerid, AC_CB_CLICK_PLAYER);
     return 1;

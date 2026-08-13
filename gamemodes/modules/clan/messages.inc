@@ -36,5 +36,6 @@
 #define CLAN_DELETED        "{MAIN}**{FFFFFF} %s deleted the clan."
 #define CLAN_NAME_CHANGED   "{MAIN}**{FFFFFF} Clan name changed to %s."
 #define CLAN_TAG_CHANGED    "{MAIN}**{FFFFFF} Clan tag changed to %s."
+#define CLAN_ROLE_CHANGED   "{MAIN}**{FFFFFF} Role name changed to %s."
 #define CLAN_ROUND_WON      "{MAIN}**{FFFFFF} Clan %s {FFFFFF}won the round ( %d Kills | %d DMG ), but needed %d more DMG to dominate the zone."
 #define CLAN_ROUND_DOMINATED_ARENA      "{MAIN}**{FFFFFF} Clan %s {FFFFFF}won the round and dominated the zone #%d. ( %d Kills | %d DMG )"

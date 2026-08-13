@@ -504,7 +504,7 @@ stock Ach_OnPlayerKill(killerid, victimid, reason)
 
     Ach_SyncKills(killerid, User[killerid][playerKills]);
 
-    if(reason == WEAPON_SNIPER)
+    if(reason == _:WEAPON_SNIPER)
         UpdatePlayerAchievementProgress(killerid, ACH_SNIPER_ELITE, 1);
 
     if(GetPVarInt(victimid, "LastBodyPart") == 9)

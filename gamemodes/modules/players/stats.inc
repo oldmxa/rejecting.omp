@@ -51,7 +51,7 @@ ShowMenu(playerid)
     format(strb, sizeof(strb), "%s{B4B5B7}Interface Color\t"COL_WHITE"%s\n", strb, strtoupper(hudPersonalization[GetPlayerHudColorIndex(playerid)][lineInfo]));
     
     format(strb, sizeof(strb), "%s{B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", strb, GetPlayerSkin(playerid));
-    format(strb, sizeof(strb), "%s{B4B5B7}Fighting Style\t{FFFFFF}ID:%d\n", strb, User[playerid][fightStyle]);
+    format(strb, sizeof(strb), "%s{B4B5B7}Fighting Style\t{FFFFFF}ID:%d\n", strb, _:User[playerid][fightStyle]);
     format(strb, sizeof(strb), "%s{B4B5B7}Weapon Set\t{FFFFFF}Change", strb);
 
     Dialog_ShowCallback(playerid, using public DIALOG_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{F3230E}Settings Menu", strb, "Confirm", "Exit");

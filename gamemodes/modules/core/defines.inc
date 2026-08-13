@@ -143,7 +143,6 @@
 
 #define PRESSED(%0) (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
 
-#define KEY_AIM		128
 
 #define MAX_PLAYERS_LOCATION	25
 #define MAX_PLAYERS_AFK	MAX_PLAYERS

@@ -51,11 +51,11 @@ stock RecreatePlayerFpsPingTd(playerid)
     if (User[playerid][hudType] == HUD_UNDERLINE)
     {
         FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid, 578.000000, 16.000000, "_");
-        PlayerTextDrawFont(playerid, FPSPingPacket[playerid], 1);
+        PlayerTextDrawFont(playerid, FPSPingPacket[playerid], TEXT_DRAW_FONT_1);
         PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.200000, 0.900000);
         PlayerTextDrawSetShadow(playerid, FPSPingPacket[playerid], 0);
         PlayerTextDrawSetOutline(playerid, FPSPingPacket[playerid], 1);
-        PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], 2);
+        PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], TEXT_DRAW_ALIGN_CENTRE);
         PlayerTextDrawColor(playerid, FPSPingPacket[playerid], -1);
         PlayerTextDrawBackgroundColor(playerid, FPSPingPacket[playerid], MAIN_BACKGROUND_COLOUR);
         PlayerTextDrawSetProportional(playerid, FPSPingPacket[playerid], true);
@@ -63,11 +63,11 @@ stock RecreatePlayerFpsPingTd(playerid)
     else // HUD_REJECTING
     {
         FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid, 557.000000, 1.399999, "_");
-        PlayerTextDrawFont(playerid, FPSPingPacket[playerid], 1);
+        PlayerTextDrawFont(playerid, FPSPingPacket[playerid], TEXT_DRAW_FONT_1);
         PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.210795, 0.843375);
         PlayerTextDrawSetShadow(playerid, FPSPingPacket[playerid], 0);
         PlayerTextDrawSetOutline(playerid, FPSPingPacket[playerid], 1);
-        PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], 2);
+        PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], TEXT_DRAW_ALIGN_CENTRE);
         PlayerTextDrawColor(playerid, FPSPingPacket[playerid], -1);
         PlayerTextDrawBackgroundColor(playerid, FPSPingPacket[playerid], MAIN_BACKGROUND_COLOUR);
     }

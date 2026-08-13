@@ -683,7 +683,7 @@ static stock
 	/**
 	 * <library>y_scriptinit</library>
 	 */
-	bool:YSI_gsObnoxiousHeader = true,
+	bool:YSI_gsObnoxiousHeader = false,
 	/**
 	 * <library>y_scriptinit</library>
 	 */

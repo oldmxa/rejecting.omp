@@ -4,7 +4,6 @@
 #define _ac_entry_included
 
 #include "modules/AC/config.inc"
-#include "modules/AC/compat.inc"
 
 #include "modules/AC/detect/aimbot.inc"
 #include "modules/AC/detect/ammo.inc"

@@ -395,6 +395,9 @@ forward OnRejectedHit(playerid, hit[E_REJECTED_HIT]);
 #define WEAPON_HELIBLADES (WEAPON:50)
 #define WEAPON_EXPLOSION (WEAPON:51)
 #define WEAPON_CARPARK (WEAPON:52)
+#if defined WEAPON_UNKNOWN
+	#undef WEAPON_UNKNOWN
+#endif
 #define WEAPON_UNKNOWN (WEAPON:55)
 
 #if !defined _INC_SKY
@@ -414,7 +417,7 @@ forward OnRejectedHit(playerid, hit[E_REJECTED_HIT]);
 #endif
 
 #if defined _INC_open_mp && defined PAWNRAKNET_INC_
-	const WC_RPC_SET_PLAYER_POS_FIND_Z = 13;
+	const WC_RPC_SET_POS_FIND_Z = 13;
 #endif
 
 #if WC_DEBUG_SILENT
@@ -4830,7 +4833,7 @@ IPacket:WC_AIM_SYNC(playerid, BitStream:bs)
 #if defined _INC_open_mp && defined PAWNRAKNET_INC_
 
 // The alternative is to `SetPlayerAdmin` to `false` on death, but this doesn't seem like the "safest" solution.
-ORPC:WC_RPC_SET_PLAYER_POS_FIND_Z(playerid, BitStream:bs)
+ORPC:WC_RPC_SET_POS_FIND_Z(playerid, BitStream:bs)
 {
 	if (s_BlockAdminTeleport[playerid]) {
 		s_BlockAdminTeleport[playerid] = false;
@@ -7988,11 +7991,14 @@ CHAIN_FORWARD:WC_OnPlayerDeathFinished(playerid, bool:cancelable) = 1;
 	#define PlayerTextDrawGetPreviewRot WC_PlayerTextDrawGetPreviewRot
 
 
+	#pragma warning push
+	#pragma warning disable 200
 	#if defined _ALS_PlayerTextDrawGetPreviewVehicleColours
 		#undef PlayerTextDrawGetPreviewVehicleColours
 	#else
 		#define _ALS_PlayerTextDrawGetPreviewVehicleColours
 	#endif
+	#pragma warning pop
 	#define PlayerTextDrawGetPreviewVehicleColours WC_PlayerTextDrawGetPreviewVehicleColours
 
 

@@ -5,7 +5,7 @@
 
 #include <YSI_Coding/y_hooks>
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     if(IsPlayerInDuel2v2(playerid))
     {
@@ -32,7 +32,7 @@ hook OnPlayerDisconnect(playerid, reason)
     return 1;
 }
 
-hook OnPlayerWeaponShot(playerid, weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
+hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
     if(hittype != BULLET_HIT_TYPE_PLAYER) return 1;
     if(!IsPlayerInDuel2v2(playerid) || !IsPlayerInDuel2v2(hitid)) return 1;

@@ -173,11 +173,11 @@ stock DuelS_ConvertTime(number)
 stock DuelS_CreateTextDraw(playerid)
 {
 	TDTimerDuelS[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 415.000000, "~w~00:00~n~~b~~h~200 ~w~: ~r~~h~200");
-	PlayerTextDrawFont(playerid, TDTimerDuelS[playerid], 1);
+	PlayerTextDrawFont(playerid, TDTimerDuelS[playerid], TEXT_DRAW_FONT_1);
 	PlayerTextDrawLetterSize(playerid, TDTimerDuelS[playerid], 0.220000, 0.950000);
 	PlayerTextDrawSetOutline(playerid, TDTimerDuelS[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, TDTimerDuelS[playerid], 0);
-	PlayerTextDrawAlignment(playerid, TDTimerDuelS[playerid], 2);
+	PlayerTextDrawAlignment(playerid, TDTimerDuelS[playerid], TEXT_DRAW_ALIGN_CENTRE);
 	PlayerTextDrawColor(playerid, TDTimerDuelS[playerid], -1);
 	PlayerTextDrawBackgroundColor(playerid, TDTimerDuelS[playerid], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawSetProportional(playerid, TDTimerDuelS[playerid], true);
@@ -206,13 +206,12 @@ stock DuelS_StartCountdown(playerid, challengerid)
 	PlayerPlaySound(playerid, 1056, 0, 0, 0);
 	PlayerPlaySound(challengerid, 1056, 0, 0, 0);
 
-	// duel loadout: Sniper (34), Shotgun (25), Deagle (24)
-	GivePlayerWeapon(playerid, 34, 1000);
-	GivePlayerWeapon(challengerid, 34, 1000);
-	GivePlayerWeapon(playerid, 25, 1000);
-	GivePlayerWeapon(challengerid, 25, 1000);
-	GivePlayerWeapon(playerid, 24, 1000);
-	GivePlayerWeapon(challengerid, 24, 1000);
+	GivePlayerWeapon(playerid, WEAPON_SNIPER, 1000);
+	GivePlayerWeapon(challengerid, WEAPON_SNIPER, 1000);
+	GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 1000);
+	GivePlayerWeapon(challengerid, WEAPON_SHOTGUN, 1000);
+	GivePlayerWeapon(playerid, WEAPON_DEAGLE, 1000);
+	GivePlayerWeapon(challengerid, WEAPON_DEAGLE, 1000);
 
 	SetTimerEx("DuelS_Countdown", 1000, false, "iii", playerid, challengerid, 2);
 }
@@ -847,7 +846,7 @@ public OnPlayerSpawn(playerid)
 	forward DuelS_OnPlayerSpawn(playerid);
 #endif
 
-public OnPlayerDeath(playerid, killerid, reason)
+public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
 	new duelState = GetPVarInt(playerid, "DuelS_State");
 	if(duelState != DUELS_STATE_NONE && duelState != DUELS_STATE_WAITING)
@@ -877,7 +876,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 #endif
 #define OnPlayerDeath DuelS_OnPlayerDeath
 #if defined DuelS_OnPlayerDeath
-	forward DuelS_OnPlayerDeath(playerid, killerid, reason);
+	forward DuelS_OnPlayerDeath(playerid, killerid, WEAPON:reason);
 #endif
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])

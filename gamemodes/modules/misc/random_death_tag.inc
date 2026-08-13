@@ -113,7 +113,7 @@ stock RandomDeathTags(killerid, playerid, death_mode = 0, const victim_name[] = 
     return 1;
 }
 
-public OnPlayerDeath(playerid, killerid, reason)
+public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     if(killerid != INVALID_PLAYER_ID && IsPlayerConnected(killerid))
     {
@@ -133,7 +133,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 #endif
 #define OnPlayerDeath RDT_OnPlayerDeath
 #if defined RDT_OnPlayerDeath
-    forward RDT_OnPlayerDeath(playerid, killerid, reason);
+    forward RDT_OnPlayerDeath(playerid, killerid, WEAPON:reason);
 #endif
 
 public OnPlayerDisconnect(playerid, reason)

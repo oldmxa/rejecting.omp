@@ -13,7 +13,8 @@
 
 #pragma dynamic 16384
 
-#include <a_samp>
+#define MIXED_SPELLINGS
+#include <open.mp>
 
 #define YSI_NO_MODE_CACHE
 #define YSI_NO_CACHE_MESSAGE

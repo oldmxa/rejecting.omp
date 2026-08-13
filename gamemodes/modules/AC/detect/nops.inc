@@ -99,7 +99,7 @@ public AC_CheckNopCalls()
 
             for (new slot; slot < AC_NOPCHK_SLOTS; slot++)
             {
-                GetPlayerWeaponData(playerid, slot, carried, ammo);
+                GetPlayerWeaponData(playerid, WEAPON_SLOT:slot, carried, ammo);
 
                 if (carried == expected && ammo > 0)
                 {
@@ -145,7 +145,7 @@ hook OnPlayerConnect(playerid)
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     AC_ClearNops(playerid);
     return 1;

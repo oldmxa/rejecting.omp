@@ -268,7 +268,7 @@ ShowPersonalizationMenu(playerid)
     format(pStr, sizeof(pStr), "%s{B4B5B7}Chat Color\t{%s}ID: #%s {FFFFFF}/ {%s}Text: #%s\n", pStr, idHex, idHex, textHex, textHex);
 
     format(pStr, sizeof(pStr), "%s{B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", pStr, GetPlayerSkin(playerid));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Fighting Style\t{FFFFFF}ID:%d\n", pStr, User[playerid][fightStyle]);
+    format(pStr, sizeof(pStr), "%s{B4B5B7}Fighting Style\t{FFFFFF}ID:%d\n", pStr, _:User[playerid][fightStyle]);
     format(pStr, sizeof(pStr), "%s{B4B5B7}Weapon Set\t{FFFFFF}Change\n", pStr);
 
     new hudTypeIdx = User[playerid][hudType];

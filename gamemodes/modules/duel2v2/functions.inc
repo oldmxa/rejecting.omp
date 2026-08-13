@@ -270,9 +270,9 @@ stock ApplyDuel2v2RoundSpawn(playerid)
     new wset = g_Duel2v2Data[matchid][d2_WeaponSet];
     if(wset < 0 || wset >= sizeof(g_Duel2v2WeaponSets)) wset = 0;
 
-    if(g_Duel2v2WeaponSets[wset][d2w_W1] > 0) GivePlayerWeapon(playerid, g_Duel2v2WeaponSets[wset][d2w_W1], g_Duel2v2WeaponSets[wset][d2w_A1]);
-    if(g_Duel2v2WeaponSets[wset][d2w_W2] > 0) GivePlayerWeapon(playerid, g_Duel2v2WeaponSets[wset][d2w_W2], g_Duel2v2WeaponSets[wset][d2w_A2]);
-    if(g_Duel2v2WeaponSets[wset][d2w_W3] > 0) GivePlayerWeapon(playerid, g_Duel2v2WeaponSets[wset][d2w_W3], g_Duel2v2WeaponSets[wset][d2w_A3]);
+    if(g_Duel2v2WeaponSets[wset][d2w_W1] > 0) GivePlayerWeapon(playerid, WEAPON:g_Duel2v2WeaponSets[wset][d2w_W1], g_Duel2v2WeaponSets[wset][d2w_A1]);
+    if(g_Duel2v2WeaponSets[wset][d2w_W2] > 0) GivePlayerWeapon(playerid, WEAPON:g_Duel2v2WeaponSets[wset][d2w_W2], g_Duel2v2WeaponSets[wset][d2w_A2]);
+    if(g_Duel2v2WeaponSets[wset][d2w_W3] > 0) GivePlayerWeapon(playerid, WEAPON:g_Duel2v2WeaponSets[wset][d2w_W3], g_Duel2v2WeaponSets[wset][d2w_A3]);
 
     CreateDuel2v2PlayerTextDraws(playerid);
     UpdateDuel2v2ScoreTextDraw(matchid);

@@ -39,6 +39,7 @@ stock AC_NoteStun(playerid)
 stock AC_SampleAnim(playerid, animationId, Float:vx, Float:vy)
 {
     if (!AC_DebugActive()) return 0;
+    if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
     if (GetTickCount() - ACAnimSample[playerid] < AC_ANIM_SAMPLE) return 0;
 
     ACAnimSample[playerid] = GetTickCount();
@@ -90,7 +91,7 @@ hook OnPlayerSpawn(playerid)
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     AC_ClearStun(playerid);
     return 1;

@@ -552,7 +552,13 @@ stock ShowPenaltyHistory(playerid, const targetname[], page = 0)
         else
         {
             if(page > 0) ShowPenaltyHistory(playerid, targetname, page - 1);
-            else Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Information", "{MAIN}This player has no penalty history recorded.", "Close", "");
+            else
+            {
+                new empty[64] = "{MAIN}This player has no penalty history recorded.";
+                format_MainColor(playerid, empty);
+
+                Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Information", empty, "Close", "");
+            }
         }
     }
     mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `action`, `details`, `created_at` FROM `server_logs` WHERE `username` = '%e' ORDER BY `created_at` DESC LIMIT %d OFFSET %d", targetname, limit + 1, offset);

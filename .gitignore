@@ -1,6 +1,6 @@
 start-server.bat
 _downloads/
-retirar sistemas
+include_backup_samp
 log.txt
 base.amx
 *.log

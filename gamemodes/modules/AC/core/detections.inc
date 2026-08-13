@@ -39,9 +39,9 @@ static AC_GetAction(code)
 
 static AC_Alert(playerid, code, const detection[], const action[])
 {
-    new weaponid = GetPlayerWeapon(playerid), weapon[24], context[40];
+    new WEAPON:weaponid = GetPlayerWeapon(playerid), weapon[24], context[40];
 
-    if (weaponid > 0)
+    if (weaponid != WEAPON_FIST)
     {
         GetWeaponName(weaponid, weapon, sizeof(weapon));
         format(context, sizeof(context), "{B4B5B7}with {3CCFFA}%s ", weapon);
@@ -147,7 +147,7 @@ static AC_ShowKickScreen(playerid, code)
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, angle);
 
-    ApplyAnimation(playerid, "PAULNMAC", "wank_loop", 4.1, 1, 0, 0, 1, 0, 1);
+    ApplyAnimation(playerid, "PAULNMAC", "wank_loop", 4.1, 1, 0, 0, 1, 0, SYNC_ALL);
 
     SetPlayerCameraPos(playerid,
         x + AC_SCREEN_CAM_DIST * floatsin(-angle, degrees),

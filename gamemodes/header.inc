@@ -94,6 +94,7 @@
 #include "modules/admins/players.inc"
 #include "modules/admins/system.inc"
 #include "modules/admins/investigate.inc"
+#include "modules/admins/eaccount.inc"
 
 #include "modules/discord/commands.inc"
 

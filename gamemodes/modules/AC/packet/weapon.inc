@@ -210,7 +210,7 @@ IPacket:AC_PACKET_BULLET(playerid, BitStream:bs)
 
     AC_DebugBullet(playerid, bulletData[PR_hitType]);
 
-    AC_CheckSilentAim(playerid, bulletData[PR_hitType], bulletData[PR_hitId],
+    AC_CheckSilentAim(playerid, BULLET_HIT_TYPE:bulletData[PR_hitType], bulletData[PR_hitId],
         bulletData[PR_origin][0], bulletData[PR_origin][1], bulletData[PR_origin][2],
         bulletData[PR_hitPos][0], bulletData[PR_hitPos][1], bulletData[PR_hitPos][2]);
 

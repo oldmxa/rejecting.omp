@@ -98,5 +98,8 @@ stock CB_printf(const fmat[], va_args<>)
     return ConsoleLog(buffer);
 }
 
+#undef print
+#undef printf
+
 #define print CB_print
 #define printf CB_printf

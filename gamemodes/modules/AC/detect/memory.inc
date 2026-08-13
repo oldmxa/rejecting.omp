@@ -43,6 +43,9 @@ static const AC_PROBE[][E_AC_PROBE] =
     {0x6EFBD8,  4,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}
 };
 
+#define AC_PROBE_SPRINTHOOK       (4)
+#define AC_PROBE_FIRST_INJECTION  (5)
+
 static const AC_SIGNATURE[][3] =
 {
     {0x4B3FC0, 128, E_REJECTING_AC_1337},
@@ -111,7 +114,7 @@ static bool:AC_SendProbes(playerid, bool:onlyInjections = false)
 {
     if (!ACProbeSupport{playerid}) return false;
 
-    for (new i = (onlyInjections ? (E_REJECTING_AC_1337) : 0); i < sizeof(AC_PROBE); i++)
+    for (new i = (onlyInjections ? AC_PROBE_FIRST_INJECTION : 0); i < sizeof(AC_PROBE); i++)
     {
         AC_SendProbe(playerid, i);
     }
@@ -182,21 +185,22 @@ hook OnClientCheckResponse(playerid, actionid, memaddr, retndata)
     if (index == -1) return 1;
 
     new bool:mismatch = (retndata != AC_PROBE[index][E_AC_PROBE_RETN_DATA]);
+    new code = mismatch ? AC_ResolveProbe(index, retndata) : E_REJECTING_AC_UNKNOWN;
 
-    if (mismatch)
+    if (AC_DebugActive())
     {
-        new code = AC_ResolveProbe(index, retndata);
         new name[32];
 
-        AC_GetDetectionName(code, name, sizeof(name));
+        if (mismatch) AC_GetDetectionName(code, name, sizeof(name));
+        else name = "match";
 
         AC_Debug(playerid, (code == E_REJECTING_AC_UNKNOWN) ? E_REJECTING_AC_OTHER_CHEATS : code,
-            "probe 0x%x returned %d, expected %d, resolved as %s",
-            AC_PROBE[index][E_AC_PROBE_MEMORY_ADDRESS], retndata, AC_PROBE[index][E_AC_PROBE_RETN_DATA], name);
-
-        if (code != E_REJECTING_AC_UNKNOWN)
-            CallRemoteFunction("OnRejectingACDetection", "ii", playerid, code);
+            "probe [%02d] 0x%x returned %d, expected %d, %s",
+            index, AC_PROBE[index][E_AC_PROBE_MEMORY_ADDRESS], retndata, AC_PROBE[index][E_AC_PROBE_RETN_DATA], name);
     }
+
+    if (mismatch && code != E_REJECTING_AC_UNKNOWN)
+        CallRemoteFunction("OnRejectingACDetection", "ii", playerid, code);
 
     switch (AC_PROBE[index][E_AC_PROBE_CODE])
     {
@@ -218,7 +222,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         {
             ACSprintProbeTick[playerid] = tickCount;
 
-            AC_SendProbe(playerid, E_REJECTING_AC_SPRINTHOOK);
+            AC_SendProbe(playerid, AC_PROBE_SPRINTHOOK);
         }
     }
     else if (tickCount - ACFullSweepTick[playerid] > 30_000)

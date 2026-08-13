@@ -61,7 +61,7 @@ hook OnPlayerDisconnect(playerid, reason)
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     if (g_PlayerTraining[playerid][pTrain_Active])
     {
@@ -87,7 +87,7 @@ hook OnDynamicObjectMoved(STREAMER_TAG_OBJECT:objectid)
     return 1;
 }
 
-hook OnPlayerWeaponShot(playerid, weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
+hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
     HandleTrainingWeaponShot(playerid, weaponid, hittype, hitid, fX, fY, fZ);
     return 1;

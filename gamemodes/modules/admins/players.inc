@@ -468,7 +468,7 @@
 	GivePlayerWeapon(targetid, WEAPON:weapid, ammo);
 
 	new weapName[32];
-	GetWeaponName(weapid, weapName, sizeof(weapName));
+	GetWeaponName(WEAPON:weapid, weapName, sizeof(weapName));
 
 	va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You gave %s (ID %d) a %s (%d ammo).", User[targetid][userName], targetid, weapName, ammo);
 	va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}Administrator {MAIN}%s {FFFFFF}gave you a {MAIN}%s {FFFFFF}with {MAIN}%d {FFFFFF}ammo.", User[playerid][userName], weapName, ammo);

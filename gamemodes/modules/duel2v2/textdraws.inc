@@ -16,11 +16,11 @@ stock CreateDuel2v2PlayerTextDraws(playerid)
     }
 
     TD2v2MatchInfo[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 415.000000, "~w~DUEL 2v2~n~~b~~h~Team A: 0 ~w~: ~r~~h~Team B: 0");
-    PlayerTextDrawFont(playerid, TD2v2MatchInfo[playerid], 1);
+    PlayerTextDrawFont(playerid, TD2v2MatchInfo[playerid], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, TD2v2MatchInfo[playerid], 0.220000, 0.950000);
     PlayerTextDrawSetOutline(playerid, TD2v2MatchInfo[playerid], 1);
     PlayerTextDrawSetShadow(playerid, TD2v2MatchInfo[playerid], 0);
-    PlayerTextDrawAlignment(playerid, TD2v2MatchInfo[playerid], 2);
+    PlayerTextDrawAlignment(playerid, TD2v2MatchInfo[playerid], TEXT_DRAW_ALIGN_CENTRE);
     PlayerTextDrawColor(playerid, TD2v2MatchInfo[playerid], -1);
     PlayerTextDrawBackgroundColor(playerid, TD2v2MatchInfo[playerid], MAIN_BACKGROUND_COLOUR);
     PlayerTextDrawSetProportional(playerid, TD2v2MatchInfo[playerid], true);

@@ -148,7 +148,10 @@ stock ShowClanLogsDialog(playerid, clanid)
 
         if (!rows)
         {
-            Dialog_ShowCallback(playerid, using public DIALOG_CLAN_LOGS_BACK<iiiis>, DIALOG_STYLE_MSGBOX, "Clan Logs", "{MAIN}No match logs recorded for your clan.", "Back", "");
+            new empty[64] = "{MAIN}No match logs recorded for your clan.";
+            format_MainColor(playerid, empty);
+
+            Dialog_ShowCallback(playerid, using public DIALOG_CLAN_LOGS_BACK<iiiis>, DIALOG_STYLE_MSGBOX, "Clan Logs", empty, "Back", "");
             return 1;
         }
 
@@ -221,13 +224,13 @@ public DIALOG_CLAN_SETTINGS(playerid, dialogid, response, listitem, string:input
         case CLAN_SET_NAME:
         {
             new body[512];
-            format(body, sizeof(body), ""COL_WHITE"Current name: %s\n"COL_WHITE"Requirements: \nMin %d and Max %d Characters", ClanInfo[clanid][clanName], CLAN_NAME_MIN, MAX_CLAN_NAME);
+            format(body, sizeof(body), "{B4B5B7}Current name: "COL_WHITE"%s\n\n{B4B5B7}Requirements: "COL_WHITE"min %d and max %d characters", ClanInfo[clanid][clanName], CLAN_NAME_MIN, MAX_CLAN_NAME);
             Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_NAME<iiiis>, DIALOG_STYLE_INPUT, "Clan Settings - Edit Clan Name", body, "Confirm", "Cancel");
         }
         case CLAN_SET_TAG:
         {
             new body[512];
-            format(body, sizeof(body), ""COL_WHITE"Current tag: %s\n"COL_WHITE"Requirements: \nMin %d and Max %d Characters", ClanInfo[clanid][clanTag], CLAN_TAG_MIN, MAX_CLAN_TAG);
+            format(body, sizeof(body), "{B4B5B7}Current tag: "COL_WHITE"%s\n\n{B4B5B7}Requirements: "COL_WHITE"min %d and max %d characters", ClanInfo[clanid][clanTag], CLAN_TAG_MIN, MAX_CLAN_TAG);
             Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_TAG<iiiis>, DIALOG_STYLE_INPUT, "Clan Settings - Edit Clan Tag", body, "Confirm", "Cancel");
         }
         case CLAN_SET_COLOR:
@@ -283,7 +286,7 @@ public DIALOG_CLAN_ROLES(playerid, dialogid, response, listitem, string:inputtex
     SetPVarInt(playerid, "EditingRoleID", listitem);
 
     new body[512];
-    format(body, sizeof(body), ""COL_WHITE"Current name: %s\n"COL_WHITE"Requirements: \nMin %d and Max %d Characters", ClanRoles[clanid][listitem], CLAN_ROLE_MIN, MAX_ROLE_NAME);
+    format(body, sizeof(body), "{B4B5B7}Current name: "COL_WHITE"%s\n\n{B4B5B7}Requirements: "COL_WHITE"min %d and max %d characters", ClanRoles[clanid][listitem], CLAN_ROLE_MIN, MAX_ROLE_NAME);
 
     Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_ROLE<iiiis>, DIALOG_STYLE_INPUT, "Clan Settings - Edit Role Name", body, "Confirm", "Cancel");
     return 1;

@@ -170,7 +170,7 @@ static AC_CheckSurf(playerid)
     }
 
     new streamerid = Streamer_GetItemStreamerID(playerid, STREAMER_TYPE_OBJECT, objectid);
-    new bool:real = (streamerid > 0) ? (Streamer_IsItemVisible(playerid, STREAMER_TYPE_OBJECT, streamerid) != 0) : (IsValidObject(objectid) != 0);
+    new bool:real = (streamerid > 0) ? (Streamer_IsItemVisible(playerid, STREAMER_TYPE_OBJECT, streamerid) != 0) : IsValidObject(objectid);
 
     if (ACSurfLogged[playerid] != objectid)
     {
@@ -407,7 +407,7 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     ACFrozen[playerid] = false;
     return 1;
