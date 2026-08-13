@@ -205,6 +205,7 @@ setAfk(playerid)
 		CallLocalFunction("CancelPlayerDuel", "i", playerid);
 	}
 	CallLocalFunction("TrainingOnSetAfk", "i", playerid);
+	CallLocalFunction("PracticeOnSetAfk", "i", playerid);
 	if((User[playerid][loungeX] == 0.0 && User[playerid][loungeY] == 0.0) || User[playerid][loungeX] == -1504.1549 || User[playerid][loungeVW] == 0)
 	{
 		User[playerid][loungeX] = 1209.1161;

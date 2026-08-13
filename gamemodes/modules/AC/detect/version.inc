@@ -24,7 +24,7 @@ public AC_DelayedKick(playerid)
 
 stock AC_SendClientChecks(playerid)
 {
-    if (!IsPlayerConnected(playerid)) return 0;
+    if (!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;
 
     ACClient[playerid][acUpdateCount] = -1;
     ACClient[playerid][acAnswered][0] = false;

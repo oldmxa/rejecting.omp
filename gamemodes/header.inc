@@ -73,6 +73,7 @@
 // anti cheat
 #tryinclude "modules/AC/entry.inc"
 #include "modules/training/training.pwn"
+#include "modules/practice/practice.inc"
 
 // duel and random_death_tag hook OnPlayerDeath via ALS:
 // they must come before the base.pwn callbacks.

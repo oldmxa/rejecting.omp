@@ -350,6 +350,9 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{BEBEBE}/training\t"COL_WHITE"Open training arena & challenges menu\n");
             strcat(cmdsstr, "{BEBEBE}/rt (/restarttraining)\t"COL_WHITE"Restart current training challenge\n");
             strcat(cmdsstr, "{BEBEBE}/exittraining\t"COL_WHITE"Exit current training arena\n");
+            strcat(cmdsstr, "{BEBEBE}/prac\t"COL_WHITE"Private aim practice in the lounge (level 5+)\n");
+            strcat(cmdsstr, "{BEBEBE}/prac pos1 (/prac pos2)\t"COL_WHITE"Set the two target movement points\n");
+            strcat(cmdsstr, "{BEBEBE}/prac exit\t"COL_WHITE"Leave the practice world\n");
             strcat(cmdsstr, "{BEBEBE}/showagain\t"COL_WHITE"Show last round results\n");
         }
         case 5:

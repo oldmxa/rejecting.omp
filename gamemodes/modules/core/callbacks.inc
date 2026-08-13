@@ -73,6 +73,8 @@ public OnQueryError(errorid, const error[], const callback[], const query[], MyS
 
 public OnPlayerConnect(playerid)
 {
+	if (IsPlayerNPC(playerid)) return true;
+
 	User[playerid] = User[MAX_PLAYERS];
 	StopSpectate(playerid);
 
@@ -113,6 +115,8 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+	if (IsPlayerNPC(playerid)) return true;
+
 	UpdatePlayerData(playerid, 1);
 	hidePlayerTextdraw(playerid);
 
@@ -209,6 +213,8 @@ public OnPlayerPrepareDeath(playerid, animlib[32], animname[32], &anim_lock, &re
 
 public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
+	if (IsPlayerNPC(playerid) || IsPracticeActive(playerid)) return true;
+
     SetClanColor(playerid);
 	new iString[100];
 	new oldMoney = GetPlayerMoney(playerid);
