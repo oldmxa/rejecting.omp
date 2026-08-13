@@ -372,10 +372,9 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		RandomDeathMessages(killerid, playerid, reason);
 
 		User[playerid][timerBox] = gettime()+2;
-		new victimHud = GetPlayerHudColorIndex(playerid);
 		format(iString, sizeof(iString), "%sKilled by %s%s",
-					hudPersonalization[victimHud][colorOne],
-					hudPersonalization[victimHud][colorTwo],
+					GetPlayerHudTag(playerid, false),
+					GetPlayerHudTag(playerid, true),
 					getPlayerName(killerid));
 
 		PlayerTextDrawSetString(playerid, DeathInfo[playerid][1], iString);
@@ -1120,7 +1119,7 @@ public OnPlayerUpdate(playerid)
 		new vehicleid = GetPlayerVehicleID(playerid);
 		new Float:vhealth;
 		GetVehicleHealth(vehicleid, vhealth);
-		format(strv, sizeof(strv), "%s_%0.1f~n~%s%02d ~w~km/h", getVehicleName(vehicleid), vhealth, hudPersonalization[GetPlayerHudColorIndex(playerid)][colorTwo], GetVehicleSpeed(vehicleid));
+		format(strv, sizeof(strv), "%s_%0.1f~n~%s%02d ~w~km/h", getVehicleName(vehicleid), vhealth, GetPlayerHudTag(playerid, true), GetVehicleSpeed(vehicleid));
 		PlayerTextDrawSetString(playerid, speedometer[playerid], strv);
 	}
 

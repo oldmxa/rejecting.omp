@@ -241,7 +241,7 @@ public DIALOG_HELP_DISCORDID(playerid, dialogid, response, listitem, string:inpu
 
 ShowPersonalizationMenu(playerid)
 {
-    new pStr[1024];
+    new pStr[2048];
     format(pStr, sizeof(pStr), "{MAIN}Preference\t{MAIN}Status / Value\n");
 
     format(pStr, sizeof(pStr), "%s{B4B5B7}World Time\t{FFFFFF}%02d:00\n", pStr, User[playerid][time]);
@@ -265,6 +265,15 @@ ShowPersonalizationMenu(playerid)
     GetPlayerChatTextColorHex(playerid, textHex);
 
     format(pStr, sizeof(pStr), "%s{B4B5B7}Interface Color\t{%s}%s\n", pStr, GetColorHexTag(hudPersonalization[hudIdx][colorOne]), name);
+
+    new shadeOne = GetPlayerShadeIndex(playerid, false), shadeTwo = GetPlayerShadeIndex(playerid, true);
+
+    if(shadeOne == -1) format(pStr, sizeof(pStr), "%s{B4B5B7}Primary Color\t{BEBEBE}Interface preset\n", pStr);
+    else format(pStr, sizeof(pStr), "%s{B4B5B7}Primary Color\t{%06x}%s\n", pStr, hudShades[shadeOne][shadeHex], hudShades[shadeOne][shadeName]);
+
+    if(shadeTwo == -1) format(pStr, sizeof(pStr), "%s{B4B5B7}Secondary Color\t{BEBEBE}Interface preset\n", pStr);
+    else format(pStr, sizeof(pStr), "%s{B4B5B7}Secondary Color\t{%06x}%s\n", pStr, hudShades[shadeTwo][shadeHex], hudShades[shadeTwo][shadeName]);
+
     format(pStr, sizeof(pStr), "%s{B4B5B7}Chat Color\t{%s}ID: #%s {FFFFFF}/ {%s}Text: #%s\n", pStr, idHex, idHex, textHex, textHex);
 
     format(pStr, sizeof(pStr), "%s{B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", pStr, GetPlayerSkin(playerid));

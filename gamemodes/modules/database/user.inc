@@ -269,6 +269,8 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][hudType] = ServerDefaultHud;
     User[playerid][lifeType] = LIFE_DEFAULT;
     User[playerid][hudColor] = ServerDefaultHudColor;
+    User[playerid][hudShadeOne] = -1;
+    User[playerid][hudShadeTwo] = -1;
     User[playerid][weather] = 32;
     User[playerid][time] = 7;
     SetPlayerWeather(playerid, 32);
@@ -466,6 +468,8 @@ public OnPlayerJoin(playerid)
 		cache_get_value_int(0, "clanid", User[playerid][clanID]);
 		cache_get_value_int(0, "clanrole", User[playerid][clanRole]);
 		cache_get_value_int(0, "hudcolor", User[playerid][hudColor]);
+		cache_get_value_int(0, "hud_shade_one", User[playerid][hudShadeOne]);
+		cache_get_value_int(0, "hud_shade_two", User[playerid][hudShadeTwo]);
 
 		cache_get_value_int(0, "chat_color", User[playerid][chatColor]);
 		cache_get_value_int(0, "chat_id_color", User[playerid][chatIDColor]);
@@ -689,6 +693,8 @@ UpdatePlayerData(playerid, disconnect = 0)
 		`time`=%d,\
 		`hitmarkcolor`=%d,\
 		`hudcolor`=%d,\
+		`hud_shade_one`=%d,\
+		`hud_shade_two`=%d,\
 		`chat_color`=%d,\
 		`chat_id_color`=%d,\
 		`hud_type`=%d,\
@@ -771,6 +777,8 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][time],
 		User[playerid][hitmarkColor],
 		User[playerid][hudColor],
+		User[playerid][hudShadeOne],
+		User[playerid][hudShadeTwo],
 		User[playerid][chatColor],
 		User[playerid][chatIDColor],
 		User[playerid][hudType],

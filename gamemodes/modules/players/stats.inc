@@ -37,7 +37,7 @@ Respawn(playerid, timestamp)
 
 ShowMenu(playerid)
 {
-    new strb[1024];
+    new strb[1536];
 
     // Header
     format(strb, sizeof(strb), "{F3230E}Preference\t{F3230E}Status / Value\n");
@@ -49,7 +49,20 @@ ShowMenu(playerid)
     format(strb, sizeof(strb), "%s{B4B5B7}Damage Informer\t{447DBF}%s\n", strb, GetDamageStyleName(User[playerid][dmgInformerStyle]));
     format(strb, sizeof(strb), "%s{B4B5B7}Hitmarker Color\t{%06x}######\n", strb, (User[playerid][hitmarkColor] >>> 8));
     format(strb, sizeof(strb), "%s{B4B5B7}Interface Color\t"COL_WHITE"%s\n", strb, strtoupper(hudPersonalization[GetPlayerHudColorIndex(playerid)][lineInfo]));
-    
+
+    new shadeOne = GetPlayerShadeIndex(playerid, false), shadeTwo = GetPlayerShadeIndex(playerid, true);
+
+    if(shadeOne == -1) format(strb, sizeof(strb), "%s{B4B5B7}Primary Color\t{BEBEBE}Interface preset\n", strb);
+    else format(strb, sizeof(strb), "%s{B4B5B7}Primary Color\t{%06x}%s\n", strb, hudShades[shadeOne][shadeHex], hudShades[shadeOne][shadeName]);
+
+    if(shadeTwo == -1) format(strb, sizeof(strb), "%s{B4B5B7}Secondary Color\t{BEBEBE}Interface preset\n", strb);
+    else format(strb, sizeof(strb), "%s{B4B5B7}Secondary Color\t{%06x}%s\n", strb, hudShades[shadeTwo][shadeHex], hudShades[shadeTwo][shadeName]);
+
+    new idHexM[7], textHexM[7];
+    GetPlayerChatIDColorHex(playerid, idHexM);
+    GetPlayerChatTextColorHex(playerid, textHexM);
+    format(strb, sizeof(strb), "%s{B4B5B7}Chat Color\t{%s}ID: #%s {FFFFFF}/ {%s}Text: #%s\n", strb, idHexM, idHexM, textHexM, textHexM);
+
     format(strb, sizeof(strb), "%s{B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", strb, GetPlayerSkin(playerid));
     format(strb, sizeof(strb), "%s{B4B5B7}Fighting Style\t{FFFFFF}ID:%d\n", strb, _:User[playerid][fightStyle]);
     format(strb, sizeof(strb), "%s{B4B5B7}Weapon Set\t{FFFFFF}Change", strb);

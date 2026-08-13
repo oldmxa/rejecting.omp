@@ -427,6 +427,8 @@ enum e_USER
     playerCoins,
     maxDamage,
     hudColor,
+    hudShadeOne,
+    hudShadeTwo,
     chatColor,
     chatIDColor,
     vipLevel,
@@ -598,6 +600,45 @@ enum coloringHud {
     colorOne[7],
     colorTwo[7],
     lineInfo[15]
+};
+
+enum e_HUD_SHADE {
+    shadeHex,
+    shadeTag[20],
+    shadeName[16]
+};
+
+new const hudShades[][e_HUD_SHADE] =
+{
+    {0x9C1619, "~r~",                "Crimson"},
+    {0xDD2025, "~r~~h~",             "Scarlet"},
+    {0xDD3037, "~r~~h~~h~",          "Ruby"},
+    {0xDD4753, "~r~~h~~h~~h~",       "Coral"},
+    {0xDD6B7D, "~r~~h~~h~~h~~h~",    "Rose"},
+    {0xDD9FBB, "~r~~h~~h~~h~~h~~h~", "Blossom"},
+
+    {0x2F5A26, "~g~",                "Forest"},
+    {0x468739, "~g~~h~",             "Clover"},
+    {0x69CB56, "~g~~h~~h~",          "Lime"},
+    {0x9DDD80, "~g~~h~~h~~h~",       "Mint"},
+
+    {0x2B346E, "~b~",                "Abyss"},
+    {0x414EA5, "~b~~h~",             "Cobalt"},
+    {0x6175DD, "~b~~h~~h~",          "Azure"},
+    {0x92AFDD, "~b~~h~~h~~h~",       "Frost"},
+
+    {0x925FDA, "~p~",                "Amethyst"},
+    {0xDA8FDD, "~p~~h~",             "Orchid"},
+    {0xDDD6DD, "~p~~h~~h~",          "Lilac"},
+
+    {0xC4A656, "~y~",                "Bronze"},
+    {0xDDDD80, "~y~~h~",             "Amber"},
+    {0xDDDDC0, "~y~~h~~h~",          "Cream"},
+
+    {0xC3C3C3, "~w~",                "Steel"},
+    {0xDDDDDD, "~w~~h~",             "Pearl"},
+
+    {0x000000, "~l~",                "Onyx"}
 };
 
 new hudPersonalization[30][coloringHud] =

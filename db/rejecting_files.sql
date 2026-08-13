@@ -24,6 +24,8 @@ CREATE TABLE `accounts` (
   `time` int(11) NOT NULL DEFAULT 10,
   `hitmarkcolor` int(10) NOT NULL DEFAULT -52,
   `hudcolor` int(11) NOT NULL DEFAULT 0,
+  `hud_shade_one` int(11) NOT NULL DEFAULT -1,
+  `hud_shade_two` int(11) NOT NULL DEFAULT -1,
   `chat_color` int(11) NOT NULL DEFAULT 0,
   `chat_id_color` int(11) NOT NULL DEFAULT 0,
   `hud_type` int(11) NOT NULL DEFAULT 0,

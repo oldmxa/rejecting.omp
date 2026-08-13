@@ -788,15 +788,14 @@ PrepareChangeArena(location, finishingArenaId)
 		{
 			TogglePlayerControllable(i, false);
 
-			new playerColorStr[10];
-			new hudIdx = GetPlayerHudColorIndex(i);
-			if(strfind(hudPersonalization[hudIdx][colorOne], "~w~") != -1)
+			new playerColorStr[20];
+			if(strfind(GetPlayerHudTag(i, false), "~w~") != -1)
 			{
-				format(playerColorStr, sizeof(playerColorStr), "%s", hudPersonalization[hudIdx][colorTwo]);
+				format(playerColorStr, sizeof(playerColorStr), "%s", GetPlayerHudTag(i, true));
 			}
 			else
 			{
-				format(playerColorStr, sizeof(playerColorStr), "%s", hudPersonalization[hudIdx][colorOne]);
+				format(playerColorStr, sizeof(playerColorStr), "%s", GetPlayerHudTag(i, false));
 			}
 
 			format(clanInfoStr, sizeof(clanInfoStr), "Best_clan_on_Arena_#%d_-_%s%s~n~Damage:_%s%d~w~_/_Kills:_%s%d~n~MVP:_%s%s", location, playerColorStr, bClanName, playerColorStr, bClanDmg, playerColorStr, bClanKills, playerColorStr, mvpName);

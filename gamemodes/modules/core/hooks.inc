@@ -8,6 +8,23 @@
 
 // CoresDoBglh Global Processor
 
+stock GetPlayerMainHex(playerid, dest[], len = sizeof(dest))
+{
+    new shade = User[playerid][hudShadeOne];
+
+    if(0 <= shade < sizeof(hudShades))
+    {
+        format(dest, len, "%06x", hudShades[shade][shadeHex]);
+        return 1;
+    }
+
+    new idx = User[playerid][hudColor];
+    if(idx < 0 || idx >= sizeof(CoresDoBglh)) idx = 0;
+
+    format(dest, len, "%s", CoresDoBglh[idx]);
+    return 1;
+}
+
 forward CB_ProcessMessage(playerid, buffer[], len);
 public CB_ProcessMessage(playerid, buffer[], len)
 {
@@ -16,11 +33,9 @@ public CB_ProcessMessage(playerid, buffer[], len)
     new pos;
     while((pos = strfind(buffer, "{MAIN}")) != -1)
     {
-        new color_idx = User[playerid][hudColor];
-        if (color_idx < 0 || color_idx >= sizeof(CoresDoBglh)) color_idx = 0;
-
-        new tag[16];
-        format(tag, sizeof(tag), "{%s}", CoresDoBglh[color_idx]);
+        new hex[7], tag[16];
+        GetPlayerMainHex(playerid, hex);
+        format(tag, sizeof(tag), "{%s}", hex);
         
         strdel(buffer, pos, pos + 6);
         strins(buffer, tag, pos, len);
@@ -281,6 +296,8 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][weather] = 10;
     User[MAX_PLAYERS][time] = 10;
     User[MAX_PLAYERS][hudColor] = 0;
+    User[MAX_PLAYERS][hudShadeOne] = -1;
+    User[MAX_PLAYERS][hudShadeTwo] = -1;
     User[MAX_PLAYERS][clanID] = -1;
     User[MAX_PLAYERS][clanRole] = -1;
     User[MAX_PLAYERS][clanIDInvite] = -1;
@@ -336,6 +353,8 @@ hook OnPlayerConnect(playerid)
 {
     User[playerid][adminLevel] = 0;
     User[playerid][hudColor] = 0;
+    User[playerid][hudShadeOne] = -1;
+    User[playerid][hudShadeTwo] = -1;
     User[playerid][chatColor] = 0;
     User[playerid][chatIDColor] = 0;
     User[playerid][vipLevel] = 0;

@@ -493,9 +493,9 @@ UpdateOutpostBar(playerid, progress, Float:dist, membersCount = 1, bool:paused =
     PlayerTextDrawShow(playerid, OutpostBar[playerid][2]);
 
     new str[128], subStr[128];
-    new cOne[16], cTwo[16], hudIdx = GetPlayerHudColorIndex(playerid);
-    format(cOne, sizeof(cOne), "%s", hudPersonalization[hudIdx][colorOne]);
-    format(cTwo, sizeof(cTwo), "%s", hudPersonalization[hudIdx][colorTwo]);
+    new cOne[20], cTwo[20];
+    format(cOne, sizeof(cOne), "%s", GetPlayerHudTag(playerid, false));
+    format(cTwo, sizeof(cTwo), "%s", GetPlayerHudTag(playerid, true));
 
     if(paused)
     {

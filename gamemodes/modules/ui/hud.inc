@@ -88,10 +88,9 @@ stock updatePlayerHud(playerid)
 		gMins = roundLeft / 60;
 		gSecs = roundLeft % 60;
 
-		new hudIdx = GetPlayerHudColorIndex(playerid);
-		new playerColorOne[7], playerColorTwo[7];
-		format(playerColorOne, sizeof playerColorOne, "%s", hudPersonalization[hudIdx][colorOne]);
-		format(playerColorTwo, sizeof playerColorTwo, "%s", hudPersonalization[hudIdx][colorTwo]);
+		new playerColorOne[20], playerColorTwo[20];
+		format(playerColorOne, sizeof playerColorOne, "%s", GetPlayerHudTag(playerid, false));
+		format(playerColorTwo, sizeof playerColorTwo, "%s", GetPlayerHudTag(playerid, true));
 
 		if (User[playerid][hudType] == HUD_UNDERLINE)
 		{

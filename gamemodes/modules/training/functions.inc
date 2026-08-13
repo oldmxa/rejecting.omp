@@ -188,9 +188,8 @@ stock Float:GetTrainingAccuracy(playerid)
 
 stock GetTrainingHudColors(playerid, colorOne_[], colorTwo_[], size1 = sizeof(colorOne_), size2 = sizeof(colorTwo_))
 {
-    new hudIdx = GetPlayerHudColorIndex(playerid);
-    format(colorOne_, size1, "%s", hudPersonalization[hudIdx][colorOne]);
-    format(colorTwo_, size2, "%s", hudPersonalization[hudIdx][colorTwo]);
+    format(colorOne_, size1, "%s", GetPlayerHudTag(playerid, false));
+    format(colorTwo_, size2, "%s", GetPlayerHudTag(playerid, true));
     return 1;
 }
 
@@ -299,7 +298,7 @@ stock UpdateTrainingHud(playerid, secondsLeft)
     if (!User[playerid][showPlayerHud])
         return 0;
 
-    new colorOne_[7], colorTwo_[7];
+    new colorOne_[20], colorTwo_[20];
     GetTrainingHudColors(playerid, colorOne_, colorTwo_);
 
     if (secondsLeft < 0) secondsLeft = 0;
@@ -343,7 +342,7 @@ stock UpdateChallengeTimerTD(playerid, secondsLeft)
     if (!IsValidTrainingArena(g_PlayerTraining[playerid][pTrain_ArenaID]))
         return 0;
 
-    new colorOne_[7], colorTwo_[7];
+    new colorOne_[20], colorTwo_[20];
     GetTrainingHudColors(playerid, colorOne_, colorTwo_);
 
     new str[144];
@@ -751,9 +750,8 @@ public OnTrainingCountdownTimer(playerid, count)
     }
     else if (count == 0)
     {
-        new hudIdx = GetPlayerHudColorIndex(playerid);
-        new goStr[16];
-        format(goStr, sizeof(goStr), "%sGO!", hudPersonalization[hudIdx][colorOne]);
+        new goStr[24];
+        format(goStr, sizeof(goStr), "%sGO!", GetPlayerHudTag(playerid, false));
         ShowTrainingCountdownTD(playerid, goStr);
 
         PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);

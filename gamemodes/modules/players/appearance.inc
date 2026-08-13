@@ -115,34 +115,36 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
         case 4: ShowDamageStyleDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 5: ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 6: ShowHudColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 7: ShowChatColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 8: ShowSkinDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 9: { strcopy(cmd, "/fight"); Command_ReProcess(playerid, cmd, 0); }
-        case 10: { strcopy(cmd, "/gunmenu"); Command_ReProcess(playerid, cmd, 0); }
-        case 11: { ShowPlayerHudTypesList(playerid); }
-        case 12: {
+        case 7: ShowHudShadeDialog(playerid, APPEARANCE_SRC_PERSONAL, false);
+        case 8: ShowHudShadeDialog(playerid, APPEARANCE_SRC_PERSONAL, true);
+        case 9: ShowChatColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
+        case 10: ShowSkinDialog(playerid, APPEARANCE_SRC_PERSONAL);
+        case 11: { strcopy(cmd, "/fight"); Command_ReProcess(playerid, cmd, 0); }
+        case 12: { strcopy(cmd, "/gunmenu"); Command_ReProcess(playerid, cmd, 0); }
+        case 13: { ShowPlayerHudTypesList(playerid); }
+        case 14: {
             User[playerid][show3DDeathTag] = !User[playerid][show3DDeathTag];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 13: {
+        case 15: {
             User[playerid][showRandomDeathTags] = !User[playerid][showRandomDeathTags];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 14: {
+        case 16: {
             User[playerid][showHeadshot] = !User[playerid][showHeadshot];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 15: { ShowHitSoundDialog(playerid); }
-        case 16: { ShowKillSoundDialog(playerid); }
-        case 17: {
+        case 17: { ShowHitSoundDialog(playerid); }
+        case 18: { ShowKillSoundDialog(playerid); }
+        case 19: {
             User[playerid][hideWelcomeMsg] = !User[playerid][hideWelcomeMsg];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 18: { ShowPlayerLifeTypesList(playerid); }
+        case 20: { ShowPlayerLifeTypesList(playerid); }
     }
     return 1;
 }

@@ -7,11 +7,11 @@ rSpree(killerid, playerid)
 	if(0 <= victimLoc < MAX_LOCATIONS)
 		firstBlood = (arenaInfo[victimLoc][totalArenaKills] < 1);
 
-    new spreeColor[10];
+    new spreeColor[20];
     new hudIdx = GetPlayerHudColorIndex(killerid);
-    if (hudIdx != 0) // 0 is 'white green'
+    if (GetPlayerShadeIndex(killerid, false) != -1 || hudIdx != 0)
     {
-        format(spreeColor, sizeof(spreeColor), "%s", hudPersonalization[hudIdx][colorOne]);
+        format(spreeColor, sizeof(spreeColor), "%s", GetPlayerHudTag(killerid, false));
     }
     else
     {
@@ -106,10 +106,9 @@ RandomDeathMessages(killerid, playerid, reason)
 {
 	new newline[64], fullLine[64*6];
 
-	new hudIdx = GetPlayerHudColorIndex(killerid);
-	new playerColorOne[7], playerColorTwo[7];
-	format(playerColorOne, sizeof playerColorOne, "%s", hudPersonalization[hudIdx][colorOne]);
-	format(playerColorTwo, sizeof playerColorTwo, "%s", hudPersonalization[hudIdx][colorTwo]);
+	new playerColorOne[20], playerColorTwo[20];
+	format(playerColorOne, sizeof playerColorOne, "%s", GetPlayerHudTag(killerid, false));
+	format(playerColorTwo, sizeof playerColorTwo, "%s", GetPlayerHudTag(killerid, true));
 
 	switch(reason)
 	{

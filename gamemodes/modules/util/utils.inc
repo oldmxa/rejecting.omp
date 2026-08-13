@@ -94,6 +94,33 @@ stock GetPlayerHudColorIndex(playerid)
     return idx;
 }
 
+stock GetPlayerShadeIndex(playerid, bool:secondary)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return -1;
+
+    new idx = secondary ? User[playerid][hudShadeTwo] : User[playerid][hudShadeOne];
+    if(idx < 0 || idx >= sizeof(hudShades)) return -1;
+    return idx;
+}
+
+stock GetPlayerHudTag(playerid, bool:secondary)
+{
+    new tag[20], shade = GetPlayerShadeIndex(playerid, secondary);
+
+    if(shade != -1)
+    {
+        format(tag, sizeof(tag), "%s", hudShades[shade][shadeTag]);
+        return tag;
+    }
+
+    new preset = GetPlayerHudColorIndex(playerid);
+
+    if(secondary) format(tag, sizeof(tag), "%s", hudPersonalization[preset][colorTwo]);
+    else format(tag, sizeof(tag), "%s", hudPersonalization[preset][colorOne]);
+
+    return tag;
+}
+
 stock GetPlayerChatColorIndex(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
@@ -143,10 +170,10 @@ stock GetPlayerChatTextColorHex(playerid, dest[], len = sizeof(dest))
 
 stock ret_MainColor(playerid)
 {
-    new idx = User[playerid][hudColor];
-    if(idx < 0 || idx >= sizeof(CoresDoBglh)) idx = 0;
+    new hex[7];
+    GetPlayerMainHex(playerid, hex);
 
-    return CoresDoBglh[idx];
+    return hex;
 }
 
 stock bool:IsServerOwner(playerid)
@@ -160,11 +187,9 @@ stock bool:IsServerOwner(playerid)
 stock format_MainColor(playerid, string[], len = sizeof(string))
 {
     if (playerid < 0 || playerid >= MAX_PLAYERS) return 0;
-    new color_idx = User[playerid][hudColor];
-    if (color_idx < 0 || color_idx >= sizeof(CoresDoBglh)) color_idx = 0;
-
-    new tag[16];
-    format(tag, sizeof(tag), "{%s}", CoresDoBglh[color_idx]);
+    new hex[7], tag[16];
+    GetPlayerMainHex(playerid, hex);
+    format(tag, sizeof(tag), "{%s}", hex);
 
     new pos, from, taglen = strlen(tag);
     while((pos = strfind(string, "{MAIN}", false, from)) != -1)

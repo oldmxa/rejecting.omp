@@ -135,16 +135,15 @@ InitRoundStatsTD(playerid)
 	PlayerTextDrawSetSelectable(playerid, topLocationTable[playerid][9], 0);
 
     new defaultInfoStr[128];
-    new colorStr[10];
-    new hudIdx = User[playerid][hudColor];
+    new colorStr[20];
 
-    if(strfind(hudPersonalization[hudIdx][colorOne], "~w~") != -1)
+    if(strfind(GetPlayerHudTag(playerid, false), "~w~") != -1)
     {
-        format(colorStr, sizeof(colorStr), "%s", hudPersonalization[hudIdx][colorTwo]);
+        format(colorStr, sizeof(colorStr), "%s", GetPlayerHudTag(playerid, true));
     }
     else
     {
-        format(colorStr, sizeof(colorStr), "%s", hudPersonalization[hudIdx][colorOne]);
+        format(colorStr, sizeof(colorStr), "%s", GetPlayerHudTag(playerid, false));
     }
 
     format(defaultInfoStr, sizeof(defaultInfoStr), "Best clan on Arena #0 - %sNone~n~Damage: %s0~w~ / Kills: %s0~n~MVP: %sNone", colorStr, colorStr, colorStr, colorStr);
@@ -217,16 +216,15 @@ InitRoundStatsTD(playerid)
 
 UpdateRoundStatsColors(playerid)
 {
-    new colorStr[10];
-    new hudIdx = User[playerid][hudColor];
+    new colorStr[20];
 
-    if(strfind(hudPersonalization[hudIdx][colorOne], "~w~") != -1)
+    if(strfind(GetPlayerHudTag(playerid, false), "~w~") != -1)
     {
-        format(colorStr, sizeof(colorStr), "%s", hudPersonalization[hudIdx][colorTwo]);
+        format(colorStr, sizeof(colorStr), "%s", GetPlayerHudTag(playerid, true));
     }
     else
     {
-        format(colorStr, sizeof(colorStr), "%s", hudPersonalization[hudIdx][colorOne]);
+        format(colorStr, sizeof(colorStr), "%s", GetPlayerHudTag(playerid, false));
     }
 
     new headerStr[64];

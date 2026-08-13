@@ -80,6 +80,35 @@ ShowHudColorDialog(playerid, source)
     return Dialog_ShowCallback(playerid, using public HUD_COLORS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
 }
 
+ShowHudShadeDialog(playerid, source, bool:secondary)
+{
+    SetAppearanceSource(playerid, source);
+
+    new selected = GetPlayerShadeIndex(playerid, secondary);
+
+    new body[3500] = "Name\tPreview\n";
+
+    strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{BEBEBE}%s\n",
+        STYLE_MARK(selected == -1),
+        secondary ? hudPersonalization[GetPlayerHudColorIndex(playerid)][colorTwo] : hudPersonalization[GetPlayerHudColorIndex(playerid)][colorOne]), sizeof(body));
+
+    for(new i; i < sizeof(hudShades); i++)
+    {
+        strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
+            STYLE_MARK(selected == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+    }
+
+    new title[64];
+    format(title, sizeof(title), "{MAIN}Personalization - %s Color", secondary ? ("Secondary") : ("Primary"));
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+
+    if(secondary)
+        return Dialog_ShowCallback(playerid, using public HUD_SHADE_TWO<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
+
+    return Dialog_ShowCallback(playerid, using public HUD_SHADE_ONE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
+}
+
 ShowChatColorDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
@@ -224,6 +253,42 @@ This is the order >> {CC0000}Red, {00CC00}Green {0000CC}Blue "COL_WHITE"and Alph
     return Dialog_ShowCallback(playerid, using public DIALOG_HITMARK<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Cancel");
 }
 
+static ApplyHudShade(playerid, listitem, bool:secondary)
+{
+    new value = (listitem == 0) ? -1 : (listitem - 1);
+
+    if(value >= sizeof(hudShades)) return 0;
+
+    if(secondary) User[playerid][hudShadeTwo] = value;
+    else User[playerid][hudShadeOne] = value;
+
+    UpdateRoundStatsColors(playerid);
+    updatePlayerHud(playerid);
+    SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+
+    if(User[playerid][showPlayerHud])
+    {
+        PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+        PlayerTextDrawShow(playerid, InfoStats[playerid][0]);
+        PlayerTextDrawShow(playerid, InfoStats[playerid][1]);
+    }
+    return 1;
+}
+
+forward HUD_SHADE_ONE(playerid, dialogid, response, listitem, string:inputtext[]);
+public HUD_SHADE_ONE(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response) ApplyHudShade(playerid, listitem, false);
+    return ReturnToAppearanceSource(playerid);
+}
+
+forward HUD_SHADE_TWO(playerid, dialogid, response, listitem, string:inputtext[]);
+public HUD_SHADE_TWO(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response) ApplyHudShade(playerid, listitem, true);
+    return ReturnToAppearanceSource(playerid);
+}
+
 forward HUD_COLORS(playerid, dialogid, response, listitem, string:inputtext[]);
 public HUD_COLORS(playerid, dialogid, response, listitem, string:inputtext[])
 {
@@ -232,7 +297,15 @@ public HUD_COLORS(playerid, dialogid, response, listitem, string:inputtext[])
 
     if(0 <= listitem < sizeof(hudPersonalization))
     {
+        new bool:hadCustom = (GetPlayerShadeIndex(playerid, false) != -1 || GetPlayerShadeIndex(playerid, true) != -1);
+
         User[playerid][hudColor] = listitem;
+        User[playerid][hudShadeOne] = -1;
+        User[playerid][hudShadeTwo] = -1;
+
+        if(hadCustom)
+            SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Primary and secondary colors were reset to the interface preset.");
+
         UpdateRoundStatsColors(playerid);
         updatePlayerHud(playerid);
         SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
@@ -387,10 +460,12 @@ public DIALOG_MENU(playerid, dialogid, response, listitem, string:inputtext[])
             case 3: ShowDamageStyleDialog(playerid, APPEARANCE_SRC_MENU);
             case 4: ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_MENU);
             case 5: ShowHudColorDialog(playerid, APPEARANCE_SRC_MENU);
-            case 6: ShowChatColorDialog(playerid, APPEARANCE_SRC_MENU);
-            case 7: ShowSkinDialog(playerid, APPEARANCE_SRC_MENU);
-            case 8: ChangeFight(playerid);
-            case 9: ShowGunMenu(playerid);
+            case 6: ShowHudShadeDialog(playerid, APPEARANCE_SRC_MENU, false);
+            case 7: ShowHudShadeDialog(playerid, APPEARANCE_SRC_MENU, true);
+            case 8: ShowChatColorDialog(playerid, APPEARANCE_SRC_MENU);
+            case 9: ShowSkinDialog(playerid, APPEARANCE_SRC_MENU);
+            case 10: ChangeFight(playerid);
+            case 11: ShowGunMenu(playerid);
         }
     }
 
