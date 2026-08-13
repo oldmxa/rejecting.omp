@@ -120,7 +120,10 @@ enum E_PRACTICE
     pracMoveTimer,
 
     pracHits,
-    pracShots
+    pracShots,
+
+    pracShotId,
+    pracHitShotId
 };
 
 new g_Practice[MAX_PLAYERS][E_PRACTICE];

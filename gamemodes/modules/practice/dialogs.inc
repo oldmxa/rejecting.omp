@@ -265,6 +265,8 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
         {
             g_Practice[playerid][pracHits]  = 0;
             g_Practice[playerid][pracShots] = 0;
+            g_Practice[playerid][pracShotId]    = 0;
+            g_Practice[playerid][pracHitShotId] = -1;
 
             SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Accuracy counters reset.");
             return ShowPracticeDialog(playerid);

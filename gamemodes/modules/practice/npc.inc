@@ -188,7 +188,11 @@ public OnNPCTakeDamage(npcid, issuerid, Float:amount, WEAPON:weaponid, bodypart)
     new owner = PracticeNPCOwner(npcid);
     if (owner == INVALID_PLAYER_ID || owner != issuerid) return 1;
 
-    g_Practice[owner][pracHits]++;
+    if (g_Practice[owner][pracHitShotId] != g_Practice[owner][pracShotId])
+    {
+        g_Practice[owner][pracHitShotId] = g_Practice[owner][pracShotId];
+        g_Practice[owner][pracHits]++;
+    }
 
     NPC_SetHealth(npcid, PRACTICE_NPC_HP);
     return 1;

@@ -3,8 +3,6 @@
 #endif
 #define _practice_record_incl
 
-// gravacao temporaria: o .rec vive so enquanto a sessao de pratica existe
-
 forward OnPracticeRecordReady(playerid);
 forward OnPracticeRecordLoop(playerid);
 
@@ -80,7 +78,6 @@ stock PracticeStopRecording(playerid)
     g_Practice[playerid][pracRecording] = false;
     g_Practice[playerid][pracRecPending] = true;
 
-    // o arquivo so fecha em disco depois do StopRecording, dai a espera
     SetTimerEx("OnPracticeRecordReady", 400, false, "i", playerid);
 
     SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Recording stopped, preparing the playback...");
@@ -98,7 +95,6 @@ public OnPracticeRecordReady(playerid)
     PracticeRecordName(playerid, name);
     format(file, sizeof(file), "%s.rec", name);
 
-    // o native resolve a partir da raiz do servidor, o fexist do Pawn so enxerga scriptfiles
     new path[48], recordid = -1;
 
     for (new i; i < 3 && recordid < 0; i++)

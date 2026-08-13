@@ -70,8 +70,8 @@ hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hiti
 {
     if (!PracticeValidateWorld(playerid)) return 1;
 
-    // conta o disparo para os dois tipos de alvo; o acerto no NPC vem por callback
     g_Practice[playerid][pracShots]++;
+    g_Practice[playerid][pracShotId]++;
 
     HandlePracticeShot(playerid, weaponid, hittype, hitid, fX, fY, fZ);
 

@@ -44,6 +44,8 @@ stock ResetPracticeState(playerid)
     g_Practice[playerid][pracMoveTimer] = 0;
     g_Practice[playerid][pracHits]     = 0;
     g_Practice[playerid][pracShots]    = 0;
+    g_Practice[playerid][pracShotId]     = 0;
+    g_Practice[playerid][pracHitShotId]  = -1;
     return 1;
 }
 
@@ -224,6 +226,8 @@ stock EnterPractice(playerid)
     g_Practice[playerid][pracActive] = true;
     g_Practice[playerid][pracHits]   = 0;
     g_Practice[playerid][pracShots]  = 0;
+    g_Practice[playerid][pracShotId]    = 0;
+    g_Practice[playerid][pracHitShotId] = -1;
 
     SetPlayerVirtualWorld(playerid, PRACTICE_VW_BASE + playerid);
 
@@ -251,6 +255,16 @@ stock EndPracticeSession(playerid)
 
     DestroyPracticeTarget(playerid);
     g_Practice[playerid][pracActive] = false;
+
+    if (User[playerid][showPlayerHud]) showPlayerTextDraw(playerid);
+    else hidePlayerTextdraw(playerid);
+
+    if (GetPlayerVirtualWorld(playerid) == PRACTICE_VW_BASE + playerid)
+    {
+        new vw = User[playerid][loungeVW];
+        SetPlayerVirtualWorld(playerid, vw ? vw : LOUNGEVW);
+    }
+
     return 1;
 }
 
