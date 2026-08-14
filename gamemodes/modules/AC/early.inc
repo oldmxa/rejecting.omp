@@ -12,7 +12,7 @@
 
 #define AC_MOVE_GRACE     (2500)
 
-#define AC_RUN_SPEED      (22.0)
+#define AC_RUN_SPEED      (17.0)
 #define AC_RUN_STRIKES    (3)
 #define AC_WARP_DISTANCE  (60.0)
 #define AC_VEHICLE_WARP   (30.0)

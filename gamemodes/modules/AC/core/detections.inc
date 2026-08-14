@@ -15,17 +15,11 @@ stock AC_GetDetectionName(code, destination[], len = sizeof(destination))
 
 static ACReportTick[MAX_PLAYERS][MAX_AC_DETECTIONS];
 
-static bool:ACAlerted[MAX_PLAYERS][MAX_AC_DETECTIONS];
-
 #include <YSI_Coding\y_hooks>
 
 hook OnPlayerConnect(playerid)
 {
-    for (new c; c < MAX_AC_DETECTIONS; c++)
-    {
-        ACReportTick[playerid][c] = 0;
-        ACAlerted[playerid][c] = false;
-    }
+    for (new c; c < MAX_AC_DETECTIONS; c++) ACReportTick[playerid][c] = 0;
 
     ApplyAnimation(playerid, "PAULNMAC", "null", 0.0, 0, 0, 0, 0, 0);
     return 1;
@@ -220,13 +214,7 @@ public OnRejectingACDetection(playerid, code)
     switch (action)
     {
         case AC_ACTION_IGNORE: return 1;
-        case AC_ACTION_REPORT:
-        {
-            if (ACAlerted[playerid][code]) return 1;
-
-            ACAlerted[playerid][code] = true;
-            AC_Alert(playerid, code, detection, "reported");
-        }
+        case AC_ACTION_REPORT: AC_Alert(playerid, code, detection, "reported");
         case AC_ACTION_KICK:
         {
             AC_Alert(playerid, code, detection, "kicked");
