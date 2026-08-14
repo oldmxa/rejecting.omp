@@ -15,16 +15,16 @@
 #define REFLEX_BAYSIDE_SPAWN_A        (316.3068)
 
 // Target Ball Details (Random Spawning)
-#define REFLEX_BAYSIDE_TARGET_MODEL   (19059) // XmasOrb1 default
+#define REFLEX_BAYSIDE_TARGET_MODEL   (19059)
 #define REFLEX_BAYSIDE_SPEED          (1.0)
-#define REFLEX_BAYSIDE_TARGET_HP      (10.0) // 1 M4 hit destroys target and instantly pops up the next
+#define REFLEX_BAYSIDE_TARGET_HP      (10.0)
 
 // Target random spawn coordinates
 static const Float:g_ReflexBaysideWaypoints[4][3] = {
-    { -2233.6565, 2402.7510, 2.4899 }, // Point 1
-    { -2251.4111, 2419.4490, 2.4939 }, // Point 2
-    { -2230.1594, 2439.1384, 2.4930 }, // Point 3
-    { -2213.9243, 2422.9924, 2.4964 }  // Point 4
+    { -2233.6565, 2402.7510, 2.4899 },
+    { -2251.4111, 2419.4490, 2.4939 },
+    { -2230.1594, 2439.1384, 2.4930 },
+    { -2213.9243, 2422.9924, 2.4964 } 
 };
 
 forward Init_ReflexBayside();

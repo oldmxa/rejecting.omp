@@ -3,37 +3,6 @@
 #endif
 #define _practice_commands_incl
 
-static SetPracticePoint(playerid, slot)
-{
-    new Float:x, Float:y, Float:z;
-    GetPlayerPos(playerid, x, y, z);
-
-    if (slot == 1)
-    {
-        g_Practice[playerid][pracPos1][0] = x;
-        g_Practice[playerid][pracPos1][1] = y;
-        g_Practice[playerid][pracPos1][2] = z;
-        g_Practice[playerid][pracHasPos1] = true;
-    }
-    else
-    {
-        g_Practice[playerid][pracPos2][0] = x;
-        g_Practice[playerid][pracPos2][1] = y;
-        g_Practice[playerid][pracPos2][2] = z;
-        g_Practice[playerid][pracHasPos2] = true;
-    }
-
-    va_SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Point {MAIN}%d {FFFFFF}set at your position.", slot);
-
-    if (g_Practice[playerid][pracMoving] && !PracticeCanMove(playerid))
-    {
-        va_SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Now set point {MAIN}%d {FFFFFF}to start the movement.", (slot == 1) ? 2 : 1);
-    }
-
-    CreatePracticeTarget(playerid);
-    return 1;
-}
-
 @cmd(.alts = {"practice"}) prac(playerid, params[], help)
 {
     if (!User[playerid][isLogged])
@@ -96,6 +65,7 @@ static SetPracticePoint(playerid, slot)
             return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Wait, the last recording is still being processed.");
 
         if (g_Practice[playerid][pracRecording]) return PracticeStopRecording(playerid);
+        if (PracticeHasRecord(playerid)) return PracticeClearRecord(playerid);
         return PracticeStartRecording(playerid);
     }
 
@@ -104,12 +74,15 @@ static SetPracticePoint(playerid, slot)
         if (!IsPracticeActive(playerid))
             return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Use {MAIN}/prac {FFFFFF}first to enter the practice world.");
 
+        if (PracticeRecordLocks(playerid))
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The recording drives the NPC. Clear it first to use the movement points.");
+
         return SetPracticePoint(playerid, (sub[3] == '1') ? 1 : 2);
     }
 
     SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac {B4B5B7}- open the settings dialog");
     SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac pos1 {B4B5B7}/ {FFFFFF}/prac pos2 {B4B5B7}- set the two movement points");
-    SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac rec {B4B5B7}- record / stop recording the NPC movement");
+    SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac rec {B4B5B7}- record, stop, then delete the NPC movement");
     SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/prac exit {B4B5B7}- leave the practice world");
     return 1;
 }

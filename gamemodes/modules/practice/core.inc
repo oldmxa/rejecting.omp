@@ -35,6 +35,7 @@ stock ResetPracticeState(playerid)
     g_Practice[playerid][pracSpeed]    = PRACTICE_SPEED_DEFAULT;
     g_Practice[playerid][pracHeight]   = PRACTICE_HEIGHT_DEFAULT;
     g_Practice[playerid][pracTolerance]  = PRACTICE_TOLERANCE_DEFAULT;
+    g_Practice[playerid][pracLatency]    = PRACTICE_LATENCY_DEFAULT;
     g_Practice[playerid][pracMoving]   = false;
     g_Practice[playerid][pracHasPos1]  = false;
     g_Practice[playerid][pracHasPos2]  = false;
@@ -87,7 +88,6 @@ static Float:GetPracticeTargetRadius(model)
     return result;
 }
 
-// slot 1 ou 2; a altura configurada e sempre somada ao ponto marcado
 stock GetPracticePoint(playerid, slot, &Float:x, &Float:y, &Float:z)
 {
     if (slot == 2)
@@ -202,6 +202,53 @@ stock CreatePracticeTarget(playerid)
     if (PracticeCanMove(playerid))
         StartPracticeMovement(playerid);
 
+    return 1;
+}
+
+stock SetPracticePoint(playerid, slot)
+{
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+
+    if (slot == 1)
+    {
+        g_Practice[playerid][pracPos1][0] = x;
+        g_Practice[playerid][pracPos1][1] = y;
+        g_Practice[playerid][pracPos1][2] = z;
+        g_Practice[playerid][pracHasPos1] = true;
+    }
+    else
+    {
+        g_Practice[playerid][pracPos2][0] = x;
+        g_Practice[playerid][pracPos2][1] = y;
+        g_Practice[playerid][pracPos2][2] = z;
+        g_Practice[playerid][pracHasPos2] = true;
+    }
+
+    va_SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Point {MAIN}%d {FFFFFF}set at your position.", slot);
+
+    if (g_Practice[playerid][pracMoving] && !PracticeCanMove(playerid))
+    {
+        va_SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Now set point {MAIN}%d {FFFFFF}to start the movement.", (slot == 1) ? 2 : 1);
+    }
+
+    CreatePracticeTarget(playerid);
+    return 1;
+}
+
+stock ClearPracticePoint(playerid, slot)
+{
+    new bool:wasMoving = PracticeCanMove(playerid);
+
+    if (slot == 1) g_Practice[playerid][pracHasPos1] = false;
+    else g_Practice[playerid][pracHasPos2] = false;
+
+    va_SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Point {MAIN}%d {FFFFFF}removed.", slot);
+
+    if (wasMoving)
+        SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}The target stopped, it needs both points to move.");
+
+    CreatePracticeTarget(playerid);
     return 1;
 }
 
@@ -336,7 +383,8 @@ stock HandlePracticeShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hit
 
     new bool:hit = false;
 
-    if (hittype == BULLET_HIT_TYPE_OBJECT || hittype == BULLET_HIT_TYPE_PLAYER_OBJECT)
+    if (g_Practice[playerid][pracLatency] <= 0 &&
+        (hittype == BULLET_HIT_TYPE_OBJECT || hittype == BULLET_HIT_TYPE_PLAYER_OBJECT))
     {
         if (Streamer_GetItemStreamerID(playerid, STREAMER_TYPE_OBJECT, hitid) == obj)
             hit = true;
@@ -360,29 +408,35 @@ stock HandlePracticeShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hit
 
         new Float:radius = GetPracticeTargetRadius(g_PracticeModels[idx][pmModel]);
 
-        // rebobina o alvo pela latencia configurada, como no training
         if (PracticeCanMove(playerid))
         {
-            new ping = GetPlayerPing(playerid);
-            if (ping > g_Practice[playerid][pracTolerance]) ping = g_Practice[playerid][pracTolerance];
+            new Float:destX, Float:destY, Float:destZ;
+            GetPracticePoint(playerid, g_Practice[playerid][pracWaypoint] ? 2 : 1, destX, destY, destZ);
+            destZ += PRACTICE_BALL_LIFT;
 
-            if (ping > 0)
+            new Float:dx = destX - objX, Float:dy = destY - objY, Float:dz = destZ - objZ;
+            new Float:len = VectorSize(dx, dy, dz);
+
+            if (len > 0.01)
             {
-                new Float:back = g_Practice[playerid][pracSpeed] * (float(ping) / 2000.0);
+                new Float:shift = 0.0;
 
-                new Float:destX, Float:destY, Float:destZ;
-                GetPracticePoint(playerid, g_Practice[playerid][pracWaypoint] ? 2 : 1, destX, destY, destZ);
-                destZ += PRACTICE_BALL_LIFT;
-
-                new Float:dx = destX - objX, Float:dy = destY - objY, Float:dz = destZ - objZ;
-                new Float:len = VectorSize(dx, dy, dz);
-
-                if (len > 0.01)
+                new lag = g_Practice[playerid][pracLatency];
+                if (lag > 0)
                 {
-                    objX -= (dx / len) * back;
-                    objY -= (dy / len) * back;
-                    objZ -= (dz / len) * back;
+                    shift = g_Practice[playerid][pracSpeed] * (float(lag) / 1000.0);
+                    if (shift > len) shift = len;
                 }
+
+                new ping = GetPlayerPing(playerid);
+                if (ping > g_Practice[playerid][pracTolerance]) ping = g_Practice[playerid][pracTolerance];
+
+                if (ping > 0)
+                    shift -= g_Practice[playerid][pracSpeed] * (float(ping) / 2000.0);
+
+                objX += (dx / len) * shift;
+                objY += (dy / len) * shift;
+                objZ += (dz / len) * shift;
             }
         }
 

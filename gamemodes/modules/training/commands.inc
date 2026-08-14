@@ -3,7 +3,7 @@
 #endif
 #define _training_commands_included
 
-// commands for the training system.
+// commands
 
 @cmd() training(playerid, params[], help)
 {

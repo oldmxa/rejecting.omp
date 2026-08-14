@@ -48,13 +48,33 @@ stock bool:PracticeHasRecord(playerid)
     return (g_Practice[playerid][pracRecordId] != -1);
 }
 
+stock PracticeClearRecord(playerid)
+{
+    if (!PracticeHasRecord(playerid)) return 0;
+
+    PracticeDropRecord(playerid);
+
+    SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Recording deleted. The NPC is back to the movement points.");
+
+    CreatePracticeTarget(playerid);
+    return 1;
+}
+
+stock bool:PracticeRecordLocks(playerid)
+{
+    if (g_Practice[playerid][pracTargetType] != PRACTICE_TYPE_NPC) return false;
+
+    return (g_Practice[playerid][pracRecording] ||
+            g_Practice[playerid][pracRecPending] ||
+            PracticeHasRecord(playerid));
+}
+
 stock PracticeStartRecording(playerid)
 {
     if (g_Practice[playerid][pracRecording]) return 0;
 
     PracticeDropRecord(playerid);
 
-    // o NPC para de patrulhar para nao poluir a referencia visual da gravacao
     new npcid = g_Practice[playerid][pracNpcId];
     if (npcid != INVALID_NPC_ID && NPC_IsValid(npcid)) NPC_StopMove(npcid);
 

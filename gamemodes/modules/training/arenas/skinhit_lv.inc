@@ -20,12 +20,12 @@
 
 // Waypoints exact trajectory matching ramp & container elevation
 static const Float:g_SkinhitLVWaypoints[6][3] = {
-    { 1348.5349, 1671.9773, 10.8203 }, // 0: Começa aqui #1
-    { 1349.0098, 1665.1542, 10.9240 }, // 1: pé da rampa de subida
-    { 1349.0933, 1656.3779, 14.8727 }, // 2: topo do contêiner
-    { 1349.2059, 1644.9747, 14.8729 }, // 3: término do contêiner / início da descida
-    { 1349.2659, 1634.8771, 10.8203 }, // 4: término da descida no chão
-    { 1349.2454, 1631.2040, 10.8203 }  // 5: final (inverte rota)
+    { 1348.5349, 1671.9773, 10.8203 },
+    { 1349.0098, 1665.1542, 10.9240 },
+    { 1349.0933, 1656.3779, 14.8727 },
+    { 1349.2059, 1644.9747, 14.8729 },
+    { 1349.2659, 1634.8771, 10.8203 },
+    { 1349.2454, 1631.2040, 10.8203 } 
 };
 
 forward Init_SkinhitLV();

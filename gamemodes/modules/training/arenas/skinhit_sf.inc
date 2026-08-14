@@ -3,15 +3,6 @@
 #endif
 #define _training_skinhit_sf_included
 
-/*
-    ============================================================================
-    ARENA: Skinhit SF
-    ============================================================================
-    First arena for the Training system.
-    Moving sphere target between two waypoints in San Fierro.
-    Restricted to Desert Eagle & Shotgun only.
-*/
-
 #define SKINHIT_SF_NAME           "Skinhit SF"
 #define SKINHIT_SF_TYPE           "Skinhit"
 

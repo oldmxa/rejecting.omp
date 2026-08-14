@@ -3,14 +3,6 @@
 #endif
 #define _training_skinhit_ganton_incl
 
-/*
-    ============================================================================
-    ARENA: Ganton SkinHit
-    ============================================================================
-    Moving sphere target between two waypoints in Ganton, Los Santos.
-    Restricted to Desert Eagle & Shotgun only.
-*/
-
 #define SKINHIT_GANTON_NAME         "Ganton SkinHit"
 #define SKINHIT_GANTON_TYPE         "Skinhit"
 

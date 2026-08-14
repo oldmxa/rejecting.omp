@@ -34,10 +34,10 @@ forward Ach_OnTrainingChallengeFinish(playerid, Float:damage, Float:accuracy, re
 
 #define TRAINING_RESPAWN_DELAY      (400)
 
-#define TRAINING_CHALLENGE_TIME     (60)    // seconds
-#define TRAINING_CHALLENGE_TICK     (250)   // ms, drives the countdown bar
+#define TRAINING_CHALLENGE_TIME     (60)
+#define TRAINING_CHALLENGE_TICK     (250)
 
-#define TRAINING_PAUSE_TIMEOUT      (3)     // seconds
+#define TRAINING_PAUSE_TIMEOUT      (3)
 
 // challenge result codes
 #define TRAINING_RECORD_NONE        (0)

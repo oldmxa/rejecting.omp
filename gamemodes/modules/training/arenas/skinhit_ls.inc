@@ -21,12 +21,12 @@
 
 // Waypoints exact trajectory matching ramp & container elevation
 static const Float:g_SkinhitLSWaypoints[6][3] = {
-    { 1966.4843, -2201.9241, 13.5469 }, // 0: start of the course on the ground
-    { 1966.6227, -2207.0178, 13.5469 }, // 1: start of the ramp (preparing for the ascent)
-    { 1966.6162, -2212.4304, 16.1250 }, // 2: top of the container
-    { 1966.6173, -2220.1470, 16.1250 }, // 3: end of the container / start of the descent ramp
-    { 1966.6732, -2225.1858, 13.5469 }, // 4: end of the ramp on the ground
-    { 1966.4751, -2226.8909, 13.5469 }  // 5: end of the course on the ground (return)
+    { 1966.4843, -2201.9241, 13.5469 },
+    { 1966.6227, -2207.0178, 13.5469 },
+    { 1966.6162, -2212.4304, 16.1250 },
+    { 1966.6173, -2220.1470, 16.1250 },
+    { 1966.6732, -2225.1858, 13.5469 },
+    { 1966.4751, -2226.8909, 13.5469 } 
 };
 
 forward Init_SkinhitLS();

@@ -21,6 +21,10 @@
 #define PRACTICE_TOLERANCE_MAX        (500)
 #define PRACTICE_TOLERANCE_DEFAULT    (300)
 
+#define PRACTICE_LATENCY_MIN          (0)
+#define PRACTICE_LATENCY_MAX          (500)
+#define PRACTICE_LATENCY_DEFAULT      (0)
+
 #define PRACTICE_TYPE_BALL          (0)
 #define PRACTICE_TYPE_NPC           (1)
 
@@ -107,6 +111,7 @@ enum E_PRACTICE
     Float:pracSpeed,
     Float:pracHeight,
     pracTolerance,
+    pracLatency,
     bool:pracMoving,
 
     bool:pracHasPos1,

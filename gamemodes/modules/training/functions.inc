@@ -3,11 +3,6 @@
 #endif
 #define _training_functions_included
 
-/*
-    helper functions for registering arenas, handling player entry/exit,
-    target object animation loops, countdown timers, and bullet hit detection.
-*/
-
 forward bool:IsValidTrainingArena(arenaid);
 forward OnTrainingCountdownTimer(playerid, count);
 forward DestroyTrainingCountdownTimer(playerid);
@@ -60,7 +55,6 @@ stock RegisterTrainingArena(
     g_TrainingArenas[id][tArena_TargetModel] = (targetModel > 0) ? targetModel : TRAINING_TARGET_MODEL;
     g_TrainingArenas[id][tArena_TargetHP] = (targetHP > 0.0) ? targetHP : TRAINING_TARGET_HP;
 
-    // never read past the weapon list the caller actually passed in
     if (weaponCount > weaponsSize) weaponCount = weaponsSize;
     if (weaponCount > TRAINING_MAX_WEAPONS) weaponCount = TRAINING_MAX_WEAPONS;
     if (weaponCount < 0) weaponCount = 0;
@@ -464,25 +458,20 @@ stock ApplyTrainingEnvironment(playerid)
     if (!IsValidTrainingArena(arenaid))
         return 0;
 
-    // hide Clan and arena Info textDraws
     hidePlayerTextdraw(playerid);
     if (User[playerid][showPlayerHud])
     {
         PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
     }
 
-    // set player environment
     SetPlayerVirtualWorld(playerid, TRAINING_VW_BASE + playerid);
     SetPlayerInterior(playerid, 0);
 
-    // set health & armor
     SetPlayerHealth(playerid, 100.0);
     SetPlayerArmour(playerid, 100.0);
 
-    // give specific arena weapons (eagle & shot)
     GiveArenaWeapons(playerid, arenaid);
 
-    // teleport player
     SetPlayerPos(
         playerid,
         g_TrainingArenas[arenaid][tArena_SpawnX],
@@ -681,10 +670,8 @@ stock EnterTrainingArena(playerid, arenaid)
         SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}Your previous run was discarded because you restarted the challenge.");
     }
 
-    // leaves any previous session behind (target, timers and hit effects)
     EndTrainingSession(playerid);
 
-    // set location & stats
     g_PlayerTraining[playerid][pTrain_Active] = true;
     g_PlayerTraining[playerid][pTrain_ArenaID] = arenaid;
     User[playerid][locationId] = ARENA_AFK;
@@ -693,7 +680,6 @@ stock EnterTrainingArena(playerid, arenaid)
     ApplyTrainingEnvironment(playerid);
     UpdateTrainingHud(playerid, TRAINING_CHALLENGE_TIME);
 
-    // create target sphere at initial start position
     CreateTrainingTarget(playerid, arenaid);
 
     va_SendClientMessage(
@@ -703,7 +689,6 @@ stock EnterTrainingArena(playerid, arenaid)
         g_TrainingArenas[arenaid][tArena_Name]
     );
 
-    // time '3' sec
     ShowTrainingCountdownTD(playerid, "~r~3");
     PlayerPlaySound(playerid, 1056, 0.0, 0.0, 0.0);
     g_PlayerTraining[playerid][pTrain_CountdownTimer] = SetTimerEx("OnTrainingCountdownTimer", 1000, false, "ii", playerid, 2);
@@ -776,8 +761,6 @@ stock HandleTrainingTargetMove(objectid)
         new arenaid = g_PlayerTraining[i][pTrain_ArenaID];
         if (!IsValidTrainingArena(arenaid)) break;
 
-        // waypoint timer already handles multi-waypoint progression;
-        // skip to avoid double-advancing and skipping elevation points
         if (g_PlayerTraining[i][pTrain_WaypointTimer] != 0) break;
 
         MoveTrainingTargetNext(i, arenaid);
@@ -863,7 +846,6 @@ stock FinishTrainingChallenge(playerid)
     new Float:damage = g_PlayerTraining[playerid][pTrain_Damage];
     new Float:accuracy = GetTrainingAccuracy(playerid);
 
-    // the record is the damage put on the target during the run
     new score = floatround(damage, floatround_round);
     new previous = g_ChallengePlayerRecord[playerid][arenaid];
 
@@ -934,7 +916,6 @@ public OnTrainingChallengeTick(playerid)
     if (!IsPlayerConnected(playerid))
         return EndTrainingSession(playerid);
 
-    // client paused (ESC / alt-tab): OnPlayerUpdate stops arriving
     if (gettime() - User[playerid][lastTimeUpdated] >= TRAINING_PAUSE_TIMEOUT)
         return CancelTrainingChallenge(playerid, "the game was paused");
 
