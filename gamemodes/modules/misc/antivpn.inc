@@ -10,7 +10,6 @@ stock CheckISP(playerid)
     if(strequal(playerIP, "127.0.0.1"))
         return true;
 
-    // um unico client por sessao: recriar a cada conexao vaza handles do plugin
     if(client == RequestsClient:0)
         client = RequestsClient("https://vpnapi.io/api/");
 
@@ -92,7 +91,7 @@ public OnGetAntiVPN(Request:id, E_HTTP_STATUS:status, Node:node)
             JsonToggleGC(security, true);
             JsonToggleGC(location, true);
             JsonToggleGC(network, true);
-            JsonToggleGC(node, true); // ativa todos
+            JsonToggleGC(node, true);
 
 
             inline const CountryBanned()

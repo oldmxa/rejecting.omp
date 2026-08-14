@@ -341,6 +341,20 @@ public OffDox(playerid)
 		format(title, sizeof(title), "{MAIN}Lookup (offline): {FFFFFF}%s", username);
 		format_MainColor(playerid, title);
 
+		if(isnull(isp))
+		{
+			new why[240];
+
+			format(why, sizeof(why),
+				"{FFFFFF}This account has no network data stored.\n\n"\
+				"{B4B5B7}Registration IP: {FFFFFF}%s\n"\
+				"{B4B5B7}Last IP: {FFFFFF}%s\n\n"\
+				"{B4B5B7}The lookup only runs on public addresses. A rejected request is logged as {FFFFFF}[ANTIVPN]{B4B5B7}.",
+				regip, lastip);
+
+			return Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, title, why, "Close", "");
+		}
+
 		format(strlookup, sizeof(strlookup),
 			"Field\tValue\n\
 			Registration IP\t%s\n\
