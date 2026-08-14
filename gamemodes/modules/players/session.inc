@@ -25,8 +25,8 @@ SyncPlayer(playerid, bool:playercalled = true)
 	return true;
 }
 
-forward LoadMap(playerid, loadtime, bool:silent);
-public LoadMap(playerid, loadtime, bool:silent)
+forward LoadMap(playerid, loadtime);
+public LoadMap(playerid, loadtime)
 {
 	if(LoaderFreezer == 0) return 1;
 
@@ -37,9 +37,6 @@ public LoadMap(playerid, loadtime, bool:silent)
 
 	ClearAnimations(playerid);
 	TogglePlayerControllable(playerid,false);
-
-	if(!silent)
-		GameTextForPlayer(playerid,"~n~~n~~n~~n~~y~loading map...", loadtime, 5);
 
 	KillTimer(TeleLockTimer[playerid]);
 
@@ -230,7 +227,7 @@ setAfk(playerid)
 	User[playerid][locationId] = ARENA_AFK;
 
 	GangZoneStopPulseForPlayer(playerid, e_ZONE_PULSE_ZONE, arenaInfo[ARENA_AFK][arenaId]);
-	LoadMap(playerid, 0, false);
+	LoadMap(playerid, 0);
 	updatePlayerHud(playerid);
 	CallLocalFunction("ResetPlayerOutpostCapture", "i", playerid);
 

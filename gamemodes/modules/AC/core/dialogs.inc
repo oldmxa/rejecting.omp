@@ -578,7 +578,7 @@ public DIALOG_AC_HISTORY(playerid, dialogid, response, listitem, string:inputtex
 @cmd() ac(playerid, params[], help)
 {
     if (User[playerid][adminLevel] < AC_MIN_ADMIN_LEVEL)
-        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+        return SendClientMessage(playerid, -1, "%s", UNKNOWN_COMMAND_MSG);
 
     CheckAdminAuth(playerid);
 
