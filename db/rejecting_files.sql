@@ -187,6 +187,16 @@ CREATE TABLE `chat_logs` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `coins_logs` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `reason` varchar(64) DEFAULT NULL,
+  `amount` int(11) NOT NULL,
+  `balance` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `clans` (
   `clan_id` int(11) NOT NULL,
   `clan_leader` int(11) NOT NULL,
@@ -439,6 +449,11 @@ ALTER TABLE `chat_logs`
   ADD KEY `channel_idx` (`channel`),
   ADD KEY `created_at_idx` (`created_at`);
 
+ALTER TABLE `coins_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id_idx` (`user_id`),
+  ADD KEY `created_at_idx` (`created_at`);
+
 ALTER TABLE `clans`
   ADD PRIMARY KEY (`clan_id`),
   ADD KEY `clan_tag` (`clan_tag`),
@@ -529,6 +544,9 @@ ALTER TABLE `banimentos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `chat_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `coins_logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `ip_whitelist`

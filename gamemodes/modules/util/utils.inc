@@ -71,6 +71,16 @@ stock FormatCoins(amount)
     return result;
 }
 
+stock FormatCoinsDelta(amount)
+{
+    new result[40];
+
+    if (amount < 0) format(result, sizeof(result), "{F84F31}-R$%s", FormatNumber(-amount, '.'));
+    else format(result, sizeof(result), "{23C552}+R$%s", FormatNumber(amount, '.'));
+
+    return result;
+}
+
 stock GetColorHexTag(const colorTag[])
 {
     new tag[7] = "FFFFFF";

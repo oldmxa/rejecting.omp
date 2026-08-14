@@ -124,6 +124,8 @@ stock RenewSafehouse(playerid, index)
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The contract cannot go past %d days. Renew closer to the expiry.", SH_DURATION / 86400);
 
     User[playerid][playerCoins] -= SH_RENEW_COINS;
+    LogCoins(User[playerid][user_sqlid], User[playerid][userName], "Safehouse renew", -SH_RENEW_COINS, User[playerid][playerCoins]);
+
     UpdatePlayerData(playerid);
 
     SafehouseData[index][sh_ExpiresAt] += extra;
@@ -370,6 +372,8 @@ stock BuySafehouse(playerid, index)
     GivePlayerMoney(playerid, -SH_BUY_PRICE);
     User[playerid][playerMoney] -= SH_BUY_PRICE;
     User[playerid][playerCoins] -= SH_BUY_COINS;
+    LogCoins(User[playerid][user_sqlid], User[playerid][userName], "Safehouse purchase", -SH_BUY_COINS, User[playerid][playerCoins]);
+
     UpdatePlayerData(playerid);
 
     new timestamp = gettime();
@@ -588,6 +592,8 @@ stock UpgradeSafehouse(playerid, index)
     GivePlayerMoney(playerid, -price);
     User[playerid][playerMoney] -= price;
     User[playerid][playerCoins] -= coins;
+    LogCoins(User[playerid][user_sqlid], User[playerid][userName], "Safehouse upgrade", -coins, User[playerid][playerCoins]);
+
     UpdatePlayerData(playerid);
 
     ApplySafehouseLevel(index, next);

@@ -90,6 +90,8 @@
 #include "modules/players/lounge.inc"
 #include "modules/players/account.inc"
 #include "modules/players/stats.inc"
+#include "modules/players/coinslog.inc"
+#include "modules/players/coinshop.inc"
 
 // admin
 #include "modules/admins/commands.inc"

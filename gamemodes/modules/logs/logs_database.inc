@@ -14,6 +14,19 @@ LogServerAction(user_id, const username[], const log_category[], const action[],
     return 1;
 }
 
+LogCoins(user_id, const username[], const reason[], amount, balance)
+{
+    if (!amount) return 0;
+
+    new query[512];
+    mysql_format(dbHandle, query, sizeof(query),
+        "INSERT INTO `coins_logs` (`user_id`, `username`, `reason`, `amount`, `balance`) VALUES (%d, '%e', '%e', %d, %d)",
+        user_id, username, reason, amount, balance);
+
+    mysql_tquery(dbHandle, query);
+    return 1;
+}
+
 LogChatMessage(user_id, const username[], const channel[], const message[])
 {
     new query[512];

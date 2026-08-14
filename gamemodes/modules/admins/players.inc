@@ -236,6 +236,10 @@
         new previous = User[targetid][playerCoins];
         User[targetid][playerCoins] = amount;
 
+        new setReason[64];
+        format(setReason, sizeof(setReason), "Set by %s", User[playerid][userName]);
+        LogCoins(User[targetid][user_sqlid], User[targetid][userName], setReason, amount - previous, amount);
+
         UpdatePlayerData(targetid);
 
         va_SendClientMessage(playerid, -1, COINS_SET_DONE, User[targetid][userName], FormatCoins(previous), FormatCoins(amount));

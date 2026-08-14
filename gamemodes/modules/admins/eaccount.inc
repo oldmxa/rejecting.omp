@@ -205,6 +205,15 @@ static EAcc_Write(playerid, field, value)
     new targetid = EAcc_OnlineTarget(playerid);
     if (targetid == INVALID_PLAYER_ID) return 0;
 
+    if (field == EACC_COINS && value != User[targetid][playerCoins])
+    {
+        new eaccReason[64];
+        format(eaccReason, sizeof(eaccReason), "Edited by %s", User[playerid][userName]);
+
+        LogCoins(User[targetid][user_sqlid], User[targetid][userName], eaccReason,
+            value - User[targetid][playerCoins], value);
+    }
+
     switch (field)
     {
         case EACC_LEVEL:       User[targetid][playerLevel]    = value;

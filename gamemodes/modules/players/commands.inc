@@ -304,7 +304,9 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{BEBEBE}/stats\t"COL_WHITE"View your or player stats\n");
             strcat(cmdsstr, "{BEBEBE}/fullstats\t"COL_WHITE"View detailed player stats\n");
             strcat(cmdsstr, "{BEBEBE}/ach\t"COL_WHITE"View your achievements & progress\n");
-            strcat(cmdsstr, "{BEBEBE}/coins\t"COL_WHITE"Check your Coins balance\n");
+            strcat(cmdsstr, "{BEBEBE}/coins\t"COL_WHITE"Balance, buy Coins, history and VIP - all in one\n");
+            strcat(cmdsstr, "{BEBEBE}/logcoins\t"COL_WHITE"Shortcut to your last 15 Coins transactions\n");
+            strcat(cmdsstr, "{BEBEBE}/buycoins [amount]\t"COL_WHITE"Shortcut to exchange in-game money for Coins\n");
             strcat(cmdsstr, "{BEBEBE}/customhud\t"COL_WHITE"Change Server HUD style\n");
             strcat(cmdsstr, "{BEBEBE}/sync\t"COL_WHITE"Resync character position\n");
         }

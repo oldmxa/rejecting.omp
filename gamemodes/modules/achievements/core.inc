@@ -21,47 +21,47 @@ enum E_ACHIEVEMENT_DATA {
 };
 
 new const g_AchievementsData[][E_ACHIEVEMENT_DATA] = {
-    {0,  "Welcome!",           "Join the server for the very first time",            ACH_CAT_GENERAL, 1,       77777,   50},
-    {1,  "First victory",      "Win your first duel or arena match",                 ACH_CAT_GENERAL, 1,       10000,   100},
-    {2,  "Maniac",             "Eliminate 500 total enemy players",                  ACH_CAT_GENERAL, 500,     25000,   250},
-    {3,  "6 figures",          "Accumulate $500,000 in total cash balance",          ACH_CAT_GENERAL, 500000,  50000,   500},
-    {4,  "Nemesis",            "Eliminate the same enemy player 25 times",           ACH_CAT_GENERAL, 25,      30000,   300},
-    {5,  "Cash maniac",        "Accumulate $3,000,000 in total cash balance",        ACH_CAT_GENERAL, 3000000, 100000,  1000},
-    {6,  "Merciless",          "Eliminate 1,000 total enemy players",                ACH_CAT_GENERAL, 1000,    50000,   500},
-    {7,  "Sniper elite",       "Eliminate 1,000 enemy players using Sniper Rifle",   ACH_CAT_GENERAL, 1000,    75000,   750},
-    {8,  "God of war",         "Eliminate 2,500 total enemy players",                ACH_CAT_GENERAL, 2500,    100000,  1000},
-    {9,  "At what cost",       "Take 20,000 total damage from enemy attacks",        ACH_CAT_GENERAL, 20000,   35000,   350},
-    {10, "2 fast",             "Perform 25 rapid double kills in combat",            ACH_CAT_GENERAL, 25,      15000,   150},
-    {11, "Variative",          "Eliminate enemies using 10 different weapons",       ACH_CAT_GENERAL, 10,      20000,   200},
-    {12, "Big time damage",    "Deal 150,000 total damage to enemy players",         ACH_CAT_GENERAL, 150000,  60000,   600},
-    {13, "Bulletproof",        "Survive 15 minutes inside an arena without dying",   ACH_CAT_GENERAL, 1,       30000,   300},
-    {14, "Undying",            "Achieve a killstreak of 25 kills without dying",     ACH_CAT_GENERAL, 25,      50000,   500},
-    {15, "Headache",           "Perform 300 headshot eliminations",                  ACH_CAT_GENERAL, 300,     40000,   400},
-    {16, "Cleanup",            "Eliminate 15 enemy players in a single round",       ACH_CAT_GENERAL, 15,      25000,   250},
-    {17, "Chilled & relaxed",  "Spend 120 minutes relaxing in the Lounge area",      ACH_CAT_GENERAL, 120,     15000,   150},
-    {18, "Call a friend",      "Join or create a clan with your teammates",          ACH_CAT_GENERAL, 1,       20000,   200},
-    {19, "Honoured",           "Reach Level 10 account status on the server",        ACH_CAT_GENERAL, 10,      50000,   500},
-    {20, "Still dangerous",    "Eliminate an enemy while having under 10 HP",        ACH_CAT_GENERAL, 1,       25000,   250},
-    {21, "Dynamic duo",        "Capture 10 outposts together with a clanmate",       ACH_CAT_GENERAL, 10,      30000,   300},
-    {22, "Wide range",         "Play matches across 10 different arenas",            ACH_CAT_GENERAL, 10,      20000,   200},
-    {23, "Improvement",        "Win 50 duels against other players",                 ACH_CAT_GENERAL, 50,      35000,   350},
-    {24, "Nolife",             "Eliminate 5,000 total enemy players",                ACH_CAT_GENERAL, 5000,    200000,  2000},
-    {25, "Light work",         "Complete 200 total arena rounds",                    ACH_CAT_GENERAL, 200,     25000,   250},
-    {26, "Highway to hell",    "Eliminate 500 players in Desert arenas",             ACH_CAT_GENERAL, 500,     50000,   500},
-    {27, "Rich",               "Accumulate $10,000,000 in total cash balance",       ACH_CAT_GENERAL, 10000000,250000,  2500},
-    {28, "Best support",       "Assist clanmates in capturing 50 outposts",          ACH_CAT_GENERAL, 50,      40000,   400},
-    {29, "Dream team",         "Win 25 outpost captures with your clan",             ACH_CAT_GENERAL, 25,      75000,   750},
-    {30, "Best fighter",       "Become the MVP player of 25 arena rounds",           ACH_CAT_GENERAL, 25,      50000,   500},
-    {31, "Sharpshooter",       "Complete 50 total training challenges",              ACH_CAT_GENERAL, 50,      30000,   300},
-    {32, "Target Annihilator", "Deal 50,000 total damage in training mode",          ACH_CAT_GENERAL, 50000,   60000,   600},
-    {33, "Bullseye",           "Achieve 95% or higher accuracy in a challenge",      ACH_CAT_GENERAL, 1,       40000,   400},
-    {34, "Record Breaker",     "Set a new personal or server record in training",    ACH_CAT_GENERAL, 1,       75000,   750},
-    {35, "Rising Star",        "Reach Level 15 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 15,      50000,   1000},
-    {36, "Veteran Fighter",    "Reach Level 20 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 20,      50000,   1000},
-    {37, "Elite Operative",    "Reach Level 25 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 25,      50000,   1000},
-    {38, "Server Warlord",     "Reach Level 30 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 30,      50000,   1000},
-    {39, "Founder",            "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       150000,  1500},
-    {40, "Legend",             "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       250000,  2500},
+    {0,  "Welcome!",           "Join the server for the very first time",            ACH_CAT_GENERAL, 1,       77777,   1000},
+    {1,  "First victory",      "Win your first duel or arena match",                 ACH_CAT_GENERAL, 1,       10000,   1000},
+    {2,  "Maniac",             "Eliminate 500 total enemy players",                  ACH_CAT_GENERAL, 500,     25000,   1000},
+    {3,  "6 figures",          "Accumulate $500,000 in total cash balance",          ACH_CAT_GENERAL, 500000,  50000,   1000},
+    {4,  "Nemesis",            "Eliminate the same enemy player 25 times",           ACH_CAT_GENERAL, 25,      30000,   1000},
+    {5,  "Cash maniac",        "Accumulate $3,000,000 in total cash balance",        ACH_CAT_GENERAL, 3000000, 100000,  2000},
+    {6,  "Merciless",          "Eliminate 1,000 total enemy players",                ACH_CAT_GENERAL, 1000,    50000,   1000},
+    {7,  "Sniper elite",       "Eliminate 1,000 enemy players using Sniper Rifle",   ACH_CAT_GENERAL, 1000,    75000,   1000},
+    {8,  "God of war",         "Eliminate 2,500 total enemy players",                ACH_CAT_GENERAL, 2500,    100000,  2000},
+    {9,  "At what cost",       "Take 20,000 total damage from enemy attacks",        ACH_CAT_GENERAL, 20000,   35000,   1000},
+    {10, "2 fast",             "Perform 25 rapid double kills in combat",            ACH_CAT_GENERAL, 25,      15000,   1000},
+    {11, "Variative",          "Eliminate enemies using 10 different weapons",       ACH_CAT_GENERAL, 10,      20000,   1000},
+    {12, "Big time damage",    "Deal 150,000 total damage to enemy players",         ACH_CAT_GENERAL, 150000,  60000,   1000},
+    {13, "Bulletproof",        "Survive 15 minutes inside an arena without dying",   ACH_CAT_GENERAL, 1,       30000,   1000},
+    {14, "Undying",            "Achieve a killstreak of 25 kills without dying",     ACH_CAT_GENERAL, 25,      50000,   1000},
+    {15, "Headache",           "Perform 300 headshot eliminations",                  ACH_CAT_GENERAL, 300,     40000,   1000},
+    {16, "Cleanup",            "Eliminate 15 enemy players in a single round",       ACH_CAT_GENERAL, 15,      25000,   1000},
+    {17, "Chilled & relaxed",  "Spend 120 minutes relaxing in the Lounge area",      ACH_CAT_GENERAL, 120,     15000,   1000},
+    {18, "Call a friend",      "Join or create a clan with your teammates",          ACH_CAT_GENERAL, 1,       20000,   1000},
+    {19, "Honoured",           "Reach Level 10 account status on the server",        ACH_CAT_GENERAL, 10,      50000,   1000},
+    {20, "Still dangerous",    "Eliminate an enemy while having under 10 HP",        ACH_CAT_GENERAL, 1,       25000,   1000},
+    {21, "Dynamic duo",        "Capture 10 outposts together with a clanmate",       ACH_CAT_GENERAL, 10,      30000,   1000},
+    {22, "Wide range",         "Play matches across 10 different arenas",            ACH_CAT_GENERAL, 10,      20000,   1000},
+    {23, "Improvement",        "Win 50 duels against other players",                 ACH_CAT_GENERAL, 50,      35000,   1000},
+    {24, "Nolife",             "Eliminate 5,000 total enemy players",                ACH_CAT_GENERAL, 5000,    200000,  3000},
+    {25, "Light work",         "Complete 200 total arena rounds",                    ACH_CAT_GENERAL, 200,     25000,   1000},
+    {26, "Highway to hell",    "Eliminate 500 players in Desert arenas",             ACH_CAT_GENERAL, 500,     50000,   1000},
+    {27, "Rich",               "Accumulate $10,000,000 in total cash balance",       ACH_CAT_GENERAL, 10000000,250000,  4000},
+    {28, "Best support",       "Assist clanmates in capturing 50 outposts",          ACH_CAT_GENERAL, 50,      40000,   1000},
+    {29, "Dream team",         "Win 25 outpost captures with your clan",             ACH_CAT_GENERAL, 25,      75000,   1000},
+    {30, "Best fighter",       "Become the MVP player of 25 arena rounds",           ACH_CAT_GENERAL, 25,      50000,   1000},
+    {31, "Sharpshooter",       "Complete 50 total training challenges",              ACH_CAT_GENERAL, 50,      30000,   1000},
+    {32, "Target Annihilator", "Deal 50,000 total damage in training mode",          ACH_CAT_GENERAL, 50000,   60000,   1000},
+    {33, "Bullseye",           "Achieve 95% or higher accuracy in a challenge",      ACH_CAT_GENERAL, 1,       40000,   1000},
+    {34, "Record Breaker",     "Set a new personal or server record in training",    ACH_CAT_GENERAL, 1,       75000,   1000},
+    {35, "Rising Star",        "Reach Level 15 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 15,      50000,   2000},
+    {36, "Veteran Fighter",    "Reach Level 20 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 20,      50000,   2000},
+    {37, "Elite Operative",    "Reach Level 25 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 25,      50000,   2000},
+    {38, "Server Warlord",     "Reach Level 30 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 30,      50000,   2000},
+    {39, "Founder",            "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       150000,  3000},
+    {40, "Legend",             "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       250000,  4000},
     {41, "Hall of Fame",       "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       500000,  5000}
 };
 
@@ -386,7 +386,13 @@ stock GivePlayerAchievement(playerid, achievement_id, bool:manual = false)
     }
 
     if(coins > 0)
+    {
         User[playerid][playerCoins] += coins;
+
+        new achReason[64];
+        format(achReason, sizeof(achReason), "Achievement: %s", g_AchievementsData[achievement_id][ach_name]);
+        LogCoins(User[playerid][user_sqlid], User[playerid][userName], achReason, coins, User[playerid][playerCoins]);
+    }
 
     if(g_AchQuietGrant[playerid])
     {
@@ -640,6 +646,10 @@ stock CheckPlayerLevelUp(playerid)
         GivePlayerMoney(playerid, ACH_LEVEL_BONUS_MONEY);
         User[playerid][playerMoney] += ACH_LEVEL_BONUS_MONEY;
         User[playerid][playerCoins] += ACH_LEVEL_BONUS_COINS;
+
+        new lvlReason[64];
+        format(lvlReason, sizeof(lvlReason), "Level %d bonus", lvl);
+        LogCoins(User[playerid][user_sqlid], User[playerid][userName], lvlReason, ACH_LEVEL_BONUS_COINS, User[playerid][playerCoins]);
 
         va_SendClientMessage(playerid, -1, LEVEL_UP_BONUS,
             lvl, FormatMoney(ACH_LEVEL_BONUS_MONEY), FormatCoins(ACH_LEVEL_BONUS_COINS));
@@ -998,8 +1008,7 @@ public DIALOG_ACHIEVEMENTS_DETAIL(playerid, dialogid, response, listitem, string
 {
     if(!User[playerid][isLogged]) return true;
 
-    va_SendClientMessage(playerid, -1, COINS_BALANCE, FormatCoins(User[playerid][playerCoins]));
-    return true;
+    return ShowCoinsMenu(playerid);
 }
 
 @cmd(.alts = {"conquistas", "achievements"}) ach(playerid, params[], help)

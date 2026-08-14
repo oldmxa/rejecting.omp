@@ -10,11 +10,11 @@ enum E_VIP_PACKAGE {
 }
 
 static const VipPackages[][E_VIP_PACKAGE] = {
-    { 15, 1000000, 1500},
-    { 30, 2000000, 2800},
-    { 45, 3000000, 4000},
-    { 60, 4000000, 5000},
-    {120, 8000000, 9000}
+    { 15, 1000000, 7000},
+    { 30, 2000000, 15000},
+    { 45, 3000000, 30000},
+    { 60, 4000000, 60000},
+    {120, 8000000, 120000}
 };
 
 // VipPackages e static; o bot do Discord le os pacotes por aqui.
@@ -24,6 +24,13 @@ stock GetVipPackageMoney(idx)   return (0 <= idx < sizeof(VipPackages)) ? VipPac
 stock GetVipPackageCoins(idx)   return (0 <= idx < sizeof(VipPackages)) ? VipPackages[idx][vip_price_coins] : 0;
 
 #define VIP_PAY_MONEY (0)
+
+#define VIP_CMD_COLOR "{C0504D}"
+#define COL_VIP_TEXT  "{B4B5B7}"
+
+#define VIP_PAY_INTERVAL (50 * 60)
+#define VIP_PAY_AMOUNT   (5000)
+#define VIP_PAY_TICK     (60000)
 #define VIP_PAY_COINS (1)
 
 forward DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -178,52 +185,53 @@ ShowVipMenu(playerid)
 {
     if(!User[playerid][isLogged]) return 0;
 
-    new strVip[2048];
-    format(strVip, sizeof(strVip), "{MAIN}Perk / Feature\t{MAIN}Benefit Details\n");
+    new strVip[2048], status[128];
 
-    strcat(strVip, "{MAIN}> VIP Subscription Status\t \n");
-    if(IsPlayerVip(playerid))
+    if(!IsPlayerVip(playerid))
     {
-        new statusStr[128];
-        if(User[playerid][vipExpire] == 0)
-        {
-            format(statusStr, sizeof(statusStr), "{4d9253}Active VIP {B4B5B7}| {4d9253}Permanent Account");
-        }
-        else
-        {
-            new remaining = User[playerid][vipExpire] - gettime();
-            if(remaining < 0) remaining = 0;
-
-            format(statusStr, sizeof(statusStr), "{4d9253}Active VIP {B4B5B7}| {FFFFFF}%d days, %d hours left", remaining / 86400, (remaining % 86400) / 3600);
-        }
-        format(strVip, sizeof(strVip), "%s{BEBEBE}Current Status\t%s\n", strVip, statusStr);
+        format(status, sizeof(status), "{F84F31}Not active {B4B5B7}(free account)");
+    }
+    else if(User[playerid][vipExpire] == 0)
+    {
+        format(status, sizeof(status), "{23C552}Active {B4B5B7}| {23C552}permanent");
     }
     else
     {
-        strcat(strVip, "{BEBEBE}Current Status\t{FF0000}Not Active (Free Account)\n");
+        new remaining = User[playerid][vipExpire] - gettime();
+        if(remaining < 0) remaining = 0;
+
+        format(status, sizeof(status), "{23C552}Active {B4B5B7}| {FFFFFF}%d {B4B5B7}days and {FFFFFF}%d {B4B5B7}hours left",
+            remaining / 86400, (remaining % 86400) / 3600);
     }
 
-    // Section 2: Perks
-    strcat(strVip, "{MAIN}> VIP Perks & Benefits\t \n");
-    strcat(strVip, "{BEBEBE}2x Money Multiplier\t{FFFFFF}Earn 2x Double Money ($) on all kills & outpost captures!\n");
-    strcat(strVip, "{BEBEBE}Head Tag Customization\t{FFFFFF}3D {FFD700}[VIP]{FFFFFF} tag above character (Toggle with /vtag)\n");
-    strcat(strVip, "{BEBEBE}Discord Role Sync\t{FFFFFF}Automatic VIP role & channels in official Discord server\n");
-    strcat(strVip, "{BEBEBE}Private VIP Chat\t{FFFFFF}Exclusive chat channel with online VIPs & Staff (/v [msg])\n");
+    format(strVip, sizeof(strVip), "{B4B5B7}Status: %s\n\n", status);
 
-    // Section 3: Commands
-    strcat(strVip, "{MAIN}> VIP Commands\t \n");
-    strcat(strVip, "{BEBEBE}/vipcmds\t{FFFFFF}View full list of VIP commands\n");
-    strcat(strVip, "{BEBEBE}/buyvip\t{FFFFFF}Activate or renew your VIP package\n");
-    strcat(strVip, "{BEBEBE}/v [message]\t{FFFFFF}Send a message in the private VIP Chat channel\n");
-    strcat(strVip, "{BEBEBE}/vips\t{FFFFFF}View the list of all online VIP members\n");
-    strcat(strVip, "{BEBEBE}/vtag\t{FFFFFF}Toggle VIP 3D Head Tag (Hidden / Visible)\n");
+    strcat(strVip, "{MAIN}\xBB VIP Benefits\n\n");
+
+    strcat(strVip, fmat_return("{FFFFFF}\x95 {B4B5B7}Salary of {23C552}%s {B4B5B7}every {23C552}%d {B4B5B7}minutes on the server\n",
+        FormatMoney(VIP_PAY_AMOUNT), VIP_PAY_INTERVAL / 60));
+
+    strcat(strVip, "{FFFFFF}\x95 {23C552}2x {B4B5B7}money on every kill\n");
+    strcat(strVip, "{FFFFFF}\x95 {23C552}2x {B4B5B7}money from your clan territory income\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Tag {FFD700}[VIP] {B4B5B7}above your nick, visible to every player\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Custom chat tag unlocked\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Private VIP chat with the staff and the other VIPs\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Your reports and questions reach the staff in a different colour, so they get answered first\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}VIP role and private channels on Discord, synced automatically\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Your connection is announced to everyone on the server\n");
+
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/v"COL_VIP_TEXT" ) to talk in the private VIP chat\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/von"COL_VIP_TEXT" ) and ( "VIP_CMD_COLOR"/voff"COL_VIP_TEXT" ) to turn the VIP chat on or off\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/vips"COL_VIP_TEXT" ) to see which VIPs are online\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/vtag"COL_VIP_TEXT" ) to customize or hide your head tag\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/coins"COL_VIP_TEXT" ) to activate or renew your package\n");
 
     new title[64];
-    format(title, sizeof(title), "{MAIN}VIP Perks & Advantages: {FFFFFF}%s", User[playerid][userName]);
+    format(title, sizeof(title), "{MAIN}VIP: {FFFFFF}%s", User[playerid][userName]);
     format_MainColor(playerid, title);
     format_MainColor(playerid, strVip);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_VIP_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, strVip, "Close", "");
+    Dialog_ShowCallback(playerid, using public DIALOG_VIP_MENU<iiiis>, DIALOG_STYLE_MSGBOX, title, strVip, "Close", "");
     return 1;
 }
 
@@ -243,15 +251,10 @@ public DIALOG_BUY_VIP(playerid, dialogid, response, listitem, string:inputtext[]
     SetPVarInt(playerid, "vip_package", listitem);
 
     new days  = VipPackages[listitem][vip_days];
-    new money = VipPackages[listitem][vip_price_money];
     new coins = VipPackages[listitem][vip_price_coins];
 
     new body[512], title[64];
     format(body, sizeof(body), "{MAIN}Payment\t{MAIN}Cost\t{MAIN}Your balance\n");
-
-    format(title, sizeof(title), "{FFFFFF}In-game money\t{00FF00}%s\t%s%s\n",
-        FormatMoney(money), (User[playerid][playerMoney] >= money) ? ("{23C552}") : ("{F84F31}"), FormatMoney(User[playerid][playerMoney]));
-    strcat(body, title);
 
     format(title, sizeof(title), "{FFFFFF}Coins\t{FFFF00}%s\t%s%s",
         FormatCoins(coins), (User[playerid][playerCoins] >= coins) ? ("{23C552}") : ("{F84F31}"), FormatCoins(User[playerid][playerCoins]));
@@ -281,30 +284,21 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
     if(idx < 0 || idx >= sizeof(VipPackages)) return 1;
 
     new days  = VipPackages[idx][vip_days];
-    new money = VipPackages[idx][vip_price_money];
     new coins = VipPackages[idx][vip_price_coins];
 
     new paidWith[32], balanceStr[64];
 
-    if(listitem == VIP_PAY_COINS)
-    {
-        if(User[playerid][playerCoins] < coins)
-            return va_SendClientMessage(playerid, -1, VIP_NO_COINS, FormatCoins(coins - User[playerid][playerCoins]));
+    if(User[playerid][playerCoins] < coins)
+        return va_SendClientMessage(playerid, -1, VIP_NO_COINS, FormatCoins(coins - User[playerid][playerCoins]));
 
-        User[playerid][playerCoins] -= coins;
-        format(paidWith, sizeof(paidWith), "{FFFF00}%s", FormatCoins(coins));
-        format(balanceStr, sizeof(balanceStr), "{FFFF00}%s", FormatCoins(User[playerid][playerCoins]));
-    }
-    else
-    {
-        if(User[playerid][playerMoney] < money)
-            return va_SendClientMessage(playerid, -1, VIP_NO_MONEY, FormatMoney(money - User[playerid][playerMoney]));
+    User[playerid][playerCoins] -= coins;
 
-        User[playerid][playerMoney] -= money;
-        GivePlayerMoney(playerid, -money);
-        format(paidWith, sizeof(paidWith), "{23C552}%s", FormatMoney(money));
-        format(balanceStr, sizeof(balanceStr), "{23C552}%s", FormatMoney(User[playerid][playerMoney]));
-    }
+    new vipReason[64];
+    format(vipReason, sizeof(vipReason), "VIP %d days", days);
+    LogCoins(User[playerid][user_sqlid], User[playerid][userName], vipReason, -coins, User[playerid][playerCoins]);
+
+    format(paidWith, sizeof(paidWith), "{FFFF00}%s", FormatCoins(coins));
+    format(balanceStr, sizeof(balanceStr), "{FFFF00}%s", FormatCoins(User[playerid][playerCoins]));
 
     if(IsPlayerVip(playerid) && User[playerid][vipExpire] > 0)
     {
@@ -345,12 +339,17 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
     if(!User[playerid][isLogged]) return true;
 
     new string2[768], line[128];
-    format(string2, sizeof(string2), "{MAIN}Package / Duration\t{MAIN}Price ($)\t{MAIN}Price (Coins)\n");
+    format(string2, sizeof(string2), "{MAIN}Package / Duration\t{MAIN}Price (Coins)\t{MAIN}Your balance\n");
 
     for(new i = 0; i < sizeof(VipPackages); i++)
     {
-        format(line, sizeof(line), "{FFFFFF}VIP %d Days\t{00FF00}%s\t{FFFF00}%s\n",
-            VipPackages[i][vip_days], FormatMoney(VipPackages[i][vip_price_money]), FormatCoins(VipPackages[i][vip_price_coins]));
+        new coinPrice = VipPackages[i][vip_price_coins];
+
+        format(line, sizeof(line), "{FFFFFF}VIP %d Days\t{FFFF00}%s\t%s%s\n",
+            VipPackages[i][vip_days], FormatCoins(coinPrice),
+            (User[playerid][playerCoins] >= coinPrice) ? ("{23C552}") : ("{F84F31}"),
+            FormatCoins(User[playerid][playerCoins]));
+
         strcat(string2, line);
     }
 
@@ -832,4 +831,55 @@ ShowVipTagDialog(playerid)
     va_SendClientMessage(targetid, -1, "{MAIN}[VIP] {FFFFFF}Your VIP status has been removed by Admin %s.", User[playerid][userName]);
 
     return true;
+}
+
+#include <YSI_Coding\y_hooks>
+
+static VipPayTick[MAX_PLAYERS];
+
+forward VipPayoutTick();
+public VipPayoutTick()
+{
+    new now = gettime();
+
+    foreach (new i : Player)
+    {
+        if (!User[i][isLogged] || !IsPlayerVip(i))
+        {
+            VipPayTick[i] = 0;
+            continue;
+        }
+
+        // o relogio so comeca depois que o jogador ja esta logado e VIP
+        if (!VipPayTick[i])
+        {
+            VipPayTick[i] = now;
+            continue;
+        }
+
+        if (now - VipPayTick[i] < VIP_PAY_INTERVAL) continue;
+
+        VipPayTick[i] = now;
+
+        User[i][playerMoney] += VIP_PAY_AMOUNT;
+        GivePlayerMoney(i, VIP_PAY_AMOUNT);
+
+        va_SendClientMessage(i, -1, "{MAIN}[VIP] {FFFFFF}You earned {23C552}%s {FFFFFF}for staying %d minutes on the server.",
+            FormatMoney(VIP_PAY_AMOUNT), VIP_PAY_INTERVAL / 60);
+
+        PlayerPlaySound(i, 1058, 0.0, 0.0, 0.0);
+    }
+    return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+    VipPayTick[playerid] = 0;
+    return 1;
+}
+
+hook OnGameModeInit()
+{
+    SetTimer("VipPayoutTick", VIP_PAY_TICK, true);
+    return 1;
 }
