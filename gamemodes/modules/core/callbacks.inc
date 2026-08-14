@@ -1121,11 +1121,18 @@ public OnPlayerUpdate(playerid)
 
 	if(playerState == PLAYER_STATE_DRIVER)
 	{
-		new strv[90];
+		new strv[128], tagOne[20], tagTwo[20];
 		new vehicleid = GetPlayerVehicleID(playerid);
 		new Float:vhealth;
 		GetVehicleHealth(vehicleid, vhealth);
-		format(strv, sizeof(strv), "%s_%0.1f~n~%s%02d ~w~km/h", getVehicleName(vehicleid), vhealth, GetPlayerHudTag(playerid, true), GetVehicleSpeed(vehicleid));
+
+		tagOne = GetPlayerHudTag(playerid, false);
+		tagTwo = GetPlayerHudTag(playerid, true);
+
+		format(strv, sizeof(strv), "%s%s~w~_%0.1f~n~%s%02d ~w~km/h",
+			tagOne, getVehicleName(vehicleid), vhealth,
+			tagTwo, GetVehicleSpeed(vehicleid));
+
 		PlayerTextDrawSetString(playerid, speedometer[playerid], strv);
 	}
 
