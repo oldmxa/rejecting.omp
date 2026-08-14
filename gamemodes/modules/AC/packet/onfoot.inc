@@ -30,7 +30,14 @@ IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
 
     AC_CheckUpsideDown(playerid, onFootData[PR_quaternion][1], onFootData[PR_quaternion][2]);
     AC_CheckStun(playerid, onFootData[PR_animationId]);
-    AC_SampleAnim(playerid, onFootData[PR_animationId], onFootData[PR_velocity][0], onFootData[PR_velocity][1]);
+    AC_CheckHealthSync(playerid, onFootData[PR_health]);
+
+    AC_CheckNullVelocity(playerid,
+        onFootData[PR_position][0], onFootData[PR_position][1], onFootData[PR_position][2],
+        onFootData[PR_velocity][0], onFootData[PR_velocity][1], onFootData[PR_velocity][2]);
+
+    AC_SampleAnim(playerid, onFootData[PR_animationId],
+        onFootData[PR_velocity][0], onFootData[PR_velocity][1], onFootData[PR_keys]);
 
     return 1;
 }

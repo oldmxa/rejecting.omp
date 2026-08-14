@@ -99,11 +99,13 @@ new const AC_ACTION_COLOR[][] =
 #define AC_NO_FALL            (24)
 #define AC_INVALID_AIMZ       (31)
 #define AC_PIZDA_WALK         (22)
+#define AC_NULL_VELOCITY      (23)
 #define AC_ANTI_STUN          (28)
 #define AC_UPSIDE_DOWN        (32)
 #define AC_INVISIBLE_UG       (34)
 #define AC_ANTI_AIM           (29)
 #define AC_INVISIBLE_SURF     (33)
+#define AC_BULLET_PROOF       (30)
 #define AC_NOP_CONTROLLABLE   (35)
 #define AC_DIALOG_CRASHER     (38)
 #define AC_SEAT_CRASHER       (39)
@@ -113,6 +115,7 @@ new const AC_ACTION_COLOR[][] =
 #define AC_NOP_INTERIOR       (43)
 #define AC_NOP_WEAPON         (44)
 #define AC_NOP_POS            (45)
+#define AC_MODEL_SWAP         (46)
 
 #define E_REJECTING_AC_UNKNOWN         (-1)
 #define E_REJECTING_AC_S0BEIT          (0)
@@ -169,7 +172,7 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Extra WS",        "More weapon shots than fired rounds",     AC_CAT_AIM,      true},
 
     {"Pizda walk",      "Walk animation swapped to hide the aim",  AC_CAT_MOVEMENT, false},
-    {"",                "",                                        AC_CAT_MOVEMENT, false},
+    {"Null velocity",   "Moves without reporting any speed",       AC_CAT_MOVEMENT, true},
     {"No fall",         "Long fall with no damage taken",          AC_CAT_MOVEMENT, true},
     {"Airbreak",        "Free movement with no ground contact",    AC_CAT_MOVEMENT, true},
     {"Map run",         "Ground speed above the animation limit",  AC_CAT_MOVEMENT, true},
@@ -177,7 +180,7 @@ new const AC_DETECTION[][e_AC_DETECTION] =
 
     {"Anti stun",       "Ignores the stagger from being hit",      AC_CAT_EXPLOIT,  true},
     {"Anti aim",        "Body angle forged against the aim",       AC_CAT_EXPLOIT,  true},
-    {"Bullet proof",    "Client refuses the health the server set", AC_CAT_EXPLOIT,  false},
+    {"Bullet proof",    "Client refuses the health the server set", AC_CAT_EXPLOIT,  true},
     {"Invalid aim Z",   "Forged or unnormalized aim vector",       AC_CAT_EXPLOIT,  true},
     {"Upside down",     "Inverted body orientation on foot",       AC_CAT_EXPLOIT,  true},
     {"Invisible surf",  "Surfing an object that is not rendered",  AC_CAT_EXPLOIT,  true},
@@ -195,7 +198,9 @@ new const AC_DETECTION[][e_AC_DETECTION] =
 
     {"NOP Interior",    "Blocks SetPlayerInterior",                AC_CAT_NOPS,     true},
     {"NOP GiveWeapon",  "Blocks GivePlayerWeapon",                 AC_CAT_NOPS,     true},
-    {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true}
+    {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true},
+
+    {"Modified model",  "Skin or collision model replaced on disk", AC_CAT_CHEATS,   false}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))

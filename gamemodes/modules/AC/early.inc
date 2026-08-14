@@ -24,6 +24,17 @@
 
 #define AC_SURF_STRIKES   (4)
 
+#define AC_NULL_WINDOW    (250)
+#define AC_NULL_SPEED     (5.0)
+#define AC_NULL_REPORTED  (0.5)
+#define AC_NULL_HOLD      (2000)
+#define AC_NULL_SAMPLE    (500)
+
+#define AC_BPROOF_GAP     (25.0)
+#define AC_BPROOF_HOLD    (3000)
+#define AC_BPROOF_SETTLE  (2000)
+#define AC_BPROOF_SAMPLE  (1000)
+
 #define AC_FALL_HEIGHT    (25.0)
 #define AC_FALL_DROP      (1.0)
 
@@ -49,7 +60,16 @@ static
     Float:ACFallTop[MAX_PLAYERS],
     bool:ACFalling[MAX_PLAYERS],
     ACSurfStrike[MAX_PLAYERS],
-    ACSurfLogged[MAX_PLAYERS];
+    ACSurfLogged[MAX_PLAYERS],
+    Float:ACNullX[MAX_PLAYERS],
+    Float:ACNullY[MAX_PLAYERS],
+    Float:ACNullZ[MAX_PLAYERS],
+    Float:ACNullSpeed[MAX_PLAYERS],
+    ACNullTick[MAX_PLAYERS],
+    ACNullSince[MAX_PLAYERS],
+    ACNullLog[MAX_PLAYERS],
+    ACBproofSince[MAX_PLAYERS],
+    ACBproofLog[MAX_PLAYERS];
 
 forward AC_TickMovement();
 
@@ -229,6 +249,112 @@ static AC_CheckFall(playerid, Float:drop)
     return 1;
 }
 
+stock Float:AC_PositionSpeed(playerid)
+{
+    return ACNullSpeed[playerid];
+}
+
+stock AC_CheckNullVelocity(playerid, Float:px, Float:py, Float:pz, Float:vx, Float:vy, Float:vz)
+{
+    new tick = GetTickCount();
+    new elapsed = tick - ACNullTick[playerid];
+
+    if (elapsed < AC_NULL_WINDOW) return 0;
+
+    new Float:dx = px - ACNullX[playerid];
+    new Float:dy = py - ACNullY[playerid];
+    new Float:dz = pz - ACNullZ[playerid];
+
+    new Float:moved = VectorSize(dx, dy, dz);
+    new bool:first = (ACNullTick[playerid] == 0);
+
+    ACNullX[playerid] = px;
+    ACNullY[playerid] = py;
+    ACNullZ[playerid] = pz;
+    ACNullTick[playerid] = tick;
+
+    if (first) return 0;
+
+    ACNullSpeed[playerid] = moved * 1000.0 / float(elapsed);
+
+    if (!User[playerid][isLogged] || User[playerid][isAfk]
+     || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT
+     || tick - ACTeleportTick[playerid] < AC_MOVE_GRACE
+     || GetPlayerSurfingObjectID(playerid) != INVALID_OBJECT_ID
+     || GetPlayerSurfingVehicleID(playerid) != INVALID_VEHICLE_ID)
+    {
+        ACNullSince[playerid] = 0;
+        return 0;
+    }
+
+    new Float:reported = VectorSize(vx, vy, vz) * 179.28;
+
+    if (!(ACNullSpeed[playerid] >= AC_NULL_SPEED && reported < AC_NULL_REPORTED))
+    {
+        ACNullSince[playerid] = 0;
+        return 0;
+    }
+
+    if (!ACNullSince[playerid]) ACNullSince[playerid] = tick;
+
+    if (tick - ACNullLog[playerid] >= AC_NULL_SAMPLE)
+    {
+        ACNullLog[playerid] = tick;
+
+        AC_Debug(playerid, AC_NULL_VELOCITY, "position %.1f u/s, packet declares %.2f u/s, held %d ms (limit %d)",
+            ACNullSpeed[playerid], reported, tick - ACNullSince[playerid], AC_NULL_HOLD);
+    }
+
+    if (tick - ACNullSince[playerid] < AC_NULL_HOLD) return 0;
+
+    ACNullSince[playerid] = 0;
+    CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_NULL_VELOCITY);
+    return 1;
+}
+
+stock AC_CheckHealthSync(playerid, clientHealth)
+{
+    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
+
+    new tick = GetTickCount();
+
+    if (tick - ACTeleportTick[playerid] < AC_BPROOF_SETTLE)
+    {
+        ACBproofSince[playerid] = 0;
+        return 0;
+    }
+
+    new Float:serverHealth;
+    GetPlayerHealth(playerid, serverHealth);
+
+    if (float(clientHealth) - serverHealth < AC_BPROOF_GAP)
+    {
+        ACBproofSince[playerid] = 0;
+        return 0;
+    }
+
+    if (!ACBproofSince[playerid])
+    {
+        ACBproofSince[playerid] = tick;
+        return 0;
+    }
+
+    if (tick - ACBproofLog[playerid] >= AC_BPROOF_SAMPLE)
+    {
+        ACBproofLog[playerid] = tick;
+
+        AC_Debug(playerid, AC_BULLET_PROOF, "client claims %d hp, server has %.0f, held %d ms (limit %d)",
+            clientHealth, serverHealth, tick - ACBproofSince[playerid], AC_BPROOF_HOLD);
+    }
+
+    if (tick - ACBproofSince[playerid] < AC_BPROOF_HOLD) return 0;
+
+    ACBproofSince[playerid] = 0;
+    CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_BULLET_PROOF);
+    return 1;
+}
+
 static AC_MovementTick(playerid)
 {
     new tick = GetTickCount();
@@ -369,6 +495,8 @@ hook OnPlayerConnect(playerid)
 {
     ACFrozen[playerid] = false;
     ACRunStrike[playerid] = ACAirStrike[playerid] = 0;
+    ACNullSince[playerid] = ACNullLog[playerid] = ACNullTick[playerid] = 0;
+    ACBproofSince[playerid] = ACBproofLog[playerid] = 0;
     ACMoveTick[playerid] = ACTeleportTick[playerid] = GetTickCount();
     AC_SetDebug(playerid, false);
     return 1;
@@ -383,6 +511,7 @@ hook OnPlayerDisconnect(playerid, reason)
 hook OnPlayerSpawn(playerid)
 {
     ACFrozen[playerid] = false;
+    ACBproofSince[playerid] = 0;
     return 1;
 }
 

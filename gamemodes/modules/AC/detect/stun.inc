@@ -36,7 +36,7 @@ stock AC_NoteStun(playerid)
     return 1;
 }
 
-stock AC_SampleAnim(playerid, animationId, Float:vx, Float:vy)
+stock AC_SampleAnim(playerid, animationId, Float:vx, Float:vy, keys)
 {
     if (!AC_DebugActive()) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
@@ -44,8 +44,13 @@ stock AC_SampleAnim(playerid, animationId, Float:vx, Float:vy)
 
     ACAnimSample[playerid] = GetTickCount();
 
-    AC_Debug(playerid, AC_PIZDA_WALK, "anim %d at speed %.1f u/s",
-        animationId, floatsqroot(vx * vx + vy * vy) * 179.28);
+    AC_Debug(playerid, AC_PIZDA_WALK, "anim %d, pos %.1f u/s, packet %.1f u/s, sprint %d, walk %d, action %d",
+        animationId,
+        AC_PositionSpeed(playerid),
+        floatsqroot(vx * vx + vy * vy) * 179.28,
+        (keys & _:KEY_SPRINT) ? 1 : 0,
+        (keys & _:KEY_WALK) ? 1 : 0,
+        _:GetPlayerSpecialAction(playerid));
 
     return 1;
 }
