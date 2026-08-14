@@ -1,6 +1,5 @@
 start-server.bat
 _downloads/
-include_backup_samp
 log.txt
 base.amx
 *.log

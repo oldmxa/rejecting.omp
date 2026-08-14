@@ -13,8 +13,6 @@ stock AC_GetDetectionName(code, destination[], len = sizeof(destination))
     return 1;
 }
 
-#define AC_REPORT_COOLDOWN (60000)
-
 static ACReportTick[MAX_PLAYERS][MAX_AC_DETECTIONS];
 
 static bool:ACAlerted[MAX_PLAYERS][MAX_AC_DETECTIONS];
@@ -205,7 +203,7 @@ public OnRejectingACDetection(playerid, code)
 
     new tick = GetTickCount();
 
-    if (ACReportTick[playerid][code] && tick - ACReportTick[playerid][code] < AC_REPORT_COOLDOWN) return 1;
+    if (ACReportTick[playerid][code] && tick - ACReportTick[playerid][code] < ServerACCooldown * 1000) return 1;
     ACReportTick[playerid][code] = tick;
 
     new detection[32];

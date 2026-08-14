@@ -123,6 +123,9 @@ ShowAdminConfig(playerid)
             format(strb, sizeof(strb), "%s{FFFFFF}Max. Accounts IP-GPCI\t{BEBEBE}%d accounts\t{BEBEBE}Accounts allowed per IP or serial\n", strb, ServerMaxAccountsPerIP);
             actions[count++] = 18;
 
+            format(strb, sizeof(strb), "%s{FFFFFF}Anti Cheat Cooldown\t{BEBEBE}%d s\t{BEBEBE}Wait before the same detection counts again\n", strb, ServerACCooldown);
+            actions[count++] = 22;
+
             format(strb, sizeof(strb), "%s{FFFFFF}Toggle Anti Spam\t%s\t{BEBEBE}Kicks chat and command flood\n", strb, (ServerAntiSpam) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
             actions[count++] = 19;
 

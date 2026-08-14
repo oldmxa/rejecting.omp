@@ -97,6 +97,15 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXACC<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Accounts", "{FFFFFF}Accounts allowed per IP or serial (0 = no limit):", "Update", "Back");
             }
+            case 22: // AC detection cooldown
+            {
+                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+                new acStr[160];
+                format(acStr, sizeof(acStr), "{FFFFFF}Current: {418cb0}%d seconds\n\n{FFFFFF}Seconds before the same detection counts again (1-60):", ServerACCooldown);
+
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_ACCOOLDOWN<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Anti Cheat Cooldown", acStr, "Update", "Back");
+            }
             case 19: // Anti Spam
             {
                 if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
@@ -239,6 +248,26 @@ public DIALOG_ADM_MAXWARN(playerid, dialogid, response, listitem, string:inputte
         ServerMaxWarnings = value;
         SaveServerConfig();
         va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Max Warnings updated to %d.", ServerMaxWarnings);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_ACCOOLDOWN(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_ACCOOLDOWN(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response && !isnull(inputtext))
+    {
+        new value = strval(inputtext);
+        if(value < 1 || value > 60)
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid value. Choose between 1 and 60.");
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+        ServerACCooldown = value;
+        SaveServerConfig();
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Anti Cheat cooldown updated to %d seconds.", ServerACCooldown);
     }
     ShowAdminConfig(playerid);
     return 1;

@@ -61,6 +61,7 @@ stock LoadServerConfig()
         else if(!strcmp(key, "MaxFPS", true)) ServerMaxFPS = strval(val);
         else if(!strcmp(key, "R2Kick", true)) R2KickEnabled = (strval(val) != 0);
         else if(!strcmp(key, "MaxWarnings", true)) ServerMaxWarnings = strval(val);
+        else if(!strcmp(key, "ACCooldown", true)) ServerACCooldown = strval(val);
         else if(!strcmp(key, "MaxLoginAttempts", true)) ServerMaxLoginAttempts = strval(val);
         else if(!strcmp(key, "MaxAccountsPerIP", true)) ServerMaxAccountsPerIP = strval(val);
         else if(!strcmp(key, "AntiSpam", true)) ServerAntiSpam = (strval(val) != 0);
@@ -108,8 +109,8 @@ stock SaveServerConfig()
     format(str, sizeof(str), "DefaultHudColor=%d\r\n", ServerDefaultHudColor);
     fwrite(file, str);
 
-    format(str, sizeof(str), "MaxWarnings=%d\r\nMaxLoginAttempts=%d\r\nMaxAccountsPerIP=%d\r\n",
-        ServerMaxWarnings, ServerMaxLoginAttempts, ServerMaxAccountsPerIP);
+    format(str, sizeof(str), "MaxWarnings=%d\r\nMaxLoginAttempts=%d\r\nMaxAccountsPerIP=%d\r\nACCooldown=%d\r\n",
+        ServerMaxWarnings, ServerMaxLoginAttempts, ServerMaxAccountsPerIP, ServerACCooldown);
     fwrite(file, str);
 
     format(str, sizeof(str), "AntiSpam=%d\r\nAntiCapslock=%d\r\nAdminsCmd=%d\r\n",

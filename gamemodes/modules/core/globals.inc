@@ -784,6 +784,7 @@ forward IsR2KickEnabled();
 new playerAccounts[MAX_PLAYERS];
 
 new ServerMaxWarnings = 5;
+new ServerACCooldown = 60;
 new ServerMaxLoginAttempts = MAX_LOGIN_ATTEMPTS;
 new ServerMaxAccountsPerIP = 3;
 new bool:ServerAntiSpam = true;
