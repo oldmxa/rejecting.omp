@@ -1,3 +1,5 @@
+#define ANTIVPN_API_KEY "1694f401ab4943d98ffd129e419b0d0c"
+
 new Request:LoadPlayerIDToRequest[MAX_PLAYERS];
 
 stock CheckISP(playerid)
@@ -21,7 +23,7 @@ stock CheckISP(playerid)
             && strequal(currentIP, playerIP))
         {
             new format_antivpn[250];
-            format(format_antivpn, sizeof(format_antivpn), "%s?key=q703k7-he5989-l67707-3067n0", playerIP);
+            format(format_antivpn, sizeof(format_antivpn), "%s?key=" ANTIVPN_API_KEY, playerIP);
 
             LoadPlayerIDToRequest[playerid] = RequestJSON(
                 client,
@@ -129,7 +131,13 @@ public OnGetAntiVPN(Request:id, E_HTTP_STATUS:status, Node:node)
                 mysql_tquery(dbHandle, queryGlobal, "OnAntiVpnWarn", "i", playerid);
             }
         }
-        default: printf("Status VPN %d", _:status);
+        default:
+        {
+            new log[128];
+            format(log, sizeof(log), "[ANTIVPN] lookup rejected by the API, HTTP status %d", _:status);
+
+            ConsoleLog(log);
+        }
     }
     return 1;
 }

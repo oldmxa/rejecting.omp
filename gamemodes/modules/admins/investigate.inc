@@ -78,6 +78,19 @@ static stock ShowOnlineLookup(playerid, targetid)
     format(title, sizeof(title), "{MAIN}Lookup: {FFFFFF}%s", getPlayerName(targetid));
     format_MainColor(playerid, title);
 
+    if (isnull(User[targetid][Isp]))
+    {
+        new why[220];
+
+        format(why, sizeof(why),
+            "{FFFFFF}No network data was collected for this player.\n\n"\
+            "{B4B5B7}IP: {FFFFFF}%s\n\n"\
+            "{B4B5B7}Local addresses are skipped on purpose. Otherwise check the console for {FFFFFF}Status VPN{B4B5B7}, which reports a rejected lookup.",
+            getPlayerIp(targetid));
+
+        return Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, title, why, "Close", "");
+    }
+
     format(strlookup, sizeof(strlookup),
         "Field\tValue\n"\
         "IP\t%s\n"\
