@@ -115,7 +115,6 @@ new const AC_ACTION_COLOR[][] =
 #define AC_NOP_INTERIOR       (43)
 #define AC_NOP_WEAPON         (44)
 #define AC_NOP_POS            (45)
-#define AC_MODEL_SWAP         (46)
 
 #define E_REJECTING_AC_UNKNOWN         (-1)
 #define E_REJECTING_AC_S0BEIT          (0)
@@ -198,9 +197,7 @@ new const AC_DETECTION[][e_AC_DETECTION] =
 
     {"NOP Interior",    "Blocks SetPlayerInterior",                AC_CAT_NOPS,     true},
     {"NOP GiveWeapon",  "Blocks GivePlayerWeapon",                 AC_CAT_NOPS,     true},
-    {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true},
-
-    {"Modified model",  "Skin or collision model replaced on disk", AC_CAT_CHEATS,   false}
+    {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))

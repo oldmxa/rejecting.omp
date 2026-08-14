@@ -44,23 +44,21 @@ static const AC_PROBE[][E_AC_PROBE] =
 
     {0x60B437,  4,  4,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
     {0x60B448,  4,  4,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x5231A6,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x5231A6,  2,  4,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
     {0x52322D,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x5233BA,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x5233BA,  2,  68,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
 
-    {0x679D3A,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x524013,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x679D3A,  2,  76,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x524013,  2,  140,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
 
-    {0x637590,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x63070C,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x4B331F,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x4B3395,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x64159F,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x637590,  2,  64,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x63070C,  2,  64,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x4B331F,  2,  12,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x4B3395,  2,  4,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x64159F,  2,  136,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
 
-    {0x5E91CE,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x544CFE,  2,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-
-    {0xC8C418,  4,  0,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}
+    {0x5E91CE,  2,  128,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
+    {0x544CFE,  2,  204,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}
 };
 
 #define AC_PROBE_SPRINTHOOK       (4)
@@ -129,18 +127,6 @@ static AC_SendProbe(playerid, index)
     return 1;
 }
 
-stock AC_SendModelCheck(playerid)
-{
-    if (!ACProbeSupport{playerid}) return 0;
-
-    new skin = GetPlayerSkin(playerid);
-    if (skin < 0 || skin > 311) return 0;
-
-    SendClientCheck(playerid, 70, skin, 0, 0);
-    SendClientCheck(playerid, 71, skin, 0, 0);
-    return 1;
-}
-
 static AC_ProbeIndexFromAddress(playerid, memaddr)
 {
     for (new i; i < sizeof(AC_PROBE); i++)
@@ -165,12 +151,27 @@ static bool:AC_SendProbes(playerid, bool:onlyInjections = false)
 {
     if (!ACProbeSupport{playerid}) return false;
 
+    new pending = 0, total = 0;
+
+    for (new i; i < sizeof(AC_PROBE); i++)
+    {
+        if (ACProbeRand[playerid][i] < 0) continue;
+
+        pending++;
+    }
+
+    for (new i = (onlyInjections ? AC_PROBE_FIRST_INJECTION : 0); i < sizeof(AC_PROBE); i++) total++;
+
+    if (pending > 0)
+    {
+        AC_Debug(playerid, E_REJECTING_AC_BYPASS, "previous sweep: %d of %d probes never answered",
+            pending, total);
+    }
+
     for (new i = (onlyInjections ? AC_PROBE_FIRST_INJECTION : 0); i < sizeof(AC_PROBE); i++)
     {
         AC_SendProbe(playerid, i);
     }
-
-    if (!onlyInjections) AC_SendModelCheck(playerid);
 
     return true;
 }
@@ -231,14 +232,6 @@ static AC_ResolveProbe(index, retndata)
 
 hook OnClientCheckResponse(playerid, actionid, memaddr, retndata)
 {
-    if (actionid == 70 || actionid == 71)
-    {
-        AC_Debug(playerid, AC_MODEL_SWAP, "%s of skin %d is %d",
-            (actionid == 70) ? ("model info") : ("collision"), memaddr, retndata);
-
-        return 1;
-    }
-
     if (actionid != 5) return 1;
 
     new index = AC_ProbeIndexFromAddress(playerid, memaddr);
