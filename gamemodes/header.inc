@@ -18,6 +18,7 @@
 #include "modules/ui/vehicle_picker.inc"
 #include "modules/ui/preview_dialog.inc"
 #include "modules/ui/textdraws.inc"
+#include "modules/ui/scoreboard.inc"
 #include "modules/ui/login.inc"
 
 // texts and set design
