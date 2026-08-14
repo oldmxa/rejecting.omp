@@ -19,6 +19,7 @@
 #include "modules/ui/preview_dialog.inc"
 #include "modules/ui/textdraws.inc"
 #include "modules/ui/scoreboard.inc"
+#include "modules/core/initgame.inc"
 #include "modules/ui/login.inc"
 
 // texts and set design

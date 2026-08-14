@@ -89,8 +89,13 @@ static AC_ToggleCJWalk(playerid)
     if (enabled) SendRconCommand("game.use_player_ped_anims 1");
     else SendRconCommand("game.use_player_ped_anims 0");
 
-    va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the CJ walk animations. Applies to players who connect from now on.",
+    new applied = ApplyPedAnimsToAll(enabled);
+
+    va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the CJ walk animations. Everyone respawns to apply it.",
         User[playerid][userName], enabled ? ("enabled") : ("disabled"));
+
+    if (applied < 1)
+        SendClientMessage(playerid, -1, ADM_TAG_NORM"Nobody could be updated live, it takes effect for players who connect from now on.");
 
     PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
     return 1;

@@ -6,8 +6,9 @@
 #include "modules/AC/config.inc"
 
 #define AC_NOP_SETTLE     (1500)
-#define AC_NOP_INTERVAL   (1000)
 #define AC_NOP_DISTANCE   (3.0)
+
+#define AC_TICK_INTERVAL  (400)
 
 #define AC_MOVE_GRACE     (2500)
 
@@ -415,7 +416,7 @@ hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 
 hook OnGameModeInit()
 {
-    SetTimer("AC_TickMovement", AC_NOP_INTERVAL, true);
+    SetTimer("AC_TickMovement", AC_TICK_INTERVAL, true);
     return 1;
 }
 
