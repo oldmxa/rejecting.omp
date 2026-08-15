@@ -6,7 +6,6 @@
 #define COINSHOP_COINS (7000)
 #define COINSHOP_MONEY (2000000)
 
-// teto por compra: mantem coins * 2000 dentro da cell
 #define COINSHOP_MAX   (100000)
 
 enum
@@ -25,7 +24,6 @@ forward DIALOG_COINS_BUY(playerid, dialogid, response, listitem, string:inputtex
 
 stock GetCoinsPrice(coins)
 {
-    // divide antes de multiplicar, senao coins * 2000000 estoura a cell
     return (coins * (COINSHOP_MONEY / 1000)) / (COINSHOP_COINS / 1000);
 }
 

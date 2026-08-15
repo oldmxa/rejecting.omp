@@ -862,7 +862,6 @@ public VipPayoutTick()
             continue;
         }
 
-        // o relogio so comeca depois que o jogador ja esta logado e VIP
         if (!VipPayTick[i])
         {
             VipPayTick[i] = now;
