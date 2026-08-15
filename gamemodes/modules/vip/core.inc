@@ -185,7 +185,7 @@ ShowVipMenu(playerid)
 {
     if(!User[playerid][isLogged]) return 0;
 
-    new strVip[2048], status[128];
+    new strVip[2560], status[128];
 
     if(!IsPlayerVip(playerid))
     {
@@ -213,18 +213,30 @@ ShowVipMenu(playerid)
 
     strcat(strVip, "{FFFFFF}\x95 {23C552}2x {B4B5B7}money on every kill\n");
     strcat(strVip, "{FFFFFF}\x95 {23C552}2x {B4B5B7}money from your clan territory income\n");
-    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Tag {FFD700}[VIP] {B4B5B7}above your nick, visible to every player\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Nick with the "VIP_CMD_COLOR"[VIP]"COL_VIP_TEXT" prefix in chat\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Tag "VIP_CMD_COLOR"[VIP]"COL_VIP_TEXT" above your nick, visible to other players\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Custom chat tag unlocked\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Private VIP chat with the staff and the other VIPs\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Your reports and questions reach the staff in a different colour, so they get answered first\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}VIP role and private channels on Discord, synced automatically\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Your connection is announced to everyone on the server\n");
 
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/vtag"COL_VIP_TEXT" ) to change the colour of the "VIP_CMD_COLOR"[VIP]"COL_VIP_TEXT" Tag\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/v"COL_VIP_TEXT" ) to talk in the private VIP chat\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/von"COL_VIP_TEXT" ) and ( "VIP_CMD_COLOR"/voff"COL_VIP_TEXT" ) to turn the VIP chat on or off\n");
-    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/vips"COL_VIP_TEXT" ) to see which VIPs are online\n");
-    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/vtag"COL_VIP_TEXT" ) to customize or hide your head tag\n");
-    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/coins"COL_VIP_TEXT" ) to activate or renew your package\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/vips"COL_VIP_TEXT" ) to see which VIPs are online\n\n");
+
+    strcat(strVip, "{F84F31}Bonus: {B4B5B7}while your VIP is active every cash reward on the server comes {23C552}doubled{B4B5B7}.\n\n");
+
+    strcat(strVip, "{MAIN}\xBB VIP Plans\n\n");
+
+    for(new i = 0; i < sizeof(VipPackages); i++)
+    {
+        strcat(strVip, fmat_return("{FFFFFF}\x95 {B4B5B7}VIP Plan {FFFFFF}%d {B4B5B7}Days = {FFFF00}%s\n",
+            VipPackages[i][vip_days], FormatCoins(VipPackages[i][vip_price_coins])));
+    }
+
+    strcat(strVip, "\n{B4B5B7}Other plans and prices may exist, check the command ( "VIP_CMD_COLOR"/coins"COL_VIP_TEXT" ).");
 
     new title[64];
     format(title, sizeof(title), "{MAIN}VIP: {FFFFFF}%s", User[playerid][userName]);
