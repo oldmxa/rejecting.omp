@@ -17,7 +17,6 @@ static const VipPackages[][E_VIP_PACKAGE] = {
     {120, 8000000, 120000}
 };
 
-// VipPackages e static; o bot do Discord le os pacotes por aqui.
 stock GetVipPackageCount()      return sizeof(VipPackages);
 stock GetVipPackageDays(idx)    return (0 <= idx < sizeof(VipPackages)) ? VipPackages[idx][vip_days]        : 0;
 stock GetVipPackageMoney(idx)   return (0 <= idx < sizeof(VipPackages)) ? VipPackages[idx][vip_price_money] : 0;

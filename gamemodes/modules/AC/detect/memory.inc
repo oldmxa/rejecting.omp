@@ -207,6 +207,15 @@ hook OnPlayerConnect(playerid)
         ACProbeSupport{playerid} = !strequal(version, "0.3.7");
     #endif
 
+    if (!ACProbeSupport{playerid})
+    {
+        new log[128];
+        format(log, sizeof(log), "[RAC] %s[%d] runs client '%s', memory probes are disabled for him",
+            User[playerid][userName], playerid, version);
+
+        ConsoleLog(log);
+    }
+
     AC_SendProbes(playerid);
 
     return 1;
