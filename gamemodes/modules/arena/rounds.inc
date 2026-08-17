@@ -67,7 +67,7 @@ stock ApplyArenaChange(playerid, location, zone)
 {
     foreach(new i : Player)
     {
-        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;
+        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i)) continue;
         GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
     }
 
@@ -79,7 +79,7 @@ stock ApplyArenaChange(playerid, location, zone)
 
     foreach(new i : Player)
     {
-        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE) || User[i][adminLevel] > 0)
+        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
             va_SendClientMessage(i, -1, CHANGED_ARENA_MSG, User[playerid][userName], arenaData[zone][arenaName], zone);
     }
 
@@ -171,7 +171,7 @@ public ChangeArena(location)
 
 	foreach(new i : Player)
 	{
-		if (User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE)
+		if (User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i))
 		{
 			if(playerArenaInfo[User[i][locationId]][i][arenaDMG] > User[i][maxDamage])
 			{
@@ -640,8 +640,8 @@ PrepareChangeArena(location, finishingArenaId)
 
 	sortPlayersInline playersTop => (R = l > r)
 	{
-		new lc = IsPlayerConnected(l) && !IsPlayerNPC(l) && User[l][locationId] == location && GetPVarInt(l, "DuelS_State") == DUELS_STATE_NONE;
-		new rc = IsPlayerConnected(r) && !IsPlayerNPC(r) && User[r][locationId] == location && GetPVarInt(r, "DuelS_State") == DUELS_STATE_NONE;
+		new lc = IsPlayerConnected(l) && !IsPlayerNPC(l) && User[l][locationId] == location && GetPVarInt(l, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(l);
+		new rc = IsPlayerConnected(r) && !IsPlayerNPC(r) && User[r][locationId] == location && GetPVarInt(r, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(r);
 
 		if (lc != rc)
 		{
@@ -695,7 +695,7 @@ PrepareChangeArena(location, finishingArenaId)
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged] && User[i][locationId] == location && !User[i][isAfk] && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE)
+		if(User[i][isLogged] && User[i][locationId] == location && !User[i][isAfk] && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i))
 			Ach_OnArenaRoundEnd(i);
 	}
 
@@ -781,7 +781,7 @@ PrepareChangeArena(location, finishingArenaId)
 
 	foreach(new i : Player)
 	{
-		if(User[i][isAfk] || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE)
+		if(User[i][isAfk] || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i))
 			continue;
 
 		if(User[i][locationId] == location)

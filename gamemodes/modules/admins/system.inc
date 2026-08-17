@@ -139,7 +139,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;
+        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i)) continue;
         GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
     }
 
@@ -150,7 +150,7 @@
 
     foreach(new i : Player)
     {
-        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE) || User[i][adminLevel] > 0)
+        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
             va_SendClientMessage(i, -1, CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[arenaid][arenaName], arenaid);
     }
 
@@ -210,7 +210,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE) continue;
+        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i)) continue;
         GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
     }
 
@@ -222,7 +222,7 @@
 
     foreach(new i : Player)
     {
-        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE) || User[i][adminLevel] > 0)
+        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
             va_SendClientMessage(i, -1, RANDOM_CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[newArenaId][arenaName], newArenaId);
     }
 
