@@ -177,9 +177,14 @@ IPacket:AC_PACKET_WEAPONS(playerid, BitStream:bs)
 
     for (new i; i < PR_MAX_WEAPON_SLOTS; i++)
     {
+        if (weaponsUpdate[PR_slotWeaponId][i] == 0 || weaponsUpdate[PR_slotWeaponAmmo][i] == 0)
+        {
+            continue;
+        }
+
         if (weaponsUpdate[PR_slotWeaponId][i] != _:ACWeapon[playerid][WEAPON_SLOT:i])
         {
-            weaponsUpdate[PR_slotWeaponId][i] =
+            weaponsUpdate[PR_slotWeaponId][i] = 0;
             weaponsUpdate[PR_slotWeaponAmmo][i] = 0;
 
             hack = true;
@@ -251,10 +256,14 @@ hook OnPlayerConnect(playerid)
     return 1;
 }
 
-hook OnPlayerSpawn(playerid)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     ACWeapon[playerid] = ACWeapon[MAX_PLAYERS];
+    return 1;
+}
 
+hook OnPlayerSpawn(playerid)
+{
     for (new i; i < sizeof(ACSpawnWeapon[]); i++)
     {
         if (ACSpawnWeapon[playerid][i])
@@ -268,6 +277,15 @@ hook OnPlayerSpawn(playerid)
 
 AC_GivePlayerWeapon(playerid, WEAPON:weaponid, ammo)
 {
+    if (ammo > 0 && weaponid != WEAPON_FIST)
+    {
+        ACWeapon[playerid][GetWeaponSlot(weaponid)] = weaponid;
+    }
+    else if (ammo == 0)
+    {
+        ACWeapon[playerid][GetWeaponSlot(weaponid)] = WEAPON_FIST;
+    }
+
     if (weaponid == WEAPON_BRASSKNUCKLE)
     {
         new WEAPON:weapons;
@@ -286,3 +304,15 @@ AC_GivePlayerWeapon(playerid, WEAPON:weaponid, ammo)
     #define _ALS_GivePlayerWeapon
 #endif
 #define GivePlayerWeapon AC_GivePlayerWeapon
+
+AC_ResetPlayerWeapons(playerid)
+{
+    ACWeapon[playerid] = ACWeapon[MAX_PLAYERS];
+    return ResetPlayerWeapons(playerid);
+}
+#if defined _ALS_ResetPlayerWeapons
+    #undef ResetPlayerWeapons
+#else
+    #define _ALS_ResetPlayerWeapons
+#endif
+#define ResetPlayerWeapons AC_ResetPlayerWeapons
