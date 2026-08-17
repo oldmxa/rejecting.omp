@@ -69,7 +69,19 @@ static
     ACNullSince[MAX_PLAYERS],
     ACNullLog[MAX_PLAYERS],
     ACBproofSince[MAX_PLAYERS],
-    ACBproofLog[MAX_PLAYERS];
+    ACBproofLog[MAX_PLAYERS],
+    ACVehSpeedStrike[MAX_PLAYERS],
+    ACCarFlyStrike[MAX_PLAYERS];
+
+static bool:AC_IsAirOrWaterVehicle(modelid)
+{
+    switch (modelid)
+    {
+        case 417, 425, 430, 446, 447, 452, 453, 454, 460, 469, 472, 473, 476, 484, 487, 488, 493, 497, 501, 511, 512, 513, 519, 520, 548, 553, 563, 577, 592, 593, 595:
+            return true;
+    }
+    return false;
+}
 
 forward AC_TickMovement();
 
@@ -382,6 +394,44 @@ static AC_MovementTick(playerid)
 
     AC_CheckFall(playerid, drop);
 
+    if (GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !User[playerid][isSpectating] && !User[playerid][isAfk])
+    {
+        new vehicleid = GetPlayerVehicleID(playerid);
+        if (vehicleid != 0 && vehicleid != INVALID_VEHICLE_ID)
+        {
+            new model = GetVehicleModel(vehicleid);
+            if (!AC_IsAirOrWaterVehicle(model))
+            {
+                new Float:vx, Float:vy, Float:vz;
+                GetVehicleVelocity(vehicleid, vx, vy, vz);
+                new Float:vehSpeed = floatsqroot(vx * vx + vy * vy + vz * vz) * 179.28;
+
+                if (vehSpeed > 260.0)
+                {
+                    if (++ACVehSpeedStrike[playerid] >= 3)
+                    {
+                        ACVehSpeedStrike[playerid] = 0;
+                        CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_CAR_SPEED);
+                    }
+                }
+                else ACVehSpeedStrike[playerid] = 0;
+
+                new Float:height = AC_HeightAboveGround(x, y, z);
+                new bool:carFlying = (vehSpeed >= 30.0 && vz > -0.05 && vz < 0.05 && height >= 10.0 && height < AC_NO_GROUND);
+
+                if (carFlying)
+                {
+                    if (++ACCarFlyStrike[playerid] >= 3)
+                    {
+                        ACCarFlyStrike[playerid] = 0;
+                        CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_CAR_AIRBREAK);
+                    }
+                }
+                else ACCarFlyStrike[playerid] = 0;
+            }
+        }
+    }
+
     if (tick - ACTeleportTick[playerid] < AC_MOVE_GRACE
      || User[playerid][isAfk]
      || User[playerid][isSpectating]
@@ -502,6 +552,7 @@ hook OnPlayerConnect(playerid)
 {
     ACFrozen[playerid] = false;
     ACRunStrike[playerid] = ACAirStrike[playerid] = 0;
+    ACVehSpeedStrike[playerid] = ACCarFlyStrike[playerid] = 0;
     ACNullSince[playerid] = ACNullLog[playerid] = ACNullTick[playerid] = 0;
     ACBproofSince[playerid] = ACBproofLog[playerid] = 0;
     ACMoveTick[playerid] = ACTeleportTick[playerid] = GetTickCount();
@@ -519,11 +570,14 @@ hook OnPlayerSpawn(playerid)
 {
     ACFrozen[playerid] = false;
     ACBproofSince[playerid] = 0;
+    ACVehSpeedStrike[playerid] = ACCarFlyStrike[playerid] = 0;
     return 1;
 }
 
 hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 {
+    ACVehSpeedStrike[playerid] = ACCarFlyStrike[playerid] = 0;
+
     if (oldstate != PLAYER_STATE_ONFOOT) return 1;
     if (newstate != PLAYER_STATE_DRIVER && newstate != PLAYER_STATE_PASSENGER) return 1;
 

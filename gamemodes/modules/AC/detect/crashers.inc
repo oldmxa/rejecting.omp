@@ -43,7 +43,9 @@ static const AC_CB_LIMIT[MAX_AC_CALLBACKS][2] =
 
 static
     ACCallbackTick[MAX_PLAYERS][MAX_AC_CALLBACKS],
-    ACCallbackHits[MAX_PLAYERS][MAX_AC_CALLBACKS];
+    ACCallbackHits[MAX_PLAYERS][MAX_AC_CALLBACKS],
+    ACDeathTick[MAX_PLAYERS],
+    ACDeathHits[MAX_PLAYERS];
 
 static AC_CountCallback(playerid, callback)
 {
@@ -61,8 +63,9 @@ static AC_CountCallback(playerid, callback)
     ACCallbackHits[playerid][callback] = 0;
     ACCallbackTick[playerid][callback] = tick;
 
-    AC_Debug(playerid, AC_CALLBACK_FLOOD, "callback %d passed %d calls in %dms",
-        callback, AC_CB_LIMIT[callback][1], AC_CB_LIMIT[callback][0]);
+    AC_Debug(playerid, AC_CALLBACK_FLOOD, "callback %d flood (%d in %dms, limit %d in %dms)",
+        callback, ACCallbackHits[playerid][callback], tick - ACCallbackTick[playerid][callback],
+        AC_CB_LIMIT[callback][1], AC_CB_LIMIT[callback][0]);
 
     CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_CALLBACK_FLOOD);
     return 1;
@@ -83,6 +86,8 @@ hook OnPlayerConnect(playerid)
         ACCallbackTick[playerid][i] = 0;
         ACCallbackHits[playerid][i] = 0;
     }
+    ACDeathTick[playerid] = 0;
+    ACDeathHits[playerid] = 0;
     return 1;
 }
 
@@ -212,5 +217,25 @@ hook OnPlayerPickUpPickup(playerid, pickupid)
 hook OnPlayerRequestClass(playerid, classid)
 {
     AC_CountCallback(playerid, AC_CB_REQUEST_CLASS);
+    return 1;
+}
+
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
+{
+    new tick = GetTickCount();
+
+    if (tick - ACDeathTick[playerid] >= 1500)
+    {
+        ACDeathTick[playerid] = tick;
+        ACDeathHits[playerid] = 0;
+    }
+    else if (++ACDeathHits[playerid] >= 3)
+    {
+        ACDeathHits[playerid] = 0;
+        AC_Debug(playerid, AC_DEATH_FLOOD, "death reported too fast (3 deaths in < 1500ms)");
+        CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_DEATH_FLOOD);
+        return 0;
+    }
+
     return 1;
 }

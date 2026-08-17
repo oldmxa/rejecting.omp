@@ -115,6 +115,9 @@ new const AC_ACTION_COLOR[][] =
 #define AC_NOP_INTERIOR       (43)
 #define AC_NOP_WEAPON         (44)
 #define AC_NOP_POS            (45)
+#define AC_CAR_AIRBREAK       (46)
+#define AC_CAR_SPEED          (47)
+#define AC_DEATH_FLOOD        (48)
 
 #define E_REJECTING_AC_UNKNOWN         (-1)
 #define E_REJECTING_AC_S0BEIT          (0)
@@ -197,7 +200,10 @@ new const AC_DETECTION[][e_AC_DETECTION] =
 
     {"NOP Interior",    "Blocks SetPlayerInterior",                AC_CAT_NOPS,     true},
     {"NOP GiveWeapon",  "Blocks GivePlayerWeapon",                 AC_CAT_NOPS,     true},
-    {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true}
+    {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true},
+    {"Car Airbreak",    "Airbreak or flying in a vehicle",         AC_CAT_MOVEMENT, true},
+    {"Car Speed",       "Vehicle speed above the model limit",      AC_CAT_MOVEMENT, true},
+    {"Death Flood",     "Sending deaths too fast (fake kill)",      AC_CAT_CRASHER,  true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))
