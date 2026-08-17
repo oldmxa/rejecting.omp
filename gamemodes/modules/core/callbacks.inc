@@ -715,13 +715,27 @@ public OnPlayerGiveDamageDynamicActor(playerid, STREAMER_TAG_ACTOR:actorid, Floa
 
 public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &bodypart)
 {
-	if (
-		(issuerid == INVALID_PLAYER_ID || playerid == INVALID_PLAYER_ID) ||
-		(!User[issuerid][isLogged] || !User[playerid][isLogged])
-	)
+	if (playerid == INVALID_PLAYER_ID || !User[playerid][isLogged])
 	{
 		return false;
 	}
+
+	if(GetPVarInt(playerid, "firstSpawn") == 1)
+		return false;
+
+	if(weapon == WEAPON_COLLISION || issuerid == INVALID_PLAYER_ID)
+	{
+		if(ACNoFallAnimation) ClearAnimations(playerid, SYNC_ALL);
+		if(ACNoFallDamage) return false;
+		return true;
+	}
+
+	if(!User[issuerid][isLogged])
+	{
+		return false;
+	}
+
+	if(ACFastStuns) ClearAnimations(playerid, SYNC_ALL);
 
 	new bool:pInDuel = (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING);
 	new bool:iInDuel = (GetPVarInt(issuerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(issuerid, "DuelS_State") != DUELS_STATE_WAITING);
@@ -756,16 +770,6 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 	{
 		return false;
 	}
-
-	if(GetPVarInt(playerid, "firstSpawn") == 1)
-		return false;
-
-	if(weapon == WEAPON_COLLISION)
-	{
-		if(ACNoFallAnimation) ClearAnimations(playerid, SYNC_ALL);
-		if(ACNoFallDamage) return false;
-	}
-	else if(ACFastStuns) ClearAnimations(playerid, SYNC_ALL);
 
 	if(weapon != WEAPON_FIST && weapon != WEAPON_DEAGLE && weapon != WEAPON_SHOTGUN && weapon != WEAPON_SNIPER && weapon != WEAPON_M4 && weapon != WEAPON_GRENADE && weapon != WEAPON_KATANA)
 		return false;
