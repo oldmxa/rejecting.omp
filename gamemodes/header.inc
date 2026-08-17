@@ -80,6 +80,8 @@
 // duel and random_death_tag hook OnPlayerDeath via ALS:
 // they must come before the base.pwn callbacks.
 #include "modules/duel/core.inc"
+#include "modules/duel2v2/entry.inc"
+#include "modules/safehouse/safehouse.inc"
 #include "modules/misc/random_death_tag.inc"
 #include "modules/achievements/core.inc"
 
@@ -102,9 +104,6 @@
 #include "modules/admins/eaccount.inc"
 
 #include "modules/discord/commands.inc"
-
-#include "modules/duel2v2/entry.inc"
-#include "modules/safehouse/safehouse.inc"
 
 // maps
 #include "modules/util/lounge_map.inc"

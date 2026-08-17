@@ -726,7 +726,23 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 	new bool:pInDuel = (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING);
 	new bool:iInDuel = (GetPVarInt(issuerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(issuerid, "DuelS_State") != DUELS_STATE_WAITING);
 
-	if (pInDuel || iInDuel)
+	new bool:pInDuel2v2 = (IsPlayerInDuel2v2(playerid) != 0);
+	new bool:iInDuel2v2 = (IsPlayerInDuel2v2(issuerid) != 0);
+
+	if (pInDuel2v2 || iInDuel2v2)
+	{
+		if (!pInDuel2v2 || !iInDuel2v2) return false;
+
+		new matchid = g_PlayerDuel2v2ID[playerid];
+		if (matchid < 0 || matchid >= MAX_DUELS_2V2) return false;
+		if (g_PlayerDuel2v2ID[issuerid] != matchid) return false;
+		if (!g_Duel2v2Data[matchid][d2_Active]) return false;
+		if (g_Duel2v2Data[matchid][d2_State] != DUEL2V2_STATE_ACTIVE) return false;
+
+		// Block friendly fire (same team in 2v2)
+		if (g_PlayerDuel2v2Team[playerid] == g_PlayerDuel2v2Team[issuerid]) return false;
+	}
+	else if (pInDuel || iInDuel)
 	{
 		if (GetPVarInt(playerid, "DuelS_State") != issuerid || GetPVarInt(issuerid, "DuelS_State") != playerid)
 		{
@@ -790,7 +806,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
     SetPVarInt(playerid, "LastBodyPart", bodypart);
 
 	new loc_issuer = User[issuerid][locationId];
-	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS);
+	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS) && !pInDuel && !iInDuel && !pInDuel2v2 && !iInDuel2v2;
 
 	// Only track hits for firearms that were counted in OnPlayerWeaponShot
 	if(loc_issuer_ok && (weapon == WEAPON_DEAGLE || weapon == WEAPON_SHOTGUN || weapon == WEAPON_M4 || weapon == WEAPON_SNIPER))

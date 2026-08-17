@@ -994,3 +994,13 @@ new const g_SoundList[][E_SOUND_LIST] =
 };
 
 new PlayerText:FPSPingPacket[MAX_PLAYERS];
+
+// Duel 2v2 Global State
+new g_PlayerDuel2v2ID[MAX_PLAYERS] = {-1, ...};
+new g_PlayerDuel2v2Team[MAX_PLAYERS] = {-1, ...};
+
+stock IsPlayerInDuel2v2(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
+    return (g_PlayerDuel2v2ID[playerid] != -1) ? 1 : 0;
+}

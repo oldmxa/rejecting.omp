@@ -426,6 +426,9 @@ stock DuelS_Host(playerid)
 	if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You are already in a duel! Use {MAIN}/backduel{FFFFFF} to leave.");
 
+	if(IsPlayerInDuel2v2(playerid))
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a 2v2 duel.");
+
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);
 	GetPlayerArmour(playerid, Armour);
@@ -477,6 +480,9 @@ stock DuelS_Host(playerid)
 
 		if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You are already in a duel! Use {MAIN}/backduel{FFFFFF} to leave.");
+
+		if(IsPlayerInDuel2v2(playerid))
+			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a 2v2 duel.");
 
 		new Float:Armour, Float:Health, Float:Result;
 		GetPlayerHealth(playerid, Health);
@@ -559,6 +565,9 @@ stock DuelS_Host(playerid)
 
 	if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You are already in a duel! Use {MAIN}/backduel{FFFFFF} to leave.");
+
+	if(IsPlayerInDuel2v2(playerid))
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in a 2v2 duel.");
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);

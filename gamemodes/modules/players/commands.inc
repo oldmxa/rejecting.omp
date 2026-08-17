@@ -48,6 +48,9 @@ StartChangeMode(playerid)
 	if(GetPVarInt(playerid, "isSpec") != 0)
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
+	if(IsPlayerInDuel2v2(playerid))
+		return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot change modes while in a 2v2 duel. Use /cancel2v2 first.");
+
 	if (g_PlayerTraining[playerid][pTrain_Active])
 	{
 		ExitTrainingArena(playerid);
@@ -150,6 +153,9 @@ ShowRankingsMenu(playerid)
 
 @cmd() gunmenu(playerid, params[], help)
 {
+    if(IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /gunmenu in a 2v2 duel.");
+
     if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
     {
         if(gettime() - User[playerid][timerRespawn] > 15)
@@ -164,6 +170,9 @@ ShowRankingsMenu(playerid)
 
 @cmd() spec(playerid, params[], help)
 {
+    if(IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot spectate while in a 2v2 duel.");
+
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
 
     if(playerState != PLAYER_STATE_SPECTATING && User[playerid][adminLevel] < 1)
@@ -204,6 +213,9 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"re"}) respawn(playerid, params[], help)
 {
+    if(IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /respawn while in a 2v2 duel.");
+
     new timestampRespawn = gettime();
     Respawn(playerid, timestampRespawn);
     return true;

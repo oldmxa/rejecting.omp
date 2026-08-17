@@ -10,6 +10,9 @@
     if (!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
+    if (IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot enter training while in a 2v2 duel.");
+
     ShowTrainingDialog(playerid);
     return 1;
 }

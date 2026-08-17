@@ -3,12 +3,6 @@
 #endif
 #define _duel2v2_functions_included
 
-stock IsPlayerInDuel2v2(playerid)
-{
-    if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
-    return (g_PlayerDuel2v2ID[playerid] != -1) ? 1 : 0;
-}
-
 stock bool:IsValidDuel2v2Player(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
@@ -182,6 +176,13 @@ stock AcceptDuel2v2Challenge(playerid)
     if(slot == -1 || !g_Duel2v2Data[slot][d2_Active] || g_Duel2v2Data[slot][d2_State] != DUEL2V2_STATE_PENDING)
     {
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You do not have any pending 2v2 duel invitations.");
+    }
+
+    if(User[playerid][isSpectating] || User[playerid][isAfk] || User[playerid][isCreatingArena] ||
+       GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE ||
+       g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive])
+    {
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You are busy and cannot accept the 2v2 duel right now.");
     }
 
     // The creator is accepted on creation and has nothing left to confirm.
@@ -456,6 +457,16 @@ stock EndDuel2v2Round(matchid, winning_team)
         g_Duel2v2Data[matchid][d2_CountdownTimer] = 0;
     }
 
+    new players[4];
+    GetDuel2v2Players(matchid, players);
+    for(new i = 0; i < 4; i++)
+    {
+        if(IsValidDuel2v2Player(players[i]))
+        {
+            TogglePlayerControllable(players[i], false);
+        }
+    }
+
     if(winning_team == 0)      g_Duel2v2Data[matchid][d2_TeamA_Score]++;
     else if(winning_team == 1) g_Duel2v2Data[matchid][d2_TeamB_Score]++;
 
@@ -588,7 +599,16 @@ stock ExitDuel2v2Player(playerid)
     ResetPlayerWeapons(playerid);
     SetPlayerVirtualWorld(playerid, 0);
     SetPlayerInterior(playerid, 0);
-    SpawnPlayerEx(playerid);
+
+    User[playerid][isAfk] = false;
+    if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
+    {
+        SpawnPlayerEx(playerid);
+    }
+    else
+    {
+        setAfk(playerid);
+    }
     return 1;
 }
 
@@ -663,5 +683,19 @@ stock CancelDuel2v2Session(matchid, const reason[])
     }
 
     ResetDuel2v2Data(matchid);
+    return 1;
+}
+
+forward ForfeitDuel2v2OnAfk(playerid);
+public ForfeitDuel2v2OnAfk(playerid)
+{
+    if(!IsPlayerInDuel2v2(playerid)) return 0;
+    new matchid = g_PlayerDuel2v2ID[playerid];
+    if(matchid != -1 && g_Duel2v2Data[matchid][d2_Active])
+    {
+        new reason[96];
+        format(reason, sizeof(reason), "%s went AFK/Lounge during the 2v2 match.", getPlayerName(playerid));
+        ForfeitDuel2v2Session(matchid, playerid, reason);
+    }
     return 1;
 }
