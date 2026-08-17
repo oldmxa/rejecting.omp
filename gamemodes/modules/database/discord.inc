@@ -104,7 +104,7 @@ public UnBanPlayerDiscord(admin[])
     	{
     		if(User[i][adminLevel] > 0)
     		{
-    			va_SendClientMessage(i, -1, ADM_TAG_NORM"Admin (Discord) "COL_WHITE"%s "COL_ADM_CMD"unbanned player "COL_WHITE"%s"COL_ADM_CMD".", admin, username);
+    			va_SendClientMessage(i, -1, ADM_TAG_NORM"[Discord] Admin "COL_WHITE"%s "COL_ADM_CMD"unbanned player "COL_WHITE"%s"COL_ADM_CMD".", admin, username);
     		}
     	}
 

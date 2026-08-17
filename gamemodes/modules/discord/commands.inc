@@ -403,7 +403,7 @@ DSLASH:kick(user, params[])
 		User[targetid][userName],
 		reason);
 
-	SendDiscordEmbed(logs_kick, "New Kick (Discord)", string, DISCORD_COLOR_WARNING);
+	SendDiscordEmbed(logs_kick, "New Kick", string, DISCORD_COLOR_WARNING);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s kicked player %s (ID: %d). Reason: %s", username, User[targetid][userName], targetid, reason);
@@ -421,7 +421,7 @@ DSLASH:a(user, params[])
     if(IsNull(params)) return 1;
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
-    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[Admin-Discord] {FFFFFF}%s: %s", username, params);
+    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[DISCORD] {FFFFFF}%s: %s", username, params);
     SendDiscordResponse(comandos, ":white_check_mark: Global message sent!");
     return true;
 }
@@ -436,7 +436,7 @@ DSLASH:lc(user, params[])
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
     for(new j = 0; j < 100; j++) SendClientMessageToAll(-1, " ");
-    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[Admin-Discord] {FFFFFF}Admin %s cleared the chat via Discord.", username);
+    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s cleared the chat.", username);
     SendDiscordResponse(comandos, ":white_check_mark: Chat successfully cleared!");
     return true;
 }
@@ -459,7 +459,7 @@ DSLASH:warn(user, params[])
     if(targetid != INVALID_PLAYER_ID)
     {
         User[targetid][warnings]++;
-        va_SendClientMessageToAll(COLOR_ADM_PUNISH, "{MAIN}[Admin-Discord] Admin %s gave a warning to %s [%d/5]. Reason: %s", username, User[targetid][userName], User[targetid][warnings], reason);
+        va_SendClientMessageToAll(COLOR_ADM_PUNISH, "{MAIN}[ADMIN] [Discord] Admin %s gave a warning to %s [%d/5]. Reason: %s", username, User[targetid][userName], User[targetid][warnings], reason);
         if(User[targetid][warnings] >= 5)
         {
             new hours = 9999;
@@ -550,7 +550,7 @@ DSLASH:hostname(user, params[])
     new str[144];
     format(str, sizeof(str), "hostname %s", params);
     SendRconCommand(str);
-    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[Admin-Discord] Server renamed to: %s", params);
+    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[ADMIN] [Discord] Server renamed to: %s", params);
     SendDiscordResponse(comandos, ":white_check_mark: Hostname successfully updated!");
     return true;
 }
@@ -606,7 +606,7 @@ DSLASH:setmoney(user, params[])
         ResetPlayerMoney(targetid);
         GivePlayerMoney(targetid, amount);
         User[targetid][playerMoney] = amount;
-        va_SendClientMessage(targetid, -1, "{MAIN}[Admin-Discord] {FFFFFF}Sua grana foi setada para %s.", FormatMoney(amount));
+        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Sua grana foi setada para %s.", FormatMoney(amount));
         
         mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `player_money` = %d WHERE `username` = '%e'", amount, target_nick);
         mysql_tquery(dbHandle, queryGlobal);
@@ -661,7 +661,7 @@ public OnDiscordSetNickExec(const adminusername[], const old_nick[], const new_n
     {
         SetPlayerName(targetid, new_nick);
         format(User[targetid][userName], MAX_PLAYER_NAME + 1, "%s", new_nick);
-        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN-DISCORD] {FFFFFF}Seu nickname foi alterado para {MAIN}%s {FFFFFF}pelo Administrador {MAIN}%s{FFFFFF}.", new_nick, adminusername);
+        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Seu nickname foi alterado para {MAIN}%s {FFFFFF}pelo Administrador {MAIN}%s{FFFFFF}.", new_nick, adminusername);
     }
 
     new log_details[256];
@@ -1402,17 +1402,17 @@ DSLASH:d(user, params[])
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
 
-    va_SendClientMessage(targetid, 0xA478E6FF, "{MAIN}[ASK] {FFFFFF}Admin (Discord) %s answered: %s", username, message);
+    va_SendClientMessage(targetid, 0xA478E6FF, "{MAIN}[ASK] {FFFFFF}[Discord] Admin %s answered: %s", username, message);
     GameTextForPlayer(targetid, "~p~~h~Ask Answered", 1500, 1);
     PlayerPlaySound(targetid, 1085, 0.0, 0.0, 10.0);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s answered ask for player %s (ID %d): %s", username, User[targetid][userName], targetid, message);
-    LogServerAction(0, username, "asks", "Ask Reply (Discord)", log_details);
+    LogServerAction(0, username, "asks", "Ask Reply [Discord]", log_details);
 
-    format(msgdiscord, sizeof(msgdiscord), "**Admin (Discord):** %s\n**Target:** %s\n**Message:** %s", username, User[targetid][userName], message);
+    format(msgdiscord, sizeof(msgdiscord), "**Admin [Discord]:** %s\n**Target:** %s\n**Message:** %s", username, User[targetid][userName], message);
     utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
-    SendDiscordEmbed(logs_ask, "Question Reply (Discord)", msgencoded, DISCORD_COLOR_INFO);
+    SendDiscordEmbed(logs_ask, "Question Reply", msgencoded, DISCORD_COLOR_INFO);
 
     return SendDiscordResponse(comandos, sprintf(":white_check_mark: Question answer sent to **%s** (ID %d)!", User[targetid][userName], targetid));
 }
@@ -1433,17 +1433,17 @@ DSLASH:r(user, params[])
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
 
-    va_SendClientMessage(targetid, 0x91BFCCFF, "{MAIN}[REPORT] {FFFFFF}Admin (Discord) %s replied: %s", username, message);
+    va_SendClientMessage(targetid, 0x91BFCCFF, "{MAIN}[REPORT] {FFFFFF}[Discord] Admin %s replied: %s", username, message);
     GameTextForPlayer(targetid, "~b~~h~Report Answered", 1500, 1);
     PlayerPlaySound(targetid, 1085, 0.0, 0.0, 10.0);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s replied to player %s (ID %d): %s", username, User[targetid][userName], targetid, message);
-    LogServerAction(0, username, "reports", "Report Reply (Discord)", log_details);
+    LogServerAction(0, username, "reports", "Report Reply [Discord]", log_details);
 
-    format(msgdiscord, sizeof(msgdiscord), "**Admin (Discord):** %s\n**Target:** %s\n**Message:** %s", username, User[targetid][userName], message);
+    format(msgdiscord, sizeof(msgdiscord), "**Admin [Discord]:** %s\n**Target:** %s\n**Message:** %s", username, User[targetid][userName], message);
     utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
-    SendDiscordEmbed(logs_report, "Report Reply (Discord)", msgencoded, DISCORD_COLOR_INFO);
+    SendDiscordEmbed(logs_report, "Report Reply", msgencoded, DISCORD_COLOR_INFO);
 
     return SendDiscordResponse(comandos, sprintf(":white_check_mark: Reply sent to **%s** (ID %d)!", User[targetid][userName], targetid));
 }
