@@ -120,15 +120,15 @@ RandomDeathMessages(killerid, playerid, reason)
 
 			default:
 			{
-					switch(random(6))
+					switch(random(20))
 					{
 							case 0: format(newline, sizeof(newline), "%sYou sent %s%s %sto cemetery~n~",
 							playerColorOne, playerColorTwo, getPlayerName(playerid), playerColorOne);
 
-							case 1: format(newline, sizeof(newline), "%sYou ate %s%s%s's ass~n~",
-							playerColorOne, playerColorTwo, getPlayerName(playerid), playerColorOne);
+							case 1: format(newline, sizeof(newline), "%sYou destroyed %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
 
-							case 2: format(newline, sizeof(newline), "%sYou raped %s%s~n~",
+							case 2: format(newline, sizeof(newline), "%sYou dominated %s%s~n~",
 							playerColorOne, playerColorTwo, getPlayerName(playerid));
 
 							case 3: format(newline, sizeof(newline), "%sYou killed %s%s~n~",
@@ -140,14 +140,53 @@ RandomDeathMessages(killerid, playerid, reason)
 							case 5: format(newline, sizeof(newline), "%sYou took %s%s%s's life~n~",
 							playerColorOne, playerColorTwo, getPlayerName(playerid), playerColorOne);
 
+							case 6: format(newline, sizeof(newline), "%sYou eliminated %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 7: format(newline, sizeof(newline), "%sYou buried %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 8: format(newline, sizeof(newline), "%sYou smoked %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 9: format(newline, sizeof(newline), "%sYou erased %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 10: format(newline, sizeof(newline), "%sYou clapped %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 11: format(newline, sizeof(newline), "%sYou wrecked %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 12: format(newline, sizeof(newline), "%sYou annihilated %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 13: format(newline, sizeof(newline), "%sYou executed %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 14: format(newline, sizeof(newline), "%sYou humiliated %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 15: format(newline, sizeof(newline), "%sYou wiped out %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 16: format(newline, sizeof(newline), "%sYou crushed %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 17: format(newline, sizeof(newline), "%sYou terminated %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 18: format(newline, sizeof(newline), "%sYou deleted %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
+
+							case 19: format(newline, sizeof(newline), "%sYou dismantled %s%s~n~",
+							playerColorOne, playerColorTwo, getPlayerName(playerid));
 					}
 			}
 	}
 
-	// lines guarda quantas linhas estao em uso; o indice valido vai ate MAX_LINES-1
 	if(lines[killerid] >= MAX_LINES)
 	{
-		// fila cheia: descarta a mais antiga e desloca as demais para cima
 		for(new i = 0; i < MAX_LINES - 1; i++)
 			StringToCat[killerid][i] = StringToCat[killerid][i + 1];
 
