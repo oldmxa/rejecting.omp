@@ -207,6 +207,19 @@ stock CreatePracticeTarget(playerid)
 
 stock SetPracticePoint(playerid, slot)
 {
+    if (IsPlayerInAnyVehicle(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot set a movement point while inside a vehicle.");
+        return 0;
+    }
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_SPECTATING)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot set a movement point right now.");
+        return 0;
+    }
+
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x, y, z);
 

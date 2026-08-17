@@ -192,6 +192,12 @@ public OnNPCTakeDamage(npcid, issuerid, Float:amount, WEAPON:weaponid, bodypart)
         g_Practice[owner][pracHits]++;
     }
 
+    new snd = User[owner][hitSoundID];
+    if (snd == 0) snd = PRACTICE_HIT_SOUND;
+    PlayerPlaySound(owner, snd, 0.0, 0.0, 0.0);
+
+    WC_ShowDamageFeedGiven(owner, owner, amount, weaponid);
+
     NPC_SetHealth(npcid, PRACTICE_NPC_HP);
     return 1;
 }

@@ -16,6 +16,13 @@
         return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need level {MAIN}%d {FFFFFF}to use the practice mode.", PRACTICE_MIN_LEVEL);
     }
 
+    if (IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use practice mode while inside a vehicle.");
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_SPECTATING)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use practice mode right now.");
+
     PracticeValidateWorld(playerid);
 
     new sub[12];

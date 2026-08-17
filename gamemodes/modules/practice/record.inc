@@ -73,6 +73,19 @@ stock PracticeStartRecording(playerid)
 {
     if (g_Practice[playerid][pracRecording]) return 0;
 
+    if (IsPlayerInAnyVehicle(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot record NPC movements while inside a vehicle.");
+        return 0;
+    }
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_SPECTATING)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot record movements right now.");
+        return 0;
+    }
+
     PracticeDropRecord(playerid);
 
     new npcid = g_Practice[playerid][pracNpcId];
