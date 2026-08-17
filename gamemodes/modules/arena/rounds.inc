@@ -158,7 +158,7 @@ stock LogDiscordNextMap(location, oldArenaId, newArenaId)
         newName,
         oldName,
         pCount,
-        RoundTime
+        RoundTime / 60
     );
 
     SendDiscordEmbed(logs_nextmap, "Next Map", mapStr, DISCORD_COLOR_ARENA);
