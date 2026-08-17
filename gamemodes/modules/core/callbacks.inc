@@ -755,6 +755,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 
 		// Block friendly fire (same team in 2v2)
 		if (g_PlayerDuel2v2Team[playerid] == g_PlayerDuel2v2Team[issuerid]) return false;
+		if (!IsDuel2v2PlayerAlive(playerid) || !IsDuel2v2PlayerAlive(issuerid)) return false;
 	}
 	else if (pInDuel || iInDuel)
 	{

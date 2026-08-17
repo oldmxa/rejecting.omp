@@ -39,6 +39,7 @@ hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hiti
     if(g_PlayerDuel2v2ID[playerid] != g_PlayerDuel2v2ID[hitid]) return 1;
 
     if(g_PlayerDuel2v2Team[playerid] == g_PlayerDuel2v2Team[hitid]) return 0;
+    if(!IsDuel2v2PlayerAlive(playerid) || !IsDuel2v2PlayerAlive(hitid)) return 0;
 
     return 1;
 }

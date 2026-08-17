@@ -78,7 +78,20 @@ stock bool:IsPlayerBusy(playerid)
     return false;
 }
 
-// Pending wizard setup variables for creator playerid
+stock bool:IsDuel2v2PlayerAlive(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    new matchid = g_PlayerDuel2v2ID[playerid];
+    if(matchid < 0 || matchid >= MAX_DUELS_2V2 || !g_Duel2v2Data[matchid][d2_Active]) return false;
+
+    if(playerid == g_Duel2v2Data[matchid][d2_TeamA_Player1]) return g_Duel2v2Data[matchid][d2_TeamA_P1_Alive];
+    if(playerid == g_Duel2v2Data[matchid][d2_TeamA_Player2]) return g_Duel2v2Data[matchid][d2_TeamA_P2_Alive];
+    if(playerid == g_Duel2v2Data[matchid][d2_TeamB_Player1]) return g_Duel2v2Data[matchid][d2_TeamB_P1_Alive];
+    if(playerid == g_Duel2v2Data[matchid][d2_TeamB_Player2]) return g_Duel2v2Data[matchid][d2_TeamB_P2_Alive];
+
+    return false;
+}
+
 new g_Duel2v2Wiz_Arena[MAX_PLAYERS];
 new g_Duel2v2Wiz_Weapons[MAX_PLAYERS];
 new g_Duel2v2Wiz_Rounds[MAX_PLAYERS];
