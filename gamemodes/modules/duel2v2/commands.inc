@@ -28,6 +28,11 @@
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You do not have any pending 2v2 invitations.");
     }
 
+    if(HasAcceptedDuel2v2(matchid, playerid))
+    {
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You already accepted this duel. Waiting for the other players.");
+    }
+
     ShowDuel2v2AcceptDialog(playerid);
     return 1;
 }

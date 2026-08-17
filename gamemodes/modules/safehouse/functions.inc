@@ -319,6 +319,15 @@ stock RefreshSafehousePickup(index)
     }
 
     SafehouseData[index][sh_Label] = CreateDynamic3DTextLabel(label, -1, x, y, z + 0.7, SH_LABEL_DISTANCE);
+
+    foreach (new i : Player)
+    {
+        if (!IsPlayerInRangeOfPoint(i, SH_ICON_DISTANCE, x, y, z)) continue;
+
+        Streamer_Update(i, STREAMER_TYPE_PICKUP);
+        Streamer_Update(i, STREAMER_TYPE_MAP_ICON);
+    }
+
     return 1;
 }
 

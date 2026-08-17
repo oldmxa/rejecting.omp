@@ -164,6 +164,18 @@ stock CreateDuel2v2Challenge(creatorid, teammateid, opp1, opp2, arenaid, weapons
     return slot;
 }
 
+stock bool:HasAcceptedDuel2v2(matchid, playerid)
+{
+    if (matchid < 0 || matchid >= MAX_DUELS_2V2) return false;
+
+    if (playerid == g_Duel2v2Data[matchid][d2_TeamA_Player1]) return true;
+    if (playerid == g_Duel2v2Data[matchid][d2_TeamA_Player2]) return g_Duel2v2Data[matchid][d2_TeamA_P2_Accepted];
+    if (playerid == g_Duel2v2Data[matchid][d2_TeamB_Player1]) return g_Duel2v2Data[matchid][d2_TeamB_P1_Accepted];
+    if (playerid == g_Duel2v2Data[matchid][d2_TeamB_Player2]) return g_Duel2v2Data[matchid][d2_TeamB_P2_Accepted];
+
+    return false;
+}
+
 stock AcceptDuel2v2Challenge(playerid)
 {
     new slot = g_PlayerDuel2v2ID[playerid];
