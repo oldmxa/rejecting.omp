@@ -10,7 +10,7 @@
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "%s", GET_HELP);
 
-    if(!IsPlayerConnected(targetid))
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)
@@ -59,7 +59,7 @@
 
     CheckAdminAuth(playerid);
 
-    if(targetid == -1 || !IsPlayerConnected(targetid))
+    if(targetid == -1 || !IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", GOON_HELP);
 
     if(targetid == playerid)
@@ -90,7 +90,7 @@
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "%s", SLAP_HELP);
 
-    if (!IsPlayerConnected(targetid))
+    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)
@@ -124,7 +124,7 @@
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "%s", FREEZE_HELP);
 
-    if (!IsPlayerConnected(targetid))
+    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)
@@ -156,7 +156,7 @@
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "%s", UNFREEZE_HELP);
 
-    if (!IsPlayerConnected(targetid))
+    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)
@@ -188,7 +188,7 @@
     if(sscanf(params, "r", targetid))
         return SendClientMessage(playerid, -1, "%s", SPAWN_HELP);
 
-    if(!IsPlayerConnected(targetid))
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid != playerid && User[targetid][adminLevel] >= User[playerid][adminLevel])
@@ -289,7 +289,7 @@
     CheckAdminAuth(playerid);
     new targetid, amount;
     if(sscanf(params, "ud", targetid, amount)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/setmoney [id] [money]");
-    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])
@@ -334,7 +334,7 @@
     CheckAdminAuth(playerid);
     new targetid, text[128];
     if(sscanf(params, "us[128]", targetid, text)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/forcetext [id] [text]");
-    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])
@@ -351,7 +351,7 @@
     CheckAdminAuth(playerid);
     new targetid, vw;
     if(sscanf(params, "ui", targetid, vw)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/setvw [id] [vw]");
-    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])
@@ -369,7 +369,7 @@
     CheckAdminAuth(playerid);
     new targetid, interior;
     if(sscanf(params, "ui", targetid, interior)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/setinterior [id] [interior]");
-    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])

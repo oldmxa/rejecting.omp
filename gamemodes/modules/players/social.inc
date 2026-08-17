@@ -133,10 +133,13 @@
 }
 @cmd() pm(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     new idplayer, text[128], tString[128];
     if (sscanf(params, "us[128]", idplayer, text))
         return SendClientMessage(playerid, -1, "%s", PM_HELP);
-    if (!IsPlayerConnected(idplayer))
+    if (!IsPlayerConnected(idplayer) || !User[idplayer][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (idplayer == playerid)
         return SendClientMessage(playerid, -1, "%s", RETARD);
@@ -170,6 +173,9 @@
 
 @cmd() votekick(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(User[playerid][isAfk])
         return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
 
@@ -177,7 +183,7 @@
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, COLOR_RED, "{MAIN}[ERROR] {FFFFFF}/votekick [id]");
 
-    if(!User[targetid][isLogged])
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, COLOR_RED, "{MAIN}[ERROR] {FFFFFF}Player isn't logged.");
 
     if(targetid == playerid)
@@ -207,21 +213,29 @@
 
 @cmd() yes(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return 1;
     return RegisterVote(playerid, true);
 }
 
 @cmd() no(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return 1;
     return RegisterVote(playerid, false);
 }
 
 @cmd() transfer(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    if(User[playerid][isAfk])
+        return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
+
     new targetid, money;
     if(sscanf(params, "ud", targetid, money))
         return SendClientMessage(playerid, -1, "%s", ERROR_TRANSFERMONEY);
 
-    if(!IsPlayerConnected(targetid))
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)

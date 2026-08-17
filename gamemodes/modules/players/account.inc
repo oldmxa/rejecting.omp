@@ -1,6 +1,9 @@
 
 @cmd() changenick(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
+
     if(IsPlayerFakingNick(playerid))
         return SendClientMessage(playerid, -1, "%s", NICK_CHANGE_WHILE_FAKE);
 

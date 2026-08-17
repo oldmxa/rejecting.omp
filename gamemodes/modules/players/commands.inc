@@ -1,10 +1,12 @@
 
 @cmd() id(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new targetid;
     if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}/id [id player/ nickname player]");
-	if (!IsPlayerConnected(targetid))
+	if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
 		return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     new pip[18], sampVERSION[24];
     GetPlayerIp(targetid, pip, sizeof(pip));
@@ -26,6 +28,9 @@
 
 @cmd() showagain(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     new location = User[playerid][locationId];
     if(location < 0 || location >= MAX_LOCATIONS)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be in an arena to see the last round results.");
@@ -45,6 +50,9 @@
 
 StartChangeMode(playerid)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
 	if(GetPVarInt(playerid, "isSpec") != 0)
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
@@ -96,13 +104,16 @@ ShowRankingsMenu(playerid)
 
 @cmd() fullstats(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     new targetid;
     if (sscanf(params, "u", targetid))
     {
         targetid = playerid;
     }
 
-    if (!IsPlayerConnected(targetid))
+    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     ShowStats(playerid, targetid);
@@ -111,13 +122,16 @@ ShowRankingsMenu(playerid)
 
 @cmd() stats(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     new targetid;
     if (sscanf(params, "u", targetid))
     {
         targetid = playerid;
     }
 
-    if (!IsPlayerConnected(targetid))
+    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     ShowStats(playerid, targetid);
@@ -126,12 +140,18 @@ ShowRankingsMenu(playerid)
 
 @cmd() menu(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     ShowMenu(playerid);
     return true;
 }
 
 @cmd(.alts = {"w"}) weather(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(IsNull(params)) return SendClientMessage(playerid, -1, "%s", WEATHER_HELP);
     if(!IsNumeric(params)) return SendClientMessage(playerid, COLOR_BLUE, "%s", IS_NOT_NUMERIC);
 
@@ -142,6 +162,9 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"t"}) time(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(IsNull(params)) return SendClientMessage(playerid, -1, "%s", TIME_HELP);
     if(!IsNumeric(params)) return SendClientMessage(playerid,COLOR_BLUE, "%s", IS_NOT_NUMERIC);
 
@@ -153,6 +176,9 @@ ShowRankingsMenu(playerid)
 
 @cmd() gunmenu(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /gunmenu in a 2v2 duel.");
 
@@ -170,6 +196,9 @@ ShowRankingsMenu(playerid)
 
 @cmd() spec(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot spectate while in a 2v2 duel.");
 
@@ -204,6 +233,9 @@ ShowRankingsMenu(playerid)
 
 @cmd() specoff(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(User[playerid][isSpectating] == false)
         return SendClientMessage(playerid, -1, "%s", NO_SPEC_MODE);
 
@@ -213,6 +245,9 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"re"}) respawn(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /respawn while in a 2v2 duel.");
 
@@ -223,6 +258,9 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"help", "commands"}) cmds(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     return ShowHelpMainMenu(playerid);
 }
 
@@ -461,18 +499,27 @@ ShowCommandCategory(playerid, catid)
 
 @cmd(.alts = {"rank"}) ranks(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     ShowRankingsMenu(playerid);
     return true;
 }
 
 @cmd() sync(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     SyncPlayer(playerid);
     return true;
 }
 
 @cmd() credits(playerid, params[], help)
 {
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     new creditsStr[2048];
     strcat(creditsStr, "{00CED1}Main Information:\n");
     strcat(creditsStr, fmat_return("{FFFFFF}\x95 {08A3FD}GameMode: {FFFFFF}%s %s\n", ServerHostname, SERVER_MODE));

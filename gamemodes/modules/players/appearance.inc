@@ -1,12 +1,15 @@
 
 @cmd() piss(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION:68);
 	return true;
 }
 
 @cmd() dance(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
 	new danceid;
 	if(sscanf(params, "d", danceid))
 		return SendClientMessage(playerid, -1, "%s", DANCE_HELP);
@@ -25,6 +28,8 @@
 
 @cmd() stopanim(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
 	if(GetPlayerSpecialAction(playerid) == 	SPECIAL_ACTION_NONE)
 		return true;
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
@@ -34,6 +39,8 @@
 
 @cmd(.alts = {"ss", "skin"}) changeskin(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if(IsNull(params)) return ShowSkinDialog(playerid, APPEARANCE_SRC_NONE);
     if(!IsNumeric(params)) return SendClientMessage(playerid,-1, "%s", IS_NOT_NUMERIC);
 
@@ -43,12 +50,16 @@
 
 @cmd(.alts = {"fightstyle"}) fight(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     ChangeFight(playerid);
     return true;
 }
 
 @cmd() flash(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     new option[4], optionid;
     if(sscanf(params, "s[4]", option))
         return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/flash [on/off]");
@@ -245,6 +256,7 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
 
 @cmd(.alts = {"hudstyle", "hudtype"}) customhud(playerid, params[], help)
 {
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     ShowPlayerHudTypesList(playerid);
     return 1;
 }
