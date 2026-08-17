@@ -31,6 +31,8 @@ IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
     AC_CheckUpsideDown(playerid, onFootData[PR_quaternion][1], onFootData[PR_quaternion][2]);
     AC_CheckStun(playerid, onFootData[PR_animationId]);
     AC_CheckHealthSync(playerid, onFootData[PR_health]);
+    AC_CheckArmourSync(playerid, onFootData[PR_armour]);
+    AC_CheckMegaJump(playerid, onFootData[PR_velocity][2]);
 
     AC_CheckNullVelocity(playerid,
         onFootData[PR_position][0], onFootData[PR_position][1], onFootData[PR_position][2],

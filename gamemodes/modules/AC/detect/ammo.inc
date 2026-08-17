@@ -11,7 +11,8 @@ static
     ACShotCount[MAX_PLAYERS][AC_WS_MAX_SLOTS],
     ACLastAmmo[MAX_PLAYERS][AC_WS_MAX_SLOTS],
     bool:ACAmmoKnown[MAX_PLAYERS][AC_WS_MAX_SLOTS],
-    ACExtraBudget[MAX_PLAYERS];
+    ACExtraBudget[MAX_PLAYERS],
+    ACStaticShots[MAX_PLAYERS][AC_WS_MAX_SLOTS];
 
 static bool:AC_IsTrackedSlot(slot)
 {
@@ -28,6 +29,7 @@ stock AC_ResetAmmoSlot(playerid, slot)
 
     ACShotCount[playerid][slot] = 0;
     ACAmmoKnown[playerid][slot] = false;
+    ACStaticShots[playerid][slot] = 0;
     return 1;
 }
 
@@ -38,6 +40,7 @@ stock AC_ResetAmmoTracking(playerid)
         ACShotCount[playerid][i] = 0;
         ACLastAmmo[playerid][i] = 0;
         ACAmmoKnown[playerid][i] = false;
+        ACStaticShots[playerid][i] = 0;
     }
 
     ACExtraBudget[playerid] = 0;
@@ -63,6 +66,7 @@ stock AC_CheckSlotAmmo(playerid, slot, ammo)
         ACLastAmmo[playerid][slot] = ammo;
         ACAmmoKnown[playerid][slot] = true;
         ACShotCount[playerid][slot] = 0;
+        ACStaticShots[playerid][slot] = 0;
         return 0;
     }
 
@@ -73,6 +77,22 @@ stock AC_CheckSlotAmmo(playerid, slot, ammo)
 
     if (spent < 0) return 0;
     if (!shots) return 0;
+
+    if (spent == 0)
+    {
+        ACStaticShots[playerid][slot] += shots;
+        if (ACStaticShots[playerid][slot] >= 12)
+        {
+            ACStaticShots[playerid][slot] = 0;
+            AC_Debug(playerid, AC_INFINITE_AMMO, "slot %d: 12 shots with 0 ammo spent (infinite ammo)", slot);
+            CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_INFINITE_AMMO);
+            return 1;
+        }
+    }
+    else
+    {
+        ACStaticShots[playerid][slot] = 0;
+    }
 
     new extra = shots - spent;
 

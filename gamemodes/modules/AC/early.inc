@@ -70,8 +70,13 @@ static
     ACNullLog[MAX_PLAYERS],
     ACBproofSince[MAX_PLAYERS],
     ACBproofLog[MAX_PLAYERS],
+    ACArmourSince[MAX_PLAYERS],
+    ACArmourLog[MAX_PLAYERS],
+    ACMegaJumpStrike[MAX_PLAYERS],
     ACVehSpeedStrike[MAX_PLAYERS],
     ACCarFlyStrike[MAX_PLAYERS];
+
+const AC_PACKET_UNOCCUPIED = 209;
 
 static bool:AC_IsAirOrWaterVehicle(modelid)
 {
@@ -372,6 +377,100 @@ stock AC_CheckHealthSync(playerid, clientHealth)
     return 1;
 }
 
+stock AC_CheckArmourSync(playerid, clientArmour)
+{
+    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
+    if (GetPVarInt(playerid, "spawn_protect") == 1) return 0;
+
+    new tick = GetTickCount();
+
+    if (tick - ACTeleportTick[playerid] < AC_BPROOF_SETTLE)
+    {
+        ACArmourSince[playerid] = 0;
+        return 0;
+    }
+
+    new Float:serverArmour;
+    GetPlayerArmour(playerid, serverArmour);
+
+    if (float(clientArmour) - serverArmour < AC_BPROOF_GAP)
+    {
+        ACArmourSince[playerid] = 0;
+        return 0;
+    }
+
+    if (!ACArmourSince[playerid])
+    {
+        ACArmourSince[playerid] = tick;
+        return 0;
+    }
+
+    if (tick - ACArmourLog[playerid] >= AC_BPROOF_SAMPLE)
+    {
+        ACArmourLog[playerid] = tick;
+
+        AC_Debug(playerid, AC_ARMOUR_PROOF, "client claims %d armour, server has %.0f, held %d ms (limit %d)",
+            clientArmour, serverArmour, tick - ACArmourSince[playerid], AC_BPROOF_HOLD);
+    }
+
+    if (tick - ACArmourSince[playerid] < AC_BPROOF_HOLD) return 0;
+
+    ACArmourSince[playerid] = 0;
+    CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_ARMOUR_PROOF);
+    return 1;
+}
+
+stock AC_CheckMegaJump(playerid, Float:vz)
+{
+    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
+    if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK) return 0;
+    if (GetPlayerSurfingObjectID(playerid) != INVALID_OBJECT_ID || GetPlayerSurfingVehicleID(playerid) != INVALID_VEHICLE_ID) return 0;
+
+    if (vz > 0.48)
+    {
+        AC_Debug(playerid, AC_MEGA_JUMP, "vertical jump velocity %.3f (limit 0.48)", vz);
+
+        if (++ACMegaJumpStrike[playerid] >= 2)
+        {
+            ACMegaJumpStrike[playerid] = 0;
+            CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_MEGA_JUMP);
+            return 1;
+        }
+    }
+    else ACMegaJumpStrike[playerid] = 0;
+
+    return 0;
+}
+
+IPacket:AC_PACKET_UNOCCUPIED(playerid, BitStream:bs)
+{
+    if (IsPlayerNPC(playerid)) return 1;
+
+    new unoccupiedData[PR_UnoccupiedSync];
+
+    BS_IgnoreBits(bs, 8);
+    BS_ReadUnoccupiedSync(bs, unoccupiedData);
+
+    new Float:dist = GetPlayerDistanceFromPoint(playerid,
+        unoccupiedData[PR_position][0], unoccupiedData[PR_position][1], unoccupiedData[PR_position][2]);
+
+    new Float:speed = VectorSize(
+        unoccupiedData[PR_velocity][0], unoccupiedData[PR_velocity][1], unoccupiedData[PR_velocity][2]) * 179.28;
+
+    if (dist > 35.0 || speed > 220.0)
+    {
+        AC_Debug(playerid, AC_CAR_SLAPPER, "unoccupied sync: vehicle %d, dist %.1fm, speed %.1f km/h",
+            unoccupiedData[PR_vehicleId], dist, speed);
+
+        CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_CAR_SLAPPER);
+        return 0;
+    }
+
+    return 1;
+}
+
 static AC_MovementTick(playerid)
 {
     new tick = GetTickCount();
@@ -553,8 +652,10 @@ hook OnPlayerConnect(playerid)
     ACFrozen[playerid] = false;
     ACRunStrike[playerid] = ACAirStrike[playerid] = 0;
     ACVehSpeedStrike[playerid] = ACCarFlyStrike[playerid] = 0;
+    ACMegaJumpStrike[playerid] = 0;
     ACNullSince[playerid] = ACNullLog[playerid] = ACNullTick[playerid] = 0;
     ACBproofSince[playerid] = ACBproofLog[playerid] = 0;
+    ACArmourSince[playerid] = ACArmourLog[playerid] = 0;
     ACMoveTick[playerid] = ACTeleportTick[playerid] = GetTickCount();
     AC_SetDebug(playerid, false);
     return 1;
@@ -570,6 +671,8 @@ hook OnPlayerSpawn(playerid)
 {
     ACFrozen[playerid] = false;
     ACBproofSince[playerid] = 0;
+    ACArmourSince[playerid] = 0;
+    ACMegaJumpStrike[playerid] = 0;
     ACVehSpeedStrike[playerid] = ACCarFlyStrike[playerid] = 0;
     return 1;
 }

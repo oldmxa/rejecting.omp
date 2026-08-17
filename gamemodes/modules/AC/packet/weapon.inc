@@ -184,6 +184,7 @@ IPacket:AC_PACKET_WEAPONS(playerid, BitStream:bs)
 
             hack = true;
             AC_ResetAmmoSlot(playerid, i);
+            CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_WEAPON_HACK);
             continue;
         }
 

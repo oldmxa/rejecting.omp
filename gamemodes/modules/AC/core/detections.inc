@@ -210,13 +210,14 @@ public OnRejectingACDetection(playerid, code)
         switch (code)
         {
             case AC_AIRBREAK, AC_CLICK_WARP, AC_NOP_CONTROLLABLE, AC_NOP_POS,
-                 AC_INVISIBLE_UG, AC_INVISIBLE_SURF, AC_MAP_RUN, AC_NULL_VELOCITY, AC_NO_FALL:
+                 AC_INVISIBLE_UG, AC_INVISIBLE_SURF, AC_MAP_RUN, AC_NULL_VELOCITY, AC_NO_FALL,
+                 AC_CAR_AIRBREAK, AC_CAR_SPEED, AC_MEGA_JUMP, AC_CAR_SLAPPER:
             {
                 return 1;
             }
         }
     }
-    if (code == AC_BULLET_PROOF && GetPVarInt(playerid, "spawn_protect") == 1)
+    if ((code == AC_BULLET_PROOF || code == AC_ARMOUR_PROOF) && GetPVarInt(playerid, "spawn_protect") == 1)
     {
         return 1;
     }

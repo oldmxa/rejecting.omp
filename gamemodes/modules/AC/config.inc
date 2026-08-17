@@ -118,6 +118,11 @@ new const AC_ACTION_COLOR[][] =
 #define AC_CAR_AIRBREAK       (46)
 #define AC_CAR_SPEED          (47)
 #define AC_DEATH_FLOOD        (48)
+#define AC_ARMOUR_PROOF       (49)
+#define AC_MEGA_JUMP          (50)
+#define AC_WEAPON_HACK        (51)
+#define AC_CAR_SLAPPER        (52)
+#define AC_INFINITE_AMMO      (53)
 
 #define E_REJECTING_AC_UNKNOWN         (-1)
 #define E_REJECTING_AC_S0BEIT          (0)
@@ -203,7 +208,12 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true},
     {"Car Airbreak",    "Airbreak or flying in a vehicle",         AC_CAT_MOVEMENT, true},
     {"Car Speed",       "Vehicle speed above the model limit",      AC_CAT_MOVEMENT, true},
-    {"Death Flood",     "Sending deaths too fast (fake kill)",      AC_CAT_CRASHER,  true}
+    {"Death Flood",     "Sending deaths too fast (fake kill)",      AC_CAT_CRASHER,  true},
+    {"Armour proof",    "Client refuses the armour the server set", AC_CAT_EXPLOIT,  true},
+    {"Mega jump",       "Abnormal upward jump velocity",           AC_CAT_MOVEMENT, true},
+    {"Weapon hack",     "Spawning unauthorized weapons",           AC_CAT_CHEATS,   true},
+    {"Car slapper",     "Moving unoccupied vehicles remotely",     AC_CAT_CRASHER,  true},
+    {"Infinite ammo",   "Ammo not decreasing after firing",        AC_CAT_AIM,      true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))
