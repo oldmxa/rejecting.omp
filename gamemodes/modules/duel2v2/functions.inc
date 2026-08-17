@@ -185,7 +185,6 @@ stock AcceptDuel2v2Challenge(playerid)
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You are busy and cannot accept the 2v2 duel right now.");
     }
 
-    // The creator is accepted on creation and has nothing left to confirm.
     if(playerid == g_Duel2v2Data[slot][d2_TeamA_Player1])
     {
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You created this duel - waiting for the other players to accept.");
@@ -683,19 +682,5 @@ stock CancelDuel2v2Session(matchid, const reason[])
     }
 
     ResetDuel2v2Data(matchid);
-    return 1;
-}
-
-forward ForfeitDuel2v2OnAfk(playerid);
-public ForfeitDuel2v2OnAfk(playerid)
-{
-    if(!IsPlayerInDuel2v2(playerid)) return 0;
-    new matchid = g_PlayerDuel2v2ID[playerid];
-    if(matchid != -1 && g_Duel2v2Data[matchid][d2_Active])
-    {
-        new reason[96];
-        format(reason, sizeof(reason), "%s went AFK/Lounge during the 2v2 match.", getPlayerName(playerid));
-        ForfeitDuel2v2Session(matchid, playerid, reason);
-    }
     return 1;
 }
