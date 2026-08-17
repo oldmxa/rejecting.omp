@@ -70,9 +70,7 @@ stock DCC_Embed:BuildDiscordEmbed(const title[], const description[], color = DI
 {
     new DCC_Embed:d_embed = DCC_CreateEmbed(.title = title, .description = description, .color = color);
 
-    new footerStr[64];
-    format(footerStr, sizeof(footerStr), "%s • %s", ServerHostname, getDateStrTD());
-    DCC_SetEmbedFooter(d_embed, footerStr);
+    DCC_SetEmbedFooter(d_embed, getDateStrTD());
 
     return d_embed;
 }

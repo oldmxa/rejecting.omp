@@ -507,9 +507,7 @@ public MSGVALIDATION(playerid, const code[])
 
 	new DCC_Embed:v_embed = DCC_CreateEmbed(.title = ServerHostname, .color = DISCORD_COLOR_INFO);
     
-    new footerStr[64];
-    format(footerStr, sizeof(footerStr), "%s • %s", ServerHostname, getDateStrTD());
-    DCC_SetEmbedFooter(v_embed, footerStr);
+    DCC_SetEmbedFooter(v_embed, getDateStrTD());
 
 	new tmpStr[500];
 	format(tmpStr, sizeof(tmpStr), "%s", getPlayerName(playerid));
