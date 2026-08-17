@@ -14,12 +14,17 @@ stock AC_GetDetectionName(code, destination[], len = sizeof(destination))
 }
 
 static ACReportTick[MAX_PLAYERS][MAX_AC_DETECTIONS];
+static ACDiscordCooldown[MAX_PLAYERS][MAX_AC_DETECTIONS];
 
 #include <YSI_Coding\y_hooks>
 
 hook OnPlayerConnect(playerid)
 {
-    for (new c; c < MAX_AC_DETECTIONS; c++) ACReportTick[playerid][c] = 0;
+    for (new c; c < MAX_AC_DETECTIONS; c++)
+    {
+        ACReportTick[playerid][c] = 0;
+        ACDiscordCooldown[playerid][c] = 0;
+    }
 
     ApplyAnimation(playerid, "PAULNMAC", "null", 0.0, 0, 0, 0, 0, 0);
     return 1;
@@ -54,14 +59,20 @@ static AC_Alert(playerid, code, const detection[], const action[])
                 User[playerid][userName], playerid, detection, context, code + 1);
     }
 
-    new pip[18], details[400];
-    GetPlayerIp(playerid, pip, sizeof(pip));
+    new now = gettime();
+    if (now - ACDiscordCooldown[playerid][code] >= 5)
+    {
+        ACDiscordCooldown[playerid][code] = now;
 
-    format(details, sizeof(details), "**Player:** %s [%d]\n**Detection:** %s\n**Weapon:** %s\n**Action:** %s\n**IP:** %s\n**GPCI:** %s",
-        User[playerid][userName], playerid, detection, weapon, action, pip, User[playerid][user_gpci]);
+        new pip[18], details[400];
+        GetPlayerIp(playerid, pip, sizeof(pip));
 
-    SendDiscordEmbed(logs_ac, "Rejecting AC", details, DISCORD_COLOR_ERROR);
-    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "warns", "Rejecting AC", detection);
+        format(details, sizeof(details), "**Player:** %s [%d]\n**Detection:** %s\n**Weapon:** %s\n**Action:** %s\n**IP:** %s\n**GPCI:** %s",
+            User[playerid][userName], playerid, detection, weapon, action, pip, User[playerid][user_gpci]);
+
+        SendDiscordEmbed(logs_ac, "Rejecting AC", details, DISCORD_COLOR_ERROR);
+        LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "warns", "Rejecting AC", detection);
+    }
     return 1;
 }
 
@@ -194,6 +205,21 @@ public OnRejectingACDetection(playerid, code)
 
     if (code < 0 || code >= MAX_AC_DETECTIONS) return 1;
     if (!AC_DETECTION[code][acdActive]) return 1;
+    if (User[playerid][isSpectating] || GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+    {
+        switch (code)
+        {
+            case AC_AIRBREAK, AC_CLICK_WARP, AC_NOP_CONTROLLABLE, AC_NOP_POS,
+                 AC_INVISIBLE_UG, AC_INVISIBLE_SURF, AC_MAP_RUN, AC_NULL_VELOCITY, AC_NO_FALL:
+            {
+                return 1;
+            }
+        }
+    }
+    if (code == AC_BULLET_PROOF && GetPVarInt(playerid, "spawn_protect") == 1)
+    {
+        return 1;
+    }
 
     new tick = GetTickCount();
 

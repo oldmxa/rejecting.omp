@@ -175,7 +175,12 @@ static Float:AC_HeightAboveGround(Float:x, Float:y, Float:z)
     new Float:hx, Float:hy, Float:hz;
 
     if (!CA_RayCastLine(x, y, z - 0.9, x, y, z - 200.0, hx, hy, hz))
+    {
+        if (z >= 980.0 && z <= 1050.0)
+            return (z - 1000.0 >= 0.0) ? (z - 1000.0) : 0.0;
+
         return 999.0;
+    }
 
     return (z - 0.9) - hz;
 }
@@ -379,6 +384,8 @@ static AC_MovementTick(playerid)
 
     if (tick - ACTeleportTick[playerid] < AC_MOVE_GRACE
      || User[playerid][isAfk]
+     || User[playerid][isSpectating]
+     || GetPlayerState(playerid) == PLAYER_STATE_SPECTATING
      || IsPlayerInAnyVehicle(playerid)
      || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT
      || GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK
