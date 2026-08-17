@@ -806,9 +806,8 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
     SetPVarInt(playerid, "LastBodyPart", bodypart);
 
 	new loc_issuer = User[issuerid][locationId];
-	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS) && !pInDuel && !iInDuel && !pInDuel2v2 && !iInDuel2v2;
+	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS) && loc_issuer != ARENA_AFK && !pInDuel && !iInDuel && !pInDuel2v2 && !iInDuel2v2 && !g_PlayerTraining[issuerid][pTrain_Active] && !g_Practice[issuerid][pracActive];
 
-	// Only track hits for firearms that were counted in OnPlayerWeaponShot
 	if(loc_issuer_ok && (weapon == WEAPON_DEAGLE || weapon == WEAPON_SHOTGUN || weapon == WEAPON_M4 || weapon == WEAPON_SNIPER))
 	{
 		if(GetPVarInt(issuerid, "LastHitedShotId") != GetPVarInt(issuerid, "CurrentShotId"))
@@ -816,9 +815,8 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 			playerArenaInfo[loc_issuer][issuerid][hitedShots]++;
 			SetPVarInt(issuerid, "LastHitedShotId", GetPVarInt(issuerid, "CurrentShotId"));
 			
-			// Ensure hitedShots never logically exceeds firedShots due to sync/lag
-			if(playerArenaInfo[loc_issuer][issuerid][hitedShots] > playerArenaInfo[loc_issuer][issuerid][firedShots])
-				playerArenaInfo[loc_issuer][issuerid][hitedShots] = playerArenaInfo[loc_issuer][issuerid][firedShots];
+			if(playerArenaInfo[loc_issuer][issuerid][firedShots] < playerArenaInfo[loc_issuer][issuerid][hitedShots])
+				playerArenaInfo[loc_issuer][issuerid][firedShots] = playerArenaInfo[loc_issuer][issuerid][hitedShots];
 		}
 	}
 
@@ -901,14 +899,16 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 
 public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-	if(User[playerid][isLogged])
+	if(User[playerid][isLogged] && !User[playerid][isAfk])
 	{
-		if(User[playerid][locationId] >= 0 && User[playerid][locationId] < MAX_LOCATIONS)
+		new loc = User[playerid][locationId];
+		new bool:pInDuel = (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING);
+		new bool:pInDuel2v2 = (IsPlayerInDuel2v2(playerid) != 0);
+
+		if(0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && !pInDuel && !pInDuel2v2 && !g_PlayerTraining[playerid][pTrain_Active] && !g_Practice[playerid][pracActive])
 		{
-			// Only count accuracy for primary weapons
 			if(weaponid == WEAPON_DEAGLE || weaponid == WEAPON_SHOTGUN || weaponid == WEAPON_M4 || weaponid == WEAPON_SNIPER)
 			{
-				new loc = User[playerid][locationId];
 				playerArenaInfo[loc][playerid][firedShots]++;
 				SetPVarInt(playerid, "CurrentShotId", GetPVarInt(playerid, "CurrentShotId") + 1);
 				

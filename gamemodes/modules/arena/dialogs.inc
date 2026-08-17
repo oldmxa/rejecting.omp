@@ -69,8 +69,10 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
     format(selectMessage, sizeof(selectMessage), JOINED_ROOM_MSG, GetLocationDisplaySlot(listitem) + 1);
     SendClientMessage(playerid, 0xa4aba7ff, "%s", selectMessage);
 
-    if(User[playerid][locationId] != ARENA_AFK)
-        SetPlayerVirtualWorld(playerid, playerid*50);
+    playerArenaInfo[listitem][playerid][firedShots] = 0;
+    playerArenaInfo[listitem][playerid][hitedShots] = 0;
+    SetPVarInt(playerid, "CurrentShotId", 0);
+    SetPVarInt(playerid, "LastHitedShotId", 0);
 
     SpawnPlayerEx(playerid);
 
