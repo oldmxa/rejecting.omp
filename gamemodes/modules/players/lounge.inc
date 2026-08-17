@@ -11,29 +11,6 @@ stock SetupPlayerVehicle(vehicleid)
     return 1;
 }
 
-@cmd(.alts = {"b"}) bike(playerid, params[], help)
-{
-	if(GetPVarInt(playerid, "isSpec") != 0)
-		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
-
-    if(User[playerid][isAfk])
-        return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
-
-    if (pVehicle[playerid] != 999)
-        DestroyVehicle(pVehicle[playerid]);
-
-    new Float:x, Float:y, Float:z;
-    GetPlayerPos(playerid, x, y, z);
-    pVehicle[playerid] = CreateVehicle(481, x, y, z, 0, random(100), random(100), -1);
-    SetupPlayerVehicle(pVehicle[playerid]);
-
-    SetVehicleVirtualWorld(pVehicle[playerid], GetPlayerVirtualWorld(playerid));
-    LinkVehicleToInterior(pVehicle[playerid], GetPlayerInterior(playerid));
-    PutPlayerInVehicle(playerid, pVehicle[playerid], 0);
-
-    return true;
-}
-
 stock CanSpawnLoungeVehicle(playerid)
 {
     if (User[playerid][isLogged] == false)
@@ -48,7 +25,70 @@ stock CanSpawnLoungeVehicle(playerid)
         return 0;
     }
 
+    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle during a duel.");
+        return 0;
+    }
+
+    if (IsPlayerInDuel2v2(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle during a 2v2 duel.");
+        return 0;
+    }
+
+    if (g_PlayerTraining[playerid][pTrain_Active])
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle in training.");
+        return 0;
+    }
+
+    if (IsPracticeActive(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle in practice.");
+        return 0;
+    }
+
+    if (User[playerid][isFrozen] || User[playerid][isCreatingArena])
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle right now.");
+        return 0;
+    }
+
+    if (playerSpecID[playerid] != INVALID_PLAYER_ID || User[playerid][isSpectating])
+    {
+        SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
+        return 0;
+    }
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle right now.");
+        return 0;
+    }
+
     return 1;
+}
+
+@cmd(.alts = {"b"}) bike(playerid, params[], help)
+{
+    if (!CanSpawnLoungeVehicle(playerid))
+        return true;
+
+    if (pVehicle[playerid] != 999)
+        DestroyVehicle(pVehicle[playerid]);
+
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+    pVehicle[playerid] = CreateVehicle(481, x, y, z, 0, random(100), random(100), -1);
+    SetupPlayerVehicle(pVehicle[playerid]);
+
+    SetVehicleVirtualWorld(pVehicle[playerid], GetPlayerVirtualWorld(playerid));
+    LinkVehicleToInterior(pVehicle[playerid], GetPlayerInterior(playerid));
+    PutPlayerInVehicle(playerid, pVehicle[playerid], 0);
+
+    return true;
 }
 
 stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
@@ -104,6 +144,16 @@ stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
     if(User[playerid][isAfk] == false)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun during a duel.");
+
+    if(g_PlayerTraining[playerid][pTrain_Active] || IsPracticeActive(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun in training or practice.");
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun right now.");
+
     new weaponStr[18], weapid,Ammo;
 
     if(sscanf(params, "s[18]d", weaponStr, Ammo))
@@ -136,8 +186,10 @@ stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
         return va_SendClientMessage(playerid, -1, HEALTH_ERROR_MSG, 200);
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
-    if(playerState == PLAYER_STATE_SPECTATING)
+    if(playerState == PLAYER_STATE_SPECTATING || playerSpecID[playerid] != INVALID_PLAYER_ID)
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot use /lounge while in a duel.");
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /lounge while in a 2v2 duel. Use /cancel2v2 first.");
     if(User[playerid][isCreatingArena])
@@ -274,12 +326,21 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(!User[playerid][isAfk])
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
-    // the safehouse spawn takes priority, so a custom lounge would never be used
-    if(User[playerid][spawnSafehouse])
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge during a duel.");
+
+    if(g_PlayerTraining[playerid][pTrain_Active] || IsPracticeActive(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge inside training or practice.");
+
+    if(g_PlayerInSafehouse[playerid] != -1 || User[playerid][spawnSafehouse])
     {
         SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You spawn at your clan safehouse, so a custom lounge would be ignored.");
         return SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Disable {MAIN}Safehouse Spawn{FFFFFF} in {MAIN}/clan{FFFFFF} first.");
     }
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge right now.");
 
     new Float:x, Float:y, Float:z, Float:a;
     GetPlayerPos(playerid, x, y, z);
@@ -302,6 +363,19 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack during a duel.");
+
+    if(g_PlayerTraining[playerid][pTrain_Active] || IsPracticeActive(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack in training or practice.");
+
+    if(IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack while in a vehicle.");
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack right now.");
+
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
     SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}You received a jetpack.");
     return true;
@@ -311,6 +385,9 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
+
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot flip a vehicle during a duel.");
 
     if(!IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not in a vehicle.");
@@ -330,6 +407,9 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
+
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot tune a vehicle during a duel.");
 
     if(!IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not in a vehicle.");

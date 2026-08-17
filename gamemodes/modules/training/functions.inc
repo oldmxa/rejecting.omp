@@ -659,9 +659,40 @@ stock EnterTrainingArena(playerid, arenaid)
         return 0;
     }
 
-    if (User[playerid][isSpectating])
+    if (IsPlayerInDuel2v2(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena while in a 2v2 duel.");
+        return 0;
+    }
+
+    if (IsPracticeActive(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}Leave the practice world first.");
+        return 0;
+    }
+
+    if (IsPlayerInAnyVehicle(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena while in a vehicle.");
+        return 0;
+    }
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena right now.");
+        return 0;
+    }
+
+    if (User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
     {
         SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena while spectating.");
+        return 0;
+    }
+
+    if (User[playerid][isFrozen] || User[playerid][isCreatingArena])
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena right now.");
         return 0;
     }
 

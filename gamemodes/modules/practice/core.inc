@@ -13,14 +13,9 @@ public PracticeOnSetAfk(playerid)
     return 1;
 }
 
-stock bool:IsPracticeActive(playerid)
-{
-    if (playerid < 0 || playerid >= MAX_PLAYERS) return false;
-    return g_Practice[playerid][pracActive];
-}
-
 stock ResetPracticeState(playerid)
 {
+    g_IsPlayerInPractice[playerid]     = false;
     g_Practice[playerid][pracActive]   = false;
     g_Practice[playerid][pracModel]    = 0;
     g_Practice[playerid][pracTargetType] = PRACTICE_TYPE_BALL;
@@ -283,6 +278,7 @@ stock EnterPractice(playerid)
 {
     if (g_Practice[playerid][pracActive]) return 0;
 
+    g_IsPlayerInPractice[playerid]   = true;
     g_Practice[playerid][pracActive] = true;
     g_Practice[playerid][pracHits]   = 0;
     g_Practice[playerid][pracShots]  = 0;
@@ -315,6 +311,7 @@ stock EndPracticeSession(playerid)
 
     DestroyPracticeTarget(playerid);
     g_Practice[playerid][pracActive] = false;
+    g_IsPlayerInPractice[playerid]   = false;
 
     if (User[playerid][showPlayerHud]) showPlayerTextDraw(playerid);
     else hidePlayerTextdraw(playerid);

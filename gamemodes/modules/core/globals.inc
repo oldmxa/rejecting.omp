@@ -1004,3 +1004,11 @@ stock IsPlayerInDuel2v2(playerid)
     if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
     return (g_PlayerDuel2v2ID[playerid] != -1) ? 1 : 0;
 }
+
+new bool:g_IsPlayerInPractice[MAX_PLAYERS];
+
+stock bool:IsPracticeActive(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return g_IsPlayerInPractice[playerid];
+}

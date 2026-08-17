@@ -13,6 +13,28 @@
     if (IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot enter training while in a 2v2 duel.");
 
+    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot enter training while in a duel.");
+
+    if (IsPracticeActive(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Leave the practice world first.");
+
+    if (IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot enter training while in a vehicle.");
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot enter training right now.");
+
+    if (User[playerid][isFrozen])
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot do this while frozen.");
+
+    if (User[playerid][isCreatingArena])
+        return SendClientMessage(playerid, -1, "%s", IN_ARENA_EDITOR);
+
+    if (playerSpecID[playerid] != INVALID_PLAYER_ID || User[playerid][isSpectating])
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Stop spectating first.");
+
     ShowTrainingDialog(playerid);
     return 1;
 }
