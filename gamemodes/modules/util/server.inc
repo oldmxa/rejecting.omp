@@ -22,8 +22,6 @@ public PrintServerBanner()
 	ConsolePrintLine("  | \\____|__  /___|  /__| |__|\\___  |___|  /\\___ \\(____  /__|  |");
 	ConsolePrintLine("  |         \\/     \\/             \\/     \\/     \\/     \\/      |");
 	ConsolePrintLine("  |                                                            |");
-	ConsolePrintLine("  |                                       oldmxa               |");
-	ConsolePrintLine("  |                                                            |");
 	ConsolePrintLine("  +------------------------------------------------------------+");
 	return 1;
 }
