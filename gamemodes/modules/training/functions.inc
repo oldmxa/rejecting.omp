@@ -696,6 +696,12 @@ stock EnterTrainingArena(playerid, arenaid)
         return 0;
     }
 
+    if (!g_PlayerTraining[playerid][pTrain_Active] && (!User[playerid][isAfk] || User[playerid][locationId] != ARENA_AFK))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}The training mode can only be started from the lounge.");
+        return 0;
+    }
+
     if (g_PlayerTraining[playerid][pTrain_ChallengeOn])
     {
         SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}Your previous run was discarded because you restarted the challenge.");

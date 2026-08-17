@@ -35,6 +35,11 @@
     if (playerSpecID[playerid] != INVALID_PLAYER_ID || User[playerid][isSpectating])
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Stop spectating first.");
 
+    if (!g_PlayerTraining[playerid][pTrain_Active] && (!User[playerid][isAfk] || User[playerid][locationId] != ARENA_AFK))
+    {
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The training mode can only be started from the lounge.");
+    }
+
     ShowTrainingDialog(playerid);
     return 1;
 }
