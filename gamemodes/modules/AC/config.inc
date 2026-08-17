@@ -178,7 +178,7 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Rapid fire",      "Shots faster than the weapon allows",     AC_CAT_AIM,      true},
     {"Extra WS",        "More weapon shots than fired rounds",     AC_CAT_AIM,      true},
 
-    {"Pizda walk",      "Walk animation swapped to hide the aim",  AC_CAT_MOVEMENT, false},
+    {"Pizda walk",      "Walk animation swapped to hide the aim",  AC_CAT_MOVEMENT, true},
     {"Null velocity",   "Moves without reporting any speed",       AC_CAT_MOVEMENT, true},
     {"No fall",         "Long fall with no damage taken",          AC_CAT_MOVEMENT, true},
     {"Airbreak",        "Free movement with no ground contact",    AC_CAT_MOVEMENT, true},

@@ -15,11 +15,12 @@ static
     bool:ACStunSeen[MAX_PLAYERS],
     ACStunStrike[MAX_PLAYERS],
     ACLastAnim[MAX_PLAYERS],
-    ACAnimSample[MAX_PLAYERS];
+    ACAnimSample[MAX_PLAYERS],
+    ACPizdaStrike[MAX_PLAYERS];
 
 static AC_ClearStun(playerid)
 {
-    ACStunTick[playerid] = ACStunAnim[playerid] = ACStunStrike[playerid] = 0;
+    ACStunTick[playerid] = ACStunAnim[playerid] = ACStunStrike[playerid] = ACPizdaStrike[playerid] = 0;
     ACLastAnim[playerid] = 0;
     ACStunSeen[playerid] = false;
     return 1;
@@ -34,6 +35,51 @@ stock AC_NoteStun(playerid)
     ACStunAnim[playerid] = ACLastAnim[playerid];
     ACStunSeen[playerid] = false;
     return 1;
+}
+
+stock AC_CheckPizdaWalk(playerid, animationId, keys, Float:vx, Float:vy)
+{
+    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
+    if (User[playerid][isSpectating]) return 0;
+
+    new WEAPON:weaponid = GetPlayerWeapon(playerid);
+    if (weaponid < WEAPON_COLT45 || weaponid > WEAPON_SNIPER)
+    {
+        ACPizdaStrike[playerid] = 0;
+        return 0;
+    }
+
+    if (keys & _:KEY_HANDBRAKE)
+    {
+        new Float:speed = floatsqroot(vx * vx + vy * vy) * 179.28;
+
+        new bool:spoofedAnim = false;
+        switch (animationId)
+        {
+            case 1195, 1196, 1197, 1198, 1204, 1205, 1206, 1211, 1266:
+            {
+                spoofedAnim = true;
+            }
+        }
+
+        if (spoofedAnim && speed > 10.0)
+        {
+            AC_Debug(playerid, AC_PIZDA_WALK, "aiming with weapon %d, spoofed anim %d, speed %.1f",
+                _:weaponid, animationId, speed);
+
+            if (++ACPizdaStrike[playerid] >= 4)
+            {
+                ACPizdaStrike[playerid] = 0;
+                CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_PIZDA_WALK);
+                return 1;
+            }
+            return 0;
+        }
+    }
+
+    ACPizdaStrike[playerid] = 0;
+    return 0;
 }
 
 stock AC_SampleAnim(playerid, animationId, Float:vx, Float:vy, keys)

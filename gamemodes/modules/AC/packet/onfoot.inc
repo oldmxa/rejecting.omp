@@ -38,6 +38,9 @@ IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
         onFootData[PR_position][0], onFootData[PR_position][1], onFootData[PR_position][2],
         onFootData[PR_velocity][0], onFootData[PR_velocity][1], onFootData[PR_velocity][2]);
 
+    AC_CheckPizdaWalk(playerid, onFootData[PR_animationId], onFootData[PR_keys],
+        onFootData[PR_velocity][0], onFootData[PR_velocity][1]);
+
     AC_SampleAnim(playerid, onFootData[PR_animationId],
         onFootData[PR_velocity][0], onFootData[PR_velocity][1], onFootData[PR_keys]);
 
