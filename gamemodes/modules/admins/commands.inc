@@ -141,19 +141,21 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
 forward DIALOG_ADMINCMDS(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_ADMINCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(response)
+    new current_page = GetPVarInt(playerid, "acmds_page");
+    if(!response)
     {
-        new current_page = GetPVarInt(playerid, "acmds_page");
-        if(strfind(inputtext, "Next Page") != -1)
-        {
-            SetPVarInt(playerid, "acmds_page", current_page + 1);
-            ShowAdminCmds(playerid);
-        }
-        else if(strfind(inputtext, "Previous Page") != -1)
+        if(current_page > 0)
         {
             SetPVarInt(playerid, "acmds_page", current_page - 1);
             ShowAdminCmds(playerid);
         }
+        return 1;
+    }
+
+    if(strfind(inputtext, "Next Page") != -1)
+    {
+        SetPVarInt(playerid, "acmds_page", current_page + 1);
+        ShowAdminCmds(playerid);
     }
     return 1;
 }
@@ -195,17 +197,12 @@ ShowAdminCmds(playerid)
         }
     }
 
-    if(page > 0)
-    {
-        strcat(cmdsstr, ""COL_RED"<<< Previous Page\tGo back\n");
-    }
-
     if(start_index + items_per_page < total_available)
     {
         strcat(cmdsstr, ""COL_KGREEN">>> Next Page\tGo next\n");
     }
 
-    Dialog_ShowCallback(playerid, using public DIALOG_ADMINCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{FF4500}Commands Admin - Page {23C552}%d", page + 1), cmdsstr, "Select", "Close");
+    Dialog_ShowCallback(playerid, using public DIALOG_ADMINCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{FF4500}Commands Admin - Page {23C552}%d", page + 1), cmdsstr, "Select", (page > 0) ? ("<") : ("Close"));
     return 1;
 }
 

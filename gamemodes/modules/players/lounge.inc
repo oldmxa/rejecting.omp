@@ -257,8 +257,6 @@ ShowLoungeCommands(playerid, page)
     new end = start + 10;
     if(end > sizeof(LoungeCmdsList)) end = sizeof(LoungeCmdsList);
 
-    if(page > 0) strcat(cmdsstr, ""COL_RED"<<< Previous Page\tGo back\n");
-
     for(new i = start; i < end; i++)
     {
         strcat(cmdsstr, "{BEBEBE}");
@@ -273,24 +271,26 @@ ShowLoungeCommands(playerid, page)
     format_MainColor(playerid, cmdsstr, sizeof(cmdsstr));
 
     SetPVarInt(playerid, "LcmdsPage", page);
-    Dialog_ShowCallback(playerid, using public DIALOG_LCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, "Select", "Close");
+    Dialog_ShowCallback(playerid, using public DIALOG_LCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, "Select", (page > 0) ? ("<") : ("Close"));
     return 1;
 }
 
 forward DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!response) return 1;
-
     new page = GetPVarInt(playerid, "LcmdsPage");
+
+    if(!response)
+    {
+        if(page > 0)
+            return ShowLoungeCommands(playerid, page - 1);
+        return 1;
+    }
 
     if(strfind(inputtext, "Next Page") != -1)
         return ShowLoungeCommands(playerid, page + 1);
 
-    if(strfind(inputtext, "Previous Page") != -1)
-        return ShowLoungeCommands(playerid, page - 1);
-
-    return ShowLoungeCommands(playerid, page);
+    return 1;
 }
 
 @cmd() lcmds(playerid, params[], help)

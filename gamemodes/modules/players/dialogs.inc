@@ -758,66 +758,66 @@ public DIALOG_MAPLIST(playerid, dialogid, response, listitem, string:inputtext[]
     maxitems = GetPVarInt(playerid, "pageItems");
     listitemm = listitem+(currentpage*16);
 
-    if(response)
+    if(!response)
     {
-        if(listitem < maxitems)
+        if(currentpage > 0)
         {
-            if(changeArenaDelay > gettime() &&  User[playerid][adminLevel] < 4)
-                return va_SendClientMessage(playerid, -1, CHANGEARENA_DELAY, convertTime(changeArenaDelay - gettime()));
-
-            new location = User[playerid][locationId];
-            if(location < 0 || location >= MAX_LOCATIONS || location == ARENA_AFK)
-                return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be inside an arena to use this command.");
-
-            if(location == ARENA_CUSTOM)
-                return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The Custom Room has its own map list. Use {MAIN}/clist{FFFFFF}.");
-
-            if(listitemm < 0 || listitemm >= MAX_ZONES || IsCustomArena(listitemm))
-                return va_SendClientMessage(playerid, -1, NOT_VALID_ARENA, MAX_ZONES-1);
-
-            if(listitemm == lastArenaId[location])
-                return va_SendClientMessage(playerid, -1, ARENA_JUST_PLAYED, arenaData[listitemm][arenaName]);
-
-            foreach(new i : Player)
-            {
-                if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i)) continue;
-                GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
-            }
-
-            GetRoundRank(location);
-            new oldArenaId = arenaInfo[location][arenaId];
-            arenaInfo[location][arenaId] = listitemm;
-            PrepareChangeArena(location, oldArenaId);
-
-            foreach(new i : Player)
-            {
-                if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
-                    va_SendClientMessage(i, -1, CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[listitemm][arenaName], listitemm);
-            }
-
-            if(User[playerid][adminLevel] < 4)
-                changeArenaDelay = gettime()+(3*60);
-        }
-        else if (listitem == maxitems)
-        {
-            if((currentpage + 1) * 16 >= MAX_ZONES)
-            {
-                showMapListDialog(playerid);
-                return true;
-            }
-            SetPVarInt(playerid, "playerCurrentPage", currentpage+1);
+            SetPVarInt(playerid, "playerCurrentPage", currentpage - 1);
             showMapListDialog(playerid);
+            return true;
         }
-        else if (listitem == maxitems+1)
+        return true;
+    }
+
+    if(strfind(inputtext, "Next Page") != -1 || listitem == maxitems)
+    {
+        if((currentpage + 1) * 16 >= MAX_ZONES)
         {
-            if(currentpage <= 0)
-            {
-                showMapListDialog(playerid);
-                return true;
-            }
-            SetPVarInt(playerid, "playerCurrentPage", currentpage-1);
             showMapListDialog(playerid);
+            return true;
         }
+        SetPVarInt(playerid, "playerCurrentPage", currentpage+1);
+        showMapListDialog(playerid);
+        return true;
+    }
+
+    if(listitem < maxitems)
+    {
+        if(changeArenaDelay > gettime() &&  User[playerid][adminLevel] < 4)
+            return va_SendClientMessage(playerid, -1, CHANGEARENA_DELAY, convertTime(changeArenaDelay - gettime()));
+
+        new location = User[playerid][locationId];
+        if(location < 0 || location >= MAX_LOCATIONS || location == ARENA_AFK)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be inside an arena to use this command.");
+
+        if(location == ARENA_CUSTOM)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The Custom Room has its own map list. Use {MAIN}/clist{FFFFFF}.");
+
+        if(listitemm < 0 || listitemm >= MAX_ZONES || IsCustomArena(listitemm))
+            return va_SendClientMessage(playerid, -1, NOT_VALID_ARENA, MAX_ZONES-1);
+
+        if(listitemm == lastArenaId[location])
+            return va_SendClientMessage(playerid, -1, ARENA_JUST_PLAYED, arenaData[listitemm][arenaName]);
+
+        foreach(new i : Player)
+        {
+            if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i)) continue;
+            GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
+        }
+
+        GetRoundRank(location);
+        new oldArenaId = arenaInfo[location][arenaId];
+        arenaInfo[location][arenaId] = listitemm;
+        PrepareChangeArena(location, oldArenaId);
+
+        foreach(new i : Player)
+        {
+            if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
+                va_SendClientMessage(i, -1, CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[listitemm][arenaName], listitemm);
+        }
+
+        if(User[playerid][adminLevel] < 4)
+            changeArenaDelay = gettime()+(3*60);
     }
     return true;
 }

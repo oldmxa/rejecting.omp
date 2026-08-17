@@ -443,18 +443,35 @@ showMapListDialog(playerid)
         if(arenaarea < 0) arenaarea *= -1;
 
         new catID = _:arenaData[arenaiddd][category];
+        new ownerClan = ZoneOwnerClan[arenaiddd];
+        new arenaNameStr[96];
+
+        if(IsValidClanID(ownerClan))
+        {
+            format(arenaNameStr, sizeof(arenaNameStr), "{%06x}%s", ClanInfo[ownerClan][clanColor] >>> 8, arenaData[arenaiddd][arenaName]);
+        }
+        else
+        {
+            format(arenaNameStr, sizeof(arenaNameStr), "{FFFFFF}%s", arenaData[arenaiddd][arenaName]);
+        }
+
         strcat(dialogStr,
             sprintf("%d\t%s\t%0.1fm\t%s\n", 
                 arenaiddd, 
-                arenaData[arenaiddd][arenaName], 
+                arenaNameStr, 
                 arenaarea, 
                 (catID >= 0 && catID < sizeof(categoryNames)) ? categoryNames[catID] : "N/A"
             )
         );
     }
-    strcat(dialogStr, "{00ff00}>>>\tNext Page\t \t \n{ff0000}<<<\tPrevious Page\t \t ");
 
-    Dialog_ShowCallback(playerid, using public DIALOG_MAPLIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "SELECT MAP", dialogStr, "Select", "Close");
+    if((currentPage + 1) * 16 < MAX_ZONES)
+    {
+        strcat(dialogStr, "{00ff00}>>>\tNext Page\t \t \n");
+    }
+
+    Dialog_ShowCallback(playerid, using public DIALOG_MAPLIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "SELECT MAP", dialogStr, "Select", (currentPage > 0) ? ("<") : ("Close"));
+    return 1;
 }
 
 ShowGunMenu(playerid)
