@@ -70,7 +70,8 @@ public RestoreSafehouseSpawn(playerid)
     if (!User[playerid][spawnSafehouse]) return 1;
     if (!User[playerid][isLogged] || !User[playerid][isAfk]) return 1;
     if (User[playerid][locationId] != ARENA_AFK) return 1;
-    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE) return 1;
+    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid)) return 1;
+    if (g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive]) return 1;
     if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid])) return 1;
 
     new home = GetPlayerSafehouse(playerid);
@@ -84,6 +85,10 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if (!PRESSED(KEY_SECONDARY_ATTACK)) return 1;
     if (!User[playerid][isLogged]) return 1;
+    if (IsPlayerInAnyVehicle(playerid)) return 1;
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING) return 1;
 
     if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
     {
@@ -95,6 +100,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
         return 1;
     }
+
+    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
+        return 1;
+
+    if (g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive] || User[playerid][isCreatingArena])
+        return 1;
+
+    if (User[playerid][isFrozen] || User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
+        return 1;
 
     new index = GetSafehouseAtPosition(playerid);
     if (!IsValidSafehouseIndex(index)) return 1;

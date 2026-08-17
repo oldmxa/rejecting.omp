@@ -309,6 +309,12 @@ public DIALOG_SAFE_DEPOSIT(playerid, dialogid, response, listitem, string:inputt
     new index = GetPlayerSafehouse(playerid);
     if (!CanUseSafehouseVault(playerid, index)) return ShowSafehouseMenu(playerid);
 
+    if (!IsNumeric(inputtext))
+    {
+        SendClientMessage(playerid, -1, "%s", SH_INVALID_AMOUNT);
+        return ShowSafehouseVault(playerid);
+    }
+
     SafehouseVaultDeposit(playerid, index, strval(inputtext));
     return ShowSafehouseVault(playerid);
 }
@@ -319,6 +325,12 @@ public DIALOG_SAFE_WITHDRAW(playerid, dialogid, response, listitem, string:input
 
     new index = GetPlayerSafehouse(playerid);
     if (!CanUseSafehouseVault(playerid, index)) return ShowSafehouseMenu(playerid);
+
+    if (!IsNumeric(inputtext))
+    {
+        SendClientMessage(playerid, -1, "%s", SH_INVALID_AMOUNT);
+        return ShowSafehouseVault(playerid);
+    }
 
     SafehouseVaultWithdraw(playerid, index, strval(inputtext));
     return ShowSafehouseVault(playerid);
