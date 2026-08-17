@@ -256,9 +256,6 @@ public OnRegisterHash(playerid, accountname[])
 	format(string, sizeof(string), "{92B5B8}*** {979E9E} %s has connected", User[playerid][userName]);
     SendClientMessageToAll(0xC4C4C4FF, "%s", string);
 
-	format(stringdiscord, sizeof stringdiscord, "> ` %s joined the server. `", User[playerid][userName]);
-	DCC_SendChannelMessage(gamechat , stringdiscord);
-
 	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
 
 	format(User[playerid][user_lastip], 18, "%s", pip);
@@ -641,9 +638,6 @@ public OnPlayerJoin(playerid)
                 SendClientMessage(i, 0xC4C4C4FF, "%s", string);
             }
         }
-
-		format(stringdiscord, sizeof stringdiscord, "> %s joined the server.", User[playerid][userName]);
-		DCC_SendChannelMessage(gamechat , stringdiscord);
 
 		new DCC_User:user, userid[20 + 1];
 		user = DCC_FindUserById(User[playerid][dc_uid]);

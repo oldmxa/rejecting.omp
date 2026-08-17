@@ -173,26 +173,18 @@
     new title[64] = "{MAIN}Clan Commands";
     format_MainColor(playerid, title);
 
-    new body[1200];
-    strcat(body, "{MAIN}Command\t{MAIN}Description\n");
+    new body[768];
+    strcat(body, "{A29582}Command\t{A29582}Description\n");
 
-    strcat(body, "{A29582}> Management & Creation\t \n");
-    strcat(body, "{BEBEBE}/clan\t"COL_WHITE"Open Clan management dashboard\n");
-    strcat(body, fmat_return("{BEBEBE}/createclan [tag] [name]\t"COL_WHITE"Create a new Clan (%s)\n", FormatMoney(CLAN_PRICE)));
-    strcat(body, "{BEBEBE}/invite [id/name]\t"COL_WHITE"Invite a player to your clan\n");
-    strcat(body, "{BEBEBE}/accept\t"COL_WHITE"Accept a clan invitation\n");
-    strcat(body, "{BEBEBE}/leaveclan\t"COL_WHITE"Leave your current clan\n");
-
-    strcat(body, "{A29582}> Safehouse\t \n");
-    strcat(body, "{BEBEBE}/safemenu\t"COL_WHITE"Manage your clan safehouse (vault, upgrade, expiry)\n");
-    strcat(body, "{BEBEBE}/exitsafehouse\t"COL_WHITE"Leave the safehouse interior\n");
-
-    strcat(body, "{A29582}> Ranking & Territories\t \n");
-    strcat(body, "{BEBEBE}/clans\t"COL_WHITE"View global Clans ranking list\n");
-    strcat(body, "{BEBEBE}/territories\t"COL_WHITE"View Outposts & territories status\n");
-    strcat(body, "{BEBEBE}/clancmds\t"COL_WHITE"View this list of clan commands\n");
-
-    format_MainColor(playerid, body);
+    strcat(body, "{FFFFFF}/clan\t{BEBEBE}Open Clan management dashboard\n");
+    strcat(body, fmat_return("{FFFFFF}/createclan [tag] [name]\t{BEBEBE}Create a new Clan (%s)\n", FormatMoney(CLAN_PRICE)));
+    strcat(body, "{FFFFFF}/invite [id/name]\t{BEBEBE}Invite a player to your clan\n");
+    strcat(body, "{FFFFFF}/accept\t{BEBEBE}Accept a clan invitation\n");
+    strcat(body, "{FFFFFF}/leaveclan\t{BEBEBE}Leave your current clan\n");
+    strcat(body, "{FFFFFF}/safemenu\t{BEBEBE}Clan safehouse & vault menu\n");
+    strcat(body, "{FFFFFF}/exitsafehouse\t{BEBEBE}Leave safehouse interior\n");
+    strcat(body, "{FFFFFF}/clans\t{BEBEBE}Global clan rankings & stats\n");
+    strcat(body, "{FFFFFF}/territories\t{BEBEBE}Outposts & territories status\n");
 
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Close", "");
     return 1;

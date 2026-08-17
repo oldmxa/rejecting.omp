@@ -158,7 +158,7 @@ ShowSettingsMenu(playerid)
     strcat(setStr, "Change my password\t \n");
     strcat(setStr, fmat_return("Incoming messages\t%s\n", (User[playerid][blockPM]) ? ("{FF0000}OFF") : ("{00FF00}ON")));
     strcat(setStr, fmat_return("Connect info\t%s\n", (User[playerid][showConnectMsg]) ? ("{00FF00}ON") : ("{FF0000}OFF")));
-    strcat(setStr, fmat_return("Global messages\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Locked") : ("{23C552}Unlocked")));
+    strcat(setStr, fmat_return("Global messages\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Enable") : ("{23C552}Disabled")));
     format_MainColor(playerid, setStr);
 
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_SETTINGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, setStr, "Select", "Back");

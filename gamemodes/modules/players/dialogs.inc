@@ -960,6 +960,9 @@ public DIALOG_ASK_SUBMIT(playerid, dialogid, response, listitem, string:inputtex
 {
     if(response)
     {
+        if(User[playerid][adminLevel] > 0)
+            return SendClientMessage(playerid, -1, "{MAIN}[ASK] {FFFFFF}Administrators cannot submit questions via /ask.");
+
         if(GetPVarInt(playerid, "ask_cooldown"))
             return SendClientMessage(playerid, -1, "{MAIN}[ASK] {FFFFFF}Please wait 30 seconds before sending another question.");
 
@@ -982,6 +985,9 @@ public DIALOG_REPORT_SUBMIT(playerid, dialogid, response, listitem, string:input
 {
     if(response)
     {
+        if(User[playerid][adminLevel] > 0)
+            return SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Administrators cannot use player reports.");
+
         if(GetPVarInt(playerid, "report_cooldown"))
             return SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Please wait 30 seconds before sending another report.");
 

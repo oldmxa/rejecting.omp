@@ -237,10 +237,10 @@ ShowHelpMainMenu(playerid)
     strcat(helpStr, "Security\t{FFFFFF}Account security, password & Discord link\n");
     strcat(helpStr, "Changemode\t{FFFFFF}Select an arena or change game mode\n");
     strcat(helpStr, "Training Mode\t{FFFFFF}Guide, commands & features of Training System\n");
-    strcat(helpStr, "VIP System & Perks\t{FFFFFF}View VIP benefits, packages & commands\n");
+    strcat(helpStr, "VIP System\t{FFFFFF}View VIP benefits & commands\n");
     strcat(helpStr, "Rankings\t{FFFFFF}View top 10 player & clan leaderboards\n");
-    strcat(helpStr, "Server Rules\t{FFFFFF}Read official server rules & guidelines\n");
-    strcat(helpStr, "Commands List\t{FFFFFF}View full list of all server commands");
+    strcat(helpStr, "Rules\t{FFFFFF}Read official server rules & guidelines\n");
+    strcat(helpStr, "Commands\t{FFFFFF}View full list of all server commands");
     format_MainColor(playerid, helpStr);
 
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, helpStr, "Select", "Close");

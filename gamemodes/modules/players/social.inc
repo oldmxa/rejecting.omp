@@ -1,6 +1,9 @@
 
 @cmd() report(playerid, params[], help)
 {
+    if(User[playerid][adminLevel] > 0)
+        return SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Administrators cannot use player reports.");
+
     if(GetPVarInt(playerid, "report_cooldown"))
         return SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Please wait 30 seconds before sending another report.");
 
@@ -61,6 +64,9 @@
 
 @cmd() ask(playerid, params[], help)
 {
+    if(User[playerid][adminLevel] > 0)
+        return SendClientMessage(playerid, -1, "{MAIN}[ASK] {FFFFFF}Administrators cannot submit questions via /ask.");
+
     if(GetPVarInt(playerid, "ask_cooldown"))
         return SendClientMessage(playerid, -1, "{MAIN}[ASK] {FFFFFF}Please wait 30 seconds before sending another question.");
 
