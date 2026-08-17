@@ -64,11 +64,14 @@ static AC_Alert(playerid, code, const detection[], const action[])
     {
         ACDiscordCooldown[playerid][code] = now;
 
-        new pip[18], details[400];
+        new pip[18], details[512];
         GetPlayerIp(playerid, pip, sizeof(pip));
 
-        format(details, sizeof(details), "**Player:** %s [%d]\n**Detection:** %s\n**Weapon:** %s\n**Action:** %s\n**IP:** %s\n**GPCI:** %s",
-            User[playerid][userName], playerid, detection, weapon, action, pip, User[playerid][user_gpci]);
+        format(details, sizeof(details),
+            "**Player:** %s [%d]\n**Detection:** %s (#%02d)\n**Weapon:** %s\n**Action:** %s\n**FPS:** %d  |  **Ping:** %d ms  |  **PL:** %.2f%%\n**IP:** %s\n**GPCI:** %s",
+            User[playerid][userName], playerid, detection, code + 1, weapon, action,
+            User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid),
+            pip, User[playerid][user_gpci]);
 
         SendDiscordEmbed(logs_ac, "Rejecting AC", details, DISCORD_COLOR_ERROR);
         LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "warns", "Rejecting AC", detection);
