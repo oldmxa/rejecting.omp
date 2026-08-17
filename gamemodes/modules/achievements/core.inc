@@ -60,9 +60,10 @@ new const g_AchievementsData[][E_ACHIEVEMENT_DATA] = {
     {36, "Veteran Fighter",    "Reach Level 20 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 20,      50000,   2000},
     {37, "Elite Operative",    "Reach Level 25 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 25,      50000,   2000},
     {38, "Server Warlord",     "Reach Level 30 (Earns $50k & 1k Coins per lvl >10)", ACH_CAT_GENERAL, 30,      50000,   2000},
-    {39, "Founder",            "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       150000,  3000},
-    {40, "Legend",             "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       250000,  4000},
-    {41, "Hall of Fame",       "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       500000,  5000}
+    {39, "Discord",            "Link your in-game account to Discord",    ACH_CAT_GENERAL, 1,       100000,  5000},
+    {40, "Founder",            "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       150000,  3000},
+    {41, "Legend",             "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       250000,  4000},
+    {42, "Hall of Fame",       "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       500000,  5000}
 };
 
 #define ACH_COUNT (sizeof(g_AchievementsData))
@@ -107,6 +108,10 @@ new const g_AchievementsData[][E_ACHIEVEMENT_DATA] = {
 #define ACH_LEVEL_20            (36)
 #define ACH_LEVEL_25            (37)
 #define ACH_LEVEL_30            (38)
+#define ACH_DISCORD             (39)
+#define ACH_FOUNDER             (40)
+#define ACH_LEGEND              (41)
+#define ACH_HALL_OF_FAME        (42)
 
 #define ACH_DOUBLE_KILL_WINDOW  (3000)
 #define ACH_BULLETPROOF_TIME    (900)
@@ -681,6 +686,9 @@ stock Ach_RefreshPlayerStats(playerid)
     if(User[playerid][clanID] != -1)
         GivePlayerAchievement(playerid, ACH_CALL_A_FRIEND);
 
+    if(strcmp(User[playerid][dc_username], "-1", true) != 0)
+        GivePlayerAchievement(playerid, ACH_DISCORD);
+
     new loc = User[playerid][locationId];
     new bool:active = Ach_IsPlayerActive(playerid);
     new bool:inArena = (active && 0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && !User[playerid][isAfk]);
@@ -1015,4 +1023,10 @@ public DIALOG_ACHIEVEMENTS_DETAIL(playerid, dialogid, response, listitem, string
 {
     ShowAchievementsMainMenu(playerid);
     return true;
+}
+
+forward Ach_OnDiscordLink(playerid);
+public Ach_OnDiscordLink(playerid)
+{
+    return GivePlayerAchievement(playerid, ACH_DISCORD);
 }

@@ -10,13 +10,12 @@
 
 enum
 {
-    COINS_ROW_SECTION_BALANCE,
     COINS_ROW_BALANCE,
     COINS_ROW_BUY,
-    COINS_ROW_HISTORY,
-    COINS_ROW_SECTION_VIP,
+    COINS_ROW_VIP_BUY,
     COINS_ROW_VIP_PERKS,
-    COINS_ROW_VIP_BUY
+    COINS_ROW_DISCORD,
+    COINS_ROW_HISTORY
 }
 
 forward DIALOG_COINS_MENU(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -29,29 +28,28 @@ stock GetCoinsPrice(coins)
 
 stock ShowCoinsMenu(playerid)
 {
-    new body[1024], title[64] = "{FFFF00}Coins";
+    new body[640], title[64] = "{MAIN}Coins";
 
-    strcat(body, "{A29582}Option\t{A29582}Detail\n");
+    strcat(body, "{A29582}Option\t{A29582}Details\n");
 
-    strcat(body, "{MAIN}\xBB Balance\t \n");
-
-    strcat(body, fmat_return("{FFFFFF}Your Coins\t{FFFF00}%s\n", FormatCoins(User[playerid][playerCoins])));
-
-    strcat(body, fmat_return("{FFFFFF}Buy Coins\t{BEBEBE}%s {B4B5B7}buys {FFFF00}%s\n",
+    strcat(body, fmat_return("{FFFFFF}My Balance\t{FFFF00}%s\n", FormatCoins(User[playerid][playerCoins])));
+    strcat(body, fmat_return("{FFFFFF}Buy Coins\t{23C552}%s {BEBEBE}\xbb {FFFF00}%s\n",
         FormatMoney(COINSHOP_MONEY), FormatCoins(COINSHOP_COINS)));
-
-    strcat(body, fmat_return("{FFFFFF}Transaction history\t{BEBEBE}Last %d movements\n", COINSLOG_ROWS));
-
-    strcat(body, "{MAIN}\xBB VIP\t \n");
+    strcat(body, fmat_return("{FFFFFF}Buy VIP\t{BEBEBE}From {FFFF00}%s\n", FormatCoins(GetVipPackageCoins(0))));
 
     if (IsPlayerVip(playerid))
-        strcat(body, fmat_return("{FFFFFF}VIP benefits\t{23C552}Active until %s\n", returnDate(User[playerid][vipExpire] - 10800)));
+        strcat(body, "{FFFFFF}VIP Perks\t{23C552}Active\n");
     else
-        strcat(body, "{FFFFFF}VIP benefits\t{BEBEBE}What VIP gives you\n");
+        strcat(body, "{FFFFFF}VIP Perks\t{BEBEBE}View perks\n");
 
-    strcat(body, fmat_return("{FFFFFF}Buy VIP\t{BEBEBE}%d plans from {FFFF00}%s\n",
-        GetVipPackageCount(), FormatCoins(GetVipPackageCoins(0))));
+    if (strcmp(User[playerid][dc_username], "-1", true) != 0)
+        strcat(body, "{FFFFFF}Discord Reward\t{23C552}Linked\n");
+    else
+        strcat(body, "{FFFFFF}Discord Reward\t{23C552}+$100k {B4B5B7}& {FFFF00}+5k Coins\n");
 
+    strcat(body, "{FFFFFF}History\t{BEBEBE}Recent transactions\n");
+
+    format_MainColor(playerid, title);
     format_MainColor(playerid, body);
 
     return Dialog_ShowCallback(playerid, using public DIALOG_COINS_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS,
@@ -64,22 +62,35 @@ public DIALOG_COINS_MENU(playerid, dialogid, response, listitem, string:inputtex
 
     switch (listitem)
     {
+        case COINS_ROW_BALANCE:
+        {
+            va_SendClientMessage(playerid, -1, "{MAIN}[COINS] {FFFFFF}Your current balance is: {FFFF00}%s{FFFFFF}.", FormatCoins(User[playerid][playerCoins]));
+            return ShowCoinsMenu(playerid);
+        }
+
         case COINS_ROW_BUY:
         {
-            new body[288];
+            new body[384], title[64] = "{MAIN}Buy Coins";
             format(body, sizeof(body),
-                "{FFFFFF}\x95 {B4B5B7}Rate: {BEBEBE}%s {B4B5B7}buys {FFFF00}%s\n"\
-                "{FFFFFF}\x95 {B4B5B7}Your cash: {BEBEBE}%s\n"\
-                "{FFFFFF}\x95 {B4B5B7}Limit: {FFFF00}%s {B4B5B7}per order\n\n"\
-                "{FFFFFF}How many Coins do you want to buy?",
+                "{FFFFFF}\x95 {B4B5B7}Rate: {23C552}%s {B4B5B7}buys {FFFF00}%s\n"\
+                "{FFFFFF}\x95 {B4B5B7}Your Cash: {23C552}%s\n"\
+                "{FFFFFF}\x95 {B4B5B7}Order Limit: {FFFF00}%s\n\n"\
+                "{FFFFFF}Enter the amount of {FFFF00}Coins {FFFFFF}you want to buy:",
                 FormatMoney(COINSHOP_MONEY), FormatCoins(COINSHOP_COINS),
                 FormatMoney(User[playerid][playerMoney]), FormatCoins(COINSHOP_MAX));
 
+            format_MainColor(playerid, title);
             return Dialog_ShowCallback(playerid, using public DIALOG_COINS_BUY<iiiis>, DIALOG_STYLE_INPUT,
-                "{FFFF00}Buy Coins", body, "Buy", "Back");
+                title, body, "Buy", "Back");
         }
 
-        case COINS_ROW_HISTORY: return ShowCoinsHistory(playerid);
+        case COINS_ROW_VIP_BUY:
+        {
+            new cmd[16];
+            strcopy(cmd, "/buyvip");
+            Command_ReProcess(playerid, cmd, 0);
+            return 1;
+        }
 
         case COINS_ROW_VIP_PERKS:
         {
@@ -87,14 +98,15 @@ public DIALOG_COINS_MENU(playerid, dialogid, response, listitem, string:inputtex
             return 1;
         }
 
-        case COINS_ROW_VIP_BUY:
+        case COINS_ROW_DISCORD:
         {
             new cmd[16];
-            strcopy(cmd, "/buyvip");
-
+            strcopy(cmd, "/discord");
             Command_ReProcess(playerid, cmd, 0);
             return 1;
         }
+
+        case COINS_ROW_HISTORY: return ShowCoinsHistory(playerid);
     }
 
     return ShowCoinsMenu(playerid);
@@ -145,7 +157,7 @@ public DIALOG_COINS_BUY(playerid, dialogid, response, listitem, string:inputtext
     return ShowCoinsMenu(playerid);
 }
 
-@cmd(.alts = {"comprarcoins"}) buycoins(playerid, params[], help)
+@cmd(.alts = {"comprarcoins", "coins"}) buycoins(playerid, params[], help)
 {
     if (!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);

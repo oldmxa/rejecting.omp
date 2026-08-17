@@ -146,6 +146,8 @@ public DIALOG_VALI_DISCORD(playerid, dialogid, response, listitem, string:inputt
                 DCC_SendChannelMessage(gamechat, msg);
 
                 DCC_SetGuildMemberNickname(guildaid, user, getPlayerName(playerid));
+
+                CallLocalFunction("Ach_OnDiscordLink", "i", playerid);
             }
             else
             {
