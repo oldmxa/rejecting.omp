@@ -26,12 +26,12 @@
 				new vipTagStr[32] = "";
 				GetVipTagStringEx(playerid, vipTagStr, sizeof(vipTagStr), true);
 				va_SendClientMessage(i, -1, "{MAIN}[VIP-REPORT] %s{FF8C00}Player %s[%d] reported: %s[%d] | Reason: %s", vipTagStr, User[playerid][userName], playerid, User[targetid][userName], targetid, reason);
-				GameTextForPlayer(i, "~n~~y~~h~VIP Report", 3000, 3);
+				GameTextForPlayer(i, "~y~~h~VIP REPORT", 3000, 1);
 			}
 			else
 			{
 				va_SendClientMessage(i, -1, "{MAIN}[REPORT] Player %s[%d] reported: %s[%d] | Reason: %s", User[playerid][userName], playerid, User[targetid][userName], targetid, reason);
-				GameTextForPlayer(i, "~n~~r~Review", 3000, 3);
+				GameTextForPlayer(i, "~r~~h~NEW REPORT", 3000, 1);
 			}
             PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
 		}
@@ -79,12 +79,12 @@
                 new vipTagStr[32] = "";
                 GetVipTagStringEx(playerid, vipTagStr, sizeof(vipTagStr), true);
                 va_SendClientMessage(i, -1, "{MAIN}[VIP ASK] %s{FF8C00}Question from %s[%d]: %s", vipTagStr, User[playerid][userName], playerid, params);
-                GameTextForPlayer(i, "~n~~y~~h~VIP Ask", 2000, 3);
+                GameTextForPlayer(i, "~y~~h~VIP QUESTION", 2000, 1);
             }
             else
             {
                 va_SendClientMessage(i, -1, "{MAIN}[ASK] Question from %s[%d]: %s", User[playerid][userName], playerid, params);
-                GameTextForPlayer(i, "~n~~p~ASK", 2000, 3);
+                GameTextForPlayer(i, "~b~~h~NEW QUESTION", 2000, 1);
             }
             PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
         }

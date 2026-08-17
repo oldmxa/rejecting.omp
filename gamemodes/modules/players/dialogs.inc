@@ -1007,12 +1007,12 @@ public DIALOG_REPORT_SUBMIT(playerid, dialogid, response, listitem, string:input
                 if(IsPlayerVip(playerid))
                 {
                     va_SendClientMessage(i, 0xFF7700FF, "{MAIN}[VIP REPORT] {FFFFFF}Player %s[%d] reported: %s[%d] | Reason: %s", User[playerid][userName], playerid, User[targetid][userName], targetid, inputtext);
-                    GameTextForPlayer(i, "~n~~o~VIP Report", 3000, 3);
+                    GameTextForPlayer(i, "~y~~h~VIP REPORT", 3000, 1);
                 }
                 else
                 {
                     va_SendClientMessage(i, 0xEDA909AA, "{MAIN}[REPORT] {FFFFFF}Player %s[%d] reported: %s[%d] | Reason: %s", User[playerid][userName], playerid, User[targetid][userName], targetid, inputtext);
-                    GameTextForPlayer(i, "~n~~r~Review", 3000, 3);
+                    GameTextForPlayer(i, "~r~~h~NEW REPORT", 3000, 1);
                 }
                 PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
             }
