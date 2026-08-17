@@ -133,6 +133,38 @@ determineArenaID(location)
 	return rand;
 }
 
+stock LogDiscordNextMap(location, oldArenaId, newArenaId)
+{
+    if(!(0 <= location < MAX_LOCATIONS)) return 0;
+    if(location == ARENA_AFK) return 0;
+
+    new oldName[64], newName[64], mapStr[512];
+
+    if(0 <= oldArenaId < MAX_ZONES)
+        format(oldName, sizeof(oldName), "%s (ID: %d)", arenaData[oldArenaId][arenaName], oldArenaId);
+    else
+        format(oldName, sizeof(oldName), "None");
+
+    if(0 <= newArenaId < MAX_ZONES)
+        format(newName, sizeof(newName), "%s (ID: %d)", arenaData[newArenaId][arenaName], newArenaId);
+    else
+        format(newName, sizeof(newName), "Unknown");
+
+    new pCount = getLocationPlayers(location);
+
+    format(mapStr, sizeof(mapStr),
+        "**Room:** %s\n**New Map:** %s\n**Previous Map:** %s\n**Players Online:** %d\n**Round Duration:** %d minutes",
+        ROOM_NAME[location][E_ROOM_NAME_DISCORD],
+        newName,
+        oldName,
+        pCount,
+        RoundTime
+    );
+
+    SendDiscordEmbed(logs_nextmap, "Next Map", mapStr, DISCORD_COLOR_ARENA);
+    return 1;
+}
+
 forward ChangeArena(location);
 public ChangeArena(location)
 {
@@ -140,6 +172,7 @@ public ChangeArena(location)
 	clanString[0] = EOS;
 
 	format(iString, sizeof(iString), ARENA_START_MSG, arenaData[arenaInfo[location][arenaId]][arenaName], arenaInfo[location][arenaId]);
+	LogDiscordNextMap(location, lastArenaId[location], arenaInfo[location][arenaId]);
 
 	inline const ZoneClanMessage()
 	{

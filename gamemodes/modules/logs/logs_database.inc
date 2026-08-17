@@ -24,6 +24,8 @@ LogCoins(user_id, const username[], const reason[], amount, balance)
         user_id, username, reason, amount, balance);
 
     mysql_tquery(dbHandle, query);
+
+    LogDiscordCoins(user_id, username, reason, amount, balance);
     return 1;
 }
 

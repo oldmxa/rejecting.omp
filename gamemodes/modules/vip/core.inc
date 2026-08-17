@@ -58,6 +58,13 @@ stock IsPlayerVip(playerid)
             new query[128];
             mysql_format(dbHandle, query, sizeof(query), "UPDATE accounts SET vip_level = 0, vip_expire = 0, vip_head_tag = 0 WHERE id = %d", User[playerid][user_sqlid]);
             mysql_tquery(dbHandle, query);
+
+            new expVipStr[256];
+            format(expVipStr, sizeof(expVipStr),
+                "**Player:** %s [ID: %d | SQL ID: %d]\n**Status:** VIP Subscription Expired",
+                User[playerid][userName], playerid, User[playerid][user_sqlid]
+            );
+            LogDiscordVipAction("VIP Expired", expVipStr, DISCORD_COLOR_WARNING);
             return 0;
         }
         return 1;
@@ -85,6 +92,13 @@ stock CheckPlayerVipOnLogin(playerid)
         new query[128];
         mysql_format(dbHandle, query, sizeof(query), "UPDATE accounts SET vip_level = 0, vip_expire = 0, vip_head_tag = 0 WHERE id = %d", User[playerid][user_sqlid]);
         mysql_tquery(dbHandle, query);
+
+        new expVipStr[256];
+        format(expVipStr, sizeof(expVipStr),
+            "**Player:** %s [ID: %d | SQL ID: %d]\n**Status:** VIP Subscription Expired",
+            User[playerid][userName], playerid, User[playerid][user_sqlid]
+        );
+        LogDiscordVipAction("VIP Expired", expVipStr, DISCORD_COLOR_WARNING);
 
         va_SendClientMessage(playerid, -1, "{MAIN}[VIP] {FFFFFF}Your VIP subscription has expired. To activate another package use {MAIN}'/buyvip'{FFFFFF}.");
         return 0;
@@ -340,6 +354,12 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
     va_SendClientMessage(playerid, -1, "{MAIN}[VIP] {FFFFFF}Use {MAIN}'/vipcmds'{FFFFFF} to check your perks and {MAIN}'/vtag'{FFFFFF} to customize your tag.");
     va_SendClientMessage(playerid, -1, "{MAIN}[VIP] {FFFFFF}Discord Sync: Link your account to receive your VIP role on Discord!");
     va_SendClientMessage(playerid, -1, "{MAIN}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+    new vipEmbedStr[512];
+    format(vipEmbedStr, sizeof(vipEmbedStr),
+        "**Player:** %s [ID: %d | SQL ID: %d]\n**Package:** VIP %d Days\n**Cost:** %d Coins\n**Remaining Balance:** %d Coins\n**Expires:** %s",
+        User[playerid][userName], playerid, User[playerid][user_sqlid], days, coins, User[playerid][playerCoins], returnDate(User[playerid][vipExpire]));
+    LogDiscordVipAction("VIP Activated", vipEmbedStr, DISCORD_COLOR_SUCCESS);
 
     va_SendClientMessageToAll(-1, "{MAIN}[VIP] {FFFFFF}Player {MAIN}%s{FFFFFF} has just activated a {MAIN}VIP Package %d Days{FFFFFF}! Enjoy the perks!", User[playerid][userName], days);
     return 1;
@@ -798,6 +818,17 @@ ShowVipTagDialog(playerid)
     va_SendClientMessage(targetid, -1, "{MAIN}[VIP] {FFFFFF}Congratulations! Admin %s granted you {23C552}VIP{FFFFFF} status!", 
         User[playerid][userName]);
 
+    new giveVipStr[512];
+    format(giveVipStr, sizeof(giveVipStr),
+        "**Admin:** %s [ID: %d]\n**Target:** %s [ID: %d | SQL ID: %d]\n**Duration:** %s (%d days)\n**Expires:** %s",
+        User[playerid][userName], playerid,
+        User[targetid][userName], targetid, User[targetid][user_sqlid],
+        (days > 0) ? ("Temporary") : ("Permanent"),
+        days,
+        (days > 0) ? returnDate(User[targetid][vipExpire]) : ("Never")
+    );
+    LogDiscordVipAction("VIP Granted by Admin", giveVipStr, DISCORD_COLOR_ADMIN);
+
     return true;
 }
 
@@ -840,6 +871,14 @@ ShowVipTagDialog(playerid)
 
     va_SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FFFFFF}Removed VIP status from %s[%d].", User[targetid][userName], targetid);
     va_SendClientMessage(targetid, -1, "{MAIN}[VIP] {FFFFFF}Your VIP status has been removed by Admin %s.", User[playerid][userName]);
+
+    new remVipStr[512];
+    format(remVipStr, sizeof(remVipStr),
+        "**Admin:** %s [ID: %d]\n**Target:** %s [ID: %d | SQL ID: %d]\n**Action:** VIP Status Removed",
+        User[playerid][userName], playerid,
+        User[targetid][userName], targetid, User[targetid][user_sqlid]
+    );
+    LogDiscordVipAction("VIP Removed by Admin", remVipStr, DISCORD_COLOR_ERROR);
 
     return true;
 }

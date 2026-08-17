@@ -791,7 +791,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][hudType],
 		User[playerid][lifeType],
 		User[playerid][adminLevel],
-		GetPlayerSkin(playerid),
+		(User[playerid][playerSkin] > 0) ? (User[playerid][playerSkin]) : (GetPlayerSkin(playerid)),
 		_:User[playerid][fightStyle],
 		User[playerid][muteTimestamp],
 		gettime(),

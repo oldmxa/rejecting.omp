@@ -13,6 +13,9 @@
 #define CH_LOGS_ADMIN_CMDS  "1477802174938615990"
 #define CH_LOGS_TICKETS     "1535689360286949488"
 #define CH_LOGS_AC          "1536842134156615711"
+#define CH_LOGS_CONNECTIONS "1538769355687596062"
+#define CH_LOGS_NEXTMAP     "1538771407310159892"
+#define CH_LOGS_VIPS        "1538771961734234192"
 #define CH_COMANDOS         "1460838135045951796"
 #define CH_GAMECHAT         "1461088854185480296"
 #define CH_ADMINCHAT        "1461088997668290581"
@@ -32,6 +35,9 @@ new
     DCC_Channel:logs_admin_cmds,
     DCC_Channel:logs_tickets,
     DCC_Channel:logs_ac,
+    DCC_Channel:logs_connections,
+    DCC_Channel:logs_nextmap,
+    DCC_Channel:logs_vips,
     DCC_Channel:PMPlayer;
 
 stock InitLogChannels()
@@ -48,6 +54,9 @@ stock InitLogChannels()
     logs_admin_cmds = DCC_FindChannelById(CH_LOGS_ADMIN_CMDS);
     logs_tickets    = DCC_FindChannelById(CH_LOGS_TICKETS);
     logs_ac         = DCC_FindChannelById(CH_LOGS_AC);
+    logs_connections= DCC_FindChannelById(CH_LOGS_CONNECTIONS);
+    logs_nextmap    = DCC_FindChannelById(CH_LOGS_NEXTMAP);
+    logs_vips       = DCC_FindChannelById(CH_LOGS_VIPS);
     comandos        = DCC_FindChannelById(CH_COMANDOS);
     gamechat        = DCC_FindChannelById(CH_GAMECHAT);
     adminchat       = DCC_FindChannelById(CH_ADMINCHAT);
@@ -73,4 +82,84 @@ stock SendDiscordEmbed(DCC_Channel:channel, const title[], const description[], 
     if(channel == DCC_INVALID_CHANNEL) return 0;
 
     return DCC_SendChannelEmbedMessage(channel, BuildDiscordEmbed(title, description, color));
+}
+
+stock LogDiscordConnect(playerid)
+{
+    if(IsPlayerNPC(playerid)) return 0;
+
+    new ip[18], serial[41], logStr[256];
+    GetPlayerIp(playerid, ip, sizeof(ip));
+    gpci(playerid, serial, sizeof(serial));
+
+    if(serial[0] == EOS)
+        format(serial, sizeof(serial), "N/A");
+
+    format(logStr, sizeof(logStr),
+        "**Player:** %s [ID: %d]\n**IP:** %s\n**Serial (GPCI):** %s\n**Version:** %s",
+        User[playerid][userName],
+        playerid,
+        ip,
+        serial,
+        User[playerid][playerVersion]
+    );
+
+    SendDiscordEmbed(logs_connections, "Player Connected", logStr, DISCORD_COLOR_SUCCESS);
+    return 1;
+}
+
+stock LogDiscordDisconnect(playerid, reason)
+{
+    if(IsPlayerNPC(playerid)) return 0;
+
+    new reasonStr[32];
+    switch(reason)
+    {
+        case 0: reasonStr = "Timeout / Crash";
+        case 1: reasonStr = "Quit";
+        case 2: reasonStr = "Kicked / Banned";
+        default: reasonStr = "Unknown";
+    }
+
+    new ip[18], logStr[256];
+    GetPlayerIp(playerid, ip, sizeof(ip));
+    if(ip[0] == EOS)
+        format(ip, sizeof(ip), "%s", User[playerid][user_lastip]);
+
+    format(logStr, sizeof(logStr),
+        "**Player:** %s [ID: %d]\n**Reason:** %s\n**IP:** %s\n**Ping:** %d ms",
+        User[playerid][userName],
+        playerid,
+        reasonStr,
+        ip,
+        GetPlayerPing(playerid)
+    );
+
+    new color = (reason == 1) ? DISCORD_COLOR_INFO : DISCORD_COLOR_ERROR;
+
+    SendDiscordEmbed(logs_connections, "Player Disconnected", logStr, color);
+    return 1;
+}
+
+stock LogDiscordCoins(user_id, const username[], const reason[], amount, balance)
+{
+    new desc[512];
+    format(desc, sizeof(desc),
+        "**Player:** %s [SQL ID: %d]\n**Action / Reason:** %s\n**Amount:** %s%d Coins\n**New Balance:** %d Coins",
+        username,
+        user_id,
+        reason,
+        (amount > 0) ? ("+") : (""),
+        amount,
+        balance
+    );
+
+    new color = (amount > 0) ? DISCORD_COLOR_SUCCESS : DISCORD_COLOR_WARNING;
+    SendDiscordEmbed(logs_vips, "Coins Transaction", desc, color);
+    return 1;
+}
+
+stock LogDiscordVipAction(const title[], const description[], color = DISCORD_COLOR_INFO)
+{
+    return SendDiscordEmbed(logs_vips, title, description, color);
 }

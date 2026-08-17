@@ -82,6 +82,8 @@ public OnPlayerConnect(playerid)
 	GetPlayerName(playerid, User[playerid][userName], MAX_PLAYER_NAME + 1);
 	GetPlayerVersion(playerid, User[playerid][playerVersion]);
 
+	LogDiscordConnect(playerid);
+
 	CheckISP(playerid);
 	CheckAccountLimit(playerid);
 
@@ -116,6 +118,8 @@ public OnPlayerConnect(playerid)
 public OnPlayerDisconnect(playerid, reason)
 {
 	if (IsPlayerNPC(playerid)) return true;
+
+	LogDiscordDisconnect(playerid, reason);
 
 	UpdatePlayerData(playerid, 1);
 	hidePlayerTextdraw(playerid);
@@ -468,6 +472,11 @@ public OnPlayerSpawn(playerid)
 	SetPlayerWorldBounds(playerid, 20000.0, -20000.0, 20000.0, -20000.0);
 	givePlayerWeapons(playerid);
     SetPlayerFightingStyle(playerid, User[playerid][fightStyle]);
+
+	if(User[playerid][playerSkin] > 0)
+	{
+		SetPlayerSkin(playerid, User[playerid][playerSkin]);
+	}
 
 	if(votingInfo[showingVoteTD])
 	{
