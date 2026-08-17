@@ -3,8 +3,6 @@
 #endif
 #define _duel2v2_textdraws_included
 
-#include <YSI_Coding/y_hooks>
-
 new PlayerText:TD2v2MatchInfo[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 stock CreateDuel2v2PlayerTextDraws(playerid)
@@ -47,7 +45,7 @@ stock UpdateDuel2v2TextDrawString(playerid, const text[])
     return 1;
 }
 
-hook OnPlayerConnect(playerid)
+public OnPlayerConnect(playerid)
 {
     g_PlayerDuel2v2ID[playerid] = -1;
     g_PlayerDuel2v2Team[playerid] = -1;
@@ -56,11 +54,39 @@ hook OnPlayerConnect(playerid)
     g_Duel2v2Wiz_Arena[playerid] = 0;
     g_Duel2v2Wiz_Weapons[playerid] = 0;
     g_Duel2v2Wiz_Rounds[playerid] = 1;
-    return 1;
-}
 
-hook OnPlayerDisconnect(playerid, reason)
+    #if defined D2TD_OnPlayerConnect
+        return D2TD_OnPlayerConnect(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect D2TD_OnPlayerConnect
+#if defined D2TD_OnPlayerConnect
+    forward D2TD_OnPlayerConnect(playerid);
+#endif
+
+public OnPlayerDisconnect(playerid, reason)
 {
     DestroyDuel2v2PlayerTextDraws(playerid);
-    return 1;
+
+    #if defined D2TD_OnPlayerDisconnect
+        return D2TD_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect D2TD_OnPlayerDisconnect
+#if defined D2TD_OnPlayerDisconnect
+    forward D2TD_OnPlayerDisconnect(playerid, reason);
+#endif

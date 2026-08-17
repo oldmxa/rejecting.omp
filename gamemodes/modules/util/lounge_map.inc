@@ -1,22 +1,50 @@
-#if defined _inc_hooks
-	#undef _inc_hooks
+#if defined _lounge_map_included
+    #endinput
 #endif
+#define _lounge_map_included
 
-#include <YSI_Coding/y_hooks>
-hook OnGameModeInit()
+public OnGameModeInit()
 {
     CreateLoungeMap();
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
 
-hook OnPlayerConnect(playerid)
+    #if defined LMAP_OnGameModeInit
+        return LMAP_OnGameModeInit();
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnGameModeInit
+    #undef OnGameModeInit
+#else
+    #define _ALS_OnGameModeInit
+#endif
+#define OnGameModeInit LMAP_OnGameModeInit
+#if defined LMAP_OnGameModeInit
+    forward LMAP_OnGameModeInit();
+#endif
+
+public OnPlayerConnect(playerid)
 {
     if(!IsPlayerNPC(playerid))
     {
         RemoveObjectsLounge(playerid);
     }
-    return Y_HOOKS_CONTINUE_RETURN_1;
+
+    #if defined LMAP_OnPlayerConnect
+        return LMAP_OnPlayerConnect(playerid);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect LMAP_OnPlayerConnect
+#if defined LMAP_OnPlayerConnect
+    forward LMAP_OnPlayerConnect(playerid);
+#endif
 
 CreateLoungeMap()
 {

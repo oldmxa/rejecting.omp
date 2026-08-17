@@ -4,8 +4,6 @@
 #endif
 #define _life_styles_included
 
-#include <a_samp>
-
 enum
 {
     LIFE_NATIVE = 0,
@@ -263,9 +261,7 @@ stock ShowPlayerLifeTypesList(playerid)
     return ShowStylePicker(playerid, DIALOG_LIFE_TYPE, "{MAIN}Life Styles", string);
 }
 
-#include <YSI_Coding/y_hooks>
-
-hook OnGameModeInit()
+public OnGameModeInit()
 {
     for (new i = 0; i < MAX_PLAYERS; i++)
     {
@@ -276,10 +272,23 @@ hook OnGameModeInit()
             LifeLabel[i][j] = PlayerText3D:INVALID_3DTEXT_ID;
     }
 
-    return 1;
+    #if defined LSTY_OnGameModeInit
+        return LSTY_OnGameModeInit();
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnGameModeInit
+    #undef OnGameModeInit
+#else
+    #define _ALS_OnGameModeInit
+#endif
+#define OnGameModeInit LSTY_OnGameModeInit
+#if defined LSTY_OnGameModeInit
+    forward LSTY_OnGameModeInit();
+#endif
 
-hook OnPlayerConnect(playerid)
+public OnPlayerConnect(playerid)
 {
     LifeLastHealth[playerid] = -1;
     LifeLastArmour[playerid] = -1;
@@ -290,10 +299,23 @@ hook OnPlayerConnect(playerid)
         LifeLabel[i][playerid] = PlayerText3D:INVALID_3DTEXT_ID;
     }
 
-    return 1;
+    #if defined LSTY_OnPlayerConnect
+        return LSTY_OnPlayerConnect(playerid);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect LSTY_OnPlayerConnect
+#if defined LSTY_OnPlayerConnect
+    forward LSTY_OnPlayerConnect(playerid);
+#endif
 
-hook OnPlayerDisconnect(playerid, reason)
+public OnPlayerDisconnect(playerid, reason)
 {
     foreach (new viewerid : Player)
     {
@@ -304,36 +326,92 @@ hook OnPlayerDisconnect(playerid, reason)
     for (new i = 0; i < MAX_PLAYERS; i++)
         LifeLabel[playerid][i] = PlayerText3D:INVALID_3DTEXT_ID;
 
-    return 1;
+    #if defined LSTY_OnPlayerDisconnect
+        return LSTY_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect LSTY_OnPlayerDisconnect
+#if defined LSTY_OnPlayerDisconnect
+    forward LSTY_OnPlayerDisconnect(playerid, reason);
+#endif
 
-hook OnPlayerSpawn(playerid)
+public OnPlayerSpawn(playerid)
 {
     ApplyLifeStyle(playerid);
     SyncLifeLabelTarget(playerid);
-    return 1;
-}
 
-hook OnPlayerStreamIn(playerid, forplayerid)
+    #if defined LSTY_OnPlayerSpawn
+        return LSTY_OnPlayerSpawn(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerSpawn
+    #undef OnPlayerSpawn
+#else
+    #define _ALS_OnPlayerSpawn
+#endif
+#define OnPlayerSpawn LSTY_OnPlayerSpawn
+#if defined LSTY_OnPlayerSpawn
+    forward LSTY_OnPlayerSpawn(playerid);
+#endif
+
+public OnPlayerStreamIn(playerid, forplayerid)
 {
-    if (!UsesCustomLifeStyle(forplayerid)) return 1;
+    if (UsesCustomLifeStyle(forplayerid))
+    {
+        ShowPlayerNameTagForPlayer(forplayerid, playerid, false);
+        RefreshLifeLabel(forplayerid, playerid);
+    }
 
-    ShowPlayerNameTagForPlayer(forplayerid, playerid, false);
-    RefreshLifeLabel(forplayerid, playerid);
-    return 1;
+    #if defined LSTY_OnPlayerStreamIn
+        return LSTY_OnPlayerStreamIn(playerid, forplayerid);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerStreamIn
+    #undef OnPlayerStreamIn
+#else
+    #define _ALS_OnPlayerStreamIn
+#endif
+#define OnPlayerStreamIn LSTY_OnPlayerStreamIn
+#if defined LSTY_OnPlayerStreamIn
+    forward LSTY_OnPlayerStreamIn(playerid, forplayerid);
+#endif
 
-hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
+public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     foreach (new viewerid : Player)
     {
         if (viewerid == playerid) continue;
         DestroyLifeLabel(viewerid, playerid);
     }
-    return 1;
-}
 
-hook OnDialogResponse(playerid, dialogid, response, listitem, string:inputtext[])
+    #if defined LSTY_OnPlayerDeath
+        return LSTY_OnPlayerDeath(playerid, killerid, reason);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerDeath
+    #undef OnPlayerDeath
+#else
+    #define _ALS_OnPlayerDeath
+#endif
+#define OnPlayerDeath LSTY_OnPlayerDeath
+#if defined LSTY_OnPlayerDeath
+    forward LSTY_OnPlayerDeath(playerid, killerid, WEAPON:reason);
+#endif
+
+public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     if (dialogid == DIALOG_LIFE_TYPE)
     {
@@ -352,8 +430,22 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, string:inputtext[]
         }
         return 1;
     }
-    return 0;
+
+    #if defined LSTY_OnDialogResponse
+        return LSTY_OnDialogResponse(playerid, dialogid, response, listitem, inputtext);
+    #else
+        return 0;
+    #endif
 }
+#if defined _ALS_OnDialogResponse
+    #undef OnDialogResponse
+#else
+    #define _ALS_OnDialogResponse
+#endif
+#define OnDialogResponse LSTY_OnDialogResponse
+#if defined LSTY_OnDialogResponse
+    forward LSTY_OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]);
+#endif
 
 forward UpdateLifeLabels();
 public UpdateLifeLabels()

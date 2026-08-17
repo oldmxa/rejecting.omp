@@ -3,8 +3,6 @@
 #endif
 #define _achievements_included
 
-#include <YSI_Coding/y_hooks>
-
 #define ACH_CAT_GENERAL (0)
 #define ACH_CAT_UNIQUE  (1)
 
@@ -314,7 +312,7 @@ stock ResetPlayerAchievements(playerid)
     return 1;
 }
 
-hook OnGameModeInit()
+public OnGameModeInit()
 {
     for(new i = 0; i < ACH_COUNT; i++)
     {
@@ -323,21 +321,63 @@ hook OnGameModeInit()
     }
 
     SetTimer("FlushAchievementSaves", ACH_FLUSH_INTERVAL, true);
-    return 1;
-}
 
-hook OnPlayerConnect(playerid)
+    #if defined ACH_OnGameModeInit
+        return ACH_OnGameModeInit();
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnGameModeInit
+    #undef OnGameModeInit
+#else
+    #define _ALS_OnGameModeInit
+#endif
+#define OnGameModeInit ACH_OnGameModeInit
+#if defined ACH_OnGameModeInit
+    forward ACH_OnGameModeInit();
+#endif
+
+public OnPlayerConnect(playerid)
 {
     ResetPlayerAchievements(playerid);
-    return 1;
-}
 
-hook OnPlayerDisconnect(playerid, reason)
+    #if defined ACH_OnPlayerConnect
+        return ACH_OnPlayerConnect(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect ACH_OnPlayerConnect
+#if defined ACH_OnPlayerConnect
+    forward ACH_OnPlayerConnect(playerid);
+#endif
+
+public OnPlayerDisconnect(playerid, reason)
 {
     FlushPlayerAchievements(playerid);
     ResetPlayerAchievements(playerid);
-    return 1;
+
+    #if defined ACH_OnPlayerDisconnect
+        return ACH_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect ACH_OnPlayerDisconnect
+#if defined ACH_OnPlayerDisconnect
+    forward ACH_OnPlayerDisconnect(playerid, reason);
+#endif
 
 stock LoadPlayerAchievements(playerid, const achData[])
 {

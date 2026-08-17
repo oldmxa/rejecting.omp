@@ -1,5 +1,3 @@
-#include <YSI_Coding/y_hooks>
-
 new PlayerText:LoginRC[MAX_PLAYERS][17];
 new bool:IsPlayerInLogin[MAX_PLAYERS];
 new CameraLoginTimer[MAX_PLAYERS];
@@ -35,20 +33,33 @@ stock GetName(playerid)
     return name;
 }
 
-hook OnPlayerConnect(playerid)
+public OnPlayerConnect(playerid)
 {
     for(new i = 0; i < sizeof(LoginRC[]); i++)
         LoginRC[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
 
     IsPlayerInLogin[playerid] = false;
-    return 1;
-}
 
-hook OnPlayerDisconnect(playerid, reason)
+    #if defined LGIN_OnPlayerConnect
+        return LGIN_OnPlayerConnect(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect LGIN_OnPlayerConnect
+#if defined LGIN_OnPlayerConnect
+    forward LGIN_OnPlayerConnect(playerid);
+#endif
+
+public OnPlayerDisconnect(playerid, reason)
 {
     IsPlayerInLogin[playerid] = false;
     KillTimer(CameraLoginTimer[playerid]);
-
 
     for(new i=0; i < sizeof(LoginRC[]); i++)
     {
@@ -58,8 +69,22 @@ hook OnPlayerDisconnect(playerid, reason)
             LoginRC[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
         }
     }
-    return 1;
+
+    #if defined LGIN_OnPlayerDisconnect
+        return LGIN_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect LGIN_OnPlayerDisconnect
+#if defined LGIN_OnPlayerDisconnect
+    forward LGIN_OnPlayerDisconnect(playerid, reason);
+#endif
 
 forward LoginScreensMusic(playerid);
 public LoginScreensMusic(playerid)
@@ -465,20 +490,34 @@ public UpdateLoginNameTD(playerid)
     return 1;
 }
 
-hook OnPlayerClickTextDraw(playerid, Text:clickedid)
+public OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
     if(IsPlayerInLogin[playerid])
     {
         if(clickedid == INVALID_TEXT_DRAW)
         {
             SelectTextDraw(playerid, LOGIN_HOVER_COLOR);
-            return Y_HOOKS_BREAK_RETURN_1;
+            return 1;
         }
     }
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
 
-hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
+    #if defined LGIN_OnPlayerClickTextDraw
+        return LGIN_OnPlayerClickTextDraw(playerid, clickedid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerClickTextDraw
+    #undef OnPlayerClickTextDraw
+#else
+    #define _ALS_OnPlayerClickTextDraw
+#endif
+#define OnPlayerClickTextDraw LGIN_OnPlayerClickTextDraw
+#if defined LGIN_OnPlayerClickTextDraw
+    forward LGIN_OnPlayerClickTextDraw(playerid, Text:clickedid);
+#endif
+
+public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 {
     if(IsPlayerInLogin[playerid])
     {
@@ -491,5 +530,19 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
             CallLocalFunction("OnLoginTypePassword", "d", playerid);
         }
     }
-    return Y_HOOKS_CONTINUE_RETURN_1;
+
+    #if defined LGIN_OnPlayerClickPlayerTD
+        return LGIN_OnPlayerClickPlayerTD(playerid, playertextid);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerClickPlayerTD
+    #undef OnPlayerClickPlayerTextDraw
+#else
+    #define _ALS_OnPlayerClickPlayerTD
+#endif
+#define OnPlayerClickPlayerTextDraw LGIN_OnPlayerClickPlayerTD
+#if defined LGIN_OnPlayerClickPlayerTD
+    forward LGIN_OnPlayerClickPlayerTD(playerid, PlayerText:playertextid);
+#endif

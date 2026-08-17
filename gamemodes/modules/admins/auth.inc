@@ -1,6 +1,4 @@
 
-#include <YSI_Coding/y_hooks>
-
 forward GenerateAdminAuthCode(playerid);
 forward OnAdminPrivateChannelCreated(playerid, const code[]);
 forward StartAdminPasswordAuth(playerid);
@@ -308,7 +306,7 @@ public OnAdminLoginTimeout(playerid)
     return 1;
 }
 
-hook OnPlayerConnect(playerid)
+public OnPlayerConnect(playerid)
 {
     User[playerid][isAdminLogged] = false;
     User[playerid][adminAuthCode] = 0;
@@ -317,11 +315,39 @@ hook OnPlayerConnect(playerid)
     User[playerid][adminAuthAttempts] = 0;
     User[playerid][adminPass][0] = '\0';
     Admin_KillLoginTimer(playerid);
-    return 1;
-}
 
-hook OnPlayerDisconnect(playerid, reason)
+    #if defined AAUT_OnPlayerConnect
+        return AAUT_OnPlayerConnect(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect AAUT_OnPlayerConnect
+#if defined AAUT_OnPlayerConnect
+    forward AAUT_OnPlayerConnect(playerid);
+#endif
+
+public OnPlayerDisconnect(playerid, reason)
 {
     Admin_KillLoginTimer(playerid);
-    return 1;
+
+    #if defined AAUT_OnPlayerDisconnect
+        return AAUT_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect AAUT_OnPlayerDisconnect
+#if defined AAUT_OnPlayerDisconnect
+    forward AAUT_OnPlayerDisconnect(playerid, reason);
+#endif

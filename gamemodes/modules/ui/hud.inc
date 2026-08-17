@@ -262,6 +262,7 @@ stock updatePlayerHud(playerid)
 				PlayerTextDrawHide(playerid, ClanHUD[playerid][i]);
 		}
 	}
+	CallLocalFunction("CheckTrainingHudOnUpdate", "d", playerid);
 }
 
 

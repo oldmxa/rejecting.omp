@@ -3,8 +3,6 @@
 #endif
 #define _outposts_included
 
-#include <YSI_Coding/y_hooks>
-
 #define MAX_OUTPOSTS_PER_ARENA (2)
 #define OUTPOST_CAPTURE_RADIUS (45.0)
 #define OUTPOST_CAPTURE_TIME   (30)
@@ -113,26 +111,68 @@ stock Float:GetOutpostRespectMultiplier(clanid)
     return 1.0;
 }
 
-hook OnGameModeInit()
+public OnGameModeInit()
 {
     SetTimer("InitOutposts", 2000, false);
     SetTimer("CheckOutpostCapture", 1000, true);
     SetTimer("RewardOutpostOwners", OUTPOST_REWARD_TIME, true);
     SetTimer("UpdateOutpostsVisibility", 5000, true);
-    return 1;
-}
 
-hook OnPlayerConnect(playerid)
+    #if defined OUTP_OnGameModeInit
+        return OUTP_OnGameModeInit();
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnGameModeInit
+    #undef OnGameModeInit
+#else
+    #define _ALS_OnGameModeInit
+#endif
+#define OnGameModeInit OUTP_OnGameModeInit
+#if defined OUTP_OnGameModeInit
+    forward OUTP_OnGameModeInit();
+#endif
+
+public OnPlayerConnect(playerid)
 {
     HideOutpostBar(playerid);
-    return 1;
-}
 
-hook OnPlayerDisconnect(playerid, reason)
+    #if defined OUTP_OnPlayerConnect
+        return OUTP_OnPlayerConnect(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect OUTP_OnPlayerConnect
+#if defined OUTP_OnPlayerConnect
+    forward OUTP_OnPlayerConnect(playerid);
+#endif
+
+public OnPlayerDisconnect(playerid, reason)
 {
     HideOutpostBar(playerid);
-    return 1;
+
+    #if defined OUTP_OnPlayerDisconnect
+        return OUTP_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect OUTP_OnPlayerDisconnect
+#if defined OUTP_OnPlayerDisconnect
+    forward OUTP_OnPlayerDisconnect(playerid, reason);
+#endif
 
 public InitOutposts()
 {
@@ -395,7 +435,7 @@ public CheckOutpostCapture()
     return 1;
 }
 
-hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
+public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(newkeys & KEY_YES)
     {
@@ -463,8 +503,22 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             }
         }
     }
-    return 1;
+
+    #if defined OUTP_OnPlayerKeyStateChange
+        return OUTP_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerKeyStateChange
+    #undef OnPlayerKeyStateChange
+#else
+    #define _ALS_OnPlayerKeyStateChange
+#endif
+#define OnPlayerKeyStateChange OUTP_OnPlayerKeyStateChange
+#if defined OUTP_OnPlayerKeyStateChange
+    forward OUTP_OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys);
+#endif
 
 ShowOutpostBar(playerid)
 {

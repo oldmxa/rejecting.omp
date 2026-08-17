@@ -1,7 +1,6 @@
 //Global
 
 new PlayerText:DeathInfo[MAX_PLAYERS][2];
-new PlayerText:InfoStats[MAX_PLAYERS][4];
 new PlayerText:killsandexp[MAX_PLAYERS];
 new PlayerText:killsandexpii[MAX_PLAYERS];
 new PlayerText:speedometer[MAX_PLAYERS];
@@ -327,51 +326,6 @@ playertextdraws(playerid)
 	PlayerTextDrawAlignment(playerid, DeathInfo[playerid][1], TEXT_DRAW_ALIGN_CENTRE);
 	PlayerTextDrawColor(playerid, DeathInfo[playerid][1], -1);
 	PlayerTextDrawBackgroundColor(playerid, DeathInfo[playerid][1], MAIN_BACKGROUND_COLOUR);
-
-	InfoStats[playerid][0] = CreatePlayerTextDraw(playerid, 3.200005, 390.257629, "_"); //hud esquerda
-	PlayerTextDrawFont(playerid, InfoStats[playerid][0], TEXT_DRAW_FONT_1);
-	PlayerTextDrawLetterSize(playerid, InfoStats[playerid][0], 0.180000, 0.799998);
-	PlayerTextDrawTextSize(playerid, InfoStats[playerid][0], 1280.000000, 1280.000000);
-	PlayerTextDrawSetProportional(playerid, InfoStats[playerid][0], true);
-	PlayerTextDrawSetOutline(playerid, InfoStats[playerid][0], 1);
-	PlayerTextDrawSetShadow(playerid, InfoStats[playerid][0], 0);
-	PlayerTextDrawAlignment(playerid, InfoStats[playerid][0], TEXT_DRAW_ALIGN_LEFT);
-	PlayerTextDrawColor(playerid, InfoStats[playerid][0], -1);
-	PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][0], MAIN_BACKGROUND_COLOUR);
-
-	#if !defined GANG
-		InfoStats[playerid][1] = CreatePlayerTextDraw(playerid, 625.767273, 397.214905, "_"); //hud direita
-		PlayerTextDrawFont(playerid, InfoStats[playerid][1], TEXT_DRAW_FONT_1);
-		PlayerTextDrawLetterSize(playerid, InfoStats[playerid][1], 0.216999, 0.766222);
-		PlayerTextDrawTextSize(playerid, InfoStats[playerid][1], 1280.000000, 1280.000000);
-		PlayerTextDrawSetProportional(playerid, InfoStats[playerid][1], true);
-		PlayerTextDrawSetOutline(playerid, InfoStats[playerid][1], 1);
-		PlayerTextDrawSetShadow(playerid, InfoStats[playerid][1], 0);
-		PlayerTextDrawAlignment(playerid, InfoStats[playerid][1], TEXT_DRAW_ALIGN_RIGHT);
-		PlayerTextDrawColor(playerid, InfoStats[playerid][1], -1);
-		PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][1], MAIN_BACKGROUND_COLOUR);
-	#else
-		InfoStats[playerid][1] = CreatePlayerTextDraw(playerid, 625.767273, 385.000000, "_");
-		PlayerTextDrawFont(playerid, InfoStats[playerid][1], TEXT_DRAW_FONT_1);
-		PlayerTextDrawLetterSize(playerid, InfoStats[playerid][1], 0.216999, 0.766222);
-		PlayerTextDrawTextSize(playerid, InfoStats[playerid][1], 1280.000000, 1280.000000);
-		PlayerTextDrawSetProportional(playerid, InfoStats[playerid][1], true);
-		PlayerTextDrawSetOutline(playerid, InfoStats[playerid][1], 1);
-		PlayerTextDrawSetShadow(playerid, InfoStats[playerid][1], 0);
-		PlayerTextDrawAlignment(playerid, InfoStats[playerid][1], TEXT_DRAW_ALIGN_RIGHT);
-		PlayerTextDrawColor(playerid, InfoStats[playerid][1], -1);
-		PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][1], MAIN_BACKGROUND_COLOUR);
-	#endif
-
-	InfoStats[playerid][2] = CreatePlayerTextDraw(playerid, 578.000000, 56.000000, "_"); 
-	PlayerTextDrawFont(playerid, InfoStats[playerid][2], TEXT_DRAW_FONT_1);
-	PlayerTextDrawLetterSize(playerid, InfoStats[playerid][2], 0.180000, 0.800000);
-	PlayerTextDrawSetProportional(playerid, InfoStats[playerid][2], true);
-	PlayerTextDrawSetShadow(playerid, InfoStats[playerid][2], 0);
-	PlayerTextDrawSetOutline(playerid, InfoStats[playerid][2], 1);
-	PlayerTextDrawAlignment(playerid, InfoStats[playerid][2], TEXT_DRAW_ALIGN_CENTRE);
-	PlayerTextDrawColor(playerid, InfoStats[playerid][2], -1);
-	PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][2], MAIN_BACKGROUND_COLOUR);
 
 	InfoStats[playerid][3] = CreatePlayerTextDraw(playerid, 569.0, 99.000000, "PROTECT ON");
 	PlayerTextDrawFont(playerid, InfoStats[playerid][3], TEXT_DRAW_FONT_1);

@@ -3,18 +3,30 @@
 #endif
 #define _duel2v2_core_included
 
-#include <YSI_Coding/y_hooks>
-
-hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
+public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     if(IsPlayerInDuel2v2(playerid))
     {
         OnDuel2v2DeathCheck(playerid, killerid);
     }
-    return 1;
-}
 
-hook OnPlayerDisconnect(playerid, reason)
+    #if defined D2C_OnPlayerDeath
+        return D2C_OnPlayerDeath(playerid, killerid, reason);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerDeath
+    #undef OnPlayerDeath
+#else
+    #define _ALS_OnPlayerDeath
+#endif
+#define OnPlayerDeath D2C_OnPlayerDeath
+#if defined D2C_OnPlayerDeath
+    forward D2C_OnPlayerDeath(playerid, killerid, WEAPON:reason);
+#endif
+
+public OnPlayerDisconnect(playerid, reason)
 {
     if(IsPlayerInDuel2v2(playerid))
     {
@@ -29,38 +41,86 @@ hook OnPlayerDisconnect(playerid, reason)
         g_PlayerDuel2v2ID[playerid] = -1;
         g_PlayerDuel2v2Team[playerid] = -1;
     }
-    return 1;
+
+    #if defined D2C_OnPlayerDisconnect
+        return D2C_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect D2C_OnPlayerDisconnect
+#if defined D2C_OnPlayerDisconnect
+    forward D2C_OnPlayerDisconnect(playerid, reason);
+#endif
 
-hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
+public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-    if(hittype != BULLET_HIT_TYPE_PLAYER) return 1;
-    if(!IsPlayerInDuel2v2(playerid) || !IsPlayerInDuel2v2(hitid)) return 1;
-    if(g_PlayerDuel2v2ID[playerid] != g_PlayerDuel2v2ID[hitid]) return 1;
-
-    if(g_PlayerDuel2v2Team[playerid] == g_PlayerDuel2v2Team[hitid]) return 0;
-    if(!IsDuel2v2PlayerAlive(playerid) || !IsDuel2v2PlayerAlive(hitid)) return 0;
-
-    return 1;
-}
-
-hook OnPlayerSpawn(playerid)
-{
-    if(!IsPlayerInDuel2v2(playerid)) return 1;
-
-    new matchid = g_PlayerDuel2v2ID[playerid];
-    if(matchid < 0 || matchid >= MAX_DUELS_2V2 || !g_Duel2v2Data[matchid][d2_Active]) return 1;
-
-    switch(g_Duel2v2Data[matchid][d2_State])
+    if(hittype == BULLET_HIT_TYPE_PLAYER)
     {
-        case DUEL2V2_STATE_PREPARING:
+        if(IsPlayerInDuel2v2(playerid) && IsPlayerInDuel2v2(hitid))
         {
-            ApplyDuel2v2RoundSpawn(playerid);
-        }
-        case DUEL2V2_STATE_ACTIVE, DUEL2V2_STATE_ROUND_END:
-        {
-            ApplyDuel2v2DeadSpawn(playerid);
+            if(g_PlayerDuel2v2ID[playerid] == g_PlayerDuel2v2ID[hitid])
+            {
+                if(g_PlayerDuel2v2Team[playerid] == g_PlayerDuel2v2Team[hitid]) return 0;
+                if(!IsDuel2v2PlayerAlive(playerid) || !IsDuel2v2PlayerAlive(hitid)) return 0;
+            }
         }
     }
-    return 1;
+
+    #if defined D2C_OnPlayerWeaponShot
+        return D2C_OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, fX, fY, fZ);
+    #else
+        return 1;
+    #endif
 }
+#if defined _ALS_OnPlayerWeaponShot
+    #undef OnPlayerWeaponShot
+#else
+    #define _ALS_OnPlayerWeaponShot
+#endif
+#define OnPlayerWeaponShot D2C_OnPlayerWeaponShot
+#if defined D2C_OnPlayerWeaponShot
+    forward D2C_OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ);
+#endif
+
+public OnPlayerSpawn(playerid)
+{
+    if(IsPlayerInDuel2v2(playerid))
+    {
+        new matchid = g_PlayerDuel2v2ID[playerid];
+        if(matchid >= 0 && matchid < MAX_DUELS_2V2 && g_Duel2v2Data[matchid][d2_Active])
+        {
+            switch(g_Duel2v2Data[matchid][d2_State])
+            {
+                case DUEL2V2_STATE_PREPARING:
+                {
+                    ApplyDuel2v2RoundSpawn(playerid);
+                }
+                case DUEL2V2_STATE_ACTIVE, DUEL2V2_STATE_ROUND_END:
+                {
+                    SetPlayerVirtualWorld(playerid, DUEL2V2_VW_BASE + matchid);
+                }
+            }
+        }
+    }
+
+    #if defined D2C_OnPlayerSpawn
+        return D2C_OnPlayerSpawn(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerSpawn
+    #undef OnPlayerSpawn
+#else
+    #define _ALS_OnPlayerSpawn
+#endif
+#define OnPlayerSpawn D2C_OnPlayerSpawn
+#if defined D2C_OnPlayerSpawn
+    forward D2C_OnPlayerSpawn(playerid);
+#endif
