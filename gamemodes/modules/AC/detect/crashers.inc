@@ -60,12 +60,13 @@ static AC_CountCallback(playerid, callback)
 
     if (++ACCallbackHits[playerid][callback] < AC_CB_LIMIT[callback][1]) return 1;
 
+    new hits = ACCallbackHits[playerid][callback], elapsed = tick - ACCallbackTick[playerid][callback];
+
     ACCallbackHits[playerid][callback] = 0;
     ACCallbackTick[playerid][callback] = tick;
 
     AC_Debug(playerid, AC_CALLBACK_FLOOD, "callback %d flood (%d in %dms, limit %d in %dms)",
-        callback, ACCallbackHits[playerid][callback], tick - ACCallbackTick[playerid][callback],
-        AC_CB_LIMIT[callback][1], AC_CB_LIMIT[callback][0]);
+        callback, hits, elapsed, AC_CB_LIMIT[callback][1], AC_CB_LIMIT[callback][0]);
 
     CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_CALLBACK_FLOOD);
     return 1;
