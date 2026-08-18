@@ -342,7 +342,7 @@ stock GetCustomClockString(hud_type, timestamp = 0, utc = -3, bool:is_pt_br = tr
         case HUD_UNDERLINE:
             string[0] = '\0';
         case HUD_REJECTING_01:
-            format(string, sizeof(string), "REJECTING_DEATHMATCH~n~%02d.%02d.%04d - %02d:%02d", day, month, year, hour, minute);
+            format(string, sizeof(string), "RLOW_DEATHMATCH~n~%02d.%02d.%04d - %02d:%02d", day, month, year, hour, minute);
         default:
             format(string, sizeof(string), "%02d.%02d.%04d - %02d:%02d", day, month, year, hour, minute);
     }
