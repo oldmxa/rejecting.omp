@@ -1085,6 +1085,9 @@ DSLASH:banr2(user, params[])
 	if(sscanf(params, "r", targetid))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, /banr2 [id].", username));
 
+	if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+		return SendDiscordResponse(comandos, sprintf(" **%s**, the player is not online!", username));
+
 	if(!strequal(User[targetid][playerVersion], "0.3.7"))
 			return SendDiscordResponse(comandos, sprintf(" **%s**, this player already plays with R2+.", username));
 

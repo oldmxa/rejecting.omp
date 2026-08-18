@@ -103,7 +103,8 @@ public OnPlayerSpawn(playerid)
                 }
                 case DUEL2V2_STATE_ACTIVE, DUEL2V2_STATE_ROUND_END:
                 {
-                    SetPlayerVirtualWorld(playerid, DUEL2V2_VW_BASE + matchid);
+                    if(IsDuel2v2PlayerAlive(playerid)) SetPlayerVirtualWorld(playerid, DUEL2V2_VW_BASE + matchid);
+                    else ApplyDuel2v2DeadSpawn(playerid);
                 }
             }
         }
