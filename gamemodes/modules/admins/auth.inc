@@ -103,10 +103,11 @@ stock ShowAdminAuthMethodDialog(playerid)
     new title[64] = "{MAIN}Admin Auth Method";
     format_MainColor(playerid, title);
 
-    new body[256];
-    strcat(body, "Method\tDescription\n");
-    strcat(body, "Code (Discord DM)\tReceive a 6-digit code via Discord DM (/alogin)\n");
-    strcat(body, "Password (Login)\tAuthenticate using an Admin Password on join");
+    new body[320];
+    strcat(body, "{MAIN}Method\t{MAIN}Description\n");
+    strcat(body, "{FFFFFF}\\x95 {B4B5B7}Code (Discord DM)\t{FFFFFF}Receive a 6-digit code via Discord DM (/alogin)\n");
+    strcat(body, "{FFFFFF}\\x95 {B4B5B7}Password (Login)\t{FFFFFF}Authenticate using an Admin Password on join");
+    format_MainColor(playerid, body);
 
     Dialog_ShowCallback(playerid, using public DIALOG_ADMIN_AUTH_SELECT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
@@ -145,7 +146,7 @@ stock ShowCreateAdminPasswordDialog(playerid)
     format_MainColor(playerid, title);
 
     new body[280];
-    format(body, sizeof(body), "{FFFFFF}Enter a secure password for your Administrator account below:\n\n{B4B5B7}Note: This password will be required every time you join the server.");
+    format(body, sizeof(body), "{FFFFFF}Enter a secure password for your Administrator account below:\n\n{FFFFFF}\\x95 {B4B5B7}Note: This password will be required every time you join the server.");
 
     Dialog_ShowCallback(playerid, using public DIALOG_CREATE_ADMIN_PASS<iiiis>, DIALOG_STYLE_PASSWORD, title, body, "Save", "Cancel");
     return 1;
@@ -218,7 +219,7 @@ stock ShowAdminPasswordDialog(playerid)
     format_MainColor(playerid, title);
 
     new body[280];
-    format(body, sizeof(body), "{FFFFFF}Welcome back, Admin %s.\n\nPlease enter your Admin Password below to log in as Administrator:\n\n{FF0000}Note: You have 30 seconds to enter your password or you will be kicked.", User[playerid][userName]);
+    format(body, sizeof(body), "{FFFFFF}Welcome back, Admin %s.\n\nPlease enter your Admin Password below to log in as Administrator:\n\n{FFFFFF}\\x95 {FF0000}Note: You have 30 seconds to enter your password or you will be kicked.", User[playerid][userName]);
 
     Dialog_ShowCallback(playerid, using public DIALOG_ADMIN_LOGIN_PASS<iiiis>, DIALOG_STYLE_PASSWORD, title, body, "Login", "Disconnect");
     return 1;

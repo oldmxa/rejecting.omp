@@ -27,8 +27,8 @@ new const HUD_TYPES[MAX_HUD_TYPES][] =
 };
 
 static const g_monthNameTD[13][7] = {
-    "zero", "Jan.", "Feb.", "Mar.", "Apr.", "May", "June",
-    "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."
+    "zero", "Jan", "Feb", "Mar", "Apr", "May", "June",
+    "July", "Aug", "Sept", "Oct", "Nov", "Dec"
 };
 
 stock getDateStrTDInfo(const primary_col[], const secondary_col[])
