@@ -364,7 +364,7 @@ public LookupOfflineStats(playerid, const targetName[])
 
     new query[512];
     mysql_format(dbHandle, query, sizeof(query),
-        "SELECT a.*, c.clan_name, c.clan_tag, c.clan_color, c.clan_points, c.clan_kills \
+        "SELECT a.*, c.clan_name, c.clan_tag, c.clan_color, c.clan_zone_points, c.clan_kills \
         FROM `accounts` a \
         LEFT JOIN `clans` c ON a.clanid = c.clan_id \
         WHERE a.`username` = '%e' LIMIT 1", targetName);
@@ -432,7 +432,7 @@ public LookupOfflineStats(playerid, const targetName[])
             cache_get_value_name(0, "clan_name", off_clan_name, sizeof(off_clan_name));
             cache_get_value_name(0, "clan_tag", off_clan_tag, sizeof(off_clan_tag));
             cache_get_value_name_int(0, "clan_color", off_clan_color);
-            cache_get_value_name_int(0, "clan_points", off_clan_pts);
+            cache_get_value_name_int(0, "clan_zone_points", off_clan_pts);
             cache_get_value_name_int(0, "clan_kills", off_clan_kills);
         }
 
