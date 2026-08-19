@@ -85,7 +85,7 @@
     if (sscanf(params, "us[128]", targetid, reason))
         return SendClientMessage(playerid, -1, ADM_TAG_NORM"/setlounge [id] [reason]");
 
-    if (!IsPlayerConnected(targetid))
+    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (targetid == playerid)

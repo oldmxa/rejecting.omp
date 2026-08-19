@@ -316,6 +316,9 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
 
 @cmd(.alts = {"leavesafe"}) exitsafehouse(playerid, params[], help)
 {
+    if (!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     if (!IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
         return SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You are not inside a safehouse.");
 
@@ -330,6 +333,8 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
 
     if (!IsSafehouseAdmin(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need Admin Level 5 or RCON to use this command.");
+
+    CheckAdminAuth(playerid);
 
     new index = -1;
     if (isnull(params))

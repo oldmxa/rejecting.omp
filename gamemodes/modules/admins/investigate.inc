@@ -231,7 +231,7 @@ stock ShowNameHistory(playerid, targetid, page = 0)
     CheckAdminAuth(playerid);
     new targetid;
     if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/inject [id/name]");
-    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
     if(!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be in a vehicle.");
     
@@ -249,7 +249,7 @@ stock ShowNameHistory(playerid, targetid, page = 0)
     CheckAdminAuth(playerid);
     new targetid;
     if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/eject [id] ou /ejetar [id]");
-    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
     if(!IsPlayerInAnyVehicle(targetid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The player is not in a vehicle.");
     

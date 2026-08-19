@@ -611,11 +611,13 @@ public DIALOG_AC_HISTORY(playerid, dialogid, response, listitem, string:inputtex
     if (User[playerid][adminLevel] < 2)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
+    CheckAdminAuth(playerid);
+
     new targetid;
     if (sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/acinfo [id/nick]");
 
-    if (!IsPlayerConnected(targetid))
+    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     return ShowACPlayer(playerid, targetid);
@@ -625,6 +627,8 @@ public DIALOG_AC_HISTORY(playerid, dialogid, response, listitem, string:inputtex
 {
     if (User[playerid][adminLevel] < AC_MIN_ADMIN_LEVEL)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
 
     return AC_ToggleVerbose(playerid);
 }

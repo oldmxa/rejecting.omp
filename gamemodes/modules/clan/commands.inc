@@ -5,7 +5,7 @@
 
 @cmd() createclan(playerid, params[], help)
 {
-    if (!IsPlayerConnected(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (User[playerid][clanID] != -1) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
     if (User[playerid][playerMoney] < CLAN_PRICE) return SendClientMessage(playerid, -1, "%s", CLAN_NOMONEY);
 
@@ -43,6 +43,7 @@
 
 @cmd() clan(playerid, params[], help)
 {
+    if (!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (User[playerid][clanID] == -1) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
 
     new option[10], value[10];
@@ -155,7 +156,7 @@
 
 @cmd(.alts = {"clanslist"}) clans(playerid, params[], help)
 {
-    if (!IsPlayerConnected(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     ShowClansListDialog(playerid);
     return 1;
@@ -163,6 +164,8 @@
 
 @cmd() territories(playerid, params[], help)
 {
+    if (!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     SetPVarInt(playerid, "terr_page", 0);
     ShowTerritories(playerid);
     return 1;
@@ -170,6 +173,8 @@
 
 @cmd() clancmds(playerid, params[], help)
 {
+    if (!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
     new title[64] = "{MAIN}Clan Commands";
     format_MainColor(playerid, title);
 
