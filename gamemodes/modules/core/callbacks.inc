@@ -1258,6 +1258,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandPerformed(playerid, cmdtext[], e_COMMAND_
 
 public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
+	if(!User[playerid][isLogged]) return 1;
+
 	if(PRESSED(KEY_SECONDARY_ATTACK) || PRESSED(KEY_JUMP) || PRESSED(KEY_SUBMISSION))
 	{
 		if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK)
