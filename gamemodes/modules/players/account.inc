@@ -107,10 +107,10 @@ ShowMyAccountMenu(playerid)
     format_MainColor(playerid, title);
 
     format(accStr, sizeof(accStr), "{MAIN}Option\t{MAIN}Description\n");
-    strcat(accStr, "{B4B5B7}Settings\t{FFFFFF}Configure preferences, sound & HUD toggles\n");
-    strcat(accStr, "{B4B5B7}Personalization\t{FFFFFF}Customize skin, hitmark, colors & sounds\n");
-    strcat(accStr, "{B4B5B7}My Stats\t{FFFFFF}View your detailed account statistics\n");
-    strcat(accStr, "{B4B5B7}Discord ID\t{FFFFFF}View your linked Discord ID & status");
+    strcat(accStr, "{MAIN}\xBB {B4B5B7}Settings\t{FFFFFF}Configure preferences, sound & HUD toggles\n");
+    strcat(accStr, "{MAIN}\xBB {B4B5B7}Personalization\t{FFFFFF}Customize skin, hitmark, colors & sounds\n");
+    strcat(accStr, "{MAIN}\xBB {B4B5B7}My Stats\t{FFFFFF}View your detailed account statistics\n");
+    strcat(accStr, "{MAIN}\xBB {B4B5B7}Discord ID\t{FFFFFF}View your linked Discord ID & status");
     format_MainColor(playerid, accStr);
 
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_MYACCOUNT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, accStr, "Select", "Back");
@@ -124,29 +124,29 @@ ShowSecurityMenu(playerid)
 
     new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
 
-    format(secStr, sizeof(secStr), "%s{B4B5B7}Account Password\t{FFFFFF}Change Password\n", secStr);
+    format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Account Password\t{FFFFFF}Change Password\n", secStr);
 
     if(User[playerid][adminLevel] > 0)
     {
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Admin Auth Method\t%s\n", secStr, (User[playerid][adminAuthType] == 1) ? ("{23C552}Password (Login)") : ("{7289DA}Code (Discord)"));
+        format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Admin Auth Method\t%s\n", secStr, (User[playerid][adminAuthType] == 1) ? ("{23C552}Password (Login)") : ("{7289DA}Code (Discord)"));
     }
 
     if(isLinked)
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t%s\n", secStr, (User[playerid][autoLogin]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Auto-Login (IP & Serial)\t%s\n", secStr, (User[playerid][autoLogin]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
     else
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t{BEBEBE}Requires Linked Discord\n", secStr);
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Auto-Login (IP & Serial)\t{BEBEBE}Requires Linked Discord\n", secStr);
 
     if(isLinked)
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{7289DA}%s#%s\n", secStr, User[playerid][dc_username], User[playerid][dc_discriminator]);
+        format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Discord Account\t{7289DA}%s#%s\n", secStr, User[playerid][dc_username], User[playerid][dc_discriminator]);
     else
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{F84F31}Not Linked\n", secStr);
+        format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Discord Account\t{F84F31}Not Linked\n", secStr);
 
     if(isLinked && User[playerid][autoLogin])
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}Maximum Protected\n", secStr);
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{23C552}Maximum Protected\n", secStr);
     else if(isLinked)
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}High Discord Verified\n", secStr);
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{23C552}High Discord Verified\n", secStr);
     else
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{F84F31}Basic Unverified\n", secStr);
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{F84F31}Basic Unverified\n", secStr);
 
     new title[64] = "{MAIN}Security Settings";
     format_MainColor(playerid, title);
@@ -163,11 +163,11 @@ ShowSettingsMenu(playerid)
     format_MainColor(playerid, title);
 
     format(setStr, sizeof(setStr), "{MAIN}Option\t{MAIN}Status / Value\n");
-    strcat(setStr, "{B4B5B7}Change Nickname\t \n");
-    strcat(setStr, "{B4B5B7}Change Password\t \n");
-    strcat(setStr, fmat_return("{B4B5B7}Private Messages\t%s\n", (User[playerid][blockPM]) ? ("{F84F31}Blocked") : ("{23C552}Allowed")));
-    strcat(setStr, fmat_return("{B4B5B7}Connect Messages\t%s\n", (User[playerid][showConnectMsg]) ? ("{23C552}Visible") : ("{F84F31}Hidden")));
-    strcat(setStr, fmat_return("{B4B5B7}Global Broadcasts\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible")));
+    strcat(setStr, "{MAIN}\xBB {B4B5B7}Change Nickname\t \n");
+    strcat(setStr, "{MAIN}\xBB {B4B5B7}Change Password\t \n");
+    strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Private Messages\t%s\n", (User[playerid][blockPM]) ? ("{F84F31}Blocked") : ("{23C552}Allowed")));
+    strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Connect Messages\t%s\n", (User[playerid][showConnectMsg]) ? ("{23C552}Visible") : ("{F84F31}Hidden")));
+    strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Global Broadcasts\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible")));
     format_MainColor(playerid, setStr);
 
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_SETTINGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, setStr, "Select", "Back");
@@ -269,13 +269,13 @@ ShowPersonalizationMenu(playerid)
     new pStr[2048];
     format(pStr, sizeof(pStr), "{MAIN}Preference\t{MAIN}Status / Value\n");
 
-    format(pStr, sizeof(pStr), "%s{B4B5B7}World Time\t{FFFFFF}%02d:00\n", pStr, User[playerid][time]);
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Weather ID\t{FFFFFF}%d\n", pStr, User[playerid][weather]);
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Player HUD\t%s\n", pStr, (User[playerid][showPlayerHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Clan HUD\t%s\n", pStr, (User[playerid][showClanHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}World Time\t{FFFFFF}%02d:00\n", pStr, User[playerid][time]);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Weather ID\t{FFFFFF}%d\n", pStr, User[playerid][weather]);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Player HUD\t%s\n", pStr, (User[playerid][showPlayerHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Clan HUD\t%s\n", pStr, (User[playerid][showClanHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
 
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Damage Informer\t{447DBF}%s\n", pStr, GetDamageStyleName(User[playerid][dmgInformerStyle]));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Hitmarker Color\t{%06x}######\n", pStr, (User[playerid][hitmarkColor] >>> 8));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Informer\t{447DBF}%s\n", pStr, GetDamageStyleName(User[playerid][dmgInformerStyle]));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hitmarker Color\t{%06x}######\n", pStr, (User[playerid][hitmarkColor] >>> 8));
 
     new hudIdx = GetPlayerHudColorIndex(playerid);
 
@@ -289,19 +289,19 @@ ShowPersonalizationMenu(playerid)
     GetPlayerChatIDColorHex(playerid, idHex);
     GetPlayerChatTextColorHex(playerid, textHex);
 
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Interface Color\t{%s}%s\n", pStr, GetColorHexTag(hudPersonalization[hudIdx][colorOne]), name);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Interface Color\t{%s}%s\n", pStr, GetColorHexTag(hudPersonalization[hudIdx][colorOne]), name);
 
     new shadeOne = GetPlayerShadeIndex(playerid, false), shadeTwo = GetPlayerShadeIndex(playerid, true);
 
-    if(shadeOne == -1) format(pStr, sizeof(pStr), "%s{B4B5B7}Primary Color\t{BEBEBE}Interface preset\n", pStr);
-    else format(pStr, sizeof(pStr), "%s{B4B5B7}Primary Color\t{%06x}%s\n", pStr, hudShades[shadeOne][shadeHex], hudShades[shadeOne][shadeName]);
+    if(shadeOne == -1) format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Primary Color\t{BEBEBE}Interface preset\n", pStr);
+    else format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Primary Color\t{%06x}%s\n", pStr, hudShades[shadeOne][shadeHex], hudShades[shadeOne][shadeName]);
 
-    if(shadeTwo == -1) format(pStr, sizeof(pStr), "%s{B4B5B7}Secondary Color\t{BEBEBE}Interface preset\n", pStr);
-    else format(pStr, sizeof(pStr), "%s{B4B5B7}Secondary Color\t{%06x}%s\n", pStr, hudShades[shadeTwo][shadeHex], hudShades[shadeTwo][shadeName]);
+    if(shadeTwo == -1) format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Secondary Color\t{BEBEBE}Interface preset\n", pStr);
+    else format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Secondary Color\t{%06x}%s\n", pStr, hudShades[shadeTwo][shadeHex], hudShades[shadeTwo][shadeName]);
 
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Chat Color\t{%s}ID: #%s {FFFFFF}/ {%s}Text: #%s\n", pStr, idHex, idHex, textHex, textHex);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Chat Color\t{%s}ID: #%s {FFFFFF}/ {%s}Text: #%s\n", pStr, idHex, idHex, textHex, textHex);
 
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", pStr, GetPlayerSkin(playerid));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", pStr, GetPlayerSkin(playerid));
 
     new fightName[16] = "Normal";
     for(new i = 0; i < sizeof(fightStyles); i++)
@@ -312,23 +312,23 @@ ShowPersonalizationMenu(playerid)
             break;
         }
     }
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Fighting Style\t{FFFFFF}%s\n", pStr, fightName);
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Weapon Set\t{FFFFFF}Change\n", pStr);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Fighting Style\t{FFFFFF}%s\n", pStr, fightName);
+    format(pStr, sizeof(pStr), "%s{MAIN}\xBB {B4B5B7}Weapon Set\t{FFFFFF}Change\n", pStr);
 
     new hudTypeIdx = User[playerid][hudType];
     if(hudTypeIdx < 0 || hudTypeIdx >= MAX_HUD_TYPES) hudTypeIdx = HUD_REJECTING;
 
-    format(pStr, sizeof(pStr), "%s{B4B5B7}HUD Style\t{FFFFFF}%s\n", pStr, HUD_TYPES[hudTypeIdx]);
-    format(pStr, sizeof(pStr), "%s{B4B5B7}3D Death Tag\t%s\n", pStr, (User[playerid][show3DDeathTag]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Random Death Tags\t%s\n", pStr, (User[playerid][showRandomDeathTags]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Headshot Text\t%s\n", pStr, (User[playerid][showHeadshot]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Hit Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID]));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Kill Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][killSoundID], GetSoundName(User[playerid][killSoundID]));
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Welcome Messages\t%s\n", pStr, (User[playerid][hideWelcomeMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}HUD Style\t{FFFFFF}%s\n", pStr, HUD_TYPES[hudTypeIdx]);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}3D Death Tag\t%s\n", pStr, (User[playerid][show3DDeathTag]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Random Death Tags\t%s\n", pStr, (User[playerid][showRandomDeathTags]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Headshot Text\t%s\n", pStr, (User[playerid][showHeadshot]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hit Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID]));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Kill Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][killSoundID], GetSoundName(User[playerid][killSoundID]));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Welcome Messages\t%s\n", pStr, (User[playerid][hideWelcomeMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));
 
     new lifeName[24];
     GetLifeStyleName(User[playerid][lifeType], lifeName);
-    format(pStr, sizeof(pStr), "%s{B4B5B7}Life Style\t{FFFFFF}%s", pStr, lifeName);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Life Style\t{FFFFFF}%s", pStr, lifeName);
 
     new pTitle[64] = "{MAIN}Personalization Menu";
     format_MainColor(playerid, pTitle);
