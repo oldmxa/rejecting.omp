@@ -420,14 +420,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if (User[playerid][lifeType] == listitem)
             {
                 SendClientMessage(playerid, -1, fmat_return("{MAIN}[LIFE] {FFFFFF}You are already using the {MAIN}%s{FFFFFF} style.", LifeStyle[listitem][lsLabel]));
-                return 1;
             }
-
-            User[playerid][lifeType] = listitem;
-            ApplyLifeStyle(playerid);
-
-            SendClientMessage(playerid, -1, fmat_return("{MAIN}[LIFE] {FFFFFF}Life style set to: {MAIN}%s", LifeStyle[listitem][lsLabel]));
+            else
+            {
+                User[playerid][lifeType] = listitem;
+                ApplyLifeStyle(playerid);
+                SendClientMessage(playerid, -1, fmat_return("{MAIN}[LIFE] {FFFFFF}Life style set to: {MAIN}%s", LifeStyle[listitem][lsLabel]));
+            }
         }
+        ShowPersonalizationMenu(playerid);
         return 1;
     }
 

@@ -211,7 +211,7 @@ stock format_MainColor(playerid, string[], len = sizeof(string))
     return 1;
 }
 
-strtoupper(const string[])
+stock strtoupper(const string[])
 {
 	new upperString[256];
 	new len = strlen(string);
@@ -226,7 +226,7 @@ strtoupper(const string[])
 	return upperString;
 }
 
-strtodown(const string[])
+stock strtodown(const string[])
 {
 	new lowerString[512];
 	new len = strlen(string);

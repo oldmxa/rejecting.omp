@@ -35,39 +35,9 @@ Respawn(playerid, timestamp)
     return true;
 }
 
-ShowMenu(playerid)
+stock ShowMenu(playerid)
 {
-    new strb[1536];
-
-    // Header
-    format(strb, sizeof(strb), "{F3230E}Preference\t{F3230E}Status / Value\n");
-    
-
-    format(strb, sizeof(strb), "%s{B4B5B7}World Time\t{FFFFFF}%02d:00\n", strb, User[playerid][time]);
-    format(strb, sizeof(strb), "%s{B4B5B7}Weather ID\t{FFFFFF}%d\n", strb, User[playerid][weather]);
-    format(strb, sizeof(strb), "%s{B4B5B7}Player HUD\t%s\n", strb, (User[playerid][showPlayerHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
-    format(strb, sizeof(strb), "%s{B4B5B7}Damage Informer\t{447DBF}%s\n", strb, GetDamageStyleName(User[playerid][dmgInformerStyle]));
-    format(strb, sizeof(strb), "%s{B4B5B7}Hitmarker Color\t{%06x}######\n", strb, (User[playerid][hitmarkColor] >>> 8));
-    format(strb, sizeof(strb), "%s{B4B5B7}Interface Color\t"COL_WHITE"%s\n", strb, strtoupper(hudPersonalization[GetPlayerHudColorIndex(playerid)][lineInfo]));
-
-    new shadeOne = GetPlayerShadeIndex(playerid, false), shadeTwo = GetPlayerShadeIndex(playerid, true);
-
-    if(shadeOne == -1) format(strb, sizeof(strb), "%s{B4B5B7}Primary Color\t{BEBEBE}Interface preset\n", strb);
-    else format(strb, sizeof(strb), "%s{B4B5B7}Primary Color\t{%06x}%s\n", strb, hudShades[shadeOne][shadeHex], hudShades[shadeOne][shadeName]);
-
-    if(shadeTwo == -1) format(strb, sizeof(strb), "%s{B4B5B7}Secondary Color\t{BEBEBE}Interface preset\n", strb);
-    else format(strb, sizeof(strb), "%s{B4B5B7}Secondary Color\t{%06x}%s\n", strb, hudShades[shadeTwo][shadeHex], hudShades[shadeTwo][shadeName]);
-
-    new idHexM[7], textHexM[7];
-    GetPlayerChatIDColorHex(playerid, idHexM);
-    GetPlayerChatTextColorHex(playerid, textHexM);
-    format(strb, sizeof(strb), "%s{B4B5B7}Chat Color\t{%s}ID: #%s {FFFFFF}/ {%s}Text: #%s\n", strb, idHexM, idHexM, textHexM, textHexM);
-
-    format(strb, sizeof(strb), "%s{B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", strb, GetPlayerSkin(playerid));
-    format(strb, sizeof(strb), "%s{B4B5B7}Fighting Style\t{FFFFFF}ID:%d\n", strb, _:User[playerid][fightStyle]);
-    format(strb, sizeof(strb), "%s{B4B5B7}Weapon Set\t{FFFFFF}Change", strb);
-
-    Dialog_ShowCallback(playerid, using public DIALOG_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{F3230E}Settings Menu", strb, "Confirm", "Exit");
+    return ShowPersonalizationMenu(playerid);
 }
 
 ShowAdminConfig(playerid)
@@ -205,7 +175,7 @@ ShowAdminConfig(playerid)
 
 ShowStats(playerid, targetid)
 {
-    new strstts[3500], sampVERSION[24], ontime = (User[targetid][totalOnTime]+(gettime()-User[targetid][loginTime]));
+    new strstts[4096], sampVERSION[24], ontime = (User[targetid][totalOnTime]+(gettime()-User[targetid][loginTime]));
     GetPlayerVersion(targetid, sampVERSION, sizeof(sampVERSION));
 
     if(ontime < 0) ontime = 0;
@@ -222,6 +192,22 @@ ShowStats(playerid, targetid)
     if(isnull(User[targetid][user_regdate])) format(regdate_str, sizeof(regdate_str), "{BEBEBE}N/A");
     else format(regdate_str, sizeof(regdate_str), "{FFFFFF}%s", User[targetid][user_regdate]);
 
+    new fightStyleName[16] = "Normal";
+    for(new i = 0; i < sizeof(fightStyles); i++)
+    {
+        if(User[targetid][fightStyle] == fightStyles[i][styleid])
+        {
+            format(fightStyleName, sizeof(fightStyleName), "%s", fightStyles[i][fightname]);
+            break;
+        }
+    }
+
+    new achUnlocked = 0;
+    for(new i = 0; i < ACH_COUNT; i++)
+    {
+        if(g_UserAchUnlocked[targetid][i]) achUnlocked++;
+    }
+
     format(strstts, sizeof(strstts), "{MAIN}Parameter\t{MAIN}Data\n");
 
     // Section 1: Overall Information
@@ -233,6 +219,7 @@ ShowStats(playerid, targetid)
     format(strstts, sizeof(strstts), "%s{BEBEBE}Mobile Client\t%s\n", strstts, (User[targetid][isMobile]) ? ("{328E0A}Yes") : ("{F84F31}No"));
     format(strstts, sizeof(strstts), "%s{BEBEBE}FPS / Ping / Loss\t{FFFFFF}%d FPS {B4B5B7}| {FFFFFF}%d ms {B4B5B7}| {FFFFFF}%.2f%%\n", strstts, User[targetid][FPS], GetPlayerPing(targetid), NetStats_PacketLossPercent(targetid));
     format(strstts, sizeof(strstts), "%s{BEBEBE}Skin ID\t{FFFFFF}#%d\n", strstts, GetPlayerSkin(targetid));
+    format(strstts, sizeof(strstts), "%s{BEBEBE}Fighting Style\t{FFFFFF}%s\n", strstts, fightStyleName);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Admin Rank\t{FFFFFF}%s\n", strstts, adminnames[(User[targetid][adminCamu] ? 0 : User[targetid][adminLevel])][ingame]);
     if(IsPlayerVip(targetid))
     {
@@ -252,20 +239,46 @@ ShowStats(playerid, targetid)
         }
     }
     else strcat(strstts, "{BEBEBE}VIP Status\t{BEBEBE}None\n");
+
+    if(User[targetid][customTag][0] != '\0')
+    {
+        if(!User[targetid][hideCustomTag])
+            format(strstts, sizeof(strstts), "%s{BEBEBE}Custom Title\t{FF4500}%s\n", strstts, User[targetid][customTag]);
+        else
+            format(strstts, sizeof(strstts), "%s{BEBEBE}Custom Title\t{BEBEBE}%s {FF6347}[Hidden]\n", strstts, User[targetid][customTag]);
+    }
+
     format(strstts, sizeof(strstts), "%s{BEBEBE}Online Time\t{FFFFFF}%02dh %02dm %02ds\n", strstts, hour, minute, second);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Money\t{23C552}%s\n", strstts, FormatMoney(User[targetid][playerMoney]));
     format(strstts, sizeof(strstts), "%s{BEBEBE}Coins\t{FFFF00}%s\n", strstts, FormatCoins(User[targetid][playerCoins]));
+
+    if(User[targetid][warnings] > 0)
+        format(strstts, sizeof(strstts), "%s{BEBEBE}Warnings\t{F84F31}%d {FFFFFF}/ {BEBEBE}%d\n", strstts, User[targetid][warnings], ServerMaxWarnings);
+    else
+        format(strstts, sizeof(strstts), "%s{BEBEBE}Warnings\t{FFFFFF}0 / %d\n", strstts, ServerMaxWarnings);
+
+    if(User[targetid][muteTimestamp] > gettime())
+    {
+        new remMute = User[targetid][muteTimestamp] - gettime();
+        format(strstts, sizeof(strstts), "%s{BEBEBE}Mute Status\t{F84F31}Muted (%02dm %02ds left)\n", strstts, remMute / 60, remMute % 60);
+    }
+    else
+    {
+        strcat(strstts, "{BEBEBE}Mute Status\t{23C552}Clean\n");
+    }
 
     // Section 2: Global Records
     strcat(strstts, "{MAIN}> Combat Records\t \n");
     format(strstts, sizeof(strstts), "%s{BEBEBE}Level\t{FFFFFF}%d\n", strstts, User[targetid][playerLevel]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Total Kills / Deaths\t{23C552}%d {FFFFFF}/ {F84F31}%d\n", strstts, User[targetid][playerKills], User[targetid][playerDeaths]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}K/D Ratio\t{23C552}%.2f\n", strstts, ratio(User[targetid][playerKills], User[targetid][playerDeaths]));
+    format(strstts, sizeof(strstts), "%s{BEBEBE}Weekly Kills / DMG\t{23C552}%d kills {B4B5B7}| {23C552}%d DMG\n", strstts, User[targetid][kills_semanais], User[targetid][dmgSemanal]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Best Killstreak\t{23C552}%d kills\n", strstts, User[targetid][maxStreak]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Best Arena Damage\t{23C552}%d DMG\n", strstts, User[targetid][maxDamage]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Arenas Won (MVP)\t{23C552}%d arenas\n", strstts, User[targetid][wonArenas]);
     format(strstts, sizeof(strstts), "%s{BEBEBE}Duel Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, User[targetid][duelWins], User[targetid][duelLosses], ratio(User[targetid][duelWins], User[targetid][duelLosses]));
     format(strstts, sizeof(strstts), "%s{BEBEBE}2v2 Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, User[targetid][duel2v2Wins], User[targetid][duel2v2Losses], ratio(User[targetid][duel2v2Wins], User[targetid][duel2v2Losses]));
+    format(strstts, sizeof(strstts), "%s{BEBEBE}Achievements\t{23C552}%d {FFFFFF}/ {BEBEBE}%d {B4B5B7}(%d%%)\n", strstts, achUnlocked, ACH_COUNT, (achUnlocked * 100) / ACH_COUNT);
 
     // Section 3: Clan
     strcat(strstts, "{MAIN}> Clan Information\t \n");
@@ -275,6 +288,15 @@ ShowStats(playerid, targetid)
         new clanColorHex[7];
         format(clanColorHex, sizeof(clanColorHex), "%06x", ClanInfo[cid][clanColor] >>> 8);
         format(strstts, sizeof(strstts), "%s{BEBEBE}Clan Name & Tag\t{%s}%s {FFFFFF}[%s]\n", strstts, clanColorHex, ClanInfo[cid][clanName], ClanInfo[cid][clanTag]);
+        
+        new roleIdx = User[targetid][clanRole];
+        new roleName[CLAN_ROLE_LEN];
+        if(IsValidClanRole(roleIdx))
+            format(roleName, sizeof(roleName), "%s", ClanRoles[cid][roleIdx]);
+        else
+            format(roleName, sizeof(roleName), "Member");
+
+        format(strstts, sizeof(strstts), "%s{BEBEBE}Clan Role\t{MAIN}%s {B4B5B7}(Level %d)\n", strstts, roleName, roleIdx);
         format(strstts, sizeof(strstts), "%s{BEBEBE}Clan Kills / Points\t{FFFFFF}%d kills {B4B5B7}| {FFFFFF}%d pts\n", strstts, ClanInfo[cid][clanKills], ClanInfo[cid][clanPoints]);
     }
     else strcat(strstts, "{BEBEBE}Clan Status\t{F84F31}No Clan\n");
@@ -294,7 +316,7 @@ ShowStats(playerid, targetid)
     new title[64];
     format(title, sizeof(title), "{MAIN}Profile Stats: {FFFFFF}%s", getPlayerName(targetid));
     format_MainColor(playerid, title);
-    format_MainColor(playerid, strstts);
+    format_MainColor(playerid, strstts, sizeof(strstts));
 
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, strstts, "Close", "");
     return 1;

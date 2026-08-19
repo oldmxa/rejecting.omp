@@ -2,33 +2,26 @@
 forward TIME(playerid, dialogid, response, listitem, string:inputtext[]);
 public TIME(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!response)
-        return 1;
-    else
+    if(response)
     {
         new timeID = strval(inputtext);
         ChangeTime(playerid, timeID);
-       	ShowMenu(playerid);
     }
-
-    return true;
+    return ShowPersonalizationMenu(playerid);
 }
 
 forward WEATHER(playerid, dialogid, response, listitem, string:inputtext[]);
 public WEATHER(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!response)
-        return 1;
-    else
+    if(response)
     {
         new weatherID = strval(inputtext);
         ChangeWeather(playerid, weatherID);
-        ShowMenu(playerid);
     }
-    return true;
+    return ShowPersonalizationMenu(playerid);
 }
 
-// Dialogs /menu, Settings e Personalization.
+// Dialogs Settings e Personalization.
 
 SetAppearanceSource(playerid, source)
 {
@@ -45,10 +38,10 @@ ReturnToAppearanceSource(playerid)
 {
     switch(GetPVarInt(playerid, "appearance_source"))
     {
-        case APPEARANCE_SRC_PERSONAL: ShowPersonalizationMenu(playerid);
+        case APPEARANCE_SRC_PERSONAL, APPEARANCE_SRC_MENU: ShowPersonalizationMenu(playerid);
         case APPEARANCE_SRC_SETTINGS: ShowSettingsMenu(playerid);
         case APPEARANCE_SRC_NONE: {} // opened from chat, nothing to reopen
-        default: ShowMenu(playerid);
+        default: ShowPersonalizationMenu(playerid);
     }
     return 1;
 }
@@ -431,50 +424,6 @@ public DIALOG_HITMARK(playerid, dialogid, response, listitem, string:inputtext[]
     return ReturnToAppearanceSource(playerid);
 }
 
-forward DIALOG_MENU(playerid, dialogid, response, listitem, string:inputtext[]);
-public DIALOG_MENU(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    if(response)
-    {
-        switch(listitem)
-        {
-            case 0:
-            {
-                Dialog_ShowCallback(playerid, using public TIME<iiiis>, DIALOG_STYLE_INPUT, "Time", "Select time", "Continue", "Cancel");
-            }
-            case 1:
-            {
-                Dialog_ShowCallback(playerid, using public WEATHER<iiiis>, DIALOG_STYLE_INPUT, "Weather", "Select weather", "Continue", "Cancel");
-            }
-            case 2:
-            {
-                if(User[playerid][showPlayerHud] == false)
-                {
-                    hidePlayerTextdraw(playerid);
-                    showPlayerTextDraw(playerid);
-                    User[playerid][showPlayerHud] = true;
-                }
-                else{
-                    User[playerid][showPlayerHud] = false;
-                    hidePlayerTextdraw(playerid);
-                }
-                SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
-                ShowMenu(playerid);
-            }
-            case 3: ShowDamageStyleDialog(playerid, APPEARANCE_SRC_MENU);
-            case 4: ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_MENU);
-            case 5: ShowHudColorDialog(playerid, APPEARANCE_SRC_MENU);
-            case 6: ShowHudShadeDialog(playerid, APPEARANCE_SRC_MENU, false);
-            case 7: ShowHudShadeDialog(playerid, APPEARANCE_SRC_MENU, true);
-            case 8: ShowChatColorDialog(playerid, APPEARANCE_SRC_MENU);
-            case 9: ShowSkinDialog(playerid, APPEARANCE_SRC_MENU);
-            case 10: ChangeFight(playerid);
-            case 11: ShowGunMenu(playerid);
-        }
-    }
-
-    return true;
-}
 
 forward CHANGE(playerid, dialogid, response, listitem, string:inputtext[]);
 public CHANGE(playerid, dialogid, response, listitem, string:inputtext[])

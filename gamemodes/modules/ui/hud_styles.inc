@@ -237,18 +237,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if (User[playerid][hudType] == listitem)
             {
                 SendClientMessage(playerid, -1, fmat_return("{MAIN}[HUD] {FFFFFF}You are already using the {MAIN}%s{FFFFFF} style.", HUD_TYPES[listitem]));
-                return 1;
             }
-
-            User[playerid][hudType] = listitem;
-            RecreatePlayerHudTextDraws(playerid);
-            SendClientMessage(playerid, -1, fmat_return("{MAIN}[HUD] {FFFFFF}HUD style set to: {MAIN}%s", HUD_TYPES[listitem]));
-            if (User[playerid][showPlayerHud])
+            else
             {
-                updatePlayerHud(playerid);
-                showPlayerTextDraw(playerid);
+                User[playerid][hudType] = listitem;
+                RecreatePlayerHudTextDraws(playerid);
+                SendClientMessage(playerid, -1, fmat_return("{MAIN}[HUD] {FFFFFF}HUD style set to: {MAIN}%s", HUD_TYPES[listitem]));
+                if (User[playerid][showPlayerHud])
+                {
+                    updatePlayerHud(playerid);
+                    showPlayerTextDraw(playerid);
+                }
             }
         }
+        ShowPersonalizationMenu(playerid);
         return 1;
     }
 
