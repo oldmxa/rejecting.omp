@@ -923,69 +923,271 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         return 0;
     }
 
-    new modeName[32];
-    switch(g_TourneyData[t_Mode])
+    for(new i = 0; i < g_TourneyData[t_MaxSlots]; i++)
     {
-        case TOURNAMENT_MODE_1V1: strcopy(modeName, "1v1 Elimination");
-        case TOURNAMENT_MODE_2V2: strcopy(modeName, "2v2 Team Battle");
-        case TOURNAMENT_MODE_CLAN: strcopy(modeName, "Clan War");
+        if(g_TourneyParticipants[i][tp_Registered])
+        {
+            if(!strcmp(g_TourneyParticipants[i][tp_Player1_Name], nick, true) || (g_TourneyParticipants[i][tp_Player2_Name][0] != '\0' && !strcmp(g_TourneyParticipants[i][tp_Player2_Name], nick, true)))
+            {
+                new alreadyMsg[256];
+                format(alreadyMsg, sizeof(alreadyMsg), "<@%s> :warning: Nick **%s** is already registered in the tournament!", userid, nick);
+                if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, alreadyMsg);
+                return 0;
+            }
+        }
     }
 
-    new appEmbed[1024];
-    format(appEmbed, sizeof(appEmbed),
-        "**Applicant Details**\n"\
-        "- **In-Game Nick:** `%s`\n"\
-        "- **Discord Member:** <@%s> (`%s`)\n"\
-        "- **Account Status:** :white_check_mark: Verified Member\n\n"\
-        "**Tournament Status**\n"\
-        "- **Event:** `%s`\n"\
-        "- **Registered Slots:** `%d / %d`\n"\
-        "- **Application Time:** `%s`",
-        nick, userid, username,
-        g_TourneyData[t_Name],
-        g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots],
-        returnDate(gettime())
-    );
-
-    utf8encode(msgencoded, appEmbed, sizeof(msgencoded));
-    SendDiscordEmbed(ch_tourney_applications, ":pencil: Tournament Application Received", msgencoded, DISCORD_COLOR_SUCCESS);
-
-    new appIdx = -1;
-    for(new i = 0; i < MAX_DISCORD_TOURNEY_APPS; i++)
+    new slot = -1;
+    for(new i = 0; i < g_TourneyData[t_MaxSlots]; i++)
     {
-        if(g_TourneyDiscordApps[i][tda_Active] && !strcmp(g_TourneyDiscordApps[i][tda_Nick], nick, true))
+        if(!g_TourneyParticipants[i][tp_Registered])
         {
-            appIdx = i;
+            slot = i;
             break;
         }
     }
-    if(appIdx == -1)
+
+    if(slot == -1)
     {
-        for(new i = 0; i < MAX_DISCORD_TOURNEY_APPS; i++)
+        new fullMsg[192];
+        format(fullMsg, sizeof(fullMsg), "<@%s> :warning: The tournament registration slots are currently full (%d/%d)!", userid, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
+        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, fullMsg);
+        return 0;
+    }
+
+    new onlinePlayerId = INVALID_PLAYER_ID;
+    for(new i = 0; i < MAX_PLAYERS; i++)
+    {
+        if(IsPlayerConnected(i) && User[i][isLogged])
         {
-            if(!g_TourneyDiscordApps[i][tda_Active])
+            if(!strcmp(User[i][userName], nick, true))
             {
-                appIdx = i;
+                onlinePlayerId = i;
                 break;
             }
         }
     }
 
-    if(appIdx != -1)
+    if(onlinePlayerId != INVALID_PLAYER_ID)
     {
-        g_TourneyDiscordApps[appIdx][tda_Active] = true;
-        strcopy(g_TourneyDiscordApps[appIdx][tda_Nick], nick, MAX_PLAYER_NAME + 1);
-        strcopy(g_TourneyDiscordApps[appIdx][tda_UCP], "Verified Discord", 128);
-        strcopy(g_TourneyDiscordApps[appIdx][tda_DiscordID], userid, DCC_ID_SIZE);
-        strcopy(g_TourneyDiscordApps[appIdx][tda_DiscordTag], username, DCC_USERNAME_SIZE);
-        g_TourneyDiscordApps[appIdx][tda_Timestamp] = gettime();
-        g_TourneyDiscordAppCount++;
+        g_TourneyParticipants[slot][tp_Registered] = true;
+        g_TourneyParticipants[slot][tp_Eliminated] = false;
+        g_TourneyParticipants[slot][tp_Seed] = slot + 1;
+        strcopy(g_TourneyParticipants[slot][tp_Player1_Name], nick, MAX_PLAYER_NAME + 1);
+        g_TourneyParticipants[slot][tp_Player1] = onlinePlayerId;
+        g_TourneyParticipants[slot][tp_Player1_SQL] = User[onlinePlayerId][user_sqlid];
+        g_PlayerTourneySlot[onlinePlayerId] = slot;
+        if(g_TourneyData[t_EntryFee] > 0 && User[onlinePlayerId][playerMoney] >= g_TourneyData[t_EntryFee])
+        {
+            GivePlayerMoney(onlinePlayerId, -g_TourneyData[t_EntryFee]);
+            User[onlinePlayerId][playerMoney] -= g_TourneyData[t_EntryFee];
+        }
+
+        g_TourneyData[t_RegisteredCount]++;
+
+        new appIdx = -1;
+        for(new i = 0; i < MAX_DISCORD_TOURNEY_APPS; i++)
+        {
+            if(g_TourneyDiscordApps[i][tda_Active] && !strcmp(g_TourneyDiscordApps[i][tda_Nick], nick, true))
+            {
+                appIdx = i;
+                break;
+            }
+        }
+        if(appIdx == -1)
+        {
+            for(new i = 0; i < MAX_DISCORD_TOURNEY_APPS; i++)
+            {
+                if(!g_TourneyDiscordApps[i][tda_Active])
+                {
+                    appIdx = i;
+                    break;
+                }
+            }
+        }
+
+        if(appIdx != -1)
+        {
+            g_TourneyDiscordApps[appIdx][tda_Active] = true;
+            strcopy(g_TourneyDiscordApps[appIdx][tda_Nick], nick, MAX_PLAYER_NAME + 1);
+            strcopy(g_TourneyDiscordApps[appIdx][tda_UCP], "Verified Discord", 128);
+            strcopy(g_TourneyDiscordApps[appIdx][tda_DiscordID], userid, DCC_ID_SIZE);
+            strcopy(g_TourneyDiscordApps[appIdx][tda_DiscordTag], username, DCC_USERNAME_SIZE);
+            g_TourneyDiscordApps[appIdx][tda_Timestamp] = gettime();
+            g_TourneyDiscordAppCount++;
+        }
+
+        new appEmbed[1024];
+        format(appEmbed, sizeof(appEmbed),
+            "**Applicant Details**\n"\
+            "- **In-Game Nick:** `%s`\n"\
+            "- **Discord Member:** <@%s> (`%s`)\n"\
+            "- **Account Status:** :white_check_mark: Verified Account (Online)\n\n"\
+            "**Tournament Status**\n"\
+            "- **Event:** `%s`\n"\
+            "- **Slot Assigned:** `#%02d`\n"\
+            "- **Registered Slots:** `%d / %d`\n"\
+            "- **Application Time:** `%s`",
+            nick, userid, username,
+            g_TourneyData[t_Name],
+            slot + 1,
+            g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots],
+            returnDate(gettime())
+        );
+
+        utf8encode(msgencoded, appEmbed, sizeof(msgencoded));
+        SendDiscordEmbed(ch_tourney_applications, ":pencil: Tournament Registration Received", msgencoded, DISCORD_COLOR_SUCCESS);
+
+        new confirmMsg[256];
+        format(confirmMsg, sizeof(confirmMsg), ":white_check_mark: <@%s> Your registration with nick **%s** is confirmed! (Slot #%02d - **%d/%d** slots filled).", userid, nick, slot + 1, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
+        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, confirmMsg);
+
+        va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT] {FFFFFF}%s joined the tournament via Discord! ({MAIN}%d/%d {FFFFFF}slots filled).",
+            nick, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
+
+        if(g_TourneyData[t_AutoStart] && g_TourneyData[t_RegisteredCount] >= g_TourneyData[t_MaxSlots])
+        {
+            g_TourneyData[t_State] = TOURNAMENT_STATE_STARTING;
+            StartTournamentCountdown(0);
+        }
+        return 1;
     }
 
-    new confirmMsg[256];
-    format(confirmMsg, sizeof(confirmMsg), ":white_check_mark: <@%s> Your tournament application with nick **%s** was registered successfully! You can now join in-game via `/jointournament`.", userid, nick);
-    if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, confirmMsg);
+    inline const OnTourneyCheckAccount()
+    {
+        if(!cache_num_rows())
+        {
+            new notFoundMsg[256];
+            format(notFoundMsg, sizeof(notFoundMsg), "<@%s> :x: The account **%s** does not exist on the server! Please make sure you registered this account in-game.", userid, nick);
+            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, notFoundMsg);
+            return 1;
+        }
 
+        if(g_TourneyData[t_State] != TOURNAMENT_STATE_REGISTRATION)
+        {
+            new failMsg[192];
+            format(failMsg, sizeof(failMsg), "<@%s> :warning: Tournament registrations closed in the meantime.", userid);
+            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, failMsg);
+            return 1;
+        }
+
+        for(new i = 0; i < g_TourneyData[t_MaxSlots]; i++)
+        {
+            if(g_TourneyParticipants[i][tp_Registered])
+            {
+                if(!strcmp(g_TourneyParticipants[i][tp_Player1_Name], nick, true) || (g_TourneyParticipants[i][tp_Player2_Name][0] != '\0' && !strcmp(g_TourneyParticipants[i][tp_Player2_Name], nick, true)))
+                {
+                    new alreadyMsg[256];
+                    format(alreadyMsg, sizeof(alreadyMsg), "<@%s> :warning: Nick **%s** is already registered in the tournament!", userid, nick);
+                    if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, alreadyMsg);
+                    return 1;
+                }
+            }
+        }
+
+        new slotIdx = -1;
+        for(new i = 0; i < g_TourneyData[t_MaxSlots]; i++)
+        {
+            if(!g_TourneyParticipants[i][tp_Registered])
+            {
+                slotIdx = i;
+                break;
+            }
+        }
+
+        if(slotIdx == -1)
+        {
+            new fullMsg[192];
+            format(fullMsg, sizeof(fullMsg), "<@%s> :warning: The tournament registration slots are currently full (%d/%d)!", userid, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
+            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, fullMsg);
+            return 1;
+        }
+
+        new acc_id = 0;
+        new acc_name[MAX_PLAYER_NAME + 1];
+        cache_get_value_int(0, "id", acc_id);
+        cache_get_value_name(0, "username", acc_name, sizeof(acc_name));
+
+        g_TourneyParticipants[slotIdx][tp_Registered] = true;
+        g_TourneyParticipants[slotIdx][tp_Eliminated] = false;
+        g_TourneyParticipants[slotIdx][tp_Seed] = slotIdx + 1;
+        g_TourneyParticipants[slotIdx][tp_Player1] = INVALID_PLAYER_ID;
+        g_TourneyParticipants[slotIdx][tp_Player1_SQL] = acc_id;
+        strcopy(g_TourneyParticipants[slotIdx][tp_Player1_Name], acc_name, MAX_PLAYER_NAME + 1);
+
+        g_TourneyData[t_RegisteredCount]++;
+
+        new appIdx2 = -1;
+        for(new i = 0; i < MAX_DISCORD_TOURNEY_APPS; i++)
+        {
+            if(g_TourneyDiscordApps[i][tda_Active] && !strcmp(g_TourneyDiscordApps[i][tda_Nick], acc_name, true))
+            {
+                appIdx2 = i;
+                break;
+            }
+        }
+        if(appIdx2 == -1)
+        {
+            for(new i = 0; i < MAX_DISCORD_TOURNEY_APPS; i++)
+            {
+                if(!g_TourneyDiscordApps[i][tda_Active])
+                {
+                    appIdx2 = i;
+                    break;
+                }
+            }
+        }
+
+        if(appIdx2 != -1)
+        {
+            g_TourneyDiscordApps[appIdx2][tda_Active] = true;
+            strcopy(g_TourneyDiscordApps[appIdx2][tda_Nick], acc_name, MAX_PLAYER_NAME + 1);
+            strcopy(g_TourneyDiscordApps[appIdx2][tda_UCP], "Verified Discord", 128);
+            strcopy(g_TourneyDiscordApps[appIdx2][tda_DiscordID], userid, DCC_ID_SIZE);
+            strcopy(g_TourneyDiscordApps[appIdx2][tda_DiscordTag], username, DCC_USERNAME_SIZE);
+            g_TourneyDiscordApps[appIdx2][tda_Timestamp] = gettime();
+            g_TourneyDiscordAppCount++;
+        }
+
+        new appEmbed2[1024];
+        format(appEmbed2, sizeof(appEmbed2),
+            "**Applicant Details**\n"\
+            "- **In-Game Nick:** `%s`\n"\
+            "- **Discord Member:** <@%s> (`%s`)\n"\
+            "- **Account Status:** :white_check_mark: Verified Account (ID: `%d`)\n\n"\
+            "**Tournament Status**\n"\
+            "- **Event:** `%s`\n"\
+            "- **Slot Assigned:** `#%02d`\n"\
+            "- **Registered Slots:** `%d / %d`\n"\
+            "- **Application Time:** `%s`",
+            acc_name, userid, username, acc_id,
+            g_TourneyData[t_Name],
+            slotIdx + 1,
+            g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots],
+            returnDate(gettime())
+        );
+
+        utf8encode(msgencoded, appEmbed2, sizeof(msgencoded));
+        SendDiscordEmbed(ch_tourney_applications, ":pencil: Tournament Registration Received", msgencoded, DISCORD_COLOR_SUCCESS);
+
+        new confirmMsg2[256];
+        format(confirmMsg2, sizeof(confirmMsg2), ":white_check_mark: <@%s> Your registration with nick **%s** is confirmed! (Slot #%02d - **%d/%d** slots filled).", userid, acc_name, slotIdx + 1, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
+        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, confirmMsg2);
+
+        va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT] {FFFFFF}%s joined the tournament via Discord! ({MAIN}%d/%d {FFFFFF}slots filled).",
+            acc_name, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
+
+        if(g_TourneyData[t_AutoStart] && g_TourneyData[t_RegisteredCount] >= g_TourneyData[t_MaxSlots])
+        {
+            g_TourneyData[t_State] = TOURNAMENT_STATE_STARTING;
+            StartTournamentCountdown(0);
+        }
+        return 1;
+    }
+
+    new accQuery[128];
+    mysql_format(dbHandle, accQuery, sizeof(accQuery), "SELECT `id`, `username` FROM `accounts` WHERE `username` = '%e' LIMIT 1", nick);
+    MySQL_TQueryInline(dbHandle, using inline OnTourneyCheckAccount, accQuery);
     return 1;
 }
 
@@ -1174,6 +1376,9 @@ stock SpawnTourneyParticipant(playerid, side, arenaCat, arenaid, vw)
             GivePlayerWeapon(playerid, WEAPON:g_TourneyWeaponSets[wset][twi_Weap3], g_TourneyWeaponSets[wset][twi_Ammo3]);
         if(g_TourneyWeaponSets[wset][twi_Weap4] > 0)
             GivePlayerWeapon(playerid, WEAPON:g_TourneyWeaponSets[wset][twi_Weap4], g_TourneyWeaponSets[wset][twi_Ammo4]);
+
+        if(g_TourneyWeaponSets[wset][twi_Weap1] > 0)
+            SetPlayerArmedWeapon(playerid, WEAPON:g_TourneyWeaponSets[wset][twi_Weap1]);
     }
 
     TogglePlayerControllableEx(playerid, false);

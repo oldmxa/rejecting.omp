@@ -30,6 +30,33 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerSpawn(playerid)
 {
+    if(User[playerid][isLogged])
+    {
+        if(g_PlayerTourneySlot[playerid] == -1 && (g_TourneyData[t_State] == TOURNAMENT_STATE_REGISTRATION || g_TourneyData[t_State] == TOURNAMENT_STATE_IN_PROGRESS))
+        {
+            for(new i = 0; i < g_TourneyData[t_MaxSlots]; i++)
+            {
+                if(g_TourneyParticipants[i][tp_Registered])
+                {
+                    if(!strcmp(g_TourneyParticipants[i][tp_Player1_Name], User[playerid][userName], true))
+                    {
+                        g_TourneyParticipants[i][tp_Player1] = playerid;
+                        g_TourneyParticipants[i][tp_Player1_SQL] = User[playerid][user_sqlid];
+                        g_PlayerTourneySlot[playerid] = i;
+                        break;
+                    }
+                    else if(g_TourneyParticipants[i][tp_Player2_Name][0] != '\0' && !strcmp(g_TourneyParticipants[i][tp_Player2_Name], User[playerid][userName], true))
+                    {
+                        g_TourneyParticipants[i][tp_Player2] = playerid;
+                        g_TourneyParticipants[i][tp_Player2_SQL] = User[playerid][user_sqlid];
+                        g_PlayerTourneySlot[playerid] = i;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     new matchid = g_PlayerTourneyMatch[playerid];
 
     if(IsPlayerInTournament(playerid) && matchid >= 0 && matchid < MAX_TOURNEY_MATCHES
@@ -92,9 +119,17 @@ public OnPlayerDisconnect(playerid, reason)
 {
     if(IsPlayerInTournament(playerid))
     {
+        new dcSlot = g_PlayerTourneySlot[playerid];
         if(g_TourneyData[t_State] == TOURNAMENT_STATE_REGISTRATION)
         {
-            UnregisterParticipant(playerid);
+            if(dcSlot >= 0 && dcSlot < MAX_TOURNEY_SLOTS)
+            {
+                if(g_TourneyParticipants[dcSlot][tp_Player1] == playerid)
+                    g_TourneyParticipants[dcSlot][tp_Player1] = INVALID_PLAYER_ID;
+                if(g_TourneyParticipants[dcSlot][tp_Player2] == playerid)
+                    g_TourneyParticipants[dcSlot][tp_Player2] = INVALID_PLAYER_ID;
+            }
+            g_PlayerTourneySlot[playerid] = -1;
         }
         else if(g_TourneyData[t_State] == TOURNAMENT_STATE_IN_PROGRESS)
         {
@@ -135,7 +170,6 @@ public OnPlayerDisconnect(playerid, reason)
                     va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT] {FFFFFF}%s disconnected, their teammate continues alone!", User[playerid][userName]);
                 }
             }
-            new dcSlot = g_PlayerTourneySlot[playerid];
             if(dcSlot >= 0 && dcSlot < MAX_TOURNEY_SLOTS)
             {
                 if(g_TourneyParticipants[dcSlot][tp_Player1] == playerid)

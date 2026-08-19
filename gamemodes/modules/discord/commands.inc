@@ -16,7 +16,7 @@ static g_InteractionParams[DSC_CONTENT_SIZE];
 	public DSC_%0(DCC_Interaction:DSC_it, DCC_User:DSC_usr) \
 	{ \
 		DSC_Probe(#%0, _:DSC_it, _:DSC_usr); \
-		DSC_Begin(DSC_it); \
+		DSC_Begin(DSC_it, DSC_usr); \
 		DSCI_%0(DSC_usr, g_InteractionParams); \
 		return DSC_End(); \
 	} \
@@ -42,10 +42,13 @@ stock DSC_Probe(const cmd[], a, b)
 	return 1;
 }
 
-stock DSC_Begin(DCC_Interaction:interaction)
+static DCC_User:g_CurrentInvoker = DCC_INVALID_USER;
+
+stock DSC_Begin(DCC_Interaction:interaction, DCC_User:user = DCC_INVALID_USER)
 {
 	g_InteractionAnswered = false;
 	g_CurrentInteraction = interaction;
+	g_CurrentInvoker = user;
 
 	g_InteractionParams[0] = EOS;
 	DCC_GetInteractionContent(g_CurrentInteraction, g_InteractionParams, sizeof(g_InteractionParams));
@@ -61,9 +64,31 @@ stock DSC_Begin(DCC_Interaction:interaction)
 stock DSC_End()
 {
 	if(!g_InteractionAnswered && g_CurrentInteraction != DCC_Interaction:0)
-		DCC_SendInteractionMessage(g_CurrentInteraction, ":hourglass_flowing_sand: Fetching data - the result appears below.");
+	{
+		if(g_CurrentInvoker != DCC_INVALID_USER)
+		{
+			new uid[DCC_ID_SIZE];
+			uid[0] = EOS;
+			DCC_GetUserId(g_CurrentInvoker, uid, sizeof(uid));
+			if(!isnull(uid))
+			{
+				new msg[128];
+				format(msg, sizeof(msg), "<@%s> :hourglass_flowing_sand: Fetching data - the result appears below.", uid);
+				DCC_SendInteractionMessage(g_CurrentInteraction, msg);
+			}
+			else
+			{
+				DCC_SendInteractionMessage(g_CurrentInteraction, ":hourglass_flowing_sand: Fetching data - the result appears below.");
+			}
+		}
+		else
+		{
+			DCC_SendInteractionMessage(g_CurrentInteraction, ":hourglass_flowing_sand: Fetching data - the result appears below.");
+		}
+	}
 
 	g_CurrentInteraction = DCC_Interaction:0;
+	g_CurrentInvoker = DCC_INVALID_USER;
 	g_InteractionAnswered = false;
 	return 1;
 }

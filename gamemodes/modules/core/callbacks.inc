@@ -466,9 +466,11 @@ public OnPlayerRequestSpawn(playerid)
 
 public OnPlayerSpawn(playerid)
 {
-	SetPlayerInterior(playerid, 0);
+	new bool:inTourneyMatch = (IsPlayerInTournament(playerid) && g_PlayerTourneyMatch[playerid] != -1);
+	new bool:inDuel = (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE);
+	new bool:inDuel2v2 = (IsPlayerInDuel2v2(playerid) != 0);
+
 	SetPlayerWorldBounds(playerid, 20000.0, -20000.0, 20000.0, -20000.0);
-	givePlayerWeapons(playerid);
     SetPlayerFightingStyle(playerid, User[playerid][fightStyle]);
 
 	if(User[playerid][playerSkin] > 0)
@@ -491,11 +493,10 @@ public OnPlayerSpawn(playerid)
 	if(IsPlayerInAnyVehicle(playerid))
 		RemovePlayerFromVehicle(playerid);
 
-	new bool:inTourneyMatch = (IsPlayerInTournament(playerid) && g_PlayerTourneyMatch[playerid] != -1);
-
-	if(!inTourneyMatch)
+	if(!inTourneyMatch && !inDuel && !inDuel2v2)
 	{
 		SetPlayerInterior(playerid, 0);
+		givePlayerWeapons(playerid);
 
 		if(User[playerid][isAfk])
 			setAfk(playerid);
