@@ -227,6 +227,7 @@ stock ShowPlayerHudTypesList(playerid)
 
 forward updatePlayerHud(playerid);
 forward showPlayerTextDraw(playerid);
+forward hidePlayerTextdraw(playerid);
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {

@@ -45,24 +45,30 @@ hidePlayerTextdraw(playerid)
 	for(new i; i < 4; i++) PlayerTextDrawHide(playerid, ClanHUD[playerid][i]);
 	for(new i; i < 5; i++) PlayerTextDrawHide(playerid, OutpostBar[playerid][i]);
 	PlayerTextDrawHide(playerid, speedometer[playerid]);
+	PlayerTextDrawHide(playerid, killsandexp[playerid]);
+	if(killsandexpii[playerid] != PlayerText:INVALID_TEXT_DRAW) PlayerTextDrawHide(playerid, killsandexpii[playerid]);
+	PlayerTextDrawHide(playerid, DeathInfo[playerid][0]);
+	PlayerTextDrawHide(playerid, DeathInfo[playerid][1]);
 
 	User[playerid][isShowingHud] = false;
 }
 
 showPlayerTextDraw(playerid)
 {
+	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID) return 0;
+
     for(new i; i < 3; i++)
 			PlayerTextDrawShow(playerid, InfoStats[playerid][i]);
     PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
 
-	// {
-	// }
-
 	User[playerid][isShowingHud] = true;
+	return 1;
 }
 
 stock updateSecondHud(playerid)
 {
+	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID) return 1;
+
 	for(new i; i < 4; i++)
 			PlayerTextDrawHide(playerid, ClanHUD[playerid][i]);
 
@@ -73,10 +79,13 @@ stock updateSecondHud(playerid)
 	NetStats_PacketLossPercent(playerid));
 	PlayerTextDrawSetString(playerid, secondHud[playerid][1], fString);
 	PlayerTextDrawSetString(playerid, secondHud[playerid][2], ServerHostname);
+	return 1;
 }
 
 stock updatePlayerHud(playerid)
 {
+	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID) return 1;
+
 	if(User[playerid][locationId] != -1)
 	{
 		new fString[300], cString[300];
@@ -263,6 +272,7 @@ stock updatePlayerHud(playerid)
 		}
 	}
 	CallLocalFunction("CheckTrainingHudOnUpdate", "d", playerid);
+	return 1;
 }
 
 
@@ -273,6 +283,7 @@ public UpdateFastHUD()
     {
         if(!User[i][isLogged] || !User[i][isAlreadySpawned]) continue;
         if(!User[i][showPlayerHud]) continue;
+        if(User[i][isSpectating] || playerSpecID[i] != INVALID_PLAYER_ID) continue;
 
         if(User[i][locationId] != -1)
         {

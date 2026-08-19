@@ -412,7 +412,7 @@ public CheckOutpostCapture()
 
     foreach(new i : Player)
     {
-        if(!User[i][isLogged] || User[i][isAfk]) { HideOutpostBar(i); continue; }
+        if(!User[i][isLogged] || User[i][isAfk] || User[i][isSpectating] || playerSpecID[i] != INVALID_PLAYER_ID) { HideOutpostBar(i); continue; }
         new loc = User[i][locationId];
         if(loc < 0 || loc >= MAX_LOCATIONS || loc == ARENA_AFK) { HideOutpostBar(i); continue; }
         new z = arenaInfo[loc][arenaId];

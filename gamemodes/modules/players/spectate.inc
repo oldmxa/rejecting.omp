@@ -34,9 +34,11 @@ setPlayerSpectate(playerid, playertargetid)
 		playerSpecID[playerid] = playertargetid;
 		SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(playertargetid));
 		SetPlayerInterior(playerid, GetPlayerInterior(playertargetid));
-		showSpecTD(playerid);
 		User[playerid][isSpectating] = true;
 		User[playerid][isAfk] = false;
+
+		hidePlayerTextdraw(playerid);
+		showSpecTD(playerid);
 
 		new stringa[30];
 		format(stringa, sizeof (stringa), "%s [%d]", getPlayerName(playertargetid), playertargetid);
