@@ -107,7 +107,7 @@ stock RecreatePlayerHudTextDraws(playerid)
         }
         case HUD_REJECTING_01:
         {
-            // FPS / Ping / PL (glow textdraw #2)
+            // FPS / Ping / PL (rlow textdraw #2)
             FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid, 554.400024, 2.986654, "_");
             PlayerTextDrawFont(playerid, FPSPingPacket[playerid], TEXT_DRAW_FONT_1);
             PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.210795, 0.843375);
