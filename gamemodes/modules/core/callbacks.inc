@@ -491,12 +491,17 @@ public OnPlayerSpawn(playerid)
 	if(IsPlayerInAnyVehicle(playerid))
 		RemovePlayerFromVehicle(playerid);
 
-	SetPlayerInterior(playerid, 0);
+	new bool:inTourneyMatch = (IsPlayerInTournament(playerid) && g_PlayerTourneyMatch[playerid] != -1);
 
-	if(User[playerid][isAfk])
-		setAfk(playerid);
-	else
-		spawnOnLocation(playerid);
+	if(!inTourneyMatch)
+	{
+		SetPlayerInterior(playerid, 0);
+
+		if(User[playerid][isAfk])
+			setAfk(playerid);
+		else
+			spawnOnLocation(playerid);
+	}
 
 	SetPlayerTime(playerid, User[playerid][time], 0);
 	SetPlayerWeather(playerid, User[playerid][weather]);
@@ -532,8 +537,11 @@ public OnPlayerSpawn(playerid)
 
 	User[playerid][isMobile] = (IsPlayerAndroid(playerid)) ? true : false;
 
-	SetPlayerArmour(playerid, 100.0);
-	SetPlayerHealth(playerid, 100.0);
+	if(!inTourneyMatch)
+	{
+		SetPlayerArmour(playerid, 100.0);
+		SetPlayerHealth(playerid, 100.0);
+	}
 
     User[playerid][timerRespawn] = gettime();
     if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
@@ -774,7 +782,6 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 		if (!g_Duel2v2Data[matchid][d2_Active]) return false;
 		if (g_Duel2v2Data[matchid][d2_State] != DUEL2V2_STATE_ACTIVE) return false;
 
-		// Block friendly fire (same team in 2v2)
 		if (g_PlayerDuel2v2Team[playerid] == g_PlayerDuel2v2Team[issuerid]) return false;
 		if (!IsDuel2v2PlayerAlive(playerid) || !IsDuel2v2PlayerAlive(issuerid)) return false;
 	}

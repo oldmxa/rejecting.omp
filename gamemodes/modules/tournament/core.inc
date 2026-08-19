@@ -28,6 +28,43 @@ public OnPlayerConnect(playerid)
     forward TOUR_OnPlayerConnect(playerid);
 #endif
 
+public OnPlayerSpawn(playerid)
+{
+    new matchid = g_PlayerTourneyMatch[playerid];
+
+    if(IsPlayerInTournament(playerid) && matchid >= 0 && matchid < MAX_TOURNEY_MATCHES
+        && g_TourneyMatches[matchid][tm_Active])
+    {
+        new mstate = g_TourneyMatches[matchid][tm_State];
+
+        if(mstate == MATCH_STATE_PREPARING || mstate == MATCH_STATE_COUNTDOWN || mstate == MATCH_STATE_ACTIVE)
+        {
+            new slot = g_PlayerTourneySlot[playerid];
+            new side = (slot == g_TourneyMatches[matchid][tm_SlotA]) ? 0 : 1;
+
+            SpawnTourneyParticipant(playerid, side,
+                g_TourneyMatches[matchid][tm_ArenaCategory],
+                g_TourneyMatches[matchid][tm_ArenaID],
+                g_TourneyMatches[matchid][tm_VirtualWorld]);
+        }
+    }
+
+    #if defined TOUR_OnPlayerSpawn
+        return TOUR_OnPlayerSpawn(playerid);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerSpawn
+    #undef OnPlayerSpawn
+#else
+    #define _ALS_OnPlayerSpawn
+#endif
+#define OnPlayerSpawn TOUR_OnPlayerSpawn
+#if defined TOUR_OnPlayerSpawn
+    forward TOUR_OnPlayerSpawn(playerid);
+#endif
+
 public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     if(IsPlayerInTournament(playerid))

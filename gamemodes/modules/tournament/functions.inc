@@ -259,6 +259,8 @@ stock GetTourneyServerArenaCoords(id, &Float:x1, &Float:y1, &Float:z1, &Float:a1
 {
     if(id < 0 || id >= MAX_TOURNEY_SERVER_ARENAS) id = 0;
 
+    if(IsCustomArena(id)) id = 0;
+
     interior = arenaData[id][arenaInterior];
 
     new Float:minX = arenaData[id][arenaPos][0];
@@ -534,7 +536,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
                 return -1;
             }
 
-            if(!IsPlayerRegisteredOnDiscord(teammateid))
+            if(g_TourneyData[t_RequireDiscord] && !IsPlayerRegisteredOnDiscord(teammateid))
             {
                 va_SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Your teammate %s has not completed their Discord application yet!", User[teammateid][userName]);
                 SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}They must go to Discord channel {23C552}#1539673870657921135 {FFFFFF}and use: {MAIN}/tournament <nick> <ucp_profile>");
@@ -669,7 +671,7 @@ stock SendTourneyInvite(playerid, teammateid)
     if(g_PlayerTourneySlot[teammateid] != -1)
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}That player is already registered in another team!");
 
-    if(!IsPlayerRegisteredOnDiscord(teammateid))
+    if(g_TourneyData[t_RequireDiscord] && !IsPlayerRegisteredOnDiscord(teammateid))
         return va_SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}%s has not completed the Discord application yet.", User[teammateid][userName]);
 
     g_PlayerTourneyInvite[teammateid] = playerid;
@@ -1241,10 +1243,26 @@ stock StartTourneyMatch(matchid)
     if(p2B != INVALID_PLAYER_ID && IsPlayerConnected(p2B)) g_PlayerTourneyMatch[p2B] = matchid;
 
     // Spawn players
-    if(IsPlayerConnected(p1A)) SpawnTourneyParticipant(p1A, 0, arenaCat, arenaid, vw);
-    if(p2A != INVALID_PLAYER_ID && IsPlayerConnected(p2A)) SpawnTourneyParticipant(p2A, 0, arenaCat, arenaid, vw);
-    if(IsPlayerConnected(p1B)) SpawnTourneyParticipant(p1B, 1, arenaCat, arenaid, vw);
-    if(p2B != INVALID_PLAYER_ID && IsPlayerConnected(p2B)) SpawnTourneyParticipant(p2B, 1, arenaCat, arenaid, vw);
+    if(IsPlayerConnected(p1A))
+    {
+        if(GetPlayerState(p1A) == PLAYER_STATE_WASTED) SpawnPlayer(p1A);
+        else SpawnTourneyParticipant(p1A, 0, arenaCat, arenaid, vw);
+    }
+    if(p2A != INVALID_PLAYER_ID && IsPlayerConnected(p2A))
+    {
+        if(GetPlayerState(p2A) == PLAYER_STATE_WASTED) SpawnPlayer(p2A);
+        else SpawnTourneyParticipant(p2A, 0, arenaCat, arenaid, vw);
+    }
+    if(IsPlayerConnected(p1B))
+    {
+        if(GetPlayerState(p1B) == PLAYER_STATE_WASTED) SpawnPlayer(p1B);
+        else SpawnTourneyParticipant(p1B, 1, arenaCat, arenaid, vw);
+    }
+    if(p2B != INVALID_PLAYER_ID && IsPlayerConnected(p2B))
+    {
+        if(GetPlayerState(p2B) == PLAYER_STATE_WASTED) SpawnPlayer(p2B);
+        else SpawnTourneyParticipant(p2B, 1, arenaCat, arenaid, vw);
+    }
 
     g_TourneyMatches[matchid][tm_P1_Alive] = (p1A != INVALID_PLAYER_ID && IsPlayerConnected(p1A));
     g_TourneyMatches[matchid][tm_P2_Alive] = (p2A != INVALID_PLAYER_ID && IsPlayerConnected(p2A));
