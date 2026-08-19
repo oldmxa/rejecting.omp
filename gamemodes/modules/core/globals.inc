@@ -541,14 +541,6 @@ enum e_USER
     bool:Proxy,
     bool:VPN,
 
-    // /newarena
-    bool:isCreatingArena,
-    newArenaStep,
-    Float:newArenaPos[4],
-    newArenaZone,
-    VisualArea:newArenaVisualArea,
-    newArenaTimer,
-
     // DISCORD SYNC
     dc_code[101],
     dc_username[101],

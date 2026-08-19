@@ -49,7 +49,7 @@ stock CanSpawnLoungeVehicle(playerid)
         return 0;
     }
 
-    if (User[playerid][isFrozen] || User[playerid][isCreatingArena])
+    if (User[playerid][isFrozen])
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle right now.");
         return 0;
@@ -191,8 +191,6 @@ stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot use /lounge while in a duel.");
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /lounge while in a 2v2 duel. Use /cancel2v2 first.");
-    if(User[playerid][isCreatingArena])
-        return SendClientMessage(playerid, -1, "%s", IN_ARENA_EDITOR);
 
     if (User[playerid][isAfk])
     {

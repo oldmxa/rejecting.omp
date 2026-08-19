@@ -229,16 +229,6 @@ CREATE TABLE `name_changes` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `new_arena` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `authorid` int(10) UNSIGNED NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `minx` float NOT NULL,
-  `miny` float NOT NULL,
-  `maxx` float NOT NULL,
-  `maxy` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 CREATE TABLE `outposts` (
   `zoneid` int(11) NOT NULL,
   `outpostid` int(11) NOT NULL,
@@ -469,9 +459,6 @@ ALTER TABLE `ispsbanidas`
 ALTER TABLE `name_changes`
   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `new_arena`
-  ADD PRIMARY KEY (`id`);
-
 ALTER TABLE `outposts`
   ADD PRIMARY KEY (`zoneid`,`outpostid`);
 
@@ -557,9 +544,6 @@ ALTER TABLE `ispsbanidas`
 
 ALTER TABLE `name_changes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `new_arena`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `player_daily_stats`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

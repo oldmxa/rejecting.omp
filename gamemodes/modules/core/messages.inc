@@ -123,19 +123,6 @@
 #define NOT_EMPTY_SPACES            "{MAIN}**{FFFFFF} There are no empty spaces in this location"
 #define JOINED_ROOM_MSG             "{MAIN}**{FFFFFF} You have chosen room #%d"
 
-// ARENA EDITOR (/NEWARENA)
-
-#define NEW_ARENA_INIT              ""COL_GREEN"** {FFFFFF}You have enabled the arena editor. Type "COL_GREEN"/newarena {FFFFFF}again to disable."
-#define NEW_ARENA_EXIT              ""COL_GREEN"** {FFFFFF}You have disabled the arena editor."
-#define NEW_ARENA_INFO              ""COL_GREEN"** {FFFFFF}Use the map in the pause menu to mark out two points that will form the diagonal of the arena."
-#define NEW_ARENA_NEXT              ""COL_GREEN"** {FFFFFF}Now determine the second point, which will be the diagonal of the arena."
-#define NEW_ARENA_TOO_BIG           "{MAIN}** {FFFFFF}The field of this arena is too big! Try again."
-#define NEW_ARENA_EMPTY_NAME        "{MAIN}** {FFFFFF}The name of the arena must not be empty!"
-#define NEW_ARENA_NAME_TOO_LONG     "{MAIN}** {FFFFFF}The name of the arena may have a maximum of 30 characters!"
-#define NEW_ARENA_SAVED             ""COL_GREEN"** {FFFFFF}The arena has been saved successfully!"
-#define NEW_ARENA_ANOTHER           ""COL_GREEN"** {FFFFFF}You can proceed to add another arena or type "COL_GREEN"/newarena {FFFFFF}to exit the editor."
-#define IN_ARENA_EDITOR             "{MAIN}** {FFFFFF}You are in the arena editor, type "COL_GREEN"/newarena {FFFFFF}to exit."
-
 // SPREES & COMBAT BROADCASTS
 
 #define FIRST_BLOOD                 RDM_TAG"{FFFFFF}First blood! {%06x}%s {FFFFFF}opened the round."

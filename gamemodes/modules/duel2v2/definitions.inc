@@ -68,7 +68,7 @@ stock bool:IsPlayerBusy(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return true;
     if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return true;
-    if(User[playerid][isSpectating] || User[playerid][isAfk] || User[playerid][isCreatingArena]) return true;
+    if(User[playerid][isSpectating] || User[playerid][isAfk]) return true;
     if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE) return true;
     if(g_PlayerDuel2v2ID[playerid] != -1) return true;
     if(g_PlayerTraining[playerid][pTrain_Active]) return true;

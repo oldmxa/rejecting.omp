@@ -281,7 +281,6 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][isAdminLogged] = false;
     User[MAX_PLAYERS][isAfk] = false;
     User[MAX_PLAYERS][isSpectating] = false;
-    User[MAX_PLAYERS][isCreatingArena] = false;
     User[MAX_PLAYERS][warnings] = 0;
     User[MAX_PLAYERS][killsSession] = 0;
     User[MAX_PLAYERS][deathsSession] = 0;
@@ -332,9 +331,6 @@ hook OnGameModeInit()
     // format() call here writes 3 cells and corrupts acfg_pm/acfg_clanpm, which
     // come immediately after it in the enum and are copied to every player.
     User[MAX_PLAYERS][dc_codetimer] = -1;
-    User[MAX_PLAYERS][newArenaPos] = Float:{0.0, 0.0, 0.0, 0.0};
-    User[MAX_PLAYERS][newArenaZone] = INVALID_GANG_ZONE;
-    User[MAX_PLAYERS][newArenaVisualArea] = INVALID_VISUAL_AREA_ID;
     playerSpecID[MAX_PLAYERS] = INVALID_PLAYER_ID;
     return 1;
 }

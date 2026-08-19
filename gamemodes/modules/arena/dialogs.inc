@@ -35,9 +35,6 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
         return true;
     }
 
-    if(User[playerid][isCreatingArena])
-        return SendClientMessage(playerid, -1, "%s", IN_ARENA_EDITOR);
-
     if(IsR2OnlyArena(listitem) && !IsPlayerR2Client(playerid))
     {
         SendClientMessage(playerid, -1, "%s", ARENA_R2_REQUIRED_ERROR);
@@ -98,60 +95,6 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
         setAfk(playerid);
 
     return true;
-}
-ShowNewArenaNameDialog(playerid)
-{
-    return Dialog_ShowCallback(playerid, using public NewArenaName<iiiis>, DIALOG_STYLE_INPUT, "New arena - name", "Give your suggestion for the name of the new arena.", "Save", "Cancel");
-}
-
-forward NewArena(playerid, dialogid, response, listitem, string:inputtext[]);
-public NewArena(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    if (response)
-    {
-        ShowNewArenaNameDialog(playerid);
-    }
-    else
-    {
-        SetCameraBehindPlayer(playerid);
-        TogglePlayerControllable(playerid, true);
-
-        SendClientMessage(playerid, -1, "%s", NEW_ARENA_ANOTHER);
-        ClearPlayerNewArenaData(playerid);
-    }
-
-    return true;
-}
-
-forward NewArenaName(playerid, dialogid, response, listitem, string:inputtext[]);
-public NewArenaName(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    if (response)
-    {
-        if (isnull(inputtext))
-        {
-            SendClientMessage(playerid, -1, "%s", NEW_ARENA_EMPTY_NAME);
-            return ShowNewArenaNameDialog(playerid);
-        }
-        if (strlen(inputtext) > 30)
-        {
-            SendClientMessage(playerid, -1, "%s", NEW_ARENA_NAME_TOO_LONG);
-            return ShowNewArenaNameDialog(playerid);
-        }
-
-        mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
-            "INSERT INTO `new_arena` (`authorid`, `name`, `minx`, `miny`, `maxx`, `maxy`) VALUES (%d, '%e', %f, %f, %f, %f)",
-            User[playerid][user_sqlid], inputtext, User[playerid][newArenaPos][0], User[playerid][newArenaPos][1], User[playerid][newArenaPos][2], User[playerid][newArenaPos][3]);
-        mysql_tquery(dbHandle, queryGlobal);
-
-        SendClientMessage(playerid, -1, "%s", NEW_ARENA_SAVED);
-    }
-
-    SetCameraBehindPlayer(playerid);
-    TogglePlayerControllable(playerid, true);
-
-    SendClientMessage(playerid, -1, "%s", NEW_ARENA_ANOTHER);
-    return ClearPlayerNewArenaData(playerid);
 }
 
 ShowCustomMapListDialog(playerid)

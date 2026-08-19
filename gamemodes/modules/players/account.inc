@@ -28,36 +28,7 @@
     bcrypt_hash(playerid, "OnPlayerChangePass", pass, BCRYPT_COST);
     return true;
 }
-/*
-@cmd(.alts = {"novaarena"}) newarena(playerid, params[], help)
-{
-    if (!User[playerid][isLogged])
-    {
-        return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
-    }
-    if (!User[playerid][isAfk])
-    {
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
-    }
-    if (User[playerid][isCreatingArena])
-    {
-        User[playerid][isCreatingArena] = false;
 
-        SetCameraBehindPlayer(playerid);
-        TogglePlayerControllable(playerid, true);
-        ClearPlayerNewArenaData(playerid);
-
-        return SendClientMessage(playerid, -1, "%s", NEW_ARENA_EXIT);
-    }
-
-    User[playerid][isCreatingArena] = true;
-
-    SendClientMessage(playerid, -1, "%s", NEW_ARENA_INIT);
-    SendClientMessage(playerid, -1, "%s", NEW_ARENA_INFO);
-
-    return true;
-}
-*/
 @cmd(.alts = {"linkdiscord", "discord", "dc"}) dvincular(playerid, params[], help)
 {
 	if(playerid == INVALID_PLAYER_ID || !User[playerid][isLogged])

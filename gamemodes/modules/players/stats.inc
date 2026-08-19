@@ -20,9 +20,6 @@ Respawn(playerid, timestamp)
     if(GetPVarInt(playerid, "isSpec") != 0)
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
-    if(User[playerid][isCreatingArena])
-        return SendClientMessage(playerid, -1, "%s", IN_ARENA_EDITOR);
-
     new Float:Armour;
     GetPlayerArmour(playerid, Armour);
     if(Armour < 20.0) return SendClientMessage(playerid, -1, "%s", CANNOT_RESPAWN);
@@ -756,9 +753,6 @@ ShowGunMenu(playerid)
 {
 	if(GetPVarInt(playerid, "isSpec") != 0)
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
-
-    if(User[playerid][isCreatingArena])
-        return SendClientMessage(playerid, -1, "%s", IN_ARENA_EDITOR);
 
     if(User[playerid][isAfk])
         return SendClientMessage(playerid, 0xFFFFFFFF, "%s", AFK_ERROR_MSG);

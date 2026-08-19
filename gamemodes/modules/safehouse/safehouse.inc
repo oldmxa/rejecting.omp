@@ -155,7 +155,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                 }
 
                 if (GetPVarInt(playerid, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(playerid) &&
-                    !g_PlayerTraining[playerid][pTrain_Active] && !g_Practice[playerid][pracActive] && !User[playerid][isCreatingArena] &&
+                    !g_PlayerTraining[playerid][pTrain_Active] && !g_Practice[playerid][pracActive] &&
                     !User[playerid][isFrozen] && !User[playerid][isSpectating] && playerSpecID[playerid] == INVALID_PLAYER_ID)
                 {
                     new index = GetSafehouseAtPosition(playerid);

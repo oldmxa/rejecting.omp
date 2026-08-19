@@ -178,7 +178,7 @@ stock AcceptDuel2v2Challenge(playerid)
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You do not have any pending 2v2 duel invitations.");
     }
 
-    if(User[playerid][isSpectating] || User[playerid][isAfk] || User[playerid][isCreatingArena] ||
+    if(User[playerid][isSpectating] || User[playerid][isAfk] ||
        GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE ||
        g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive])
     {

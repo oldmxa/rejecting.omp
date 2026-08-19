@@ -416,7 +416,6 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/x1c (/duel2v2)\t{FFFFFF}Create a 2v2 team duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/gx1 (/accept2v2)\t{FFFFFF}Accept a 2v2 team duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/cancel2v2\t{FFFFFF}Cancel a 2v2 duel challenge\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/newarena\t{FFFFFF}Create a custom private arena\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/safemenu (/safe)\t{FFFFFF}Open Clan Safehouse base menu\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/exitsafehouse (/leavesafe)\t{FFFFFF}Exit Clan Safehouse base\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/training\t{FFFFFF}Open training arena & challenges menu\n");

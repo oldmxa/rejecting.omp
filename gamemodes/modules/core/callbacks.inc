@@ -139,8 +139,6 @@ public OnPlayerDisconnect(playerid, reason)
 	for(new i; i < MAX_ZONES; i++)
 		HideZoneForPlayer(playerid,i);
 
-	ClearPlayerNewArenaData(playerid);
-
 	new szString[64], name[25];
 
 	GetPlayerName(playerid, name, sizeof(name));
@@ -1124,27 +1122,6 @@ public OnPlayerUpdate(playerid)
 	{
 		SetPlayerHealth(playerid, 100.0);
 		SetPlayerArmour(playerid, 100.0);
-	}
-
-	if (User[playerid][isCreatingArena] && User[playerid][newArenaStep] == 2)
-	{
-		User[playerid][newArenaStep] ++;
-
-		new
-			Float:playerX = (User[playerid][newArenaPos][0] + User[playerid][newArenaPos][2]) / 2.0,
-			Float:playerY = (User[playerid][newArenaPos][1] + User[playerid][newArenaPos][3]) / 2.0,
-			Float:playerZ;
-
-		CA_FindZ_For2DCoord(playerX, playerY, playerZ);
-		playerZ += 2.0;
-
-		SetPlayerPos(playerid, playerX, playerY, playerZ);
-		SetPlayerFacingAngle(playerid, 0.0);
-		SetCameraBehindPlayer(playerid);
-
-		User[playerid][newArenaTimer] = SetTimerEx("CameraDelay", 1000, false, "iiffffff", playerid, 0, playerX, playerY, playerZ, 0.0, 0.0, 0.0);
-
-		return true;
 	}
 
 	new PLAYER_STATE:playerState = GetPlayerState(playerid);

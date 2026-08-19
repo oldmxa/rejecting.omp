@@ -690,7 +690,7 @@ stock EnterTrainingArena(playerid, arenaid)
         return 0;
     }
 
-    if (User[playerid][isFrozen] || User[playerid][isCreatingArena])
+    if (User[playerid][isFrozen])
     {
         SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena right now.");
         return 0;

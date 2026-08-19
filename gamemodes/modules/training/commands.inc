@@ -29,9 +29,6 @@
     if (User[playerid][isFrozen])
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot do this while frozen.");
 
-    if (User[playerid][isCreatingArena])
-        return SendClientMessage(playerid, -1, "%s", IN_ARENA_EDITOR);
-
     if (playerSpecID[playerid] != INVALID_PLAYER_ID || User[playerid][isSpectating])
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Stop spectating first.");
 
