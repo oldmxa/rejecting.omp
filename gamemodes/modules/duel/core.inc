@@ -266,7 +266,6 @@ public DuelS_Countdown(playerid, challengerid, pos)
 			if(DuelS_Timer[playerid]) KillTimer(DuelS_Timer[playerid]);
 			if(DuelS_Timer[challengerid] && DuelS_Timer[challengerid] != DuelS_Timer[playerid]) KillTimer(DuelS_Timer[challengerid]);
 
-			// um unico timer atende os dois lados; ambos guardam o mesmo id
 			DuelS_Timer[playerid] = SetTimerEx("DuelS_UpdateInfo", 1000, true, "ii", playerid, challengerid);
 			DuelS_Timer[challengerid] = DuelS_Timer[playerid];
 		}
@@ -309,7 +308,6 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 	SetPVarInt(winner, "DuelS_State", DUELS_STATE_NONE);
 	SetPVarInt(loser, "DuelS_State", DUELS_STATE_NONE);
 
-	// winner e loser compartilham o mesmo timer: matar duas vezes o mesmo id
 	if(DuelS_Timer[winner])
 		KillTimer(DuelS_Timer[winner]);
 	else if(DuelS_Timer[loser])
@@ -672,7 +670,6 @@ stock DuelS_Host(playerid)
 	SetPlayerVirtualWorld(playerid, id + 10000);
 
 	new aString[180];
-	// Dois nomes no mesmo format: buffers locais, nao getPlayerName duplicado.
 	new accName[MAX_PLAYER_NAME + 1], oppName[MAX_PLAYER_NAME + 1];
 	GetPlayerName(playerid, accName, sizeof(accName));
 	GetPlayerName(id, oppName, sizeof(oppName));

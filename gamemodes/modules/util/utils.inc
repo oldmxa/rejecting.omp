@@ -94,7 +94,6 @@ stock GetColorHexTag(const colorTag[])
     return tag;
 }
 
-// indices de cor vem do banco: sempre passar por aqui antes de indexar as tabelas
 stock GetPlayerHudColorIndex(playerid)
 {
     if(playerid < 0 || playerid > MAX_PLAYERS) return 0;
@@ -273,7 +272,6 @@ GetWeaponModelIDFromName(const wname[])
 {
 	if(isnull(wname)) return -1;
 
-	// indice 0 e "none": nunca deve ser resolvido por nome
 	for (new i = 1; i < sizeof(wName); i++)
 	{
 			if (strfind(wName[i], wname, true) != -1)
@@ -297,7 +295,6 @@ returnDate( timestamp, _form=0 )
 
 	if(timestamp < 0) timestamp = 0;
 
-	// dias inteiros desde a epoch; o resto do dia vira hora/minuto/segundo
 	new days = timestamp / 86400;
 	new rest = timestamp % 86400;
 

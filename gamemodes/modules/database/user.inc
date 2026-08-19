@@ -105,7 +105,6 @@ public OnLoginVerify(playerid, bool:success)
 			strcopy(rearrangedAdminLevel, adminnames[User[playerid][adminLevel]][ingame], sizeof(rearrangedAdminLevel));
 
 		new planeString[250];
-		// form 5 = "dd.mm.yyyy hh:mm:ss" (pontos, nao barras)
 		strcopy(planeString, returnDate(User[playerid][lastLogin]-10800, 5), sizeof(planeString));
 
 		if(!User[playerid][hideWelcomeMsg])
@@ -609,8 +608,6 @@ public OnPlayerJoin(playerid)
 		GetPlayerIp(playerid, current_ip, sizeof(current_ip));
 		new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
 
-		// o IP residencial muda com o tempo: aceita tambem o da ultima sessao,
-		// senao quem registrou num IP antigo nunca mais faz auto login
 		new stored_lastip[18];
 		cache_get_value_name(0, "lastip", stored_lastip, sizeof(stored_lastip));
 

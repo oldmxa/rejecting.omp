@@ -546,7 +546,6 @@ stock SetClanColor(playerid)
     return 1;
 }
 
-// premia o clan que causou mais dano na arena e envia a disputa da zona
 stock GetRoundRank(location)
 {
     if (location < 0 || location >= MAX_LOCATIONS) return 0;

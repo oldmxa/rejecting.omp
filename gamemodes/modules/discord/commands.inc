@@ -260,7 +260,7 @@ enum E_SLASH_CMD
 {
 	slash_name[DCC_COMMAND_SIZE],
 	slash_desc[DCC_COMMAND_DESCRIPTION_SIZE],
-	slash_level                                     // 0 = publico (so exige vinculo)
+	slash_level
 }
 
 static const g_SlashCommands[][E_SLASH_CMD] = {
@@ -321,7 +321,7 @@ public RegisterSlashCommands()
 	if(g != DCC_INVALID_GUILD)
 		guildaid = g;
 
-	// printf("[DSC] guild no registro: %d (era %d no init)", _:g, _:guildaid);
+	// printf("[DSC] guild at registration: %d (was %d at init)", _:g, _:guildaid);
 
 	new cmdName[DCC_COMMAND_SIZE], cmdDesc[DCC_COMMAND_DESCRIPTION_SIZE];
 	new callbackName[DCC_COMMAND_SIZE + 8];
@@ -335,13 +335,13 @@ public RegisterSlashCommands()
 		new DCC_Command:c = DCC_CreateCommand(cmdName, cmdDesc, callbackName, true, guildaid);
 
 		#if DSC_DEBUG
-			if(i < 3) printf("[DSC] registrado /%s -> %s (guild=%d, cmd=%d)", cmdName, callbackName, _:guildaid, _:c);
+			if(i < 3) printf("[DSC] registered /%s -> %s (guild=%d, cmd=%d)", cmdName, callbackName, _:guildaid, _:c);
 		#else
 			#pragma unused c
 		#endif
 	}
 
-	// printf("[DSC] %d slash commands registrados na guild %d.", sizeof(g_SlashCommands), _:guildaid);
+	// printf("[DSC] %d slash commands registered in guild %d.", sizeof(g_SlashCommands), _:guildaid);
 
 	return 1;
 }
@@ -764,7 +764,7 @@ public OnResetPasswordHash(adminid, sqlid, const targetName[], const adminName[]
         "UPDATE `accounts` SET `password` = '%e' WHERE `id` = %d", hash, sqlid);
     mysql_tquery(dbHandle, queryGlobal);
 
-   foreach(new i : Player)
+    foreach(new i : Player)
     {
         if(User[i][user_sqlid] == sqlid && User[i][isLogged])
         {
@@ -958,7 +958,6 @@ DSLASH:cmds(user, params[])
 	#pragma unused params
 	if(!DSC_RequireLevel(user, 1)) return 1;
 
-	// Lista so o que o cargo do membro alcanca, como o /acmds do jogo.
 	new level = DSC_GetLevel(user), body[1024], line[64], found;
 	for(new lv = 1; lv <= level; lv++)
 	{
@@ -1407,8 +1406,6 @@ DSLASH:stafflist(user, params[])
 
 	inline const StaffList()
 	{
-		// Um campo por nivel, com os nomes vindos de adminnames. Uma passada por
-		// nivel evita capturar um array 2D no closure.
 		new rows = cache_num_rows(), list[384], line[96];
 		new level, username[MAX_PLAYER_NAME + 1], lastlogin;
 

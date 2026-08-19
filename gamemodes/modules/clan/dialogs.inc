@@ -255,7 +255,6 @@ stock ShowClanRolesDialog(playerid, clanid)
 {
     if (!IsValidClanID(clanid)) return 0;
 
-    // fundador ve os MAX_ROLES cargos; co-fundador nao pode editar o proprio topo
     new maxRole = (IsClanLeader(playerid)) ? MAX_ROLES : (MAX_ROLES - 1);
 
     new body[2500];
@@ -506,7 +505,6 @@ public DIALOG_CLAN_EDITMEMBER(playerid, dialogid, response, listitem, string:inp
     new slot = GetPVarInt(playerid, "EditingClanPlayer");
     if (!IsValidClanSlot(slot)) return 1;
 
-    // a lista mostra os cargos 0..MAX_ROLES-2 e "kick" como ultimo item
     if (listitem == MAX_ROLES - 1)
         ChangePlayerRank(playerid, clanid, slot, -1);
     else if (0 <= listitem < MAX_ROLES - 1)

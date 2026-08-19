@@ -641,7 +641,6 @@ stock Ach_OnDuelWin(playerid)
     return 1;
 }
 
-// exclusiva: GivePlayerAchievement bloqueia ACH_CAT_UNIQUE sem o manual = true
 stock Ach_OnTournamentWin(playerid)
 {
     return GivePlayerAchievement(playerid, ACH_TOURNAMENT_CHAMPION, true);
@@ -862,9 +861,6 @@ public DIALOG_ACHIEVEMENTS_MAIN(playerid, dialogid, response, listitem, string:i
     return 1;
 }
 
-// Filtro unico de exibicao: a lista e o handler de clique remontam o indice pela mesma regra,
-// se as duas divergirem clicar numa linha abre a conquista errada.
-// Exclusivas: quem nao e dono so enxerga as que o alvo ja conquistou.
 stock bool:Ach_IsRowVisible(playerid, targetid, ach_index, ach_cat)
 {
     if(g_AchievementsData[ach_index][ach_category] != ach_cat) return false;

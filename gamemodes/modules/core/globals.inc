@@ -399,7 +399,6 @@ new VehicleNames[212][18] = {
 };
 
 new pVehicle[MAX_PLAYERS] = {999, ...};
-// INVALID_OBJECT_ID e nao 0: object id 0 e valido no SA-MP, entao 0 como
 new objecthporarmour[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...};
 new hpandarmourtimer[MAX_PLAYERS];
 

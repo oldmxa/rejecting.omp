@@ -114,7 +114,6 @@ stock updatePlayerHud(playerid)
 			}
 			else
 			{
-				// minutos na cor um, segundos na cor dois; os dois em vermelho no aviso final
 				new bool:lowTime = (gMins < 1 && gSecs <= 30);
 
 				format(fString, sizeof(fString), "%s~n~%sFPS: %s%d %sPL: %s%.1f~n~%sArena Time: %s%d:%s%02d",

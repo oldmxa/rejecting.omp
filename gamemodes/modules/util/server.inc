@@ -348,7 +348,6 @@ public KickPlayerEx(playerid)
 
 public OnVehicleDeath(vehicleid, killerid)
 {
-	// limpa o dono do veiculo, nao quem o destruiu
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
 		if(pVehicle[i] == vehicleid)
@@ -409,7 +408,6 @@ public OnScriptUpdate()
 
 	foreach(new i : Player)
 	{
-		// lastDamageTime guarda o instante de expiracao: so limpa depois que ele passa
 		if(User[i][lastDamagerId] != INVALID_PLAYER_ID && User[i][lastDamageTime] != -1 && gettime() >= User[i][lastDamageTime])
 			User[i][lastDamagerId] = INVALID_PLAYER_ID, User[i][lastDamageTime] = -1;
 
@@ -534,9 +532,6 @@ public CheckTime()
 	CheckDay();
 	return true;
 }
-
-// cada rotina periodica tem seu proprio marcador: um LastCheck unico faz uma
-// zerar a janela da outra e o reinicio automatico nunca dispara
 static LastWeeklyCheck;
 static LastGmxCheck;
 
@@ -620,7 +615,6 @@ initializeServer(const gamemodeName[])
 
 	updateKillRank();
 
-	// skins CJ, Ryder e Sweet dao vantagem de movimentacao
 	for (new i = 0, rand; i < 30; i++)
 	{
 		do{

@@ -120,7 +120,7 @@ stock RecreatePlayerHudTextDraws(playerid)
             PlayerTextDrawBackgroundColor(playerid, FPSPingPacket[playerid], MAIN_BACKGROUND_COLOUR);
             PlayerTextDrawSetSelectable(playerid, FPSPingPacket[playerid], false);
 
-            // HUD esquerda (glow textdraw #8)
+            // Left HUD (rlow textdraw #8)
             InfoStats[playerid][0] = CreatePlayerTextDraw(playerid, 3.200005, 390.257629, "_");
             PlayerTextDrawFont(playerid, InfoStats[playerid][0], TEXT_DRAW_FONT_1);
             PlayerTextDrawLetterSize(playerid, InfoStats[playerid][0], 0.180000, 0.799998);
@@ -133,7 +133,7 @@ stock RecreatePlayerHudTextDraws(playerid)
             PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][0], MAIN_BACKGROUND_COLOUR);
             PlayerTextDrawSetSelectable(playerid, InfoStats[playerid][0], false);
 
-            // HUD direita (glow textdraw #3 / #6)
+            // Right HUD (rlow textdraw #3 / #6)
             InfoStats[playerid][1] = CreatePlayerTextDraw(playerid, 625.767273, 397.214905, "_");
             PlayerTextDrawFont(playerid, InfoStats[playerid][1], TEXT_DRAW_FONT_1);
             PlayerTextDrawLetterSize(playerid, InfoStats[playerid][1], 0.216999, 0.766222);
@@ -146,7 +146,7 @@ stock RecreatePlayerHudTextDraws(playerid)
             PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][1], MAIN_BACKGROUND_COLOUR);
             PlayerTextDrawSetSelectable(playerid, InfoStats[playerid][1], false);
 
-            // Horario e nome do servidor (glow textdraw #11)
+            // Time and server name (rlow textdraw #11)
             InfoStats[playerid][2] = CreatePlayerTextDraw(playerid, 577.468811, 25.515415, "_");
             PlayerTextDrawFont(playerid, InfoStats[playerid][2], TEXT_DRAW_FONT_1);
             PlayerTextDrawLetterSize(playerid, InfoStats[playerid][2], 0.186127, 0.816041);

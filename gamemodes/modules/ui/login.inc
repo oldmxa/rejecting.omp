@@ -13,7 +13,7 @@ new CameraLoginTimer[MAX_PLAYERS];
 // this clearance on all four sides allows the design to touch the edge of the panel
 #define LOGIN_CORNER_FIT       (6.0) // there's straight fabric left over at any corner: increase.
 
-// color nick/senha
+// Nickname/password field highlight color
 #define LOGIN_HOVER_COLOR (0xFFD700FF)
 
 #define LOGIN_PANEL_W (LOGIN_PANEL_RIGHT - LOGIN_PANEL_LEFT)

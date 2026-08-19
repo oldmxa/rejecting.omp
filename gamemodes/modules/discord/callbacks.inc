@@ -70,7 +70,6 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		return true;
 	}
 
-	// so reage ao comando: antes qualquer conversa no canal de inscricao virava candidatura
 	if(!strcmp(str, "/tournament", true, 11) || !strcmp(str, ".tournament", true, 11) || !strcmp(str, "!tournament", true, 11))
 	{
 		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);

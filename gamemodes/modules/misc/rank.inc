@@ -54,7 +54,7 @@ updateKillRank()
 		}
 
 		DestroyObject(g_Object);
-		g_Object = CreateObject(3077, 1177.4472, -2037.1240, 67.8771, 0.0000, 0.0000, -97.4003);//painel de top kills
+		g_Object = CreateObject(3077, 1177.4472, -2037.1240, 67.8771, 0.0000, 0.0000, -97.4003); // Top kills board
 		SetObjectMaterialText(g_Object, str, 0, OBJECT_MATERIAL_SIZE_512x256, "Lucida Console", 18, false, 0xFFD9A0A9, 0, OBJECT_MATERIAL_TEXT_ALIGN_LEFT);
 	}
 	MySQL_TQueryInline(dbHandle, using inline OnKillRankLoad,

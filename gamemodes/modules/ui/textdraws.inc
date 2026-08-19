@@ -309,7 +309,7 @@ playertextdraws(playerid)
 {
 	RecreatePlayerFpsPingTd(playerid);
 
-	DeathInfo[playerid][0] = CreatePlayerTextDraw(playerid, 326.400146, 390.0, "_"); //mataste alguem 12044
+	DeathInfo[playerid][0] = CreatePlayerTextDraw(playerid, 326.400146, 390.0, "_"); // You killed someone
 	PlayerTextDrawFont(playerid, DeathInfo[playerid][0], TEXT_DRAW_FONT_1);
 	PlayerTextDrawLetterSize(playerid, DeathInfo[playerid][0], 0.25, 0.91);
 	PlayerTextDrawSetShadow(playerid, DeathInfo[playerid][0], 0);
@@ -318,7 +318,7 @@ playertextdraws(playerid)
 	PlayerTextDrawColor(playerid, DeathInfo[playerid][0], -1);
 	PlayerTextDrawBackgroundColor(playerid, DeathInfo[playerid][0], MAIN_BACKGROUND_COLOUR);
 
-	DeathInfo[playerid][1] = CreatePlayerTextDraw(playerid, 326.000000, 382.0, "_"); // killed by alguem
+	DeathInfo[playerid][1] = CreatePlayerTextDraw(playerid, 326.000000, 382.0, "_"); // Killed by someone
 	PlayerTextDrawFont(playerid, DeathInfo[playerid][1], TEXT_DRAW_FONT_1);
 	PlayerTextDrawLetterSize(playerid, DeathInfo[playerid][1], 0.25, 0.91);
 	PlayerTextDrawSetOutline(playerid, DeathInfo[playerid][1], 1);
@@ -346,7 +346,7 @@ playertextdraws(playerid)
 	PlayerTextDrawColor(playerid, secondHud[playerid][0], -1);
 	PlayerTextDrawBackgroundColor(playerid, secondHud[playerid][0], 255);
 
-	secondHud[playerid][1] = CreatePlayerTextDraw(playerid, 557.000000, 1.000000, "_"); //FPS CARAI
+	secondHud[playerid][1] = CreatePlayerTextDraw(playerid, 557.000000, 1.000000, "_"); // FPS Textdraw
 	PlayerTextDrawFont(playerid, secondHud[playerid][1], TEXT_DRAW_FONT_1);
 	PlayerTextDrawLetterSize(playerid, secondHud[playerid][1], 0.189998, 0.930000);
 	PlayerTextDrawSetOutline(playerid, secondHud[playerid][1], 0);

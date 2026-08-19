@@ -10,7 +10,6 @@ forward OnSafehouseInserted(index);
 forward SafehouseTick();
 forward RestoreSafehouseSpawn(playerid);
 
-// prototipos das funcoes com tag: sem eles a ordem dentro de functions.inc importa
 forward bool:IsSafehouseMember(playerid, index);
 forward bool:IsSafehouseLeader(playerid, index);
 forward bool:CanUseSafehouseVault(playerid, index);

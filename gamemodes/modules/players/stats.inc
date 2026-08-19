@@ -680,7 +680,6 @@ public Stats_ChangeSkin(playerid, skinid)
     SetPlayerSkin(playerid, skinid);
     User[playerid][playerSkin] = skinid;
 
-    // mantem o ponto de spawn do lounge: passar 0,0,0 aqui jogava o respawn na origem do mapa
     SetSpawnInfo(playerid, 0, User[playerid][playerSkin],
         User[playerid][loungeX], User[playerid][loungeY], User[playerid][loungeZ], User[playerid][loungeA],
         WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);

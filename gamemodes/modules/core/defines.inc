@@ -181,7 +181,7 @@
 //access restricted to owner
 #define         SERVER_OWNER        "oldmxa"
 
-// guild do discord: used in init and when registering slash commands
+// Discord guild
 #define         DISCORD_GUILD_ID    "1460103805290151946"
 
 // discord Roles 
