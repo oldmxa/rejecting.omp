@@ -24,6 +24,17 @@ ORPC:RPC_INIT_GAME(playerid, BitStream:bs)
     return 1;
 }
 
+forward RestorePlayerEnv(playerid);
+public RestorePlayerEnv(playerid)
+{
+    if (IsPlayerConnected(playerid) && User[playerid][isLogged])
+    {
+        SetPlayerTime(playerid, User[playerid][time], 0);
+        SetPlayerWeather(playerid, User[playerid][weather]);
+    }
+    return 1;
+}
+
 stock bool:ResendInitGame(playerid, bool:pedAnims)
 {
     if (!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return false;
@@ -56,6 +67,10 @@ stock bool:ResendInitGame(playerid, bool:pedAnims)
     {
         SetPlayerSkin(playerid, User[playerid][playerSkin]);
     }
+
+    SetPlayerTime(playerid, User[playerid][time], 0);
+    SetPlayerWeather(playerid, User[playerid][weather]);
+    SetTimerEx("RestorePlayerEnv", 50, false, "i", playerid);
 
     return true;
 }

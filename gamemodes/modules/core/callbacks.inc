@@ -498,15 +498,15 @@ public OnPlayerSpawn(playerid)
 	else
 		spawnOnLocation(playerid);
 
+	SetPlayerTime(playerid, User[playerid][time], 0);
+	SetPlayerWeather(playerid, User[playerid][weather]);
+
 	if(GetPVarInt(playerid, "firstSpawn") == 1)
 	{
 		for (new i; i < MAX_ZONES; i ++)
 		{
 			ShowZoneForPlayer(playerid, i, ZoneColour[i], 0xFFFFFFFF, 0xFFFFFFFF);
 		}
-
-		SetPlayerTime(playerid, User[playerid][time], 0);
-		SetPlayerWeather(playerid, User[playerid][weather]);
 
 		hideSpecTD(playerid);
 
