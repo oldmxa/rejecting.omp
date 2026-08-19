@@ -341,36 +341,43 @@ public OffDox(playerid)
 		format(title, sizeof(title), "{MAIN}Lookup (offline): {FFFFFF}%s", username);
 		format_MainColor(playerid, title);
 
+		new accGpci[42];
+		cache_get_value(0, "gpci", accGpci);
+		if(isnull(accGpci)) format(accGpci, sizeof(accGpci), "N/A");
+
 		if(isnull(isp))
 		{
-			new why[240];
+			new why[260];
 
 			format(why, sizeof(why),
 				"{FFFFFF}This account has no network data stored.\n\n"\
 				"{B4B5B7}Registration IP: {FFFFFF}%s\n"\
-				"{B4B5B7}Last IP: {FFFFFF}%s\n\n"\
+				"{B4B5B7}Last IP: {FFFFFF}%s\n"\
+				"{B4B5B7}GPCI / Serial: {FFFFFF}%s\n\n"\
 				"{B4B5B7}The lookup only runs on public addresses. A rejected request is logged as {FFFFFF}[ANTIVPN]{B4B5B7}.",
-				regip, lastip);
+				regip, lastip, accGpci);
 
 			return Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, title, why, "Close", "");
 		}
 
 		format(strlookup, sizeof(strlookup),
-			"Field\tValue\n\
-			Registration IP\t%s\n\
-			Last IP\t%s\n\
-			ISP\t%s\n\
-			Network\t%s\n\
-			ISP Number\t%s\n\
-			City\t%s\n\
-			Region\t%s (%s)\n\
-			Country\t%s (%s)\n\
-			Coordinates\t%s, %s\n\
-			Time Zone\t%s\n\
-			VPN\t%s\n\
-			Proxy\t%s",
+			"{MAIN}Field\t{MAIN}Value\n"\
+			"{B4B5B7}Registration IP\t{FFFFFF}%s\n"\
+			"{B4B5B7}Last IP\t{FFFFFF}%s\n"\
+			"{B4B5B7}GPCI / Serial\t{FFFFFF}%s\n"\
+			"{B4B5B7}ISP\t{FFFFFF}%s\n"\
+			"{B4B5B7}Network\t{FFFFFF}%s\n"\
+			"{B4B5B7}ISP Number\t{FFFFFF}%s\n"\
+			"{B4B5B7}City\t{FFFFFF}%s\n"\
+			"{B4B5B7}Region\t{FFFFFF}%s (%s)\n"\
+			"{B4B5B7}Country\t{FFFFFF}%s (%s)\n"\
+			"{B4B5B7}Coordinates\t{FFFFFF}%s, %s\n"\
+			"{B4B5B7}Time Zone\t{FFFFFF}%s\n"\
+			"{B4B5B7}VPN\t%s\n"\
+			"{B4B5B7}Proxy\t%s",
 			regip,
 			lastip,
+			accGpci,
 			isp,
 			network,
 			ispnumber,
@@ -383,6 +390,7 @@ public OffDox(playerid)
 			proxy == true ? (""COL_KGREEN"Yes") : (""COL_RED"No")
 		);
 
+		format_MainColor(playerid, strlookup);
 		Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, strlookup, "Close", "");
 		return true;
 	}

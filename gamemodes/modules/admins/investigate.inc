@@ -80,31 +80,34 @@ static stock ShowOnlineLookup(playerid, targetid)
 
     if (isnull(User[targetid][Isp]))
     {
-        new why[220];
+        new why[240];
 
         format(why, sizeof(why),
             "{FFFFFF}No network data was collected for this player.\n\n"\
-            "{B4B5B7}IP: {FFFFFF}%s\n\n"\
+            "{B4B5B7}IP: {FFFFFF}%s\n"\
+            "{B4B5B7}GPCI / Serial: {FFFFFF}%s\n\n"\
             "{B4B5B7}Local addresses are skipped on purpose. Otherwise check the console for {FFFFFF}Status VPN{B4B5B7}, which reports a rejected lookup.",
-            getPlayerIp(targetid));
+            getPlayerIp(targetid), User[targetid][user_gpci]);
 
         return Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, title, why, "Close", "");
     }
 
     format(strlookup, sizeof(strlookup),
-        "Field\tValue\n"\
-        "IP\t%s\n"\
-        "ISP\t%s\n"\
-        "Network\t%s\n"\
-        "ISP Number\t%s\n"\
-        "City\t%s\n"\
-        "Region\t%s (%s)\n"\
-        "Country\t%s (%s)\n"\
-        "Coordinates\t%s, %s\n"\
-        "Time Zone\t%s\n"\
-        "VPN\t%s\n"\
-        "Proxy\t%s",
+        "{MAIN}Field\t{MAIN}Value\n"\
+        "{B4B5B7}IP\t{FFFFFF}%s\n"\
+        "{B4B5B7}GPCI / Serial\t{FFFFFF}%s\n"\
+        "{B4B5B7}ISP\t{FFFFFF}%s\n"\
+        "{B4B5B7}Network\t{FFFFFF}%s\n"\
+        "{B4B5B7}ISP Number\t{FFFFFF}%s\n"\
+        "{B4B5B7}City\t{FFFFFF}%s\n"\
+        "{B4B5B7}Region\t{FFFFFF}%s (%s)\n"\
+        "{B4B5B7}Country\t{FFFFFF}%s (%s)\n"\
+        "{B4B5B7}Coordinates\t{FFFFFF}%s, %s\n"\
+        "{B4B5B7}Time Zone\t{FFFFFF}%s\n"\
+        "{B4B5B7}VPN\t%s\n"\
+        "{B4B5B7}Proxy\t%s",
         getPlayerIp(targetid),
+        User[targetid][user_gpci],
         User[targetid][Isp],
         User[targetid][Network],
         User[targetid][IspNumber],
@@ -117,6 +120,7 @@ static stock ShowOnlineLookup(playerid, targetid)
         User[targetid][Proxy] == true ? (""COL_KGREEN"Yes") : (""COL_RED"No")
     );
 
+    format_MainColor(playerid, strlookup);
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, strlookup, "Close", "");
     return true;
 }
