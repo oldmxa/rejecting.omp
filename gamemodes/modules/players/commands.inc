@@ -274,14 +274,14 @@ ShowHelpMainMenu(playerid)
     format_MainColor(playerid, title);
 
     format(helpStr, sizeof(helpStr), "{MAIN}Category / Option\t{MAIN}Description\n");
-    strcat(helpStr, "My Account\t{FFFFFF}View account info, statistics & settings\n");
-    strcat(helpStr, "Security\t{FFFFFF}Account security, password & Discord link\n");
-    strcat(helpStr, "Changemode\t{FFFFFF}Select an arena or change game mode\n");
-    strcat(helpStr, "Training Mode\t{FFFFFF}Guide, commands & features of Training System\n");
-    strcat(helpStr, "VIP System\t{FFFFFF}View VIP benefits & commands\n");
-    strcat(helpStr, "Rankings\t{FFFFFF}View top 10 player & clan leaderboards\n");
-    strcat(helpStr, "Rules\t{FFFFFF}Read official server rules & guidelines\n");
-    strcat(helpStr, "Commands\t{FFFFFF}View full list of all server commands");
+    strcat(helpStr, "{B4B5B7}My Account\t{FFFFFF}View account info, statistics & settings\n");
+    strcat(helpStr, "{B4B5B7}Security\t{FFFFFF}Account security, password & Discord link\n");
+    strcat(helpStr, "{B4B5B7}Changemode\t{FFFFFF}Select an arena or change game mode\n");
+    strcat(helpStr, "{B4B5B7}Training Mode\t{FFFFFF}Guide, commands & features of Training System\n");
+    strcat(helpStr, "{B4B5B7}VIP System\t{FFFFFF}View VIP benefits & commands\n");
+    strcat(helpStr, "{B4B5B7}Rankings\t{FFFFFF}View top 10 player & clan leaderboards\n");
+    strcat(helpStr, "{B4B5B7}Rules\t{FFFFFF}Read official server rules & guidelines\n");
+    strcat(helpStr, "{B4B5B7}Commands\t{FFFFFF}View full list of all server commands");
     format_MainColor(playerid, helpStr);
 
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, helpStr, "Select", "Close");
@@ -309,7 +309,7 @@ ShowPlayerCommands(playerid)
     strcat(body, "{MAIN}Category\t{MAIN}Open\n", sizeof(body));
 
     for(new i = 0; i < CMD_CATEGORIES; i++)
-        strcat(body, fmat_return("{BEBEBE}%s\t"COL_WHITE"\xBB\n", g_CmdCategories[i]), sizeof(body));
+        strcat(body, fmat_return("{B4B5B7}%s\t{FFFFFF}\xBB\n", g_CmdCategories[i]), sizeof(body));
 
     format_MainColor(playerid, body);
 
@@ -347,93 +347,93 @@ ShowCommandCategory(playerid, catid)
     {
         case 0:
         {
-            strcat(cmdsstr, "{BEBEBE}/changemode\t"COL_WHITE"Select arena or change game mode\n");
-            strcat(cmdsstr, "{BEBEBE}/menu\t"COL_WHITE"Show player settings menu\n");
-            strcat(cmdsstr, "{BEBEBE}/l (/lounge)\t"COL_WHITE"Teleport to the lounge room\n");
-            strcat(cmdsstr, "{BEBEBE}/respawn\t"COL_WHITE"Respawn your character\n");
-            strcat(cmdsstr, "{BEBEBE}/gunmenu\t"COL_WHITE"Open weapon selection menu in arena\n");
-            strcat(cmdsstr, "{BEBEBE}/spec\t"COL_WHITE"Spectate a player\n");
-            strcat(cmdsstr, "{BEBEBE}/specoff\t"COL_WHITE"Stop spectating\n");
-            strcat(cmdsstr, "{BEBEBE}/stats\t"COL_WHITE"View your or player stats\n");
-            strcat(cmdsstr, "{BEBEBE}/fullstats\t"COL_WHITE"View detailed player stats\n");
-            strcat(cmdsstr, "{BEBEBE}/ach\t"COL_WHITE"View your achievements & progress\n");
-            strcat(cmdsstr, "{BEBEBE}/coins\t"COL_WHITE"Balance, buy Coins, history and VIP - all in one\n");
-            strcat(cmdsstr, "{BEBEBE}/logcoins\t"COL_WHITE"Shortcut to your last 15 Coins transactions\n");
-            strcat(cmdsstr, "{BEBEBE}/buycoins [amount]\t"COL_WHITE"Shortcut to exchange in-game money for Coins\n");
-            strcat(cmdsstr, "{BEBEBE}/customhud\t"COL_WHITE"Change Server HUD style\n");
-            strcat(cmdsstr, "{BEBEBE}/sync\t"COL_WHITE"Resync character position\n");
+            strcat(cmdsstr, "{B4B5B7}/changemode\t{FFFFFF}Select arena or change game mode\n");
+            strcat(cmdsstr, "{B4B5B7}/menu\t{FFFFFF}Show player settings menu\n");
+            strcat(cmdsstr, "{B4B5B7}/l (/lounge)\t{FFFFFF}Teleport to the lounge room\n");
+            strcat(cmdsstr, "{B4B5B7}/respawn\t{FFFFFF}Respawn your character\n");
+            strcat(cmdsstr, "{B4B5B7}/gunmenu\t{FFFFFF}Open weapon selection menu in arena\n");
+            strcat(cmdsstr, "{B4B5B7}/spec\t{FFFFFF}Spectate a player\n");
+            strcat(cmdsstr, "{B4B5B7}/specoff\t{FFFFFF}Stop spectating\n");
+            strcat(cmdsstr, "{B4B5B7}/stats\t{FFFFFF}View your or player stats\n");
+            strcat(cmdsstr, "{B4B5B7}/fullstats\t{FFFFFF}View detailed player stats\n");
+            strcat(cmdsstr, "{B4B5B7}/ach\t{FFFFFF}View your achievements & progress\n");
+            strcat(cmdsstr, "{B4B5B7}/coins\t{FFFFFF}Balance, buy Coins, history and VIP - all in one\n");
+            strcat(cmdsstr, "{B4B5B7}/logcoins\t{FFFFFF}Shortcut to your last 15 Coins transactions\n");
+            strcat(cmdsstr, "{B4B5B7}/buycoins [amount]\t{FFFFFF}Shortcut to exchange in-game money for Coins\n");
+            strcat(cmdsstr, "{B4B5B7}/customhud\t{FFFFFF}Change Server HUD style\n");
+            strcat(cmdsstr, "{B4B5B7}/sync\t{FFFFFF}Resync character position\n");
         }
         case 1:
         {
-            strcat(cmdsstr, "{BEBEBE}/skin\t"COL_WHITE"Change your character skin\n");
-            strcat(cmdsstr, "{BEBEBE}/fight\t"COL_WHITE"Change your fighting style\n");
-            strcat(cmdsstr, "{BEBEBE}/weather\t"COL_WHITE"Change your local weather\n");
-            strcat(cmdsstr, "{BEBEBE}/time\t"COL_WHITE"Change your local time\n");
-            strcat(cmdsstr, "{BEBEBE}/dance\t"COL_WHITE"Perform dance animations\n");
-            strcat(cmdsstr, "{BEBEBE}/piss\t"COL_WHITE"Perform pee animation\n");
-            strcat(cmdsstr, "{BEBEBE}/stopanim\t"COL_WHITE"Stop current animation\n");
-            strcat(cmdsstr, "{BEBEBE}/flash\t"COL_WHITE"Toggle hitmark flash effect\n");
+            strcat(cmdsstr, "{B4B5B7}/skin\t{FFFFFF}Change your character skin\n");
+            strcat(cmdsstr, "{B4B5B7}/fight\t{FFFFFF}Change your fighting style\n");
+            strcat(cmdsstr, "{B4B5B7}/weather\t{FFFFFF}Change your local weather\n");
+            strcat(cmdsstr, "{B4B5B7}/time\t{FFFFFF}Change your local time\n");
+            strcat(cmdsstr, "{B4B5B7}/dance\t{FFFFFF}Perform dance animations\n");
+            strcat(cmdsstr, "{B4B5B7}/piss\t{FFFFFF}Perform pee animation\n");
+            strcat(cmdsstr, "{B4B5B7}/stopanim\t{FFFFFF}Stop current animation\n");
+            strcat(cmdsstr, "{B4B5B7}/flash\t{FFFFFF}Toggle hitmark flash effect\n");
         }
         case 2:
         {
-            strcat(cmdsstr, "{BEBEBE}/car\t"COL_WHITE"Spawn vehicle in Lounge\n");
-            strcat(cmdsstr, "{BEBEBE}/bike\t"COL_WHITE"Spawn bicycle in Lounge\n");
-            strcat(cmdsstr, "{BEBEBE}/jetpack\t"COL_WHITE"Get jetpack in Lounge\n");
-            strcat(cmdsstr, "{BEBEBE}/tune\t"COL_WHITE"Tune vehicle in Lounge\n");
-            strcat(cmdsstr, "{BEBEBE}/flip\t"COL_WHITE"Flip vehicle in Lounge\n");
-            strcat(cmdsstr, "{BEBEBE}/fix\t"COL_WHITE"Repair vehicle in Lounge\n");
-            strcat(cmdsstr, "{BEBEBE}/getgun\t"COL_WHITE"Get weapons in Lounge\n");
-            strcat(cmdsstr, "{BEBEBE}/changelounge\t"COL_WHITE"Change Lounge spawn location\n");
-            strcat(cmdsstr, "{BEBEBE}/lcmds\t"COL_WHITE"List all Lounge commands\n");
+            strcat(cmdsstr, "{B4B5B7}/car\t{FFFFFF}Spawn vehicle in Lounge\n");
+            strcat(cmdsstr, "{B4B5B7}/bike\t{FFFFFF}Spawn bicycle in Lounge\n");
+            strcat(cmdsstr, "{B4B5B7}/jetpack\t{FFFFFF}Get jetpack in Lounge\n");
+            strcat(cmdsstr, "{B4B5B7}/tune\t{FFFFFF}Tune vehicle in Lounge\n");
+            strcat(cmdsstr, "{B4B5B7}/flip\t{FFFFFF}Flip vehicle in Lounge\n");
+            strcat(cmdsstr, "{B4B5B7}/fix\t{FFFFFF}Repair vehicle in Lounge\n");
+            strcat(cmdsstr, "{B4B5B7}/getgun\t{FFFFFF}Get weapons in Lounge\n");
+            strcat(cmdsstr, "{B4B5B7}/changelounge\t{FFFFFF}Change Lounge spawn location\n");
+            strcat(cmdsstr, "{B4B5B7}/lcmds\t{FFFFFF}List all Lounge commands\n");
         }
         case 3:
         {
-            strcat(cmdsstr, "{BEBEBE}/clan\t"COL_WHITE"Open Clan management menu\n");
-            strcat(cmdsstr, fmat_return("{BEBEBE}/createclan\t"COL_WHITE"Create a new Clan (%s)\n", FormatMoney(1000000)));
-            strcat(cmdsstr, "{BEBEBE}/clans\t"COL_WHITE"View global Clans ranking list\n");
-            strcat(cmdsstr, "{BEBEBE}/territories\t"COL_WHITE"View Outpost & territory status\n");
-            strcat(cmdsstr, "{BEBEBE}/clancmds\t"COL_WHITE"View full list of Clan commands\n");
+            strcat(cmdsstr, "{B4B5B7}/clan\t{FFFFFF}Open Clan management menu\n");
+            strcat(cmdsstr, fmat_return("{B4B5B7}/createclan\t{FFFFFF}Create a new Clan (%s)\n", FormatMoney(1000000)));
+            strcat(cmdsstr, "{B4B5B7}/clans\t{FFFFFF}View global Clans ranking list\n");
+            strcat(cmdsstr, "{B4B5B7}/territories\t{FFFFFF}View Outpost & territory status\n");
+            strcat(cmdsstr, "{B4B5B7}/clancmds\t{FFFFFF}View full list of Clan commands\n");
         }
         case 4:
         {
-            strcat(cmdsstr, "{BEBEBE}/duel [id]\t"COL_WHITE"Challenge a player to 1v1 duel\n");
-            strcat(cmdsstr, "{BEBEBE}/acceptduel\t"COL_WHITE"Accept a duel challenge\n");
-            strcat(cmdsstr, "{BEBEBE}/x1c\t"COL_WHITE"Create a 2v2 team duel challenge\n");
-            strcat(cmdsstr, "{BEBEBE}/gx1\t"COL_WHITE"Accept a 2v2 team duel challenge\n");
-            strcat(cmdsstr, "{BEBEBE}/leaveduel\t"COL_WHITE"Cancel or leave a duel\n");
-            strcat(cmdsstr, "{BEBEBE}/newarena\t"COL_WHITE"Create a custom private arena\n");
-            strcat(cmdsstr, "{BEBEBE}/training\t"COL_WHITE"Open training arena & challenges menu\n");
-            strcat(cmdsstr, "{BEBEBE}/rt (/restarttraining)\t"COL_WHITE"Restart current training challenge\n");
-            strcat(cmdsstr, "{BEBEBE}/exittraining\t"COL_WHITE"Exit current training arena\n");
-            strcat(cmdsstr, "{BEBEBE}/prac\t"COL_WHITE"Private aim practice in the lounge (level 5+)\n");
-            strcat(cmdsstr, "{BEBEBE}/prac pos1 (/prac pos2)\t"COL_WHITE"Set the two target movement points\n");
-            strcat(cmdsstr, "{BEBEBE}/prac rec\t"COL_WHITE"Record a movement for the NPC to repeat\n");
-            strcat(cmdsstr, "{BEBEBE}/prac exit\t"COL_WHITE"Leave the practice world\n");
-            strcat(cmdsstr, "{BEBEBE}/showagain\t"COL_WHITE"Show last round results\n");
+            strcat(cmdsstr, "{B4B5B7}/duel [id]\t{FFFFFF}Challenge a player to 1v1 duel\n");
+            strcat(cmdsstr, "{B4B5B7}/acceptduel\t{FFFFFF}Accept a duel challenge\n");
+            strcat(cmdsstr, "{B4B5B7}/x1c\t{FFFFFF}Create a 2v2 team duel challenge\n");
+            strcat(cmdsstr, "{B4B5B7}/gx1\t{FFFFFF}Accept a 2v2 team duel challenge\n");
+            strcat(cmdsstr, "{B4B5B7}/leaveduel\t{FFFFFF}Cancel or leave a duel\n");
+            strcat(cmdsstr, "{B4B5B7}/newarena\t{FFFFFF}Create a custom private arena\n");
+            strcat(cmdsstr, "{B4B5B7}/training\t{FFFFFF}Open training arena & challenges menu\n");
+            strcat(cmdsstr, "{B4B5B7}/rt (/restarttraining)\t{FFFFFF}Restart current training challenge\n");
+            strcat(cmdsstr, "{B4B5B7}/exittraining\t{FFFFFF}Exit current training arena\n");
+            strcat(cmdsstr, "{B4B5B7}/prac\t{FFFFFF}Private aim practice in the lounge (level 5+)\n");
+            strcat(cmdsstr, "{B4B5B7}/prac pos1 (/prac pos2)\t{FFFFFF}Set the two target movement points\n");
+            strcat(cmdsstr, "{B4B5B7}/prac rec\t{FFFFFF}Record a movement for the NPC to repeat\n");
+            strcat(cmdsstr, "{B4B5B7}/prac exit\t{FFFFFF}Leave the practice world\n");
+            strcat(cmdsstr, "{B4B5B7}/showagain\t{FFFFFF}Show last round results\n");
         }
         case 5:
         {
-            strcat(cmdsstr, "{BEBEBE}/id [id/name]\t"COL_WHITE"Find player ID or info\n");
-            strcat(cmdsstr, "{BEBEBE}/pm [id] [msg]\t"COL_WHITE"Send a private message\n");
-            strcat(cmdsstr, "{BEBEBE}/transfer [id/name] [amt]\t"COL_WHITE"Transfer money to a player\n");
-            strcat(cmdsstr, "{BEBEBE}/report [id] [reason]\t"COL_WHITE"Report a player to admins\n");
-            strcat(cmdsstr, "{BEBEBE}/ask [question]\t"COL_WHITE"Ask a question to online staff\n");
-            strcat(cmdsstr, "{BEBEBE}/votekick [id]\t"COL_WHITE"Initiate a votekick poll\n");
-            strcat(cmdsstr, "{BEBEBE}/admins\t"COL_WHITE"View online administrators\n");
-            strcat(cmdsstr, "{BEBEBE}/ranks\t"COL_WHITE"View server rankings\n");
-            strcat(cmdsstr, "{BEBEBE}/credits\t"COL_WHITE"Show server credits\n");
+            strcat(cmdsstr, "{B4B5B7}/id [id/name]\t{FFFFFF}Find player ID or info\n");
+            strcat(cmdsstr, "{B4B5B7}/pm [id] [msg]\t{FFFFFF}Send a private message\n");
+            strcat(cmdsstr, "{B4B5B7}/transfer [id/name] [amt]\t{FFFFFF}Transfer money to a player\n");
+            strcat(cmdsstr, "{B4B5B7}/report [id] [reason]\t{FFFFFF}Report a player to admins\n");
+            strcat(cmdsstr, "{B4B5B7}/ask [question]\t{FFFFFF}Ask a question to online staff\n");
+            strcat(cmdsstr, "{B4B5B7}/votekick [id]\t{FFFFFF}Initiate a votekick poll\n");
+            strcat(cmdsstr, "{B4B5B7}/admins\t{FFFFFF}View online administrators\n");
+            strcat(cmdsstr, "{B4B5B7}/ranks\t{FFFFFF}View server rankings\n");
+            strcat(cmdsstr, "{B4B5B7}/credits\t{FFFFFF}Show server credits\n");
         }
         case 6:
         {
-            strcat(cmdsstr, "{BEBEBE}/buyvip\t"COL_WHITE"Open VIP package activation menu\n");
-            strcat(cmdsstr, "{BEBEBE}/vip\t"COL_WHITE"View VIP perks & status\n");
-            strcat(cmdsstr, "{BEBEBE}/vtag\t"COL_WHITE"Customize 3D VIP Head Tag\n");
-            strcat(cmdsstr, "{BEBEBE}/tag\t"COL_WHITE"Manage tag visibility (VIP, Clan, Admin, Custom)\n");
-            strcat(cmdsstr, "{BEBEBE}/vipcmds\t"COL_WHITE"View full list of VIP commands\n");
-            strcat(cmdsstr, "{BEBEBE}/dvincular\t"COL_WHITE"Link your Discord account\n");
-            strcat(cmdsstr, "{BEBEBE}/udiscord\t"COL_WHITE"Unlink your Discord account\n");
-            strcat(cmdsstr, "{BEBEBE}/changepass\t"COL_WHITE"Change your account password\n");
-            strcat(cmdsstr, "{BEBEBE}/changenick\t"COL_WHITE"Change your nickname\n");
+            strcat(cmdsstr, "{B4B5B7}/buyvip\t{FFFFFF}Open VIP package activation menu\n");
+            strcat(cmdsstr, "{B4B5B7}/vip\t{FFFFFF}View VIP perks & status\n");
+            strcat(cmdsstr, "{B4B5B7}/vtag\t{FFFFFF}Customize 3D VIP Head Tag\n");
+            strcat(cmdsstr, "{B4B5B7}/tag\t{FFFFFF}Manage tag visibility (VIP, Clan, Admin, Custom)\n");
+            strcat(cmdsstr, "{B4B5B7}/vipcmds\t{FFFFFF}View full list of VIP commands\n");
+            strcat(cmdsstr, "{B4B5B7}/dvincular\t{FFFFFF}Link your Discord account\n");
+            strcat(cmdsstr, "{B4B5B7}/udiscord\t{FFFFFF}Unlink your Discord account\n");
+            strcat(cmdsstr, "{B4B5B7}/changepass\t{FFFFFF}Change your account password\n");
+            strcat(cmdsstr, "{B4B5B7}/changenick\t{FFFFFF}Change your nickname\n");
         }
     }
 

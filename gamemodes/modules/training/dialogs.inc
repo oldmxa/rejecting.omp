@@ -181,11 +181,11 @@ stock ShowTrainingHelpDialog(playerid)
 
     new buf[1024];
     format(buf, sizeof(buf), "{MAIN}Command / Feature\t{MAIN}Description\n");
-    strcat(buf, "/training\t{FFFFFF}Open Training menu & select an arena\n");
-    strcat(buf, "/rt\t{FFFFFF}Restart current training challenge instantly\n");
-    strcat(buf, "Key 'N'\t{FFFFFF}Shortcut key to restart the challenge in real-time\n");
-    strcat(buf, "/exittraining\t{FFFFFF}Exit current training arena and return to Lounge\n");
-    strcat(buf, "Records\t{FFFFFF}Personal & server high-scores are shown in the /training menu");
+    strcat(buf, "{B4B5B7}/training\t{FFFFFF}Open Training menu & select an arena\n");
+    strcat(buf, "{B4B5B7}/rt\t{FFFFFF}Restart current training challenge instantly\n");
+    strcat(buf, "{B4B5B7}Key 'N'\t{FFFFFF}Shortcut key to restart the challenge in real-time\n");
+    strcat(buf, "{B4B5B7}/exittraining\t{FFFFFF}Exit current training arena and return to Lounge\n");
+    strcat(buf, "{B4B5B7}Records\t{FFFFFF}Personal & server high-scores are shown in the /training menu");
 
     format_MainColor(playerid, buf);
 
