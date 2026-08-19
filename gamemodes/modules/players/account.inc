@@ -400,6 +400,12 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
     return 1;
 }
 
+forward DIALOG_HELP_RULES(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_HELP_RULES(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    return ShowHelpMainMenu(playerid);
+}
+
 forward DIALOG_HELP_MAIN(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_HELP_MAIN(playerid, dialogid, response, listitem, string:inputtext[])
 {
@@ -438,7 +444,7 @@ public DIALOG_HELP_MAIN(playerid, dialogid, response, listitem, string:inputtext
 
             new rulesTitle[64] = "{MAIN}Server Rules & Guidelines";
             format_MainColor(playerid, rulesTitle);
-            Dialog_ShowCallback(playerid, using public DIALOG_HELP_MAIN<iiiis>, DIALOG_STYLE_MSGBOX, rulesTitle, rulesStr, "Back", "");
+            Dialog_ShowCallback(playerid, using public DIALOG_HELP_RULES<iiiis>, DIALOG_STYLE_MSGBOX, rulesTitle, rulesStr, "Back", "");
         }
         case 7: ShowPlayerCommands(playerid);
     }
