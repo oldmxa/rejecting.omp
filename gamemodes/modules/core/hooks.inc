@@ -313,7 +313,7 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][showConnectMsg] = true;
     User[MAX_PLAYERS][hideGlobalMsg] = false;
     User[MAX_PLAYERS][hideWelcomeMsg] = false;
-    User[MAX_PLAYERS][show3DDeathTag] = true;
+    User[MAX_PLAYERS][show3DDeathTag] = false;
     User[MAX_PLAYERS][showRandomDeathTags] = true;
     User[MAX_PLAYERS][hitSoundID] = 17802;
     User[MAX_PLAYERS][killSoundID] = 1057;

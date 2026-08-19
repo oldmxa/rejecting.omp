@@ -284,7 +284,7 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][showConnectMsg] = true;
     User[playerid][hideGlobalMsg] = false;
     User[playerid][hideWelcomeMsg] = false;
-    User[playerid][show3DDeathTag] = true;
+    User[playerid][show3DDeathTag] = false;
     User[playerid][showRandomDeathTags] = true;
     User[playerid][hitSoundID] = 17802;
     User[playerid][killSoundID] = 1057;
