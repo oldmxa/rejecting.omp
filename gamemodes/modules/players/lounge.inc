@@ -208,8 +208,12 @@ stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
         }
         else
         {
+            new oldLocation = User[playerid][locationId];
+
             User[playerid][isAfk] = false;
             User[playerid][locationId] = User[playerid][lastLocation];
+
+            ApplyArenaRpWalk(playerid, oldLocation, User[playerid][locationId]);
         }
 
         SpawnPlayerEx(playerid);

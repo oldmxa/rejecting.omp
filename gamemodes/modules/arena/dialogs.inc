@@ -52,6 +52,8 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
         return true;
     }
 
+    new oldLocation = User[playerid][lastLocation];
+
     User[playerid][locationId] = listitem;
     User[playerid][lastLocation] = listitem;
 
@@ -87,6 +89,8 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
     playerArenaInfo[listitem][playerid][hitedShots] = 0;
     SetPVarInt(playerid, "CurrentShotId", 0);
     SetPVarInt(playerid, "LastHitedShotId", 0);
+
+    ApplyArenaRpWalk(playerid, oldLocation, listitem);
 
     SpawnPlayerEx(playerid);
 

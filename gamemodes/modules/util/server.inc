@@ -75,6 +75,16 @@ stock LoadServerConfig()
             ServerDefaultHudColor = strval(val);
             if(ServerDefaultHudColor < 0 || ServerDefaultHudColor >= sizeof(hudPersonalization)) ServerDefaultHudColor = 0;
         }
+        else if(!strcmp(key, "DefaultHudShadeOne", true))
+        {
+            ServerDefaultHudShadeOne = strval(val);
+            if(ServerDefaultHudShadeOne < -1 || ServerDefaultHudShadeOne >= sizeof(hudShades)) ServerDefaultHudShadeOne = -1;
+        }
+        else if(!strcmp(key, "DefaultHudShadeTwo", true))
+        {
+            ServerDefaultHudShadeTwo = strval(val);
+            if(ServerDefaultHudShadeTwo < -1 || ServerDefaultHudShadeTwo >= sizeof(hudShades)) ServerDefaultHudShadeTwo = -1;
+        }
     }
     fclose(file);
     return 1;
@@ -105,6 +115,9 @@ stock SaveServerConfig()
     fwrite(file, str);
 
     format(str, sizeof(str), "DefaultHudColor=%d\r\n", ServerDefaultHudColor);
+    fwrite(file, str);
+
+    format(str, sizeof(str), "DefaultHudShadeOne=%d\r\nDefaultHudShadeTwo=%d\r\n", ServerDefaultHudShadeOne, ServerDefaultHudShadeTwo);
     fwrite(file, str);
 
     format(str, sizeof(str), "MaxWarnings=%d\r\nMaxLoginAttempts=%d\r\nMaxAccountsPerIP=%d\r\nACCooldown=%d\r\n",
@@ -426,7 +439,7 @@ public OnScriptUpdate()
 
 		if(User[i][isLogged] && User[i][isAlreadySpawned] && User[i][isAfk] == false)
 		{
-			if(User[i][locationId] == ARENA_R2_FPS_UNLOCK)
+			if(IsFpsFreeArena(User[i][locationId]))
 			{
 				DeletePVar(i, "highFpsTicks");
 				DeletePVar(i, "lowFpsTicks");

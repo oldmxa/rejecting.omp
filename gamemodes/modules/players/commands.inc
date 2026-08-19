@@ -77,7 +77,10 @@ StartChangeMode(playerid)
         return SendClientMessage(playerid, 0xa4aba7ff, "%s", IN_VEHICLE_ERROR);
 
     if(User[playerid][locationId] != -1)
+    {
         GangZoneStopPulseForPlayer(playerid, e_ZONE_PULSE_ZONE, arenaInfo[User[playerid][locationId]][arenaId]);
+        User[playerid][lastLocation] = User[playerid][locationId];
+    }
 
     User[playerid][locationId] = -1;
     User[playerid][isAlreadySpawned] = false;

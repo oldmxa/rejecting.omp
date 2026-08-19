@@ -107,6 +107,8 @@ new const AC_ACTION_COLOR[][] =
 #define AC_INVISIBLE_SURF     (33)
 #define AC_BULLET_PROOF       (30)
 #define AC_NOP_CONTROLLABLE   (35)
+#define AC_NOP_ANIMATION      (36)
+#define AC_NOP_ENGINE_STATE   (37)
 #define AC_DIALOG_CRASHER     (38)
 #define AC_SEAT_CRASHER       (39)
 #define AC_TUNING_CRASHER     (40)
@@ -194,8 +196,8 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Invisible under", "Standing below the world geometry",       AC_CAT_EXPLOIT,  true},
 
     {"NOP Controllable","Keeps moving while the server froze him",  AC_CAT_NOPS,     true},
-    {"NOP Animation",   "Blocks SetPlayerAnimation",               AC_CAT_NOPS,     false},
-    {"NOP EngineState", "Blocks SetVehicleEngineState",            AC_CAT_NOPS,     false},
+    {"NOP Animation",   "Blocks SetPlayerAnimation",               AC_CAT_NOPS,     true},
+    {"NOP EngineState", "Blocks SetVehicleEngineState",            AC_CAT_NOPS,     true},
 
     {"Dialog crasher",  "Dialog answer with a forged field",       AC_CAT_CRASHER,  true},
     {"Seat crasher",    "Claims a seat the vehicle does not have", AC_CAT_CRASHER,  true},

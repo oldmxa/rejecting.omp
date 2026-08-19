@@ -74,7 +74,7 @@ public AC_CheckLimits()
         format(detail, sizeof(detail), "%.2f%%", packetLoss);
         if (ServerMaxPacketLoss > 0.0 && AC_CheckLimit(playerid, AC_LIMIT_PL, (packetLoss > ServerMaxPacketLoss), detail)) continue;
 
-        if (User[playerid][locationId] != ARENA_R2_FPS_UNLOCK)
+        if (!IsFpsFreeArena(User[playerid][locationId]))
         {
             new fps = User[playerid][FPS];
             format(detail, sizeof(detail), "%d fps", fps);

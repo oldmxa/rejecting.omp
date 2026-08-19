@@ -234,6 +234,8 @@ setAfk(playerid)
 
 	HideRoundStatsTD(playerid);
 
+	ApplyArenaRpWalk(playerid, User[playerid][locationId], ARENA_AFK);
+
 	User[playerid][isAfk] = true;
 	User[playerid][locationId] = ARENA_AFK;
 

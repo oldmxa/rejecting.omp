@@ -103,13 +103,29 @@ ShowAdminConfig(playerid)
             format(strb, sizeof(strb), "%s{FFFFFF}Default Server HUD\t{BEBEBE}%s\t{BEBEBE}HUD new players start with\n", strb, hudName);
             actions[count++] = 14; // Default Server HUD
 
-            new colorName[32];
+            new colorName[40];
             if(0 <= ServerDefaultHudColor < sizeof(hudPersonalization))
-                format(colorName, sizeof(colorName), "%s", hudPersonalization[ServerDefaultHudColor][lineInfo]);
+                format(colorName, sizeof(colorName), "{%s}%s", GetColorHexTag(hudPersonalization[ServerDefaultHudColor][colorOne]), hudPersonalization[ServerDefaultHudColor][lineInfo]);
             else
-                format(colorName, sizeof(colorName), "Default");
-            format(strb, sizeof(strb), "%s{FFFFFF}Default HUD Color\t{BEBEBE}%s\t{BEBEBE}Colour new players start with\n", strb, colorName);
+                format(colorName, sizeof(colorName), "{BEBEBE}Default");
+            format(strb, sizeof(strb), "%s{FFFFFF}Default HUD Color\t%s\t{BEBEBE}Colour new players start with\n", strb, colorName);
             actions[count++] = 15; // Default HUD Color
+
+            new primaryName[32];
+            if(0 <= ServerDefaultHudShadeOne < sizeof(hudShades))
+                format(primaryName, sizeof(primaryName), "{%06x}%s", hudShades[ServerDefaultHudShadeOne][shadeHex], hudShades[ServerDefaultHudShadeOne][shadeName]);
+            else
+                format(primaryName, sizeof(primaryName), "{BEBEBE}Interface preset");
+            format(strb, sizeof(strb), "%s{FFFFFF}Default HUD Primary\t%s\t{BEBEBE}Overrides the preset's primary color\n", strb, primaryName);
+            actions[count++] = 23; // Default HUD Primary
+
+            new secondaryName[32];
+            if(0 <= ServerDefaultHudShadeTwo < sizeof(hudShades))
+                format(secondaryName, sizeof(secondaryName), "{%06x}%s", hudShades[ServerDefaultHudShadeTwo][shadeHex], hudShades[ServerDefaultHudShadeTwo][shadeName]);
+            else
+                format(secondaryName, sizeof(secondaryName), "{BEBEBE}Interface preset");
+            format(strb, sizeof(strb), "%s{FFFFFF}Default HUD Secondary\t%s\t{BEBEBE}Overrides the preset's secondary color\n", strb, secondaryName);
+            actions[count++] = 24; // Default HUD Secondary
 
             strcat(strb, "{MAIN}\xBB Moderation\t \t \n");
             actions[count++] = 0;

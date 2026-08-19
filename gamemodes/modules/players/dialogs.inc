@@ -86,11 +86,15 @@ ShowHudShadeDialog(playerid, source, bool:secondary)
 
     new selected = GetPlayerShadeIndex(playerid, secondary);
 
+    new presetColor = GetPlayerHudColorIndex(playerid);
+    new hex[7];
+    if (secondary) hex = GetColorHexTag(hudPersonalization[presetColor][colorTwo]);
+    else hex = GetColorHexTag(hudPersonalization[presetColor][colorOne]);
+
     new body[3500] = "Name\tPreview\n";
 
-    strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{BEBEBE}%s\n",
-        STYLE_MARK(selected == -1),
-        secondary ? hudPersonalization[GetPlayerHudColorIndex(playerid)][colorTwo] : hudPersonalization[GetPlayerHudColorIndex(playerid)][colorOne]), sizeof(body));
+    strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{%s}Preview\n",
+        STYLE_MARK(selected == -1), hex), sizeof(body));
 
     for(new i; i < sizeof(hudShades); i++)
     {

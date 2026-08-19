@@ -227,6 +227,48 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 format_MainColor(playerid, body);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUDCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default HUD Color", body, "Select", "Back");
             }
+            case 23: // Default HUD Primary
+            {
+                if(User[playerid][adminLevel] < 5)
+                    return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change the default HUD primary color.");
+
+                new presetColor = (0 <= ServerDefaultHudColor < sizeof(hudPersonalization)) ? ServerDefaultHudColor : 0;
+                new hex1[7];
+                hex1 = GetColorHexTag(hudPersonalization[presetColor][colorOne]);
+
+                new body[3500] = "Name\tPreview\n";
+                strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{%s}Preview\n",
+                    STYLE_MARK(ServerDefaultHudShadeOne == -1), hex1), sizeof(body));
+
+                for(new i; i < sizeof(hudShades); i++)
+                {
+                    strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
+                        STYLE_MARK(ServerDefaultHudShadeOne == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+                }
+                format_MainColor(playerid, body);
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTSHADE1<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default HUD Primary", body, "Select", "Back");
+            }
+            case 24: // Default HUD Secondary
+            {
+                if(User[playerid][adminLevel] < 5)
+                    return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change the default HUD secondary color.");
+
+                new presetColor = (0 <= ServerDefaultHudColor < sizeof(hudPersonalization)) ? ServerDefaultHudColor : 0;
+                new hex2[7];
+                hex2 = GetColorHexTag(hudPersonalization[presetColor][colorTwo]);
+
+                new body[3500] = "Name\tPreview\n";
+                strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{%s}Preview\n",
+                    STYLE_MARK(ServerDefaultHudShadeTwo == -1), hex2), sizeof(body));
+
+                for(new i; i < sizeof(hudShades); i++)
+                {
+                    strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
+                        STYLE_MARK(ServerDefaultHudShadeTwo == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+                }
+                format_MainColor(playerid, body);
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTSHADE2<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default HUD Secondary", body, "Select", "Back");
+            }
         }
     }
 
@@ -525,6 +567,60 @@ public DIALOG_ADM_DEFAULTHUDCOLOR(playerid, dialogid, response, listitem, string
         SaveServerConfig();
 
         va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD color updated to: %s (applies to new accounts).", hudPersonalization[ServerDefaultHudColor][lineInfo]);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_DEFAULTSHADE1(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_DEFAULTSHADE1(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response)
+    {
+        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+
+        new value = (listitem == 0) ? -1 : (listitem - 1);
+        if(value < -1 || value >= sizeof(hudShades))
+        {
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+
+        ServerDefaultHudShadeOne = value;
+        SaveServerConfig();
+
+        new shadeName_[16];
+        if(value == -1) format(shadeName_, sizeof(shadeName_), "Interface preset");
+        else format(shadeName_, sizeof(shadeName_), "%s", hudShades[value][shadeName]);
+
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD primary color updated to: %s (applies to new accounts).", shadeName_);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_DEFAULTSHADE2(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_DEFAULTSHADE2(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response)
+    {
+        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+
+        new value = (listitem == 0) ? -1 : (listitem - 1);
+        if(value < -1 || value >= sizeof(hudShades))
+        {
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+
+        ServerDefaultHudShadeTwo = value;
+        SaveServerConfig();
+
+        new shadeName_[16];
+        if(value == -1) format(shadeName_, sizeof(shadeName_), "Interface preset");
+        else format(shadeName_, sizeof(shadeName_), "%s", hudShades[value][shadeName]);
+
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD secondary color updated to: %s (applies to new accounts).", shadeName_);
     }
     ShowAdminConfig(playerid);
     return 1;

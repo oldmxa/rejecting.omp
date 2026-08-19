@@ -805,8 +805,10 @@ new ServerMaxPing = MAX_PING;
 new Float:ServerMaxPacketLoss = MAX_PL;
 new ServerMinFPS = MIN_FPS;
 new ServerMaxFPS = MAX_FPS;
-new ServerDefaultHud = 1; // 0: hud_rejecting, 1: hud_underline
+new ServerDefaultHud = 1;
 new ServerDefaultHudColor = 0;
+new ServerDefaultHudShadeOne = -1;
+new ServerDefaultHudShadeTwo = -1;
 
 new MySQL: dbHandle;
 new queryGlobal[4096];
@@ -932,12 +934,12 @@ enum E_ROOM_NAME
 
 new const ROOM_NAME[MAX_LOCATIONS][E_ROOM_NAME] =
 {
-    {"{B4B5B7}DM Room",               "DM Room 1"},
-    {"{B4B5B7}DM Room",               "DM Room 2"},
+    {"{B4B5B7}RP Walk Room",          "RP Walk Room"},
+    {"{B4B5B7}RP Walk FPSUNLOCK Room","RP Walk Unlock"},
     {"{B4B5B7}Lounge Room",           "Lounge Room"},
     {"{B4B5B7}Custom Room",           "Custom Room"},
-    {"{B4B5B7}R2 Room",               "R2 Room"},
     {"{B4B5B7}R2 FPS Unlock Room",    "R2 Unlock Room"},
+    {"{B4B5B7}FPS Unlock Room",       "FPS Unlock Room"},
     {"{B4B5B7}R2 FPS Lock 102 Room",  "R2 Lock Room"}
 };
 
@@ -945,8 +947,8 @@ new const LOCATION_DISPLAY_ORDER[MAX_LOCATIONS] =
 {
     ARENA_DM_1,
     ARENA_DM_2,
-    ARENA_R2,
     ARENA_R2_FPS_UNLOCK,
+    ARENA_R2,
     ARENA_R2_FPS_LOCK,
     ARENA_CUSTOM,
     ARENA_AFK
@@ -1028,7 +1030,12 @@ stock bool:IsR2OnlyArena(location)
 
 stock bool:ArenaRequiresFpsLock(location)
 {
-    return (location == ARENA_DM_1 || location == ARENA_DM_2 || location == ARENA_R2_FPS_LOCK);
+    return (location == ARENA_DM_1 || location == ARENA_R2_FPS_LOCK);
+}
+
+stock bool:IsFpsFreeArena(location)
+{
+    return (location == ARENA_DM_2 || location == ARENA_R2_FPS_UNLOCK);
 }
 
 new bool:g_IsPlayerInPractice[MAX_PLAYERS];

@@ -18,25 +18,11 @@ ORPC:RPC_INIT_GAME(playerid, BitStream:bs)
 
     if (g_InitGame[playerid] != BitStream:0) BS_Delete(g_InitGame[playerid]);
 
-    g_InitGameOk[playerid] = false;
     g_InitGame[playerid] = BS_NewCopy(bs);
-
-    if (g_InitGame[playerid] == BitStream:0) return 1;
-
-    new bool:bit;
-    BS_SetReadOffset(g_InitGame[playerid], IG_BIT_CJWALK);
-    BS_ReadBool(g_InitGame[playerid], bit);
-    BS_SetReadOffset(g_InitGame[playerid], 0);
-
-    g_InitGameOk[playerid] = (bit == GetConsoleVarAsBool("game.use_player_ped_anims"));
-
-    if (!g_InitGameOk[playerid])
-        print("[INITGAME] CJ walk bit did not match the server setting, live toggle disabled.");
+    g_InitGameOk[playerid] = (g_InitGame[playerid] != BitStream:0);
 
     return 1;
 }
-
-forward OnInitGameRespawn(playerid);
 
 stock bool:ResendInitGame(playerid, bool:pedAnims)
 {
@@ -66,21 +52,17 @@ stock bool:ResendInitGame(playerid, bool:pedAnims)
     PR_SendRPC(bs, playerid, RPC_INIT_GAME);
     BS_Delete(bs);
 
-    SetTimerEx("OnInitGameRespawn", 300, false, "i", playerid);
+    if (GetPlayerState(playerid) == PLAYER_STATE_ONFOOT && User[playerid][playerSkin] > 0)
+    {
+        SetPlayerSkin(playerid, User[playerid][playerSkin]);
+    }
+
     return true;
 }
 
-public OnInitGameRespawn(playerid)
+stock bool:IsRpWalkArena(location)
 {
-    if (!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 1;
-
-    TogglePlayerSpectating(playerid, true);
-    TogglePlayerSpectating(playerid, false);
-
-    SetPlayerTime(playerid, User[playerid][time], 0);
-    SetPlayerWeather(playerid, User[playerid][weather]);
-
-    return 1;
+    return (location == ARENA_DM_1 || location == ARENA_DM_2);
 }
 
 stock ApplyPedAnimsToAll(bool:pedAnims)
@@ -88,9 +70,22 @@ stock ApplyPedAnimsToAll(bool:pedAnims)
     new done = 0;
 
     foreach (new i : Player)
-        if (ResendInitGame(i, pedAnims)) done++;
+    {
+        new bool:targetAnim = IsRpWalkArena(User[i][locationId]) ? false : pedAnims;
+        if (ResendInitGame(i, targetAnim)) done++;
+    }
 
     return done;
+}
+
+stock ApplyArenaRpWalk(playerid, oldLocation, newLocation)
+{
+    new bool:wasRpWalk = IsRpWalkArena(oldLocation);
+    new bool:isRpWalk = IsRpWalkArena(newLocation);
+
+    if (wasRpWalk == isRpWalk) return 0;
+
+    return ResendInitGame(playerid, !isRpWalk);
 }
 
 hook OnPlayerDisconnect(playerid, reason)

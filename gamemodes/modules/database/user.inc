@@ -266,8 +266,8 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][hudType] = ServerDefaultHud;
     User[playerid][lifeType] = LIFE_DEFAULT;
     User[playerid][hudColor] = ServerDefaultHudColor;
-    User[playerid][hudShadeOne] = -1;
-    User[playerid][hudShadeTwo] = -1;
+    User[playerid][hudShadeOne] = ServerDefaultHudShadeOne;
+    User[playerid][hudShadeTwo] = ServerDefaultHudShadeTwo;
     User[playerid][weather] = 32;
     User[playerid][time] = 7;
     SetPlayerWeather(playerid, 32);
