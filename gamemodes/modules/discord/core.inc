@@ -111,3 +111,157 @@ FailValidation(playerid)
 	SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}Discord verification failed or code expired. Please try again.");
 	return true;
 }
+
+#define MAX_PENDING_DC_VERIFIES 64
+
+enum E_PENDING_DC_VERIFY
+{
+    bool:pv_Active,
+    pv_DiscordID[DCC_ID_SIZE],
+    pv_DiscordUsername[DCC_USERNAME_SIZE],
+    pv_DiscordDiscriminator[10],
+    pv_Code[16],
+    pv_ExpireTimestamp
+};
+
+new g_PendingDCVerify[MAX_PENDING_DC_VERIFIES][E_PENDING_DC_VERIFY];
+
+stock CreatePendingDCVerify(const uid[], const username[], const discriminator[], const code[], expireSeconds = 600)
+{
+    new slot = -1;
+    new now = gettime();
+
+    for(new i = 0; i < MAX_PENDING_DC_VERIFIES; i++)
+    {
+        if(g_PendingDCVerify[i][pv_Active] && !strcmp(g_PendingDCVerify[i][pv_DiscordID], uid, true))
+        {
+            slot = i;
+            break;
+        }
+    }
+
+    if(slot == -1)
+    {
+        for(new i = 0; i < MAX_PENDING_DC_VERIFIES; i++)
+        {
+            if(!g_PendingDCVerify[i][pv_Active] || g_PendingDCVerify[i][pv_ExpireTimestamp] < now)
+            {
+                slot = i;
+                break;
+            }
+        }
+    }
+
+    if(slot == -1) slot = random(MAX_PENDING_DC_VERIFIES);
+
+    g_PendingDCVerify[slot][pv_Active] = true;
+    strcopy(g_PendingDCVerify[slot][pv_DiscordID], uid, DCC_ID_SIZE);
+    strcopy(g_PendingDCVerify[slot][pv_DiscordUsername], username, DCC_USERNAME_SIZE);
+    strcopy(g_PendingDCVerify[slot][pv_DiscordDiscriminator], discriminator, 10);
+    strcopy(g_PendingDCVerify[slot][pv_Code], code, 16);
+    g_PendingDCVerify[slot][pv_ExpireTimestamp] = now + expireSeconds;
+
+    return slot;
+}
+
+stock FindPendingDCVerify(const code[])
+{
+    new now = gettime();
+    for(new i = 0; i < MAX_PENDING_DC_VERIFIES; i++)
+    {
+        if(g_PendingDCVerify[i][pv_Active])
+        {
+            if(g_PendingDCVerify[i][pv_ExpireTimestamp] < now)
+            {
+                g_PendingDCVerify[i][pv_Active] = false;
+                continue;
+            }
+
+            if(!strcmp(g_PendingDCVerify[i][pv_Code], code, false))
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+stock RemovePendingDCVerify(slot)
+{
+    if(0 <= slot < MAX_PENDING_DC_VERIFIES)
+    {
+        g_PendingDCVerify[slot][pv_Active] = false;
+        g_PendingDCVerify[slot][pv_DiscordID][0] = '\0';
+        g_PendingDCVerify[slot][pv_Code][0] = '\0';
+        g_PendingDCVerify[slot][pv_ExpireTimestamp] = 0;
+    }
+    return 1;
+}
+
+forward OnDiscordVerifyDMCreated(const code[]);
+public OnDiscordVerifyDMCreated(const code[])
+{
+    new DCC_Channel:dmChannel = DCC_GetCreatedPrivateChannel();
+    if(dmChannel == DCC_INVALID_CHANNEL) return 0;
+
+    new DCC_Embed:v_embed = DCC_CreateEmbed(.title = "Account Verification", .color = DISCORD_COLOR_INFO);
+    DCC_SetEmbedFooter(v_embed, getDateStrTD());
+
+    new desc[512];
+    format(desc, sizeof(desc),
+        "**Your Verification Code:** `%s`\n\n"\
+        "**How to link your in-game account:**\n"\
+        "1. Open SA-MP and log in to the server (`%s`)\n"\
+        "2. Type the following command in-game:\n"\
+        "```\n/dcode %s\n```\n"\
+        "*(This code expires in 10 minutes)*",
+        code, ServerHostname, code);
+
+    DCC_SetEmbedDescription(v_embed, desc);
+    DCC_SendChannelEmbedMessage(dmChannel, v_embed);
+    return 1;
+}
+
+stock ProcessDiscordVerifyCmd(DCC_User:user, DCC_Channel:channel = DCC_INVALID_CHANNEL)
+{
+    if(_:user == 0) return 0;
+
+    new bool:isBot;
+    DCC_IsUserBot(user, isBot);
+    if(isBot) return 0;
+
+    new userid[DCC_ID_SIZE], username[DCC_USERNAME_SIZE], discriminator[10];
+    DCC_GetUserId(user, userid, sizeof(userid));
+    DCC_GetUserName(user, username, sizeof(username));
+    DCC_GetUserDiscriminator(user, discriminator, sizeof(discriminator));
+
+    inline const OnCheckDiscordLinked()
+    {
+        if(cache_num_rows())
+        {
+            new linkedNick[MAX_PLAYER_NAME + 1];
+            cache_get_value_name(0, "username", linkedNick, sizeof(linkedNick));
+            new errMsg[256];
+            format(errMsg, sizeof(errMsg), "<@%s> :warning: Your Discord account is already linked to the in-game account **%s**! (Use `/udiscord` in-game to unlink first if needed).", userid, linkedNick);
+            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, errMsg);
+            return 1;
+        }
+
+        new genCode[16];
+        format(genCode, sizeof(genCode), "%05d", random(100000));
+
+        CreatePendingDCVerify(userid, username, discriminator, genCode, 600);
+
+        DCC_CreatePrivateChannel(user, "OnDiscordVerifyDMCreated", "s", genCode);
+
+        new resp[256];
+        format(resp, sizeof(resp), "<@%s> :envelope_with_arrow: A verification code has been sent to your **Discord DMs**!\nLog into the server and type `/dcode %s` to complete your verification.", userid, genCode);
+        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, resp);
+        return 1;
+    }
+
+    new q[128];
+    mysql_format(dbHandle, q, sizeof(q), "SELECT `id`, `username` FROM `accounts` WHERE `dc_uid` = '%e' LIMIT 1", userid);
+    MySQL_TQueryInline(dbHandle, using inline OnCheckDiscordLinked, q);
+    return 1;
+}

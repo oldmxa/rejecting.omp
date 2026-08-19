@@ -53,8 +53,38 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		}
 	}
 
-	if(channel == ch_tourney_register || !strcmp(str, "/tournament", true, 11) || !strcmp(str, ".tournament", true, 11) || !strcmp(str, "/torneio", true, 8) || !strcmp(str, ".torneio", true, 8))
+	if(!strcmp(str, "/verify", true, 7) || !strcmp(str, ".verify", true, 7) || !strcmp(str, "!verify", true, 7) || !strcmp(str, "/link", true, 5) || !strcmp(str, ".link", true, 5))
 	{
+		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+		if(channel != logs_linked)
+		{
+			new uid[DCC_ID_SIZE];
+			DCC_GetUserId(author, uid, sizeof(uid));
+			new denyMsg[256];
+			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!", uid);
+			DCC_SendChannelMessage(channel, denyMsg);
+			return true;
+		}
+
+		ProcessDiscordVerifyCmd(author, channel);
+		return true;
+	}
+
+	if(channel == ch_tourney_register || !strcmp(str, "/tournament", true, 11) || !strcmp(str, ".tournament", true, 11) || !strcmp(str, "!tournament", true, 11))
+	{
+		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);
+		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+
+		if(channel != ch_tourney_register && channel != logs_linked)
+		{
+			new uid[DCC_ID_SIZE];
+			DCC_GetUserId(author, uid, sizeof(uid));
+			new denyMsg[256];
+			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Tournament registration can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_LOGS_LINKED ">!", uid);
+			DCC_SendChannelMessage(channel, denyMsg);
+			return true;
+		}
+
 		ProcessDiscordTourneyApp(author, channel, str);
 		return true;
 	}

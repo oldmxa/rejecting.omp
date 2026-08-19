@@ -876,7 +876,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
     if(!IsDiscordUserVerified(user))
     {
         new notVerifiedMsg[256];
-        format(notVerifiedMsg, sizeof(notVerifiedMsg), "<@%s> :no_entry: Only **verified members** can register for tournaments!\nPlease link your in-game account using `/dvincular` to get verified.", userid);
+        format(notVerifiedMsg, sizeof(notVerifiedMsg), "<@%s> :no_entry: Only **verified members** can register for tournaments!\nPlease link your account using `/verify` on Discord or `/linkdiscord` in-game to get verified.", userid);
         if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, notVerifiedMsg);
         return 0;
     }
@@ -893,21 +893,9 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
     format(cleanParams, sizeof(cleanParams), "%s", params);
     cleanParams[sizeof(cleanParams) - 1] = '\0';
 
-    if(!strcmp(cleanParams, "/tournament", true, 11) || !strcmp(cleanParams, ".tournament", true, 11))
+    if(!strcmp(cleanParams, "/tournament", true, 11) || !strcmp(cleanParams, ".tournament", true, 11) || !strcmp(cleanParams, "!tournament", true, 11))
     {
         strdel(cleanParams, 0, 11);
-    }
-    else if(!strcmp(cleanParams, "/torneio", true, 8) || !strcmp(cleanParams, ".torneio", true, 8))
-    {
-        strdel(cleanParams, 0, 8);
-    }
-    else if(!strcmp(cleanParams, "!tournament", true, 11))
-    {
-        strdel(cleanParams, 0, 11);
-    }
-    else if(!strcmp(cleanParams, "!torneio", true, 8))
-    {
-        strdel(cleanParams, 0, 8);
     }
 
     new startPos = 0;

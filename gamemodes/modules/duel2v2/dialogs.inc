@@ -237,7 +237,7 @@ public DIALOG_DUEL2V2_PLAYERS(playerid, dialogid, response, listitem, string:inp
 
         if(CreateDuel2v2Challenge(playerid, teammateid, opp1, opp2, arenaid, wset, rounds) == -1)
         {
-            SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}Could not create the 2v2 duel. Please start over with /x1c.");
+            SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}Could not create the 2v2 duel. Please start over with /duel2v2.");
             return 1;
         }
     }

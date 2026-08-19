@@ -29,7 +29,7 @@
     return true;
 }
 
-@cmd(.alts = {"linkdiscord", "discord", "dc"}) dvincular(playerid, params[], help)
+@cmd(.alts = {"discord", "dc", "linkdc"}) linkdiscord(playerid, params[], help)
 {
 	if(playerid == INVALID_PLAYER_ID || !User[playerid][isLogged])
         return false;
@@ -69,6 +69,67 @@ Enter your Discord username or ID below to receive a verification code:\n\n\
 
     Dialog_ShowCallback(playerid, using public DIALOG_UNLINK_DISCORD<iiiis>, DIALOG_STYLE_MSGBOX, title, body, "Unlink", "Cancel");
     return true;
+}
+
+@cmd(.alts = {"verifycode", "dccode"}) dcode(playerid, params[], help)
+{
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    if(strcmp(User[playerid][dc_username], "-1", true) != 0)
+        return va_SendClientMessage(playerid, COLOR_TOMATO, DC_LINKED, User[playerid][dc_username], User[playerid][dc_discriminator]);
+
+    new code[32];
+    if(sscanf(params, "s[32]", code))
+        return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/dcode [code] (e.g. /dcode 12345)");
+
+    new slot = FindPendingDCVerify(code);
+    if(slot == -1)
+    {
+        return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}Invalid or expired verification code! Use {MAIN}/verify{FFFFFF} on Discord to get a new code.");
+    }
+
+    inline const OnVerifyCodeChecked()
+    {
+        if(cache_num_rows())
+        {
+            RemovePendingDCVerify(slot);
+            return SendClientMessage(playerid, COLOR_TOMATO, "%s", DC_INUSE);
+        }
+
+        format(User[playerid][dc_username], 100, "%s", g_PendingDCVerify[slot][pv_DiscordUsername]);
+        format(User[playerid][dc_discriminator], 100, "%s", g_PendingDCVerify[slot][pv_DiscordDiscriminator]);
+        format(User[playerid][dc_uid], 100, "%s", g_PendingDCVerify[slot][pv_DiscordID]);
+        format(User[playerid][dc_code], 100, "-1");
+
+        mysql_format(dbHandle, queryGlobal, sizeof queryGlobal,
+            "UPDATE `accounts` SET `dc_username` = '%e', `dc_discriminator` = '%e', `dc_uid` = '%e' WHERE `id` = %d",
+            User[playerid][dc_username], User[playerid][dc_discriminator], User[playerid][dc_uid], User[playerid][user_sqlid]);
+        mysql_tquery(dbHandle, queryGlobal);
+
+        SyncPlayerDiscordRoles(playerid);
+
+        new DCC_User:user = DCC_FindUserById(User[playerid][dc_uid]);
+        if(user != DCC_INVALID_USER)
+        {
+            DCC_SetGuildMemberNickname(guildaid, user, getPlayerName(playerid));
+        }
+
+        new msg[128];
+        format(msg, sizeof(msg), "<@%s> Successfully linked and verified account! <3", User[playerid][dc_uid]);
+        if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+        if(logs_linked != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(logs_linked, msg);
+
+        CallLocalFunction("Ach_OnDiscordLink", "i", playerid);
+
+        SendClientMessage(playerid, COLOR_KGREEN, "{MAIN}[DISCORD] {FFFFFF}Your account has been successfully verified and linked with Discord!");
+        RemovePendingDCVerify(slot);
+        return 1;
+    }
+
+    new checkQ[128];
+    mysql_format(dbHandle, checkQ, sizeof(checkQ), "SELECT `id` FROM `accounts` WHERE `dc_uid` = '%e' LIMIT 1", g_PendingDCVerify[slot][pv_DiscordID]);
+    MySQL_TQueryInline(dbHandle, using inline OnVerifyCodeChecked, checkQ);
+    return 1;
 }
 
 ShowMyAccountMenu(playerid)
@@ -414,7 +475,7 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
         case 3:
         { 
             if(strcmp(User[playerid][dc_username], "-1", true)) strcopy(cmd, "/udiscord"); 
-            else strcopy(cmd, "/dvincular");
+            else strcopy(cmd, "/linkdiscord");
             
             Command_ReProcess(playerid, cmd, 0); 
         }
@@ -422,7 +483,7 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
         { 
             new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
             if(!isLinked)
-                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Link your Discord account ({MAIN}/dvincular{FFFFFF}) to activate Auto-Login and achieve Maximum Security.");
+                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Link your Discord account ({MAIN}/linkdiscord{FFFFFF}) to activate Auto-Login and achieve Maximum Security.");
             else if(!User[playerid][autoLogin])
                 SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Your Discord is verified! Enable {MAIN}Auto-Login (IP & Serial){FFFFFF} for Maximum Security.");
             else

@@ -163,6 +163,7 @@
     new chat_details[256];
     format(chat_details, sizeof(chat_details), "To %s: %s", User[idplayer][userName], text);
     LogChatMessage(User[playerid][user_sqlid], User[playerid][userName], "pm", chat_details);
+    LogDiscordPM(playerid, idplayer, text);
 
     foreach(new i : Player)
 		if(User[i][adminLevel] > 2 && User[i][isLogged] && User[i][acfg_pm])

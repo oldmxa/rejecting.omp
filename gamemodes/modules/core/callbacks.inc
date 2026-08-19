@@ -1021,6 +1021,7 @@ public OnPlayerText(playerid, text[])
 					va_SendClientMessage(i, -1, ADMIN_SEE_CLANPM, ClanInfo[clanid][clanTag], User[playerid][userName], playerid, ClanRoles[clanid][roleid], text[1]);
 
             LogChatMessage(User[playerid][user_sqlid], User[playerid][userName], "clan", text[1]);
+            LogDiscordClanChat(playerid, ClanInfo[clanid][clanTag], ClanInfo[clanid][clanName], ClanRoles[clanid][roleid], text[1]);
 			return false;
 		}
 	}

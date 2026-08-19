@@ -5,7 +5,7 @@
 
 // Tournament Commands
 
-@cmd(.alts = {"torneio", "tourney", "tourneyadmin"}) tournament(playerid, params[], help)
+@cmd(.alts = {"tourney", "tourneyadmin"}) tournament(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
@@ -18,7 +18,7 @@
     return ShowTourneyBracketDialog(playerid);
 }
 
-@cmd(.alts = {"jointourney", "entrar", "participar"}) jointournament(playerid, params[], help)
+@cmd(.alts = {"jointourney"}) jointournament(playerid, params[], help)
 {
     if(g_TourneyData[t_State] != TOURNAMENT_STATE_REGISTRATION)
     {
@@ -103,7 +103,7 @@
     return 1;
 }
 
-@cmd(.alts = {"aceitartorneio", "accepttourney"}) accepttournament(playerid, params[], help)
+@cmd(.alts = {"accepttourney"}) accepttournament(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
@@ -114,7 +114,7 @@
     return 1;
 }
 
-@cmd(.alts = {"leavetourney", "sair"}) leavetournament(playerid, params[], help)
+@cmd(.alts = {"leavetourney"}) leavetournament(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
@@ -122,7 +122,7 @@
     return 1;
 }
 
-@cmd(.alts = {"chaves", "bracket", "tourneybracket"}) bracket(playerid, params[], help)
+@cmd(.alts = {"tourneybracket"}) bracket(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 

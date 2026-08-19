@@ -425,8 +425,8 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/duel [id]\t{FFFFFF}Challenge a player to 1v1 duel\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/acceptduel (/goduel)\t{FFFFFF}Accept a duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/backduel (/leaveduel)\t{FFFFFF}Cancel or leave a 1v1 duel\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/x1c (/duel2v2)\t{FFFFFF}Create a 2v2 team duel challenge\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/gx1 (/accept2v2)\t{FFFFFF}Accept a 2v2 team duel challenge\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/duel2v2 (/create2v2)\t{FFFFFF}Create a 2v2 team duel challenge\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/accept2v2 (/go2v2)\t{FFFFFF}Accept a 2v2 team duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/cancel2v2\t{FFFFFF}Cancel a 2v2 duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/safemenu (/safe)\t{FFFFFF}Open Clan Safehouse base menu\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/exitsafehouse (/leavesafe)\t{FFFFFF}Exit Clan Safehouse base\n");
@@ -462,7 +462,8 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vtag\t{FFFFFF}Customize 3D VIP Head Tag\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tag\t{FFFFFF}Manage tag visibility (VIP, Clan, Admin, Custom)\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vipcmds\t{FFFFFF}View full list of VIP commands\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dvincular (/discord)\t{FFFFFF}Link your Discord account\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/linkdiscord (/discord)\t{FFFFFF}Link your Discord account\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dcode [code]\t{FFFFFF}Enter verification code received from Discord\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/udiscord\t{FFFFFF}Unlink your Discord account\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changepass\t{FFFFFF}Change your account password\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changenick\t{FFFFFF}Change your nickname\n");

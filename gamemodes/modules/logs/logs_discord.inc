@@ -19,6 +19,9 @@
 #define CH_COMANDOS         "1460838135045951796"
 #define CH_GAMECHAT         "1461088854185480296"
 #define CH_ADMINCHAT        "1461088997668290581"
+#define CH_LOGS_PM          "1539748119112187964"
+#define CH_LOGS_CLAN_CHAT   "1539748245096366171"
+#define CH_LOGS_LINKED      "1460111666724212788"
 #define CH_TOURNEY_ANNOUNCE     "1539673557267644496"
 #define CH_TOURNEY_REGISTER     "1539673870657921135"
 #define CH_TOURNEY_ADMIN_LOGS   "1539674148752724108"
@@ -42,6 +45,9 @@ new
     DCC_Channel:logs_connections,
     DCC_Channel:logs_nextmap,
     DCC_Channel:logs_vips,
+    DCC_Channel:logs_pm,
+    DCC_Channel:logs_clan_chat,
+    DCC_Channel:logs_linked,
     DCC_Channel:PMPlayer,
     DCC_Channel:ch_tourney_announce,
     DCC_Channel:ch_tourney_register,
@@ -65,6 +71,9 @@ stock InitLogChannels()
     logs_connections= DCC_FindChannelById(CH_LOGS_CONNECTIONS);
     logs_nextmap    = DCC_FindChannelById(CH_LOGS_NEXTMAP);
     logs_vips       = DCC_FindChannelById(CH_LOGS_VIPS);
+    logs_pm         = DCC_FindChannelById(CH_LOGS_PM);
+    logs_clan_chat  = DCC_FindChannelById(CH_LOGS_CLAN_CHAT);
+    logs_linked     = DCC_FindChannelById(CH_LOGS_LINKED);
     comandos        = DCC_FindChannelById(CH_COMANDOS);
     gamechat        = DCC_FindChannelById(CH_GAMECHAT);
     adminchat       = DCC_FindChannelById(CH_ADMINCHAT);
@@ -172,4 +181,68 @@ stock LogDiscordCoins(user_id, const username[], const reason[], amount, balance
 stock LogDiscordVipAction(const title[], const description[], color = DISCORD_COLOR_INFO)
 {
     return SendDiscordEmbed(logs_vips, title, description, color);
+}
+
+stock LogDiscordPM(senderid, targetid, const message[])
+{
+    if(!IsPlayerConnected(senderid) || !IsPlayerConnected(targetid)) return 0;
+
+    if(logs_pm == DCC_INVALID_CHANNEL)
+    {
+        logs_pm = DCC_FindChannelById(CH_LOGS_PM);
+    }
+    if(logs_pm == DCC_INVALID_CHANNEL) return 0;
+
+    new sName[MAX_PLAYER_NAME + 1], tName[MAX_PLAYER_NAME + 1];
+    GetPlayerName(senderid, sName, sizeof(sName));
+    GetPlayerName(targetid, tName, sizeof(tName));
+
+    new cleanMsg[160];
+    format(cleanMsg, sizeof(cleanMsg), "%s", message);
+    strreplace(cleanMsg, "%", "");
+
+    new logStr[512], encodedMsg[512];
+    format(logStr, sizeof(logStr),
+        "**[PM]** `%s` (ID: %d) -> `%s` (ID: %d): %s",
+        sName, senderid,
+        tName, targetid,
+        cleanMsg
+    );
+
+    utf8encode(encodedMsg, logStr, sizeof(encodedMsg));
+    DCC_SendChannelMessage(logs_pm, encodedMsg);
+    return 1;
+}
+
+stock LogDiscordClanChat(playerid, const clanTag[], const clanName[], const roleName[], const message[])
+{
+    #pragma unused clanName
+    if(!IsPlayerConnected(playerid)) return 0;
+
+    if(logs_clan_chat == DCC_INVALID_CHANNEL)
+    {
+        logs_clan_chat = DCC_FindChannelById(CH_LOGS_CLAN_CHAT);
+    }
+    if(logs_clan_chat == DCC_INVALID_CHANNEL) return 0;
+
+    new pName[MAX_PLAYER_NAME + 1];
+    GetPlayerName(playerid, pName, sizeof(pName));
+
+    new cleanMsg[160];
+    format(cleanMsg, sizeof(cleanMsg), "%s", message);
+    strreplace(cleanMsg, "%", "");
+
+    new logStr[512], encodedMsg[512];
+    format(logStr, sizeof(logStr),
+        "**[CLAN %s]** `%s` (%s | ID: %d): %s",
+        clanTag,
+        pName,
+        roleName,
+        playerid,
+        cleanMsg
+    );
+
+    utf8encode(encodedMsg, logStr, sizeof(encodedMsg));
+    DCC_SendChannelMessage(logs_clan_chat, encodedMsg);
+    return 1;
 }

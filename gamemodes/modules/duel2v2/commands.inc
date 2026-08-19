@@ -5,7 +5,7 @@
 
 // Duel 2v2 
 
-@cmd(.alts = {"duel2v2", "create2v2"}) x1c(playerid, params[], help)
+@cmd(.alts = {"create2v2", "2v2"}) duel2v2(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return 1;
 
@@ -34,7 +34,7 @@
     return 1;
 }
 
-@cmd(.alts = {"accept2v2"}) gx1(playerid, params[], help)
+@cmd(.alts = {"go2v2"}) accept2v2(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return 1;
 

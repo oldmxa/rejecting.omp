@@ -149,7 +149,7 @@ stock CreateDuel2v2Challenge(creatorid, teammateid, opp1, opp2, arenaid, weapons
 
     new msg[192];
     format(msg, sizeof(msg),
-        "{MAIN}[DUEL 2v2] {FFFFFF}%s challenges you to a 2v2 duel on {MAIN}'%s'{FFFFFF}! Type {MAIN}/gx1{FFFFFF} or {MAIN}/accept2v2{FFFFFF} to accept.",
+        "{MAIN}[DUEL 2v2] {FFFFFF}%s challenges you to a 2v2 duel on {MAIN}'%s'{FFFFFF}! Type {MAIN}/accept2v2{FFFFFF} to accept.",
         getPlayerName(creatorid), DuelS_ArenaNames[arenaid]);
 
     SendDuel2v2Message(slot, msg, creatorid);

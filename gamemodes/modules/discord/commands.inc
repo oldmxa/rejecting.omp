@@ -43,12 +43,19 @@ stock DSC_Probe(const cmd[], a, b)
 }
 
 static DCC_User:g_CurrentInvoker = DCC_INVALID_USER;
+static DCC_Channel:g_CurrentInteractionChannel = DCC_INVALID_CHANNEL;
 
 stock DSC_Begin(DCC_Interaction:interaction, DCC_User:user = DCC_INVALID_USER)
 {
 	g_InteractionAnswered = false;
 	g_CurrentInteraction = interaction;
 	g_CurrentInvoker = user;
+	g_CurrentInteractionChannel = DCC_INVALID_CHANNEL;
+
+	if(interaction != DCC_Interaction:0)
+	{
+		DCC_GetInteractionChannel(interaction, g_CurrentInteractionChannel);
+	}
 
 	g_InteractionParams[0] = EOS;
 	DCC_GetInteractionContent(g_CurrentInteraction, g_InteractionParams, sizeof(g_InteractionParams));
@@ -89,6 +96,7 @@ stock DSC_End()
 
 	g_CurrentInteraction = DCC_Interaction:0;
 	g_CurrentInvoker = DCC_INVALID_USER;
+	g_CurrentInteractionChannel = DCC_INVALID_CHANNEL;
 	g_InteractionAnswered = false;
 	return 1;
 }
@@ -158,6 +166,15 @@ static stock DSC_Deny(const message[])
 
 stock DSC_RequireLevel(DCC_User:user, level)
 {
+    if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
+    {
+        if(comandos == DCC_INVALID_CHANNEL) comandos = DCC_FindChannelById(CH_COMANDOS);
+        if(g_CurrentInteractionChannel != comandos)
+        {
+            return DSC_Deny(":no_entry: Administrative commands can only be used in <#" CH_COMANDOS ">!");
+        }
+    }
+
     if(DSC_GetLevel(user) >= level) return 1;
 
     new msg[160];
@@ -167,9 +184,40 @@ stock DSC_RequireLevel(DCC_User:user, level)
 
 stock DSC_RequirePlayer(DCC_User:user)
 {
+    if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
+    {
+        if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+        if(g_CurrentInteractionChannel != logs_linked)
+        {
+            return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
+        }
+    }
+
     if(DSC_IsPlayer(user)) return 1;
 
-    return DSC_Deny(":no_entry: Link your game account first (use /dvincular in-game) to unlock the bot commands.");
+    return DSC_Deny(":no_entry: Link your game account first (use /linkdiscord in-game) to unlock the bot commands.");
+}
+
+forward OnDiscordPrivateMsg(const message[]);
+public OnDiscordPrivateMsg(const message[])
+{
+    new DCC_Channel:dm = DCC_GetCreatedPrivateChannel();
+    if(dm != DCC_INVALID_CHANNEL)
+    {
+        DCC_SendChannelMessage(dm, message);
+    }
+    return 1;
+}
+
+forward OnDiscordPrivateEmbed(DCC_Embed:embed_data);
+public OnDiscordPrivateEmbed(DCC_Embed:embed_data)
+{
+    new DCC_Channel:dm = DCC_GetCreatedPrivateChannel();
+    if(dm != DCC_INVALID_CHANNEL)
+    {
+        DCC_SendChannelEmbedMessage(dm, embed_data);
+    }
+    return 1;
 }
 
 forward Discord_SendDiscordResponse(DCC_Channel:channel, const message[]);
@@ -178,6 +226,12 @@ public Discord_SendDiscordResponse(DCC_Channel:channel, const message[])
 	new DCC_Interaction:interaction = DSC_TakeInteraction();
 	if(interaction != DCC_Interaction:0) return DCC_SendInteractionMessage(interaction, message);
 
+	if(g_CurrentInvoker != DCC_INVALID_USER)
+	{
+		DCC_CreatePrivateChannel(g_CurrentInvoker, "OnDiscordPrivateMsg", "s", message);
+		return 1;
+	}
+
 	return DCC_SendChannelMessage(channel, message);
 }
 
@@ -185,6 +239,12 @@ stock SendDiscordEmbedResponse(DCC_Channel:channel, DCC_Embed:embed_data)
 {
 	new DCC_Interaction:interaction = DSC_TakeInteraction();
 	if(interaction != DCC_Interaction:0) return DCC_SendInteractionEmbed(interaction, embed_data);
+
+	if(g_CurrentInvoker != DCC_INVALID_USER)
+	{
+		DCC_CreatePrivateChannel(g_CurrentInvoker, "OnDiscordPrivateEmbed", "i", _:embed_data);
+		return 1;
+	}
 
 	return DCC_SendChannelEmbedMessage(channel, embed_data);
 }
@@ -242,11 +302,14 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"reply",           "Reply to a player report",      1},
 
 	// publicos
+	{"help",            "List player commands and help", 0},
+	{"commands",        "List the player commands",      0},
+	{"verify",          "Link and verify your account",  0},
+	{"link",            "Link and verify your account",  0},
+	{"howtolink",       "Guide on how to link account",  0},
 	{"rules",           "Server rules",                  0},
 	{"stats",           "Show account statistics",       0},
-	{"commands",        "List the player commands",      0},
 	{"online",          "Who is playing right now",      0},
-	{"link",            "How to link your account",      0},
 	{"vip",             "VIP packages and perks",        0},
 	{"top",             "Top 10 players by kills",       0},
 	{"tournament",      "Tournament application",        0}
@@ -1400,7 +1463,7 @@ DSLASH:stats(user, params[])
             if(hasTarget)
                 SendDiscordResponse(comandos, "Account not found with that nickname!");
             else
-                SendDiscordResponse(comandos, "Your Discord account is not linked to any game account! Use /dvincular in-game or specify a nick: /stats [nick].");
+                SendDiscordResponse(comandos, "Your Discord account is not linked to any game account! Use /linkdiscord in-game or specify a nick: /stats [nick].");
         }
     }
 
@@ -1504,6 +1567,12 @@ DSLASH:rules(user, params[])
 	return SendDiscordResponse(comandos, body);
 }
 
+DSLASH:help(user, params[])
+{
+	#pragma unused params
+	return DSC_commands(g_CurrentInteraction, user);
+}
+
 DSLASH:commands(user, params[])
 {
 	#pragma unused params
@@ -1566,7 +1635,7 @@ DSLASH:online(user, params[])
 	return SendDiscordResponse(comandos, body);
 }
 
-DSLASH:link(user, params[])
+DSLASH:howtolink(user, params[])
 {
 	#pragma unused params
 	if(!DSC_RequirePlayer(user)) return 1;
@@ -1574,7 +1643,7 @@ DSLASH:link(user, params[])
 	new body[768];
 	format(body, sizeof(body), "**Linking your game account**\n\n");
 	strcat(body, "1. Join the server and log into your account\n", sizeof(body));
-	strcat(body, "2. Type `/dvincular` in-game\n", sizeof(body));
+	strcat(body, "2. Type `/linkdiscord` in-game\n", sizeof(body));
 	strcat(body, "3. Enter your Discord username or ID in the dialog\n", sizeof(body));
 	strcat(body, "4. You will get a code in your Discord DM - keep your DMs open\n", sizeof(body));
 	strcat(body, "5. Type that code in-game to confirm\n\n", sizeof(body));
@@ -1639,5 +1708,43 @@ DSLASH:top(user, params[])
 
 DSLASH:tournament(user, params[])
 {
-	return ProcessDiscordTourneyApp(user, ch_tourney_register, params);
+	if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
+	{
+		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);
+		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+
+		if(g_CurrentInteractionChannel != ch_tourney_register && g_CurrentInteractionChannel != logs_linked)
+		{
+			return DSC_Deny(":no_entry: Tournament registration commands can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_LOGS_LINKED ">!");
+		}
+	}
+	return ProcessDiscordTourneyApp(user, (ch_tourney_register != DCC_INVALID_CHANNEL) ? (ch_tourney_register) : (logs_linked), params);
+}
+
+DSLASH:verify(user, params[])
+{
+	#pragma unused params
+	if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
+	{
+		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+		if(g_CurrentInteractionChannel != logs_linked)
+		{
+			return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
+		}
+	}
+	return ProcessDiscordVerifyCmd(user, logs_linked);
+}
+
+DSLASH:link(user, params[])
+{
+	#pragma unused params
+	if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
+	{
+		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+		if(g_CurrentInteractionChannel != logs_linked)
+		{
+			return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
+		}
+	}
+	return ProcessDiscordVerifyCmd(user, logs_linked);
 }
