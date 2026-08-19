@@ -124,29 +124,29 @@ ShowSecurityMenu(playerid)
 
     new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
 
-    if(isLinked && User[playerid][autoLogin])
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}Maximum Protected\n", secStr);
-    else if(isLinked)
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}High Discord Verified\n", secStr);
-    else
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{F84F31}Basic Unverified\n", secStr);
-
-    if(isLinked)
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{7289DA}%s#%s\n", secStr, User[playerid][dc_username], User[playerid][dc_discriminator]);
-    else
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{F84F31}Not Linked\n", secStr);
-
-    if(isLinked)
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t%s\n", secStr, (User[playerid][autoLogin]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
-    else
-        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t{BEBEBE}Requires Linked Discord\n", secStr);
-
     format(secStr, sizeof(secStr), "%s{B4B5B7}Account Password\t{FFFFFF}Change Password\n", secStr);
 
     if(User[playerid][adminLevel] > 0)
     {
         format(secStr, sizeof(secStr), "%s{B4B5B7}Admin Auth Method\t%s\n", secStr, (User[playerid][adminAuthType] == 1) ? ("{23C552}Password (Login)") : ("{7289DA}Code (Discord)"));
     }
+
+    if(isLinked)
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t%s\n", secStr, (User[playerid][autoLogin]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+    else
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t{BEBEBE}Requires Linked Discord\n", secStr);
+
+    if(isLinked)
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{7289DA}%s#%s\n", secStr, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    else
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{F84F31}Not Linked\n", secStr);
+
+    if(isLinked && User[playerid][autoLogin])
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}Maximum Protected\n", secStr);
+    else if(isLinked)
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}High Discord Verified\n", secStr);
+    else
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{F84F31}Basic Unverified\n", secStr);
 
     new title[64] = "{MAIN}Security Settings";
     format_MainColor(playerid, title);
@@ -392,26 +392,33 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
         return Command_ReProcess(playerid, cmd, 0);
     }
 
-    switch(listitem)
+    new item = listitem;
+    if(User[playerid][adminLevel] < 1 && item >= 1)
+    {
+        item++;
+    }
+
+    switch(item)
     {
         case 0:
-        { 
-            new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
-            if(!isLinked)
-                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Link your Discord account ({MAIN}/dvincular{FFFFFF}) to activate Auto-Login and achieve Maximum Security.");
-            else if(!User[playerid][autoLogin])
-                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Your Discord is verified! Enable {MAIN}Auto-Login (IP & Serial){FFFFFF} for Maximum Security.");
-            else
-                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Your account is fully protected with discord verification and Auto-Login.");
-            
-            ShowSecurityMenu(playerid);
+        {
+            SetPVarInt(playerid, "changepass_source", 1);
+            new passBody[192];
+            format(passBody, sizeof(passBody),
+                "{FFFFFF}Enter your new password below:\n\n{B4B5B7}Only letters and numbers, between %d and %d characters.",
+                MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
+
+            Dialog_ShowCallback(playerid, using public DIALOG_CHANGE_PASSWORD<iiiis>, DIALOG_STYLE_PASSWORD, "Change Password", passBody, "Change", "Cancel");
         }
         case 1:
-        { 
-            if(strcmp(User[playerid][dc_username], "-1", true)) strcopy(cmd, "/udiscord"); 
-            else strcopy(cmd, "/dvincular");
-            
-            Command_ReProcess(playerid, cmd, 0); 
+        {
+            if(User[playerid][adminLevel] < 1)
+            {
+                ShowSecurityMenu(playerid);
+                return 1;
+            }
+
+            ShowAdminAuthMethodDialog(playerid);
         }
         case 2:
         {
@@ -431,24 +438,23 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
             ShowSecurityMenu(playerid);
         }
         case 3:
-        {
-            SetPVarInt(playerid, "changepass_source", 1);
-            new passBody[192];
-            format(passBody, sizeof(passBody),
-                "{FFFFFF}Enter your new password below:\n\n{B4B5B7}Only letters and numbers, between %d and %d characters.",
-                MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
-
-            Dialog_ShowCallback(playerid, using public DIALOG_CHANGE_PASSWORD<iiiis>, DIALOG_STYLE_PASSWORD, "Change Password", passBody, "Change", "Cancel");
+        { 
+            if(strcmp(User[playerid][dc_username], "-1", true)) strcopy(cmd, "/udiscord"); 
+            else strcopy(cmd, "/dvincular");
+            
+            Command_ReProcess(playerid, cmd, 0); 
         }
         case 4:
-        {
-            if(User[playerid][adminLevel] < 1)
-            {
-                ShowSecurityMenu(playerid);
-                return 1;
-            }
-
-            ShowAdminAuthMethodDialog(playerid);
+        { 
+            new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
+            if(!isLinked)
+                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Link your Discord account ({MAIN}/dvincular{FFFFFF}) to activate Auto-Login and achieve Maximum Security.");
+            else if(!User[playerid][autoLogin])
+                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Your Discord is verified! Enable {MAIN}Auto-Login (IP & Serial){FFFFFF} for Maximum Security.");
+            else
+                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Your account is fully protected with discord verification and Auto-Login.");
+            
+            ShowSecurityMenu(playerid);
         }
     }
     return 1;
