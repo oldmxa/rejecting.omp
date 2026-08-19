@@ -786,11 +786,10 @@ DSLASH:setname(user, params[])
             case '0'..'9', 'A'..'Z', 'a'..'z', '_', '[', ']', '(', ')', '.', '@': continue;
             default: return SendDiscordResponse(comandos, sprintf(" **%s**, o nickname possui caracteres invalidos.", username));
         }
-
-        mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", new_nick);
-        mysql_tquery(dbHandle, queryGlobal, "OnDiscordSetNickCheck", "sss", username, old_nick, new_nick);
-        return true;
     }
+
+    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", new_nick);
+    mysql_tquery(dbHandle, queryGlobal, "OnDiscordSetNickCheck", "sss", username, old_nick, new_nick);
     return true;
 }
 

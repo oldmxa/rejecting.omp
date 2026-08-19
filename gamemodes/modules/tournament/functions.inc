@@ -889,6 +889,18 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         return 0;
     }
 
+    if(g_TourneyData[t_Mode] != TOURNAMENT_MODE_1V1)
+    {
+        new modeName[16], modeMsg[256];
+
+        if(g_TourneyData[t_Mode] == TOURNAMENT_MODE_2V2) strcopy(modeName, "2v2", sizeof(modeName));
+        else strcopy(modeName, "Clan War", sizeof(modeName));
+
+        format(modeMsg, sizeof(modeMsg), "<@%s> :warning: This tournament is **%s**. Discord registration is only available for **1v1** - please register in-game with `/jointournament`.", userid, modeName);
+        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, modeMsg);
+        return 0;
+    }
+
     new cleanParams[256];
     format(cleanParams, sizeof(cleanParams), "%s", params);
     cleanParams[sizeof(cleanParams) - 1] = '\0';
@@ -958,6 +970,22 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
 
     if(onlinePlayerId != INVALID_PLAYER_ID)
     {
+        if(g_TourneyData[t_EntryFee] > 0 && User[onlinePlayerId][playerMoney] < g_TourneyData[t_EntryFee])
+        {
+            new feeMsg[256];
+            format(feeMsg, sizeof(feeMsg), "<@%s> :x: **%s** does not have enough money for the entry fee (%s).", userid, nick, FormatMoney(g_TourneyData[t_EntryFee]));
+            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, feeMsg);
+            return 0;
+        }
+
+        if(IsPlayerBusy(onlinePlayerId))
+        {
+            new busyMsg[256];
+            format(busyMsg, sizeof(busyMsg), "<@%s> :warning: **%s** is busy in another activity right now and cannot be registered.", userid, nick);
+            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, busyMsg);
+            return 0;
+        }
+
         g_TourneyParticipants[slot][tp_Registered] = true;
         g_TourneyParticipants[slot][tp_Eliminated] = false;
         g_TourneyParticipants[slot][tp_Seed] = slot + 1;
@@ -965,7 +993,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         g_TourneyParticipants[slot][tp_Player1] = onlinePlayerId;
         g_TourneyParticipants[slot][tp_Player1_SQL] = User[onlinePlayerId][user_sqlid];
         g_PlayerTourneySlot[onlinePlayerId] = slot;
-        if(g_TourneyData[t_EntryFee] > 0 && User[onlinePlayerId][playerMoney] >= g_TourneyData[t_EntryFee])
+        if(g_TourneyData[t_EntryFee] > 0)
         {
             GivePlayerMoney(onlinePlayerId, -g_TourneyData[t_EntryFee]);
             User[onlinePlayerId][playerMoney] -= g_TourneyData[t_EntryFee];
