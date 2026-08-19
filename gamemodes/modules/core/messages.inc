@@ -295,7 +295,7 @@ public SendMSG(playerid)
     format(stringe[3], 160, "{MAIN}[INFO] {FFFFFF}Explore all our arenas: RP Walk, FPS Lock, FPS Unlock & Custom using {MAIN}'/changemode'{FFFFFF}.");
     format(stringe[4], 160, "{MAIN}[INFO] {FFFFFF}Want to train your aim and break server records? Use {MAIN}'/training'{FFFFFF} for timed challenges!");
     format(stringe[5], 160, "{MAIN}[INFO] {FFFFFF}Practice against configurable moving NPC bots anytime using {MAIN}'/prac'{FFFFFF} (or {MAIN}'/practice'{FFFFFF})!");
-    format(stringe[6], 160, "{MAIN}[INFO] {FFFFFF}Challenge players to 1v1 and 2v2 duels with custom weapons and bets via {MAIN}'/duel'{FFFFFF}.");
+    format(stringe[6], 160, "{MAIN}[INFO] {FFFFFF}Challenge players to 1v1/2v2 duels: {MAIN}'/duel'{FFFFFF} & {MAIN}'/duel2v2'{FFFFFF}.");
     format(stringe[7], 160, "{MAIN}[INFO] {FFFFFF}Gather your clan, unlock extra member slots and spawn at your Clan Safehouse with {MAIN}'/safemenu'{FFFFFF}!");
     format(stringe[8], 160, "{MAIN}[INFO] {FFFFFF}Capture floating Outpost torches with your Clan to receive {MAIN}$5,000 & 50 points{FFFFFF} every 5 minutes!");
     format(stringe[9], 160, "{MAIN}[INFO] {FFFFFF}Manage your clan, invite members and customize colors using {MAIN}'/clan'{FFFFFF}.");
