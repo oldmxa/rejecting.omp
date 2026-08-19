@@ -58,7 +58,7 @@
     return true;
 }
 */
-@cmd(.alts = {"linkdiscord"}) dvincular(playerid, params[], help)
+@cmd(.alts = {"linkdiscord", "discord", "dc"}) dvincular(playerid, params[], help)
 {
 	if(playerid == INVALID_PLAYER_ID || !User[playerid][isLogged])
         return false;

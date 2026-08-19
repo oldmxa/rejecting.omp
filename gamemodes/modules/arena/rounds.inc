@@ -251,6 +251,8 @@ public initArena()
 		arenaInfo[i][roundMints] = RoundTime;
 		arenaInfo[i][isRunningArena] = true;
 
+		if (i == ARENA_AFK) continue;
+
 		new poolCategory = (i == ARENA_CUSTOM) ? ARENA_CATEGORY_CUSTOM : ARENA_CATEGORY_SMALL;
 
 		arenaInfo[i][arenaId] = Iter_Random(ArenaQueue<poolCategory>);

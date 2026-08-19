@@ -124,6 +124,8 @@
 
 #define NOT_EMPTY_SPACES 	"{MAIN}**{FFFFFF} There are no empty spaces in this location"
 #define JOINED_ROOM_MSG		"{MAIN}**{FFFFFF} You have chosen room #%d"
+#define ARENA_R2_REQUIRED_ERROR	"{MAIN}[ERROR] {FFFFFF}This arena requires an R2+ client (SA-MP R2/R3/R4/R5 or open.mp). Update your client to enter."
+#define ARENA_FPS_LOCK_ERROR	"{MAIN}[ERROR] {FFFFFF}This arena requires your FPS locked at exactly %d. Your current FPS is %d."
 
 // FPS
 

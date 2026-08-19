@@ -17,7 +17,10 @@ enum
     ARENA_DM_1,
     ARENA_DM_2,
     ARENA_AFK,
-    ARENA_CUSTOM
+    ARENA_CUSTOM,
+    ARENA_R2,
+    ARENA_R2_FPS_UNLOCK,
+    ARENA_R2_FPS_LOCK
 }
 
 enum playerArena
@@ -929,16 +932,22 @@ enum E_ROOM_NAME
 
 new const ROOM_NAME[MAX_LOCATIONS][E_ROOM_NAME] =
 {
-    {"{B4B5B7}DM Room",         "DM Room 1"},
-    {"{B4B5B7}DM Room",         "DM Room 2"},
-    {"{B4B5B7}Lounge Room",     "Lounge Room"},
-    {"{B4B5B7}Custom Room",     "Custom Room"}
+    {"{B4B5B7}DM Room",               "DM Room 1"},
+    {"{B4B5B7}DM Room",               "DM Room 2"},
+    {"{B4B5B7}Lounge Room",           "Lounge Room"},
+    {"{B4B5B7}Custom Room",           "Custom Room"},
+    {"{B4B5B7}R2 Room",               "R2 Room"},
+    {"{B4B5B7}R2 FPS Unlock Room",    "R2 Unlock Room"},
+    {"{B4B5B7}R2 FPS Lock 102 Room",  "R2 Lock Room"}
 };
 
 new const LOCATION_DISPLAY_ORDER[MAX_LOCATIONS] =
 {
     ARENA_DM_1,
     ARENA_DM_2,
+    ARENA_R2,
+    ARENA_R2_FPS_UNLOCK,
+    ARENA_R2_FPS_LOCK,
     ARENA_CUSTOM,
     ARENA_AFK
 };
@@ -1004,6 +1013,22 @@ stock IsPlayerInDuel2v2(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
     return (g_PlayerDuel2v2ID[playerid] != -1) ? 1 : 0;
+}
+
+stock bool:IsPlayerR2Client(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return !strequal(User[playerid][playerVersion], "0.3.7");
+}
+
+stock bool:IsR2OnlyArena(location)
+{
+    return (location == ARENA_R2 || location == ARENA_R2_FPS_LOCK);
+}
+
+stock bool:ArenaRequiresFpsLock(location)
+{
+    return (location == ARENA_DM_1 || location == ARENA_DM_2 || location == ARENA_R2_FPS_LOCK);
 }
 
 new bool:g_IsPlayerInPractice[MAX_PLAYERS];

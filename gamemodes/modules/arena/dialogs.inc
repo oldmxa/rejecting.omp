@@ -38,6 +38,20 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
     if(User[playerid][isCreatingArena])
         return SendClientMessage(playerid, -1, "%s", IN_ARENA_EDITOR);
 
+    if(IsR2OnlyArena(listitem) && !IsPlayerR2Client(playerid))
+    {
+        SendClientMessage(playerid, -1, "%s", ARENA_R2_REQUIRED_ERROR);
+        showLocationSelectDialog(playerid);
+        return true;
+    }
+
+    if(ArenaRequiresFpsLock(listitem) && User[playerid][FPS] != ARENA_FPS_LOCK_VALUE)
+    {
+        va_SendClientMessage(playerid, -1, ARENA_FPS_LOCK_ERROR, ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
+        showLocationSelectDialog(playerid);
+        return true;
+    }
+
     User[playerid][locationId] = listitem;
     User[playerid][lastLocation] = listitem;
 

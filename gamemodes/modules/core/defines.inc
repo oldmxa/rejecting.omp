@@ -118,7 +118,7 @@
 #define MAX_LOGIN_ATTEMPTS 3
 #define MAX_ACCOUNT_LOCKTIME 2
 
-#define MAX_ZONES 63
+#define MAX_ZONES 71
 
 #define MAX_LINES 			6
 #define BACKGROUND_COLOR	"30"
@@ -148,7 +148,9 @@
 #define MAX_PLAYERS_LOCATION	25
 #define MAX_PLAYERS_AFK	MAX_PLAYERS
 
-#define MAX_LOCATIONS		4
+#define MAX_LOCATIONS		7
+
+#define ARENA_FPS_LOCK_VALUE	(102)
 
 
 #define IsPlayerAndroid(%0)                 GetPVarInt(%0, "NotAndroid") == 0

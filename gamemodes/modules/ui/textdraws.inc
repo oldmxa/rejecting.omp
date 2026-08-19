@@ -5,7 +5,7 @@ new PlayerText:killsandexp[MAX_PLAYERS];
 new PlayerText:killsandexpii[MAX_PLAYERS];
 new PlayerText:speedometer[MAX_PLAYERS];
 
-new PlayerText:topLocationTable[MAX_PLAYERS][130];
+new PlayerText:topLocationTable[MAX_PLAYERS][MAX_LOCATIONS * 20 + 26];
 
 
 new PlayerText:specTextDraw[MAX_PLAYERS][7];

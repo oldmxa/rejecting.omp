@@ -88,6 +88,7 @@ setAfkReason(playerid, const reasonn[])
 	if(!strcmp(reasonn, "lowfps", true)) reasonid = 3;
 	if(!strcmp(reasonn, "highping", true)) reasonid = 4;
 	if(!strcmp(reasonn, "highpl", true)) reasonid = 5;
+	if(!strcmp(reasonn, "fps102", true)) reasonid = 6;
 
 	if(User[playerid][isAfk] == false)
 	{
@@ -137,6 +138,15 @@ setAfkReason(playerid, const reasonn[])
 				{
 					if(i != playerid)
 						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: HIGH PL", getPlayerName(playerid));
+				}
+			}
+			case 6:
+			{
+				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: FPS DRIFTED FROM %d (yours: %d)", ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
+				foreach(new i : Player)
+				{
+					if(i != playerid)
+						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: FPS LOCK", getPlayerName(playerid));
 				}
 			}
 		}

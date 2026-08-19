@@ -426,29 +426,49 @@ public OnScriptUpdate()
 
 		if(User[i][isLogged] && User[i][isAlreadySpawned] && User[i][isAfk] == false)
 		{
-			if(ServerMaxFPS > 0 && User[i][FPS] > ServerMaxFPS)
+			if(User[i][locationId] == ARENA_R2_FPS_UNLOCK)
 			{
-				new count = GetPVarInt(i, "highFpsTicks") + 1;
-				SetPVarInt(i, "highFpsTicks", count);
-				if(count >= 5)
-				{
-					DeletePVar(i, "highFpsTicks");
-					setAfkReason(i, "highfps");
-				}
+				DeletePVar(i, "highFpsTicks");
+				DeletePVar(i, "lowFpsTicks");
 			}
-			else DeletePVar(i, "highFpsTicks");
+			else
+			{
+				if(ServerMaxFPS > 0 && User[i][FPS] > ServerMaxFPS)
+				{
+					new count = GetPVarInt(i, "highFpsTicks") + 1;
+					SetPVarInt(i, "highFpsTicks", count);
+					if(count >= 5)
+					{
+						DeletePVar(i, "highFpsTicks");
+						setAfkReason(i, "highfps");
+					}
+				}
+				else DeletePVar(i, "highFpsTicks");
 
-			if(ServerMinFPS > 0 && User[i][FPS] < ServerMinFPS && User[i][FPS] > 5)
+				if(ServerMinFPS > 0 && User[i][FPS] < ServerMinFPS && User[i][FPS] > 5)
+				{
+					new count = GetPVarInt(i, "lowFpsTicks") + 1;
+					SetPVarInt(i, "lowFpsTicks", count);
+					if(count >= 5)
+					{
+						DeletePVar(i, "lowFpsTicks");
+						setAfkReason(i, "lowfps");
+					}
+				}
+				else DeletePVar(i, "lowFpsTicks");
+			}
+
+			if(ArenaRequiresFpsLock(User[i][locationId]) && User[i][FPS] > 5 && User[i][FPS] != ARENA_FPS_LOCK_VALUE)
 			{
-				new count = GetPVarInt(i, "lowFpsTicks") + 1;
-				SetPVarInt(i, "lowFpsTicks", count);
+				new count = GetPVarInt(i, "lock102Ticks") + 1;
+				SetPVarInt(i, "lock102Ticks", count);
 				if(count >= 5)
 				{
-					DeletePVar(i, "lowFpsTicks");
-					setAfkReason(i, "lowfps");
+					DeletePVar(i, "lock102Ticks");
+					setAfkReason(i, "fps102");
 				}
 			}
-			else DeletePVar(i, "lowFpsTicks");
+			else DeletePVar(i, "lock102Ticks");
 
 			if(ServerMaxPing > 0 && GetPlayerPing(i) > ServerMaxPing)
 			{

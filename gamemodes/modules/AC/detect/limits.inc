@@ -74,10 +74,13 @@ public AC_CheckLimits()
         format(detail, sizeof(detail), "%.2f%%", packetLoss);
         if (ServerMaxPacketLoss > 0.0 && AC_CheckLimit(playerid, AC_LIMIT_PL, (packetLoss > ServerMaxPacketLoss), detail)) continue;
 
-        new fps = User[playerid][FPS];
-        format(detail, sizeof(detail), "%d fps", fps);
-        new bool:badFps = (fps > 0 && (fps < ServerMinFPS || fps > ServerMaxFPS));
-        AC_CheckLimit(playerid, AC_LIMIT_FPS, badFps, detail);
+        if (User[playerid][locationId] != ARENA_R2_FPS_UNLOCK)
+        {
+            new fps = User[playerid][FPS];
+            format(detail, sizeof(detail), "%d fps", fps);
+            new bool:badFps = (fps > 0 && (fps < ServerMinFPS || fps > ServerMaxFPS));
+            AC_CheckLimit(playerid, AC_LIMIT_FPS, badFps, detail);
+        }
     }
     return 1;
 }
