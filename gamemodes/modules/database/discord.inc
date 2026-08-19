@@ -323,30 +323,33 @@ public AkaDiscord(username[], admin[])
 		SendDiscordResponse( comandos, sprintf(" **%s**, this player does not exist.", admin));
 }
 
-forward ForceOMPDiscord(admin[], targetid);
-public ForceOMPDiscord(admin[], targetid)
+forward ForceOMPDiscord(admin[], targetid, targetname[]);
+public ForceOMPDiscord(admin[], targetid, targetname[])
 {
 	new rows = cache_num_rows();
-	if(rows)
+	if(!rows)
 	{
-		if(!IsPlayerConnected(targetid)) return true;
+		SendDiscordResponse(comandos, sprintf(" **%s**, the account %s was not found in the database.", admin, targetname));
+		return true;
+	}
 
-		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", User[targetid][userName]);
-		mysql_tquery(dbHandle, queryGlobal);
+	mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", targetname);
+	mysql_tquery(dbHandle, queryGlobal);
 
-		va_SendClientMessageToAll(-1, FORCED_OMP_BAN, admin, User[targetid][userName]);
+	va_SendClientMessageToAll(-1, FORCED_OMP_BAN, admin, targetname);
 
+	SendDiscordResponse( comandos, sprintf(":white_check_mark: **%s**, the player %s got forced to play with open.mp launcher.", admin, targetname));
+
+	new string[1024];
+	format(string, sizeof(string), "**Admin:** **%s**\n**User banned:** **%s**",
+		admin,
+		targetname);
+	SendDiscordEmbed(logs_ban, "New Force open.mp Ban", string, DISCORD_COLOR_ERROR);
+
+	if(IsPlayerConnected(targetid) && strequal(User[targetid][userName], targetname))
+	{
 		ShowBanDialog(targetid, admin, "Forced to use open.mp launcher", "Now", "Never (Install open.mp)");
 		KickEx(targetid, 2000);
-
-		SendDiscordResponse( comandos, sprintf(":white_check_mark: **%s**, the player %s got forced to play with open.mp launcher.", admin, User[targetid][userName]));
-
-		new string[1024];
-		format(string, sizeof(string), "**Admin:** **%s**\n**User banned:** **%s**",
-			admin,
-			User[targetid][userName]);
-
-		return SendDiscordEmbed(logs_ban, "New Force open.mp Ban", string, DISCORD_COLOR_ERROR);
 	}
 
 	return true;

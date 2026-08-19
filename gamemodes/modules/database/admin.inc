@@ -204,32 +204,39 @@ public BanPlayerAC(adminid, targetid, const adminNick[], const reason[], hours, 
 	return false;
 }
 
-forward ForcePlayerOMP(adminid, targetid);
-public ForcePlayerOMP(adminid, targetid)
+forward ForcePlayerOMP(adminid, targetid, targetname[]);
+public ForcePlayerOMP(adminid, targetid, targetname[])
 {
 	new rows = cache_num_rows();
-	if(rows)
+	if(!rows)
 	{
-		if(!IsPlayerConnected(targetid)) return true;
+		va_SendClientMessage(adminid, -1, "{MAIN}[ERROR] {FFFFFF}The account %s was not found in the database.", targetname);
+		return true;
+	}
 
-		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", User[targetid][userName]);
-		mysql_tquery(dbHandle, queryGlobal);
+	mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", targetname);
+	mysql_tquery(dbHandle, queryGlobal);
 
-		new banMsg[256];
-		format(banMsg, sizeof(banMsg), COL_ADM_PUNISH"[Admin] %s "COL_ADM_PUNISH"%s banned player %s (Reason: Forced open.mp Launcher)", adminnames[User[adminid][adminLevel]][ingame], User[adminid][userName], User[targetid][userName]);
-		SendClientMessageToAll(-1, "%s", banMsg);
+	new banMsg[256];
+	format(banMsg, sizeof(banMsg), COL_ADM_PUNISH"[Admin] %s "COL_ADM_PUNISH"%s banned player %s (Reason: Forced open.mp Launcher)", adminnames[User[adminid][adminLevel]][ingame], User[adminid][userName], targetname);
+	SendClientMessageToAll(-1, "%s", banMsg);
 
+	new string[1024];
+	format(string, sizeof(string), "**Admin:** %s\n**Target:** %s",
+		User[adminid][userName],
+		targetname);
+	SendDiscordEmbed(logs_ban, "New Force open.mp Ban", string, DISCORD_COLOR_ERROR);
+
+	if(IsPlayerConnected(targetid) && strequal(User[targetid][userName], targetname))
+	{
 		GameTextForPlayer(targetid, "~r~BANNED~w~!", 2500, 3);
 		SendBanNotice(targetid, ban_message_color"[BANNED] This account is forced to use the official open.mp launcher.");
 
 		KickEx(targetid, 2000);
-
-		new string[1024];
-		format(string, sizeof(string), "**Admin:** %s\n**Target:** %s",
-			User[adminid][userName],
-			User[targetid][userName]);
-
-		return SendDiscordEmbed(logs_ban, "New Force open.mp Ban", string, DISCORD_COLOR_ERROR);
+	}
+	else
+	{
+		va_SendClientMessage(adminid, -1, "{MAIN}[INFO] {FFFFFF}%s disconnected before the kick, but the open.mp lock was saved.", targetname);
 	}
 
 	return true;

@@ -146,7 +146,7 @@
         return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[targetid][userName]);
-	mysql_tquery(dbHandle, queryGlobal, "ForcePlayerOMP", "dd", playerid, targetid);
+	mysql_tquery(dbHandle, queryGlobal, "ForcePlayerOMP", "dds", playerid, targetid, User[targetid][userName]);
 
     return true;
 }

@@ -1088,24 +1088,22 @@ DSLASH:banomp(user, params[])
 	if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
 		return SendDiscordResponse(comandos, sprintf(" **%s**, the player is not online!", username));
 
+	if(User[targetid][adminLevel] > 1)
+		return SendDiscordResponse(comandos, SUPERIOR_RIGHTS_DISCORD);
+
 	if(IsPlayerUsingOmp(targetid))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, this player is already using the open.mp launcher.", username));
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
 		"SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[targetid][userName]);
 
-	mysql_tquery(dbHandle, queryGlobal, "ForceOMPDiscord", "sd", username, targetid);
+	mysql_tquery(dbHandle, queryGlobal, "ForceOMPDiscord", "sds", username, targetid, User[targetid][userName]);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s forced open.mp launcher on player %s (ID: %d)", username, User[targetid][userName], targetid);
     LogServerAction(0, username, "bans", "BanOMP (Discord)", log_details);
 
 	return true;
-}
-
-DSLASH:banr2(user, params[])
-{
-	return DSCI_banomp(user, params);
 }
 
 DSLASH:unbanomp(user, params[])
@@ -1152,11 +1150,6 @@ DSLASH:unbanomp(user, params[])
     LogServerAction(0, username, "unbans", "UnbanOMP (Discord)", log_details);
 
 	return true;
-}
-
-DSLASH:unbanr2(user, params[])
-{
-	return DSCI_unbanomp(user, params);
 }
 
 DSLASH:unbanip(user, params[])
