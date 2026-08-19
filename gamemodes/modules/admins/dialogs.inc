@@ -69,15 +69,28 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     Dialog_ShowCallback(playerid, using public DIALOG_ADM_LOCKPASS<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Server Lock", "{FFFFFF}Enter the password to lock the server:", "Lock", "Back");
                 }
             }
-            case 13: // R2 Kick (server-wide)
+            case 13: // Fake Version server-wide
             {
                 if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to change this.");
 
                 R2KickEnabled = !R2KickEnabled;
                 SaveServerConfig();
 
-                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the R2 client check kick.",
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the Fake Version client check kick.",
                     User[playerid][userName], (R2KickEnabled) ? ("enabled") : ("disabled"));
+
+                ShowAdminConfig(playerid);
+                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            }
+            case 25: // open.mp Launcher server-wide
+            {
+                if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to change this.");
+
+                OMPKickEnabled = !OMPKickEnabled;
+                SaveServerConfig();
+
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the open.mp launcher check kick.",
+                    User[playerid][userName], (OMPKickEnabled) ? ("enabled") : ("disabled"));
 
                 ShowAdminConfig(playerid);
                 PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);

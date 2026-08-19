@@ -53,6 +53,13 @@ hook OnPlayerConnect(playerid)
 {
     ACClient[playerid][acUpdateCount] = -1;
     AC_SendClientChecks(playerid);
+
+    if (OMPKickEnabled && !IsPlayerNPC(playerid) && !IsPlayerUsingOmp(playerid))
+    {
+        SendClientMessage(playerid, 0xE74C3CFF, "[AC] O servidor exige conexao exclusiva via open.mp Launcher oficial.");
+        SendClientMessage(playerid, -1, "Baixe o launcher oficial em {MAIN}open.mp{FFFFFF} para jogar.");
+        SetTimerEx("AC_DelayedKick", AC_KICK_DELAY, false, "i", playerid);
+    }
     return 1;
 }
 

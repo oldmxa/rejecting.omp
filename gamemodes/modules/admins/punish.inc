@@ -122,7 +122,7 @@
     return true;
 }
 
-@cmd() banr2(playerid, params[], help)
+@cmd(.alts = {"banopenmp", "banr2"}) banomp(playerid, params[], help)
 {
     if (User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
@@ -131,7 +131,7 @@
 
     new targetid;
     if(sscanf(params, "r", targetid))
-        return SendClientMessage(playerid,-1, "%s", FORCE_R2_HELP);
+        return SendClientMessage(playerid,-1, "%s", FORCE_OMP_HELP);
 
     if(!IsPlayerConnected(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
@@ -139,19 +139,19 @@
     if(targetid == playerid)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
-    if(!strequal(User[targetid][playerVersion], "0.3.7"))
-        return SendClientMessage(playerid, -1, "{MAIN}**{FFFFFF} This player already has R2+.");
+    if(IsPlayerUsingOmp(targetid))
+        return SendClientMessage(playerid, -1, "{MAIN}**{FFFFFF} This player is already using the open.mp launcher.");
 
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])
         return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[targetid][userName]);
-	mysql_tquery(dbHandle, queryGlobal, "ForcePlayerR2", "dd", playerid, targetid);
+	mysql_tquery(dbHandle, queryGlobal, "ForcePlayerOMP", "dd", playerid, targetid);
 
     return true;
 }
 
-@cmd() unbanr2(playerid, params[], help)
+@cmd(.alts = {"unbanopenmp", "unbanr2"}) unbanomp(playerid, params[], help)
 {
 	if (User[playerid][adminLevel] < 2)
 	    return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
@@ -160,12 +160,12 @@
 
 	new player[MAX_PLAYER_NAME + 1];
 	if(sscanf(params, "s[25]", player))
-		return SendClientMessage(playerid,-1, "%s", UNBAN_R2_HELP);
+		return SendClientMessage(playerid,-1, "%s", UNBAN_OMP_HELP);
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
-		"SELECT `id` FROM `accounts` WHERE `username` = '%e' AND `forcedr2` = 1 LIMIT 1", player);
+		"SELECT `id` FROM `accounts` WHERE `username` = '%e' AND `forced_omp` = 1 LIMIT 1", player);
 
-	mysql_tquery(dbHandle, queryGlobal, "UnBanR2", "iss", playerid, User[playerid][userName], player);
+	mysql_tquery(dbHandle, queryGlobal, "UnBanOMP", "iss", playerid, User[playerid][userName], player);
 
 	return true;
 }

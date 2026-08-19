@@ -202,8 +202,8 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"gmx",             "Restart the gamemode",          4},
 	{"gtemp",           "Demand a player recording",     1},
 	{"temprec",         "Demand a player recording",     1},
-	{"banr2",           "Force a player to use R2+",     1},
-	{"unbanr2",         "Remove the forced R2+",         2},
+	{"banomp",          "Force open.mp launcher",        1},
+	{"unbanomp",        "Unban open.mp launcher",        2},
 	{"unbanip",         "Unban an IP address",           2},
 	{"dox",             "Show IP and ISP data",          2},
 	{"turnoff",         "Shut the server down",          5},
@@ -1074,7 +1074,7 @@ DSLASH:temprec(user, params[])
 	return DiscordTempRecCommand(user, "temprec", params);
 }
 
-DSLASH:banr2(user, params[])
+DSLASH:banomp(user, params[])
 {
 	if(!DSC_RequireLevel(user, 1)) return 1;
 
@@ -1083,27 +1083,32 @@ DSLASH:banr2(user, params[])
 
 	new targetid;
 	if(sscanf(params, "r", targetid))
-		return SendDiscordResponse(comandos, sprintf(" **%s**, /banr2 [id].", username));
+		return SendDiscordResponse(comandos, sprintf(" **%s**, /banomp [id].", username));
 
 	if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
 		return SendDiscordResponse(comandos, sprintf(" **%s**, the player is not online!", username));
 
-	if(!strequal(User[targetid][playerVersion], "0.3.7"))
-			return SendDiscordResponse(comandos, sprintf(" **%s**, this player already plays with R2+.", username));
+	if(IsPlayerUsingOmp(targetid))
+		return SendDiscordResponse(comandos, sprintf(" **%s**, this player is already using the open.mp launcher.", username));
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
 		"SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[targetid][userName]);
 
-	mysql_tquery(dbHandle, queryGlobal, "ForceR2Discord", "sd", username, targetid);
+	mysql_tquery(dbHandle, queryGlobal, "ForceOMPDiscord", "sd", username, targetid);
 
     new log_details[256];
-    format(log_details, sizeof(log_details), "Discord Admin %s forced R2 on player %s (ID: %d)", username, User[targetid][userName], targetid);
-    LogServerAction(0, username, "bans", "BanR2 (Discord)", log_details);
+    format(log_details, sizeof(log_details), "Discord Admin %s forced open.mp launcher on player %s (ID: %d)", username, User[targetid][userName], targetid);
+    LogServerAction(0, username, "bans", "BanOMP (Discord)", log_details);
 
 	return true;
 }
 
-DSLASH:unbanr2(user, params[])
+DSLASH:banr2(user, params[])
+{
+	return DSCI_banomp(user, params);
+}
+
+DSLASH:unbanomp(user, params[])
 {
 	if(!DSC_RequireLevel(user, 2)) return 1;
 
@@ -1130,23 +1135,28 @@ DSLASH:unbanr2(user, params[])
 		DCC_GetRoleId(role, outputRole);
 
 		if(strequal("824869097929310219", outputRole))
-			return SendDiscordResponse(comandos, sprintf(" **%s**, /unbanr2 can only be used by MASTER+.", username));
+			return SendDiscordResponse(comandos, sprintf(" **%s**, /unbanomp can only be used by MASTER+.", username));
 	}
 
 	new player[MAX_PLAYER_NAME + 1];
 	if(sscanf(params, "s[24]", player))
-		return SendDiscordResponse(comandos, sprintf(" **%s**, /unbanr2 [name].", username));
+		return SendDiscordResponse(comandos, sprintf(" **%s**, /unbanomp [name].", username));
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
-		"SELECT `id` FROM `accounts` WHERE `username` = '%e' AND `forcedr2` = 1 LIMIT 1", player);
+		"SELECT `id` FROM `accounts` WHERE `username` = '%e' AND `forced_omp` = 1 LIMIT 1", player);
 
-	mysql_tquery(dbHandle, queryGlobal, "UnBanR2Discord", "ss", username, player);
+	mysql_tquery(dbHandle, queryGlobal, "UnBanOMPDiscord", "ss", username, player);
 
     new log_details[256];
-    format(log_details, sizeof(log_details), "Discord Admin %s removed forced R2 from player %s", username, player);
-    LogServerAction(0, username, "unbans", "UnbanR2 (Discord)", log_details);
+    format(log_details, sizeof(log_details), "Discord Admin %s removed forced open.mp launcher from player %s", username, player);
+    LogServerAction(0, username, "unbans", "UnbanOMP (Discord)", log_details);
 
 	return true;
+}
+
+DSLASH:unbanr2(user, params[])
+{
+	return DSCI_unbanomp(user, params);
 }
 
 DSLASH:unbanip(user, params[])

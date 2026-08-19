@@ -103,7 +103,7 @@ CREATE TABLE `accounts` (
   `social_steam` varchar(100) DEFAULT NULL,
   `achievements_data` mediumtext NOT NULL DEFAULT '',
   `videos` int(11) NOT NULL DEFAULT 0,
-  `forcedr2` int(11) NOT NULL DEFAULT 0,
+  `forced_omp` int(11) NOT NULL DEFAULT 0,
   `showhud` int(11) NOT NULL DEFAULT 1,
   `hide_vip_tag` tinyint(1) NOT NULL DEFAULT 0,
   `hide_clan_tag` tinyint(1) NOT NULL DEFAULT 0,

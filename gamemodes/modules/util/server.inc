@@ -31,6 +31,11 @@ public IsR2KickEnabled()
     return _:R2KickEnabled;
 }
 
+public IsOMPKickEnabled()
+{
+    return _:OMPKickEnabled;
+}
+
 stock LoadServerConfig()
 {
     if(!fexist("server_config.ini"))
@@ -58,6 +63,7 @@ stock LoadServerConfig()
         else if(!strcmp(key, "MinFPS", true)) ServerMinFPS = strval(val);
         else if(!strcmp(key, "MaxFPS", true)) ServerMaxFPS = strval(val);
         else if(!strcmp(key, "R2Kick", true)) R2KickEnabled = (strval(val) != 0);
+        else if(!strcmp(key, "OMPKick", true)) OMPKickEnabled = (strval(val) != 0);
         else if(!strcmp(key, "MaxWarnings", true)) ServerMaxWarnings = strval(val);
         else if(!strcmp(key, "ACCooldown", true)) ServerACCooldown = strval(val);
         else if(!strcmp(key, "MaxLoginAttempts", true)) ServerMaxLoginAttempts = strval(val);
@@ -109,6 +115,9 @@ stock SaveServerConfig()
     fwrite(file, str);
 
     format(str, sizeof(str), "R2Kick=%d\r\n", _:R2KickEnabled);
+    fwrite(file, str);
+
+    format(str, sizeof(str), "OMPKick=%d\r\n", _:OMPKickEnabled);
     fwrite(file, str);
 
     format(str, sizeof(str), "DefaultHud=%d\r\n", ServerDefaultHud);

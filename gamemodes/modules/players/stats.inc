@@ -122,8 +122,11 @@ ShowAdminConfig(playerid)
         strcat(strb, "{MAIN}\xBB Server & Security\t \t \n");
         actions[count++] = 0;
 
-        format(strb, sizeof(strb), "%s{FFFFFF}R2 Client Kick\t%s\t{BEBEBE}Kicks clients faking their version\n", strb, (R2KickEnabled) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
-        actions[count++] = 13; // R2 Kick
+        format(strb, sizeof(strb), "%s{FFFFFF}Fake Version Kick\t%s\t{BEBEBE}Kicks clients faking their version\n", strb, (R2KickEnabled) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+        actions[count++] = 13; // Fake Version Kick
+
+        format(strb, sizeof(strb), "%s{FFFFFF}open.mp Only Kick\t%s\t{BEBEBE}Kicks clients not using open.mp launcher\n", strb, (OMPKickEnabled) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+        actions[count++] = 25; // OMP Kick
 
         format(strb, sizeof(strb), "%s{FFFFFF}Server Lock\t%s\t{BEBEBE}Requires a password to join\n", strb, (ServerLocked) ? ("{F84F31}Locked") : ("{23C552}Unlocked"));
         actions[count++] = 5; // Lock

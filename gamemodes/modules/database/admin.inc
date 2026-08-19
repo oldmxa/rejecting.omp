@@ -204,21 +204,21 @@ public BanPlayerAC(adminid, targetid, const adminNick[], const reason[], hours, 
 	return false;
 }
 
-forward ForcePlayerR2(adminid, targetid);
-public ForcePlayerR2(adminid, targetid)
+forward ForcePlayerOMP(adminid, targetid);
+public ForcePlayerOMP(adminid, targetid)
 {
 	new rows = cache_num_rows();
 	if(rows)
 	{
-		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forcedr2` = 1 WHERE `username` = '%e'", User[targetid][userName]);
+		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", User[targetid][userName]);
 		mysql_tquery(dbHandle, queryGlobal);
 
 		new banMsg[256];
-		format(banMsg, sizeof(banMsg), COL_ADM_PUNISH"[Admin] %s "COL_ADM_PUNISH"%s banned player %s (Reason: Forced R2+)", adminnames[User[adminid][adminLevel]][ingame], User[adminid][userName], User[targetid][userName]);
+		format(banMsg, sizeof(banMsg), COL_ADM_PUNISH"[Admin] %s "COL_ADM_PUNISH"%s banned player %s (Reason: Forced open.mp Launcher)", adminnames[User[adminid][adminLevel]][ingame], User[adminid][userName], User[targetid][userName]);
 		SendClientMessageToAll(-1, "%s", banMsg);
 
 		GameTextForPlayer(targetid, "~r~BANNED~w~!", 2500, 3);
-		SendBanNotice(targetid, ban_message_color"[BANNED] This account is forced to use R2+ version of SA-MP.");
+		SendBanNotice(targetid, ban_message_color"[BANNED] This account is forced to use the official open.mp launcher.");
 
 		KickEx(targetid, 2000);
 
@@ -227,34 +227,34 @@ public ForcePlayerR2(adminid, targetid)
 			User[adminid][userName],
 			User[targetid][userName]);
 
-		return SendDiscordEmbed(logs_ban, "New Force R2 Ban", string, DISCORD_COLOR_ERROR);
+		return SendDiscordEmbed(logs_ban, "New Force open.mp Ban", string, DISCORD_COLOR_ERROR);
 	}
 
 	return true;
 }
 
-forward UnBanR2(adminid, admin[], player[]);
-public UnBanR2(adminid, admin[], player[])
+forward UnBanOMP(adminid, admin[], player[]);
+public UnBanOMP(adminid, admin[], player[])
 {
 	new rows = cache_num_rows();
 	if(rows)
 	{
-		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forcedr2` = 0 WHERE `username` = '%e'", player);
+		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 0 WHERE `username` = '%e'", player);
 		mysql_tquery(dbHandle, queryGlobal);
 
-		va_SendClientMessage(adminid, -1, R2_UNBAN, player);
+		va_SendClientMessage(adminid, -1, OMP_UNBAN, player);
 
 		new string[1024];
 		format(string, sizeof(string), "**Admin:** %s\n**Target:** %s",
 			admin,
 			player);
 
-		return SendDiscordEmbed(logs_unban, "New Force R2 Unban", string, DISCORD_COLOR_SUCCESS);
+		return SendDiscordEmbed(logs_unban, "New Force open.mp Unban", string, DISCORD_COLOR_SUCCESS);
 	}
 
 	else
 	{
-		SendClientMessage(adminid, -1, "{MAIN}**{FFFFFF} This player isnt R2 Banned.");
+		SendClientMessage(adminid, -1, "{MAIN}**{FFFFFF} This player isnt open.mp Banned.");
 	}
 
 	return true;

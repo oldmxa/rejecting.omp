@@ -88,8 +88,8 @@ public OnPlayerConnect(playerid)
 	CheckAccountLimit(playerid);
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
-	"SELECT `username`, `forcedr2` FROM `accounts` WHERE `username` = '%e' and `forcedr2` = 1", User[playerid][userName]);
-	mysql_tquery(dbHandle, queryGlobal, "ForcedR2Data", "i", playerid);
+	"SELECT `username`, `forced_omp` FROM `accounts` WHERE `username` = '%e' and `forced_omp` = 1", User[playerid][userName]);
+	mysql_tquery(dbHandle, queryGlobal, "ForcedOMPData", "i", playerid);
 
 	PreloadAnims(playerid);
 

@@ -320,58 +320,58 @@ public AkaDiscord(username[], admin[])
 			"SELECT `username` FROM `accounts` WHERE `regip` = '%e'", regip);
 	}
 	else
-		SendDiscordResponse(comandos, sprintf(" **%s**, this player does not exist.", admin));
+		SendDiscordResponse( comandos, sprintf(" **%s**, this player does not exist.", admin));
 }
 
-forward ForceR2Discord(admin[], targetid);
-public ForceR2Discord(admin[], targetid)
+forward ForceOMPDiscord(admin[], targetid);
+public ForceOMPDiscord(admin[], targetid)
 {
 	new rows = cache_num_rows();
 	if(rows)
 	{
-		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forcedr2` = 1 WHERE `username` = '%e'", User[targetid][userName]);
+		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", User[targetid][userName]);
 		mysql_tquery(dbHandle, queryGlobal);
 
-		va_SendClientMessageToAll(-1, FORCED_R2_BAN, admin, User[targetid][userName]);
+		va_SendClientMessageToAll(-1, FORCED_OMP_BAN, admin, User[targetid][userName]);
 
-		ShowBanDialog(targetid, admin, "Forced to use R2+", "Now", "Never (Update SA:MP)");
+		ShowBanDialog(targetid, admin, "Forced to use open.mp launcher", "Now", "Never (Install open.mp)");
 		KickEx(targetid, 2000);
 
-		SendDiscordResponse(comandos, sprintf(":white_check_mark: **%s**, the player %s got forced to play with R2+.", admin, User[targetid][userName]));
+		SendDiscordResponse( comandos, sprintf(":white_check_mark: **%s**, the player %s got forced to play with open.mp launcher.", admin, User[targetid][userName]));
 
 		new string[1024];
 		format(string, sizeof(string), "**Admin:** **%s**\n**User banned:** **%s**",
 			admin,
 			User[targetid][userName]);
 
-		return SendDiscordEmbed(logs_ban, "New Force R2 Ban", string, DISCORD_COLOR_ERROR);
+		return SendDiscordEmbed(logs_ban, "New Force open.mp Ban", string, DISCORD_COLOR_ERROR);
 	}
 
 	return true;
 }
 
-forward UnBanR2Discord(admin[], player[]);
-public UnBanR2Discord(admin[], player[])
+forward UnBanOMPDiscord(admin[], player[]);
+public UnBanOMPDiscord(admin[], player[])
 {
 	new rows = cache_num_rows();
 	if(rows)
 	{
-		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forcedr2` = 0 WHERE `username` = '%e'", player);
+		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 0 WHERE `username` = '%e'", player);
 		mysql_tquery(dbHandle, queryGlobal);
 
-		SendDiscordResponse(comandos, sprintf(":white_check_mark: **%s**, the player %s won't be forced to play with R2+ no more.", admin, player));
+		SendDiscordResponse( comandos, sprintf(":white_check_mark: **%s**, the player %s won't be forced to play with open.mp launcher no more.", admin, player));
 
 		new string[1024];
 		format(string, sizeof(string), "**Admin:** **%s**\n**User unbanned:** **%s**",
 			admin,
 			player);
 
-		return SendDiscordEmbed(logs_unban, "New Force R2 Unban", string, DISCORD_COLOR_SUCCESS);
+		return SendDiscordEmbed(logs_unban, "New Force open.mp Unban", string, DISCORD_COLOR_SUCCESS);
 	}
 
 	else
 	{
-		SendDiscordResponse(comandos, sprintf(" **%s**, the player %s isn't force banned to play with R2+.", admin, player));
+		SendDiscordResponse( comandos, sprintf(" **%s**, the player %s isn't force banned to play with open.mp launcher.", admin, player));
 	}
 
 	return true;

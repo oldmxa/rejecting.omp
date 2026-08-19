@@ -247,11 +247,11 @@
 #define BAN_TEMPREC_MINUTES         ADM_TAG_PUN"5 minutes has passed. Post your review in our server."
 #define BAN_TEMPREC_WHOBANNED       ADM_TAG_PUN"You were banned by %s, reason: %s. Your IP: %s."
 
-// --- R2 Force & Client Restrictions ---
-#define FORCE_R2_HELP               "{MAIN}[ERROR] {FFFFFF}/banr2 [id] - Force player to R2+."
-#define FORCED_R2_BAN               ADM_TAG_PUN"Admin %s forced R2+ on %s"
-#define R2_UNBAN                    ADM_TAG_NORM"The player "COL_WHITE"%s "COL_ADM_CMD"got R2 unbanned."
-#define UNBAN_R2_HELP               "{MAIN}[ERROR] {FFFFFF}/unbanr2 [nick] - Unban a player that has been forced to play with R2+."
+// --- open.mp launcher force ---
+#define FORCE_OMP_HELP              "{MAIN}[ERROR] {FFFFFF}/banomp [id] - Force player to open.mp launcher."
+#define FORCED_OMP_BAN              ADM_TAG_PUN"Admin %s forced open.mp launcher on %s"
+#define OMP_UNBAN                   ADM_TAG_NORM"The player "COL_WHITE"%s "COL_ADM_CMD"got open.mp unbanned."
+#define UNBAN_OMP_HELP              "{MAIN}[ERROR] {FFFFFF}/unbanomp [nick] - Unban a player that has been forced to play with open.mp launcher."
 
 // --- Network & Client Limits ---
 #define TOO_HIGH_FPS                "FPS TOO HIGH (%d/%d)"

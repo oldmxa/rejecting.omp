@@ -14,6 +14,7 @@
 #define AC_ROW_FALLANIM  (8)
 #define AC_ROW_CJWALK    (9)
 #define AC_ROW_STUNS     (10)
+#define AC_ROW_OMP       (11)
 #define AC_ROW_CATEGORY  (100)
 
 #define AC_RECENT_ROWS   (30)
@@ -168,9 +169,13 @@ ShowACMenu(playerid)
         ACPunishEnabled ? ("{00FF00}Enabled") : ("{FF0000}Report only")), sizeof(body));
     rows[count++] = AC_ROW_PUNISH;
 
-    strcat(body, fmat_return("{418cb0}R2 Client Kick\t%s\n",
+    strcat(body, fmat_return("{418cb0}Fake Version Kick\t%s\n",
         R2KickEnabled ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_R2;
+
+    strcat(body, fmat_return("{418cb0}open.mp Only Kick\t%s\n",
+        OMPKickEnabled ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    rows[count++] = AC_ROW_OMP;
 
     strcat(body, "{MAIN}\xBB RAC - Extra\t \n", sizeof(body));
     rows[count++] = AC_ROW_SECTION;
@@ -491,8 +496,18 @@ public DIALOG_AC_MENU(playerid, dialogid, response, listitem, string:inputtext[]
             R2KickEnabled = !R2KickEnabled;
             SaveServerConfig();
 
-            va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the R2 client check kick.",
+            va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the Fake Version client check kick.",
                 User[playerid][userName], R2KickEnabled ? ("enabled") : ("disabled"));
+
+            PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+        }
+        case AC_ROW_OMP:
+        {
+            OMPKickEnabled = !OMPKickEnabled;
+            SaveServerConfig();
+
+            va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the open.mp launcher check kick.",
+                User[playerid][userName], OMPKickEnabled ? ("enabled") : ("disabled"));
 
             PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
         }

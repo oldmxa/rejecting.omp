@@ -369,21 +369,21 @@ public InsertDataSQL(playerid)
     LoadPlayerAchievements(playerid, "");
 }
 
-forward ForcedR2Data(playerid);
-public ForcedR2Data(playerid)
+forward ForcedOMPData(playerid);
+public ForcedOMPData(playerid)
 {
 	new rows = cache_num_rows();
 	if (rows)
 	{
-		cache_get_value_bool(0, "forcedr2", User[playerid][ForcedR2]);
+		cache_get_value_bool(0, "forced_omp", User[playerid][ForcedOMP]);
 	}
 
-	if (User[playerid][ForcedR2])
+	if (User[playerid][ForcedOMP])
 	{
-		if (strequal(User[playerid][playerVersion], "0.3.7"))
+		if (!IsPlayerUsingOmp(playerid))
 		{
-			new string[150];
-			format(string, sizeof(string), "[NOT R1] The account %s is forced to play with R2+. Disconnect and install the newer versions.", User[playerid][userName]);
+			new string[160];
+			format(string, sizeof(string), "[OPEN.MP REQUIRED] The account %s is forced to play with open.mp launcher. Download it at open.mp and reconnect.", User[playerid][userName]);
 			SendClientMessage(playerid, 0xB81A1AFF, "%s", string);
 			return KickEx(playerid, 1000);
 		}
