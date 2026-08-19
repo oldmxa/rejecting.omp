@@ -125,8 +125,8 @@ stock updatePlayerHud(playerid)
 			PlayerTextDrawSetString(playerid, FPSPingPacket[playerid], fString);
 		}
 
-		new clockStr[64];
-		format(clockStr, sizeof(clockStr), "%s", GetCustomClockString(User[playerid][hudType], 0, -3, true));
+		new clockStr[128];
+		format(clockStr, sizeof(clockStr), "%s", GetCustomClockString(User[playerid][hudType], playerColorOne, playerColorTwo, 0, -3, true));
 		if (clockStr[0] != '\0')
 			PlayerTextDrawSetString(playerid, InfoStats[playerid][2], clockStr);
 		else

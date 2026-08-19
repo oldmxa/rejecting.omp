@@ -23,7 +23,7 @@ new const HUD_TYPES[MAX_HUD_TYPES][] =
 {
     "Rejecting",
     "Underline",
-    "rejecting_01"
+    "RLOW"
 };
 
 static const g_monthNameTD[13][7] = {
@@ -326,10 +326,10 @@ stock FormatDeathMessageForHud(hud_type, const primary_col[], const secondary_co
     return 1;
 }
 
-stock GetCustomClockString(hud_type, timestamp = 0, utc = -3, bool:is_pt_br = true)
+stock GetCustomClockString(hud_type, const primary_col[] = "", const secondary_col[] = "", timestamp = 0, utc = -3, bool:is_pt_br = true)
 {
     #pragma unused timestamp, utc, is_pt_br
-    new string[64];
+    new string[128];
 
     new year, month, day, hour, minute, second;
     getdate(year, month, day);
@@ -342,7 +342,13 @@ stock GetCustomClockString(hud_type, timestamp = 0, utc = -3, bool:is_pt_br = tr
         case HUD_UNDERLINE:
             string[0] = '\0';
         case HUD_REJECTING_01:
-            format(string, sizeof(string), "RLOW_DEATHMATCH~n~%02d.%02d.%04d - %02d:%02d", day, month, year, hour, minute);
+        {
+            new secCol[20];
+            if (secondary_col[0] != '\0') format(secCol, sizeof(secCol), "%s", secondary_col);
+            else format(secCol, sizeof(secCol), "~w~~h~");
+
+            format(string, sizeof(string), "%sR~w~~h~LOW_%sD~w~~h~EATHMATCH~n~%02d.%02d.%04d - %02d:%02d", primary_col, secCol, day, month, year, hour, minute);
+        }
         default:
             format(string, sizeof(string), "%02d.%02d.%04d - %02d:%02d", day, month, year, hour, minute);
     }
