@@ -119,27 +119,33 @@ ShowMyAccountMenu(playerid)
 
 ShowSecurityMenu(playerid)
 {
-    new secStr[512];
+    new secStr[1024];
     format(secStr, sizeof(secStr), "{MAIN}Option\t{MAIN}Status / Info\n");
 
-    if(strcmp(User[playerid][dc_username], "-1", true)) 
-        strcat(secStr, fmat_return("Discord Account\t{00FF00}%s\n", User[playerid][dc_username]));
-    else 
-        strcat(secStr, "Discord Account\t{FF0000}Not Linked\n");
-
     new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
-    if(isLinked)
-    {
-        strcat(secStr, fmat_return("Auto-Login (IP & Serial)\t%s\n", (User[playerid][autoLogin]) ? ("{00FF00}ON") : ("{FF0000}OFF")));
-    }
+
+    if(isLinked && User[playerid][autoLogin])
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}Maximum Protected\n", secStr);
+    else if(isLinked)
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{23C552}High Discord Verified\n", secStr);
     else
-    {
-        strcat(secStr, "Auto-Login (IP & Serial)\t{BEBEBE}Requires Linked Discord\n");
-    }
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Security Rating\t{F84F31}Basic Unverified\n", secStr);
+
+    if(isLinked)
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{7289DA}%s#%s\n", secStr, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    else
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Discord Account\t{F84F31}Not Linked\n", secStr);
+
+    if(isLinked)
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t%s\n", secStr, (User[playerid][autoLogin]) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
+    else
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Auto-Login (IP & Serial)\t{BEBEBE}Requires Linked Discord\n", secStr);
+
+    format(secStr, sizeof(secStr), "%s{B4B5B7}Account Password\t{FFFFFF}Change Password\n", secStr);
 
     if(User[playerid][adminLevel] > 0)
     {
-        strcat(secStr, fmat_return("Admin Authentication\t%s\n", (User[playerid][adminAuthType] == 1) ? ("{00FF00}Password (Login)") : ("{00FF00}Code (Discord)")));
+        format(secStr, sizeof(secStr), "%s{B4B5B7}Admin Auth Method\t%s\n", secStr, (User[playerid][adminAuthType] == 1) ? ("{23C552}Password (Login)") : ("{7289DA}Code (Discord)"));
     }
 
     new title[64] = "{MAIN}Security Settings";
@@ -157,11 +163,11 @@ ShowSettingsMenu(playerid)
     format_MainColor(playerid, title);
 
     format(setStr, sizeof(setStr), "{MAIN}Option\t{MAIN}Status / Value\n");
-    strcat(setStr, "Change my username\t \n");
-    strcat(setStr, "Change my password\t \n");
-    strcat(setStr, fmat_return("Incoming messages\t%s\n", (User[playerid][blockPM]) ? ("{FF0000}OFF") : ("{00FF00}ON")));
-    strcat(setStr, fmat_return("Connect info\t%s\n", (User[playerid][showConnectMsg]) ? ("{00FF00}ON") : ("{FF0000}OFF")));
-    strcat(setStr, fmat_return("Global messages\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Disabled") : ("{23C552}Enabled")));
+    strcat(setStr, "{B4B5B7}Change Nickname\t \n");
+    strcat(setStr, "{B4B5B7}Change Password\t \n");
+    strcat(setStr, fmat_return("{B4B5B7}Private Messages\t%s\n", (User[playerid][blockPM]) ? ("{F84F31}Blocked") : ("{23C552}Allowed")));
+    strcat(setStr, fmat_return("{B4B5B7}Connect Messages\t%s\n", (User[playerid][showConnectMsg]) ? ("{23C552}Visible") : ("{F84F31}Hidden")));
+    strcat(setStr, fmat_return("{B4B5B7}Global Broadcasts\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible")));
     format_MainColor(playerid, setStr);
 
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_SETTINGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, setStr, "Select", "Back");
@@ -186,6 +192,7 @@ public DIALOG_HELP_SETTINGS(playerid, dialogid, response, listitem, string:input
         }
         case 1:
         {
+            SetPVarInt(playerid, "changepass_source", 0);
             new passBody[192];
             format(passBody, sizeof(passBody),
                 "{FFFFFF}Enter your new password below:\n\n{B4B5B7}Only letters and numbers, between %d and %d characters.",
@@ -221,16 +228,31 @@ public DIALOG_HELP_SETTINGS(playerid, dialogid, response, listitem, string:input
 forward DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!response) return ShowSettingsMenu(playerid);
+    new src = GetPVarInt(playerid, "changepass_source");
+    DeletePVar(playerid, "changepass_source");
+
+    if(!response)
+    {
+        if(src == 1) return ShowSecurityMenu(playerid);
+        return ShowSettingsMenu(playerid);
+    }
 
     if(!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
 
     if(isnull(inputtext))
-        return SendClientMessage(playerid, -1, "%s", ERROR_CHANGEPASS);
+    {
+        SendClientMessage(playerid, -1, "%s", ERROR_CHANGEPASS);
+        if(src == 1) return ShowSecurityMenu(playerid);
+        return ShowSettingsMenu(playerid);
+    }
 
     if(!IsValidPassword(inputtext))
-        return va_SendClientMessage(playerid, -1, ERROR_INVALIDPASS, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
+    {
+        va_SendClientMessage(playerid, -1, ERROR_INVALIDPASS, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
+        if(src == 1) return ShowSecurityMenu(playerid);
+        return ShowSettingsMenu(playerid);
+    }
 
     bcrypt_hash(playerid, "OnPlayerChangePass", inputtext, BCRYPT_COST);
     return 1;
@@ -374,12 +396,24 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
     {
         case 0:
         { 
+            new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
+            if(!isLinked)
+                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Link your Discord account ({MAIN}/dvincular{FFFFFF}) to activate Auto-Login and achieve Maximum Security.");
+            else if(!User[playerid][autoLogin])
+                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Your Discord is verified! Enable {MAIN}Auto-Login (IP & Serial){FFFFFF} for Maximum Security.");
+            else
+                SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Your account is fully protected with discord verification and Auto-Login.");
+            
+            ShowSecurityMenu(playerid);
+        }
+        case 1:
+        { 
             if(strcmp(User[playerid][dc_username], "-1", true)) strcopy(cmd, "/udiscord"); 
             else strcopy(cmd, "/dvincular");
             
             Command_ReProcess(playerid, cmd, 0); 
         }
-        case 1:
+        case 2:
         {
             if(!strcmp(User[playerid][dc_username], "-1", true))
             {
@@ -393,10 +427,20 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
             mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `auto_login` = %d WHERE `id` = %d", User[playerid][autoLogin], User[playerid][user_sqlid]);
             mysql_tquery(dbHandle, queryGlobal);
 
-            va_SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Auto-Login (IP & Serial) is now %s{FFFFFF}.", (User[playerid][autoLogin]) ? ("{00FF00}ENABLED") : ("{FF0000}DISABLED"));
+            va_SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FFFFFF}Auto-Login (IP & Serial) is now %s{FFFFFF}.", (User[playerid][autoLogin]) ? ("{23C552}ENABLED") : ("{F84F31}DISABLED"));
             ShowSecurityMenu(playerid);
         }
-        case 2:
+        case 3:
+        {
+            SetPVarInt(playerid, "changepass_source", 1);
+            new passBody[192];
+            format(passBody, sizeof(passBody),
+                "{FFFFFF}Enter your new password below:\n\n{B4B5B7}Only letters and numbers, between %d and %d characters.",
+                MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
+
+            Dialog_ShowCallback(playerid, using public DIALOG_CHANGE_PASSWORD<iiiis>, DIALOG_STYLE_PASSWORD, "Change Password", passBody, "Change", "Cancel");
+        }
+        case 4:
         {
             if(User[playerid][adminLevel] < 1)
             {
