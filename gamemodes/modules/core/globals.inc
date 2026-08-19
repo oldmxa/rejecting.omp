@@ -929,13 +929,13 @@ enum E_ROOM_NAME
 
 new const ROOM_NAME[MAX_LOCATIONS][E_ROOM_NAME] =
 {
-    {"{B4B5B7}RP Walk Room",          "RP Walk Room"},
-    {"{B4B5B7}RP Walk FPSUNLOCK Room","RP Walk Unlock"},
-    {"{B4B5B7}Lounge Room",           "Lounge Room"},
-    {"{B4B5B7}Custom Room",           "Custom Room"},
-    {"{B4B5B7}R2 FPS Unlock Room",    "R2 Unlock Room"},
-    {"{B4B5B7}FPS Unlock Room",       "FPS Unlock Room"},
-    {"{B4B5B7}R2 FPS Lock 102 Room",  "R2 Lock Room"}
+    {"{FFFFFF}RP Walk Room Lock {F3230E}102",       "RP Walk Lock"},
+    {"{FFFFFF}RP Walk Room FPS Unlock",     "RP Walk Unlock"},
+    {"{FFFFFF}Lounge Room",                   "Lounge Room"},
+    {"{FFFFFF}Custom Room",                   "Custom Room"},
+    {"{FFFFFF}Classic Room FPS Unlock",     "Classic Room"},
+    {"{FFFFFF}FPS Unlock Room",               "FPS Unlock Room"},
+    {"{FFFFFF}FPS Lock {F3230E}102{FFFFFF} Room",             "FPS Lock Room"}
 };
 
 new const LOCATION_DISPLAY_ORDER[MAX_LOCATIONS] =

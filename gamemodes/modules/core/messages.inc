@@ -289,26 +289,33 @@ public SendMSG(playerid)
 {
     if(User[playerid][hideGlobalMsg]) return 1;
 
-    new stringe[17][160];
+    new stringe[24][160];
     format(stringe[0], 160, "{MAIN}[INFO] {FFFFFF}Have a question for staff? Use {MAIN}'/ask [question]'{FFFFFF} to get help from admins.");
     format(stringe[1], 160, "{MAIN}[INFO] {FFFFFF}Suspect someone of cheating or breaking rules? Report them: {MAIN}'/report [id] [reason]'{FFFFFF}.");
-    format(stringe[2], 160, "{MAIN}[INFO] {FFFFFF}Press {MAIN}'N'{FFFFFF} anytime to open your quick menu (Settings, My Account, Security & Help){FFFFFF}.");
-    format(stringe[3], 160, "{MAIN}[INFO] {FFFFFF}Want to switch arenas or game modes? Use {MAIN}'/changemode'{FFFFFF} or press {MAIN}'N'{FFFFFF}.");
-    format(stringe[4], 160, "{MAIN}[INFO] {FFFFFF}Configure your security, Auto-Login & Admin Auth in {MAIN}'/help' -> Security{FFFFFF}.");
-    format(stringe[5], 160, "{MAIN}[INFO] {FFFFFF}Join or create a Clan to capture Outposts and earn bonus money and points!");
-    format(stringe[6], 160, "{MAIN}[INFO] {FFFFFF}Outposts grant $5,000 & 50 points every 5 minutes to the controlling clan!");
-    format(stringe[7], 160, "{MAIN}[INFO] {FFFFFF}Need to rest or chat in peace? Go to the Lounge using {MAIN}'/lounge'{FFFFFF}.");
-    format(stringe[8], 160, "{MAIN}[INFO] {FFFFFF}Customize your hit sound, damage informer, and HUD in {MAIN}'/help' -> My Account{FFFFFF}.");
-    format(stringe[9], 160, "{MAIN}[INFO] {FFFFFF}Change your skin anytime using {MAIN}'/setskin (/ss) [skin id]'{FFFFFF}.");
-    format(stringe[10], 160, "{MAIN}[INFO] {FFFFFF}Select your favorite weapon loadout in {MAIN}'/gunmenu'{FFFFFF}.");
-    format(stringe[11], 160, "{MAIN}[INFO] {FFFFFF}Join our Discord community to stay updated, chat, and submit suggestions!");
-    format(stringe[12], 160, "{MAIN}[INFO] {FFFFFF}Change your fighting style using {MAIN}'/fightstyle'{FFFFFF} for custom melee combat.");
-    format(stringe[13], 160, "{MAIN}[INFO] {FFFFFF}Use {MAIN}'/stats [id]'{FFFFFF} to view detailed player statistics and account creation date.");
-    format(stringe[14], 160, "{MAIN}[INFO] {FFFFFF}To change your nickname, password, or settings, press {MAIN}'N'{FFFFFF}.");
-    format(stringe[15], 160, "{MAIN}[INFO] {FFFFFF}A command that will help at any moment: {MAIN}'/help'{FFFFFF}.");
-    format(stringe[16], 160, "{MAIN}[INFO] {FFFFFF}Want to practice your aim and break records? Use {MAIN}'/training'{FFFFFF} to enter training challenges!");
+    format(stringe[2], 160, "{MAIN}[INFO] {FFFFFF}Press {MAIN}'N'{FFFFFF} anytime to open your quick menu (Settings, My Account, Security & Help).");
+    format(stringe[3], 160, "{MAIN}[INFO] {FFFFFF}Explore all our arenas: RP Walk, FPS Lock, FPS Unlock & Custom using {MAIN}'/changemode'{FFFFFF}.");
+    format(stringe[4], 160, "{MAIN}[INFO] {FFFFFF}Want to train your aim and break server records? Use {MAIN}'/training'{FFFFFF} for timed challenges!");
+    format(stringe[5], 160, "{MAIN}[INFO] {FFFFFF}Practice against configurable moving NPC bots anytime using {MAIN}'/prac'{FFFFFF} (or {MAIN}'/practice'{FFFFFF})!");
+    format(stringe[6], 160, "{MAIN}[INFO] {FFFFFF}Challenge players to 1v1 and 2v2 duels with custom weapons and bets via {MAIN}'/duel'{FFFFFF} & {MAIN}'/duel2v2'{FFFFFF}.");
+    format(stringe[7], 160, "{MAIN}[INFO] {FFFFFF}Gather your clan, unlock extra member slots and spawn at your Clan Safehouse with {MAIN}'/safemenu'{FFFFFF}!");
+    format(stringe[8], 160, "{MAIN}[INFO] {FFFFFF}Capture floating Outpost torches with your Clan to receive {MAIN}$5,000 & 50 points{FFFFFF} every 5 minutes!");
+    format(stringe[9], 160, "{MAIN}[INFO] {FFFFFF}Manage your clan, invite members and customize colors using {MAIN}'/clan'{FFFFFF}.");
+    format(stringe[10], 160, "{MAIN}[INFO] {FFFFFF}Need to take a break or chat in peace? Go to the Lounge using {MAIN}'/lounge'{FFFFFF} or {MAIN}'/afk'{FFFFFF}.");
+    format(stringe[11], 160, "{MAIN}[INFO] {FFFFFF}Select and customize your favorite weapon loadout in {MAIN}'/gunmenu'{FFFFFF}.");
+    format(stringe[12], 160, "{MAIN}[INFO] {FFFFFF}Customize your environment: change weather ({MAIN}'/weather [id]'{FFFFFF}) and world time ({MAIN}'/t [0-23]'{FFFFFF}).");
+    format(stringe[13], 160, "{MAIN}[INFO] {FFFFFF}Change your skin anytime using {MAIN}'/setskin (/ss) [skin id]'{FFFFFF}.");
+    format(stringe[14], 160, "{MAIN}[INFO] {FFFFFF}Change your melee fighting style using {MAIN}'/fightstyle'{FFFFFF}.");
+    format(stringe[15], 160, "{MAIN}[INFO] {FFFFFF}Customize your hit sound (Bell), Headshot text, and HUD in Settings ({MAIN}'N'{FFFFFF} key).");
+    format(stringe[16], 160, "{MAIN}[INFO] {FFFFFF}Check your K/D ratio, achievements, clan rank and registration date with {MAIN}'/stats [id]'{FFFFFF}.");
+    format(stringe[17], 160, "{MAIN}[INFO] {FFFFFF}Configure your security, Auto-Login & Admin Auth in {MAIN}'/help'{FFFFFF} -> Security.");
+    format(stringe[18], 160, "{MAIN}[INFO] {FFFFFF}Join our Discord community to participate in tournaments, claim roles, and submit feedback!");
+    format(stringe[19], 160, "{MAIN}[INFO] {FFFFFF}To change your nickname, password, or gameplay toggles, press {MAIN}'N'{FFFFFF}.");
+    format(stringe[20], 160, "{MAIN}[INFO] {FFFFFF}Try our {MAIN}RP Walk Arenas{FFFFFF} for authentic, tactical foot combat movement!");
+    format(stringe[21], 160, "{MAIN}[INFO] {FFFFFF}Looking for max smoothness? Play in our {MAIN}FPS Unlock Arenas{FFFFFF} via {MAIN}'/changemode'{FFFFFF}.");
+    format(stringe[22], 160, "{MAIN}[INFO] {FFFFFF}Toggle PMs, hit sound, HUD and connect messages in Settings ({MAIN}'N'{FFFFFF} key).");
+    format(stringe[23], 160, "{MAIN}[INFO] {FFFFFF}Need a complete list of commands? Check {MAIN}'/help'{FFFFFF} and {MAIN}'/cmds'{FFFFFF}.");
 
-    SendClientMessage(playerid, -1, "%s", stringe[randomEx(0, 16)]);
+    SendClientMessage(playerid, -1, "%s", stringe[randomEx(0, sizeof(stringe) - 1)]);
     return 1;
 }
 
