@@ -181,7 +181,6 @@ stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
     GetPlayerArmour(playerid, Armour);
     GetPlayerHealth(playerid, Health);
 
-    // a mensagem cobra 200 de total: checar so o colete deixava entrar ferido
     if (floatround(Health + Armour) < 200)
         return va_SendClientMessage(playerid, -1, HEALTH_ERROR_MSG, 200);
 
