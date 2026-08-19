@@ -72,7 +72,7 @@ ShowMenu(playerid)
 
 ShowAdminConfig(playerid)
 {
-    new strb[3072], count = 0, actions[32];
+    new strb[3072], count = 0, actions[48];
 
     format(strb, sizeof(strb), "{A29582}Setting\t{A29582}Status\t{A29582}Info\n");
 
