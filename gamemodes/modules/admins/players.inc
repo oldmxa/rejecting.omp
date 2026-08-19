@@ -200,13 +200,13 @@
     return true;
 }
 
-@cmd() cornick(playerid, params[], help)
+@cmd(.alts = {"namecolor", "colorname"}) nickcolor(playerid, params[], help)
 {
     if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new color;
-    if(sscanf(params, "x", color)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/cornick [hex color or FFFF00]");
+    if(sscanf(params, "x", color)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/nickcolor [hex color or FFFF00]");
     
     if(color <= 0xFFFFFF) color = (color << 8) | 0x65;
     else color = (color & 0xFFFFFF00) | 0x65;
@@ -216,7 +216,7 @@
     return true;
 }
 
-@cmd(.alts = {"setarcoins"}) setcoins(playerid, params[], help)
+@cmd() setcoins(playerid, params[], help)
 {
     if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 

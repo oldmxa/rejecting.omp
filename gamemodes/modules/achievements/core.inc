@@ -993,7 +993,7 @@ public DIALOG_ACHIEVEMENTS_DETAIL(playerid, dialogid, response, listitem, string
     return 1;
 }
 
-@cmd(.alts = {"darconquista"}) giveach(playerid, params[], help)
+@cmd() giveach(playerid, params[], help)
 {
     if(!IsServerOwner(playerid))
         return SendClientMessage(playerid, -1, "%s", ACHIEVEMENT_GIVE_OWNER);
@@ -1052,14 +1052,14 @@ public DIALOG_ACHIEVEMENTS_DETAIL(playerid, dialogid, response, listitem, string
     return true;
 }
 
-@cmd(.alts = {"saldo"}) coins(playerid, params[], help)
+@cmd() coins(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return true;
 
     return ShowCoinsMenu(playerid);
 }
 
-@cmd(.alts = {"conquistas", "achievements"}) ach(playerid, params[], help)
+@cmd(.alts = {"achievements"}) ach(playerid, params[], help)
 {
     ShowAchievementsMainMenu(playerid);
     return true;

@@ -14,7 +14,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/baninfo [nick/ip]", "Check details of a banned account or IP.", 1},
     {"/banr2 [id]", "Force R2+ on a player.", 1},
     {"/cnn [text]", "Send an on-screen announcement (# ~p~Nick~p~: ~w~Text #).", 1},
-    {"/cornick [color]", "Change nickname color.", 1},
+    {"/nickcolor [color]", "Change nickname color.", 1},
     {"/count", "Global administrative message.", 1},
     {"/d [id] [message]", "Answer a player question (/ask).", 1},
     {"/eject [id]", "To eject the player from the vehicle.", 1},
@@ -60,12 +60,12 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/camouflage", "Camouflage admin tag in stats.", 4},
     {"/changebanreason [name] [reason]", "Changes the ban reason.", 4},
     {"/changebantime [name] [amount] [h/d]", "Changes the ban expiry time.", 4},
-    {"/deslogarall", "Disconnect all players except executing admin.", 4},
+    {"/kickall", "Disconnect all players except executing admin.", 4},
     {"/fake [nick]", "Change your nick to a fake one.", 4},
     {"/fakecmd [id/name] [cmd]", "Force a player to execute a command.", 4},
     {"/forcetext [id] [text]", "Force a player to say something.", 4},
     {"/giveach [id] [ach id]", "Grant an exclusive achievement (server owner only).", 4},
-    {"/givegun [id] [weapon] [ammo]", "Give a weapon to a player (ou /dararma).", 4},
+    {"/givegun [id] [weapon] [ammo]", "Give a weapon to a player (/giveweapon).", 4},
     {"/givevip [id] [days]", "Grant VIP status to a player (0 = permanent).", 4},
     {"/gmx", "Restart server.", 4},
     {"/gpciaka [id/name]", "Check accounts related to a player's GPCI.", 4},
@@ -88,9 +88,9 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/viewpass [id/name]", "Show player password (hash).", 4},
     {"/warn [id] [reason]", "Give a warning to a player. (5 = ban).", 4},
     {"/ac", "Anti cheat settings: actions, punishment and flagged players.", 5},
-    {"/acdebug", "Anti cheat verbose mode: shows every measurement live.", 5},
-    {"/actest [code]", "Preview of the anti cheat kick screen, kicks nobody.", 5},
-    {"/eaccount [id/name]", "Edit every stat of an online account, and the clan if they own one.", 5},
+    {"/actest", "Anti cheat tests: simulation of cheat detections.", 5},
+    {"/acdebug", "Anti cheat debug.", 5},
+    {"/eaccount [id/name]", "Account Editor.", 5},
     {"/editsafehouse", "Open the safehouse panel: create, place, edit and configure bases.", 5},
     {"/givecustomtag [id]", "Toggle custom tag permission for a player.", 5},
     {"/lifez [height]", "Calibrate the height of the custom life bar above the head.", 5},
@@ -218,7 +218,7 @@ ShowAdminCmds(playerid)
     return true;
 }
 
-@cmd(.alts = {"duvida", "ans"}) d(playerid, params[], help)
+@cmd(.alts = {"ans", "askreply"}) d(playerid, params[], help)
 {
     if(User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);

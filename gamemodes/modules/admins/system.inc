@@ -334,7 +334,7 @@ public AdminCountdown(count)
     return true;
 }
 
-@cmd(.alts = {"kickall"}) deslogarall(playerid, params[], help)
+@cmd() kickall(playerid, params[], help)
 {
 	if(User[playerid][adminLevel] < 4 || !IsPlayerAdmin(playerid))
 		return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ and RCON login required.");
@@ -359,8 +359,8 @@ public AdminCountdown(count)
 	va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You disconnected all players from the server (%d players kicked).", count);
 
 	new log_details[128];
-	format(log_details, sizeof(log_details), "Admin %s executed /deslogarall (%d players kicked)", User[playerid][userName], count);
-	LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "auth", "DeslogarAll", log_details);
+	format(log_details, sizeof(log_details), "Admin %s executed /kickall (%d players kicked)", User[playerid][userName], count);
+	LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "auth", "KickAll", log_details);
 
 	return 1;
 }

@@ -157,7 +157,7 @@ public DIALOG_COINS_BUY(playerid, dialogid, response, listitem, string:inputtext
     return ShowCoinsMenu(playerid);
 }
 
-@cmd(.alts = {"comprarcoins", "coins"}) buycoins(playerid, params[], help)
+@cmd(.alts = {"coins"}) buycoins(playerid, params[], help)
 {
     if (!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);

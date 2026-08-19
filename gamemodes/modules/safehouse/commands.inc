@@ -314,7 +314,7 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
     return ShowSafehouseMenu(playerid);
 }
 
-@cmd(.alts = {"leavesafe", "sairbase"}) exitsafehouse(playerid, params[], help)
+@cmd(.alts = {"leavesafe"}) exitsafehouse(playerid, params[], help)
 {
     if (!IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
         return SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You are not inside a safehouse.");
