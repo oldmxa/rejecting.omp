@@ -38,7 +38,7 @@ public DIALOG_TRAINING_CHALLENGES(playerid, dialogid, response, listitem, string
 forward ShowTrainingChallengeDialog(playerid);
 public ShowTrainingChallengeDialog(playerid)
 {
-    new title[64] = "{MAIN}> {FFFFFF}Training Challenges - Records";
+    new title[64] = "{MAIN}Training Challenges: {FFFFFF}Records";
     format_MainColor(playerid, title);
 
     if (g_TotalTrainingArenas == 0)
@@ -49,14 +49,14 @@ public ShowTrainingChallengeDialog(playerid)
             DIALOG_STYLE_MSGBOX,
             title,
             "No training arenas are currently registered.",
-            "< Back",
+            "<",
             "Close"
         );
         return 1;
     }
 
     new line[192];
-    format(g_TrainingDialogBuf, sizeof(g_TrainingDialogBuf), "{BEBEBE}Arena\t{BEBEBE}Your Record\t{BEBEBE}Server Record\t{BEBEBE}Holder\n");
+    format(g_TrainingDialogBuf, sizeof(g_TrainingDialogBuf), "{MAIN}Arena\t{MAIN}Your Record\t{MAIN}Server Record\t{MAIN}Holder\n");
 
     for (new i = 0; i < g_TotalTrainingArenas; i++)
     {
@@ -97,7 +97,7 @@ public ShowTrainingChallengeDialog(playerid)
         DIALOG_STYLE_TABLIST_HEADERS,
         title,
         g_TrainingDialogBuf,
-        "< Back",
+        "<",
         "Close"
     );
     return 1;

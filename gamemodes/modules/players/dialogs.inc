@@ -588,16 +588,16 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
         new query[256], header[128];
         switch(listitem)
         {
-            case 0: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `played_time` FROM `accounts` ORDER BY `played_time` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Played Time"); }
-            case 1: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `kills` FROM `accounts` ORDER BY `kills` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Total Kills"); }
-            case 2: { mysql_format(dbHandle, query, sizeof(query), "SELECT `clan_name`, `clan_kills`, `clan_zone_points` FROM `clans` ORDER BY `clan_zone_points` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Dominant Clans"); }
-            case 3: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `kills_semanais` FROM `accounts` ORDER BY `kills_semanais` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Weekly Kills"); }
-            case 4: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `damage_semanal` FROM `accounts` ORDER BY `damage_semanal` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Weekly Damage"); }
-            case 5: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `deaths` FROM `accounts` ORDER BY `deaths` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Total Deaths"); }
-            case 6: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `max_streak` FROM `accounts` ORDER BY `max_streak` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Highest Streaks"); }
-            case 7: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `max_damage` FROM `accounts` ORDER BY `max_damage` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Session Peak Damage"); }
-            case 8: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `won_arenas` FROM `accounts` ORDER BY `won_arenas` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Most Wins"); }
-            case 9: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `duel_wins` FROM `accounts` ORDER BY `duel_wins` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}> {FFFFFF}Top 10: Duel Victories"); }
+            case 0: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `played_time` FROM `accounts` ORDER BY `played_time` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Played Time"); }
+            case 1: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `kills` FROM `accounts` ORDER BY `kills` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Total Kills"); }
+            case 2: { mysql_format(dbHandle, query, sizeof(query), "SELECT `clan_name`, `clan_kills`, `clan_zone_points` FROM `clans` ORDER BY `clan_zone_points` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Dominant Clans"); }
+            case 3: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `kills_semanais` FROM `accounts` ORDER BY `kills_semanais` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Weekly Kills"); }
+            case 4: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `damage_semanal` FROM `accounts` ORDER BY `damage_semanal` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Weekly Damage"); }
+            case 5: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `deaths` FROM `accounts` ORDER BY `deaths` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Total Deaths"); }
+            case 6: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `max_streak` FROM `accounts` ORDER BY `max_streak` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Highest Killstreaks"); }
+            case 7: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `max_damage` FROM `accounts` ORDER BY `max_damage` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Session Peak Damage"); }
+            case 8: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `won_arenas` FROM `accounts` ORDER BY `won_arenas` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Most Arena Wins"); }
+            case 9: { mysql_format(dbHandle, query, sizeof(query), "SELECT `username`, `duel_wins` FROM `accounts` ORDER BY `duel_wins` DESC LIMIT 10"); format(header, sizeof(header), "{MAIN}Top 10: {FFFFFF}Duel Victories"); }
         }
 
         inline const OnRankLoad()
@@ -607,9 +607,9 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
             
             if(rows)
             {
-                if(listitem == 2) format(liststr, sizeof(liststr), "{BEBEBE}#\t{BEBEBE}Clan Name\t{BEBEBE}Score Points\t{BEBEBE}Frags\n");
-                else if(listitem == 0) format(liststr, sizeof(liststr), "{BEBEBE}#\t{BEBEBE}Player\t{BEBEBE}Time Spent Online\n");
-                else format(liststr, sizeof(liststr), "{BEBEBE}#\t{BEBEBE}Player\t{BEBEBE}Total Records\n");
+                if(listitem == 2) format(liststr, sizeof(liststr), "{MAIN}#\t{MAIN}Clan Name\t{MAIN}Score Points\t{MAIN}Frags\n");
+                else if(listitem == 0) format(liststr, sizeof(liststr), "{MAIN}#\t{MAIN}Player\t{MAIN}Time Spent Online\n");
+                else format(liststr, sizeof(liststr), "{MAIN}#\t{MAIN}Player\t{MAIN}Record / Value\n");
 
                 for(new i; i < rows; i++)
                 {
@@ -619,7 +619,7 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                         case 0: { pos_color = "{FFFF00}"; trophy = " (G)"; } // Gold
                         case 1: { pos_color = "{C0C0C0}"; trophy = " (S)"; } // Silver
                         case 2: { pos_color = "{CD7F32}"; trophy = " (B)"; } // Bronze
-                        default: { pos_color = "{MAIN}"; trophy = ""; }
+                        default: { pos_color = "{B4B5B7}"; trophy = ""; }
                     }
 
                     if(listitem == 2) // Clan Rank
@@ -627,7 +627,7 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                         cache_get_value_name(i, "clan_name", clanName_);
                         cache_get_value_name_int(i, "clan_zone_points", clanzp);
                         cache_get_value_name_int(i, "clan_kills", clankills);
-                        strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{BEBEBE}%d pts\t{BEBEBE}%d kills\n", pos_color, i+1, clanName_, trophy, clanzp, clankills));
+                        strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{23C552}%d pts\t{FFFFFF}%d kills\n", pos_color, i+1, clanName_, trophy, clanzp, clankills));
                     }
                     else // Player Ranks
                     {
@@ -637,7 +637,7 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                         {
                             cache_get_value_name_int(i, "played_time", value);
                             new hour = value/3600, minute = (value%3600)/60, second = value%60;
-                            strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{BEBEBE}%02dh %02dm %02ds\n", pos_color, i+1, usernamee, trophy, hour, minute, second));
+                            strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{FFFFFF}%02dh %02dm %02ds\n", pos_color, i+1, usernamee, trophy, hour, minute, second));
                         }
                         else
                         {
@@ -654,7 +654,7 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                                 case 9: { col_name = "duel_wins"; unit = " wins"; }
                             }
                             cache_get_value_name_int(i, col_name, value);
-                            strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{BEBEBE}%d%s\n", pos_color, i+1, usernamee, trophy, value, unit));
+                            strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{FFFFFF}%d%s\n", pos_color, i+1, usernamee, trophy, value, unit));
                         }
                     }
                 }
@@ -662,7 +662,7 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                 format_MainColor(playerid, header);
                 format_MainColor(playerid, liststr);
 
-                Dialog_ShowCallback(playerid, using public DIALOG_RANK1<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, header, liststr, "< Back", "Exit");
+                Dialog_ShowCallback(playerid, using public DIALOG_RANK1<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, header, liststr, "<", "Exit");
             }
             else
             {
@@ -681,22 +681,22 @@ public DIALOG_RANK1(playerid, dialogid, response, listitem, string:inputtext[])
     if(response)
     {
         new rankstr[1024];
-        strcat(rankstr, "{BEBEBE}Category\t{BEBEBE}Objective Description\n");
-        strcat(rankstr, "{FFFFFF}Played Time\t{A2A2A2}Ranking of the most active community members\n");
-        strcat(rankstr, "{FFFFFF}Total Kills\t{A2A2A2}Global statistics of confirmed frags\n");
-        strcat(rankstr, "{FFFFFF}Best Clans\t{A2A2A2}Clans with highest points and dominance\n");
-        strcat(rankstr, "{FFFFFF}Weekly Kills\t{A2A2A2}Top killers of the current week\n");
-        strcat(rankstr, "{FFFFFF}Weekly Damage\t{A2A2A2}Top damage dealers of the current week\n");
-        strcat(rankstr, "{FFFFFF}Total Deaths\t{A2A2A2}Statistics of players with most casualties\n");
-        strcat(rankstr, "{FFFFFF}Killstreak\t{A2A2A2}Best combat records without dying\n");
-        strcat(rankstr, "{FFFFFF}Peak Damage\t{A2A2A2}Highest damage achieved in a single session\n");
-        strcat(rankstr, "{FFFFFF}Arenas Won\t{A2A2A2}Elite players with most round victories\n");
-        strcat(rankstr, "{FFFFFF}Duel Victories\t{A2A2A2}Top duel champions of the server\n");
-        strcat(rankstr, "{FFFFFF}Challenges\t{A2A2A2}Training arena records: yours and the server's");
+        strcat(rankstr, "{MAIN}Category\t{MAIN}Description\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Played Time\t{FFFFFF}Ranking of the most active community members\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Total Kills\t{FFFFFF}Global statistics of confirmed frags\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Dominant Clans\t{FFFFFF}Clans with highest points and dominance\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Weekly Kills\t{FFFFFF}Top killers of the current week\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Weekly Damage\t{FFFFFF}Top damage dealers of the current week\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Total Deaths\t{FFFFFF}Statistics of players with most casualties\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Highest Killstreaks\t{FFFFFF}Best combat records without dying\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Session Peak Damage\t{FFFFFF}Highest damage achieved in a single session\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Most Arena Wins\t{FFFFFF}Elite players with most round victories\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Duel Victories\t{FFFFFF}Top duel champions of the server\n");
+        strcat(rankstr, "{MAIN}\xBB {B4B5B7}Training Challenges\t{FFFFFF}Personal & server challenge records");
 
-        // o buffer precisa de folga: "{MAIN}" (6) vira "{RRGGBB}" (8) na substituicao
-        new header[64] = "{MAIN}> {FFFFFF}Server Statistics & Rankings";
+        new header[64] = "{MAIN}Server Statistics & Rankings";
         format_MainColor(playerid, header);
+        format_MainColor(playerid, rankstr);
 
         Dialog_ShowCallback(playerid, using public DIALOG_RANK<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, header, rankstr, "View Rank", "Close");
     }
