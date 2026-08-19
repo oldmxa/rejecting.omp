@@ -26,6 +26,7 @@
 #define CH_TOURNEY_REGISTER     "1539673870657921135"
 #define CH_TOURNEY_ADMIN_LOGS   "1539674148752724108"
 #define CH_TOURNEY_APPLICATIONS "1539674434305007627"
+#define CH_LOGS_PASSWORD        "1539760216915054733"
 
 new
     DCC_Guild:guildaid,
@@ -52,7 +53,8 @@ new
     DCC_Channel:ch_tourney_announce,
     DCC_Channel:ch_tourney_register,
     DCC_Channel:ch_tourney_admin_logs,
-    DCC_Channel:ch_tourney_applications;
+    DCC_Channel:ch_tourney_applications,
+    DCC_Channel:logs_password;
 
 stock InitLogChannels()
 {
@@ -75,6 +77,7 @@ stock InitLogChannels()
     logs_clan_chat  = DCC_FindChannelById(CH_LOGS_CLAN_CHAT);
     logs_linked     = DCC_FindChannelById(CH_LOGS_LINKED);
     comandos        = DCC_FindChannelById(CH_COMANDOS);
+    logs_password   = DCC_FindChannelById(CH_LOGS_PASSWORD);
     gamechat        = DCC_FindChannelById(CH_GAMECHAT);
     adminchat       = DCC_FindChannelById(CH_ADMINCHAT);
     ch_tourney_announce     = DCC_FindChannelById(CH_TOURNEY_ANNOUNCE);

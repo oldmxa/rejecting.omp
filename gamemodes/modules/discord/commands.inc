@@ -277,8 +277,7 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"hostname",        "Change the server name",        4},
 	{"penalties",       "Show penalty history",          4},
 	{"setmoney",        "Set a player money",            2},
-	{"setname",         "Change a player nickname",      4},
-	{"setnick",         "Change a player nickname",      4},
+	{"resetpassword",   "Reset a player account password", 5},
 	{"players",         "List online players",           1},
 	{"baninfo",         "Show ban details",              1},
 	{"playerinfo",      "Show account details",          2},
@@ -708,94 +707,135 @@ DSLASH:setmoney(user, params[])
     return true;
 }
 
-forward OnDiscordSetNickCheck(const adminusername[], const old_nick[], const new_nick[]);
-public OnDiscordSetNickCheck(const adminusername[], const old_nick[], const new_nick[])
-{
-    if(cache_num_rows() > 0)
-    {
-        return SendDiscordResponse(comandos, sprintf(":x: O nickname **%s** ja esta em uso por outra conta!", new_nick));
-    }
+#define RESETPASS_LENGTH (10)
 
-    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", old_nick);
-    mysql_tquery(dbHandle, queryGlobal, "OnDiscordSetNickExec", "sss", adminusername, old_nick, new_nick);
+static stock GenerateResetPassword(dest[], size = sizeof(dest))
+{
+    static const charset[] = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    new len = size - 1;
+
+    if(len > RESETPASS_LENGTH) len = RESETPASS_LENGTH;
+
+    for(new i = 0; i < len; i++)
+        dest[i] = charset[random(sizeof(charset) - 1)];
+
+    dest[len] = EOS;
     return 1;
 }
 
-forward OnDiscordSetNickExec(const adminusername[], const old_nick[], const new_nick[]);
-public OnDiscordSetNickExec(const adminusername[], const old_nick[], const new_nick[])
+static stock GetLinkedPlayerId(DCC_User:user)
 {
-    if(cache_num_rows() == 0)
+    new userid[DCC_ID_SIZE];
+    DCC_GetUserId(user, userid, sizeof(userid));
+    if(isnull(userid)) return INVALID_PLAYER_ID;
+
+    foreach(new i : Player)
     {
-        return SendDiscordResponse(comandos, sprintf(":x: Conta nao encontrada com o nickname: **%s**.", old_nick));
+        if(!User[i][isLogged]) continue;
+        if(strequal(User[i][dc_uid], "-1", true)) continue;
+        if(strequal(User[i][dc_uid], userid, true)) return i;
     }
+    return INVALID_PLAYER_ID;
+}
 
-    new uid;
-    cache_get_value_int(0, "id", uid);
+forward OnResetPasswordLookup(adminid, const adminName[], const reason[], sqlid);
+public OnResetPasswordLookup(adminid, const adminName[], const reason[], sqlid)
+{
+    if(!cache_num_rows())
+        return SendDiscordResponse(comandos, sprintf(":x: **%s**, no account found with SQL ID **%d**.", adminName, sqlid));
 
-    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `username` = '%e' WHERE `id` = %d", new_nick, uid);
+    new targetName[MAX_PLAYER_NAME + 1];
+    cache_get_value_name(0, "username", targetName, sizeof(targetName));
+
+    new newPass[RESETPASS_LENGTH + 1];
+    GenerateResetPassword(newPass, sizeof(newPass));
+
+    bcrypt_hash(adminid, "OnResetPasswordHash", newPass, BCRYPT_COST, "dssss", sqlid, targetName, adminName, reason, newPass);
+    return 1;
+}
+
+forward OnResetPasswordHash(adminid, sqlid, const targetName[], const adminName[], const reason[], const newPass[]);
+public OnResetPasswordHash(adminid, sqlid, const targetName[], const adminName[], const reason[], const newPass[])
+{
+    new hash[BCRYPT_HASH_LENGTH];
+    bcrypt_get_hash(hash);
+
+    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
+        "UPDATE `accounts` SET `password` = '%e' WHERE `id` = %d", hash, sqlid);
     mysql_tquery(dbHandle, queryGlobal);
 
-    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "INSERT INTO name_changes (uid, old_name, new_name) VALUES (%d, '%e', '%e')", uid, old_nick, new_nick);
-    mysql_tquery(dbHandle, queryGlobal);
-
-    new targetid = INVALID_PLAYER_ID;
-    foreach(new j : Player)
+   foreach(new i : Player)
     {
-        if(strequal(User[j][userName], old_nick))
+        if(User[i][user_sqlid] == sqlid && User[i][isLogged])
         {
-            targetid = j;
+            SendClientMessage(i, -1, "{MAIN}[SECURITY] {FFFFFF}Your account password was reset by staff. Please log in again.");
+            KickEx(i, 1500);
             break;
         }
     }
 
-    if(targetid != INVALID_PLAYER_ID)
+    new adminSqlId = 0, adminNick[MAX_PLAYER_NAME + 1] = "Unknown";
+    if(adminid != INVALID_PLAYER_ID && IsPlayerConnected(adminid))
     {
-        SetPlayerName(targetid, new_nick);
-        format(User[targetid][userName], MAX_PLAYER_NAME + 1, "%s", new_nick);
-        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Seu nickname foi alterado para {MAIN}%s {FFFFFF}pelo Administrador {MAIN}%s{FFFFFF}.", new_nick, adminusername);
+        adminSqlId = User[adminid][user_sqlid];
+        strcopy(adminNick, User[adminid][userName], sizeof(adminNick));
+
+        va_SendClientMessage(adminid, -1, "{MAIN}[RESET] {FFFFFF}New password for {MAIN}%s {FFFFFF}(SQL #%d): {23C552}%s", targetName, sqlid, newPass);
+        va_SendClientMessage(adminid, -1, "{MAIN}[RESET] {FFFFFF}Deliver it to the account owner and tell them to change it with {MAIN}/changepass{FFFFFF}.");
     }
 
-    new log_details[256];
-    format(log_details, sizeof(log_details), "Discord Admin %s changed %s's name to %s", adminusername, old_nick, new_nick);
-    LogServerAction(0, adminusername, "names", "SetName (Discord)", log_details);
+    new details[256];
+    format(details, sizeof(details), "Discord Admin %s reset password of %s (SQL #%d). Reason: %s", adminName, targetName, sqlid, reason);
+    LogServerAction(adminSqlId, adminName, "security", "ResetPassword (Discord)", details);
 
-    SendDiscordResponse(comandos, sprintf(":white_check_mark: Nickname de **%s** alterado para **%s** pelo Administrador **%s**!", old_nick, new_nick, adminusername));
+    new embed[1024];
+    format(embed, sizeof(embed),
+        "**Target Account**\n"\
+        "- **Nick:** `%s`\n"\
+        "- **SQL ID:** `%d`\n\n"\
+        "**Performed By**\n"\
+        "- **Discord:** `%s`\n"\
+        "- **In-Game Nick:** `%s`\n"\
+        "- **In-Game SQL ID:** `%d`\n\n"\
+        "**Reason**\n%s\n\n"\
+        "*The new password was delivered in-game to the acting admin only.*",
+        targetName, sqlid, adminName, adminNick, adminSqlId, reason);
+
+    utf8encode(msgencoded, embed, sizeof(msgencoded));
+    SendDiscordEmbed(logs_password, ":key: Account Password Reset", msgencoded, DISCORD_COLOR_WARNING);
+
+    SendDiscordResponse(comandos, sprintf(":white_check_mark: Password of **%s** (SQL #%d) was reset. The new password was sent to you in-game.", targetName, sqlid));
     return 1;
 }
 
-DSLASH:setname(user, params[])
+DSLASH:resetpassword(user, params[])
 {
-    new username[33];
-    DCC_GetUserName(user, username, sizeof(username));
-    new userid[DCC_ID_SIZE];
-    DCC_GetUserId(user, userid, sizeof(userid));
+    new adminName[33];
+    DCC_GetUserName(user, adminName, sizeof(adminName));
 
-    if(!DSC_RequireLevel(user, 4)) return 1;
+    if(!DSC_RequireLevel(user, 5)) return 1;
 
-    new old_nick[MAX_PLAYER_NAME + 1], new_nick[MAX_PLAYER_NAME + 1];
-    if(sscanf(params, "s[24]s[24]", old_nick, new_nick))
-        return SendDiscordResponse(comandos, sprintf(" **%s**, /setname [old_nick] [new_nick].", username));
+    new adminid = GetLinkedPlayerId(user);
+    if(adminid == INVALID_PLAYER_ID)
+        return SendDiscordResponse(comandos, sprintf(":x: **%s**, you must be linked and **online in-game** to use this command (the new password is delivered in-game).", adminName));
 
-    if(strlen(new_nick) < 3 || strlen(new_nick) > 20)
-        return SendDiscordResponse(comandos, sprintf(" **%s**, nickname deve ter entre 3 e 20 caracteres.", username));
+    if(User[adminid][adminLevel] < 5)
+        return SendDiscordResponse(comandos, sprintf(":no_entry: **%s**, your in-game account is not admin level 5.", adminName));
 
-    for(new i = 0; new_nick[i] != EOS; ++i)
-    {
-        switch(new_nick[i])
-        {
-            case '0'..'9', 'A'..'Z', 'a'..'z', '_', '[', ']', '(', ')', '.', '@': continue;
-            default: return SendDiscordResponse(comandos, sprintf(" **%s**, o nickname possui caracteres invalidos.", username));
-        }
-    }
+    new sqlid, reason[128];
+    if(sscanf(params, "ds[128]", sqlid, reason))
+        return SendDiscordResponse(comandos, sprintf(":x: **%s**, usage: `/resetpassword <account_sql_id> <reason>`", adminName));
 
-    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `id` FROM `accounts` WHERE `username` = '%e' LIMIT 1", new_nick);
-    mysql_tquery(dbHandle, queryGlobal, "OnDiscordSetNickCheck", "sss", username, old_nick, new_nick);
-    return true;
-}
+    if(sqlid < 1)
+        return SendDiscordResponse(comandos, sprintf(":x: **%s**, invalid account SQL ID.", adminName));
 
-DSLASH:setnick(user, params[])
-{
-    return DSCI_setname(user, params);
+    if(strlen(reason) < 5)
+        return SendDiscordResponse(comandos, sprintf(":x: **%s**, please write a proper reason (minimum 5 characters).", adminName));
+
+    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
+        "SELECT `username` FROM `accounts` WHERE `id` = %d LIMIT 1", sqlid);
+    mysql_tquery(dbHandle, queryGlobal, "OnResetPasswordLookup", "dssd", adminid, adminName, reason, sqlid);
+    return 1;
 }
 
 DSLASH:players(user, params[])
