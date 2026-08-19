@@ -329,6 +329,8 @@ public ForceOMPDiscord(admin[], targetid)
 	new rows = cache_num_rows();
 	if(rows)
 	{
+		if(!IsPlayerConnected(targetid)) return true;
+
 		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", User[targetid][userName]);
 		mysql_tquery(dbHandle, queryGlobal);
 

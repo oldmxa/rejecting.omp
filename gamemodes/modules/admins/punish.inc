@@ -133,7 +133,7 @@
     if(sscanf(params, "r", targetid))
         return SendClientMessage(playerid,-1, "%s", FORCE_OMP_HELP);
 
-    if(!IsPlayerConnected(targetid))
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)
