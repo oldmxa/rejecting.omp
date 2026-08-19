@@ -53,5 +53,11 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		}
 	}
 
+	if(channel == ch_tourney_register || !strcmp(str, "/tournament", true, 11) || !strcmp(str, ".tournament", true, 11) || !strcmp(str, "/torneio", true, 8) || !strcmp(str, ".torneio", true, 8))
+	{
+		ProcessDiscordTourneyApp(author, channel, str);
+		return true;
+	}
+
 	return true;
 }

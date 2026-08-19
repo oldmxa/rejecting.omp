@@ -26,7 +26,8 @@ stock GetCoinsPrice(coins)
     return (coins * (COINSHOP_MONEY / 1000)) / (COINSHOP_COINS / 1000);
 }
 
-stock ShowCoinsMenu(playerid)
+forward Coinshop_ShowCoinsMenu(playerid);
+public Coinshop_ShowCoinsMenu(playerid)
 {
     new body[640], title[64] = "{MAIN}Coins";
 

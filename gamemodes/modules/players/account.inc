@@ -88,7 +88,8 @@ ShowMyAccountMenu(playerid)
     return 1;
 }
 
-ShowSecurityMenu(playerid)
+forward Account_ShowSecurityMenu(playerid);
+public Account_ShowSecurityMenu(playerid)
 {
     new secStr[1024];
     format(secStr, sizeof(secStr), "{MAIN}Option\t{MAIN}Status / Info\n");
@@ -127,7 +128,8 @@ ShowSecurityMenu(playerid)
     return 1;
 }
 
-ShowSettingsMenu(playerid)
+forward Account_ShowSettingsMenu(playerid);
+public Account_ShowSettingsMenu(playerid)
 {
     new setStr[1024], title[64];
     format(title, sizeof(title), "{MAIN}Account & Gameplay Settings");
@@ -235,7 +237,8 @@ public DIALOG_HELP_DISCORDID(playerid, dialogid, response, listitem, string:inpu
     return ShowMyAccountMenu(playerid);
 }
 
-ShowPersonalizationMenu(playerid)
+forward Account_ShowPersonalizationMenu(playerid);
+public Account_ShowPersonalizationMenu(playerid)
 {
     new pStr[2048];
     format(pStr, sizeof(pStr), "{MAIN}Preference\t{MAIN}Status / Value\n");

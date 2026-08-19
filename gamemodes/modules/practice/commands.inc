@@ -11,6 +11,9 @@
     if (IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use practice mode while in a 2v2 duel.");
 
+    if (IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use practice mode while playing a tournament match.");
+
     if (User[playerid][playerLevel] < PRACTICE_MIN_LEVEL)
     {
         return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need level {MAIN}%d {FFFFFF}to use the practice mode.", PRACTICE_MIN_LEVEL);

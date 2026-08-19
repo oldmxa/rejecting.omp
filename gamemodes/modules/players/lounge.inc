@@ -11,7 +11,8 @@ stock SetupPlayerVehicle(vehicleid)
     return 1;
 }
 
-stock CanSpawnLoungeVehicle(playerid)
+forward Lounge_CanSpawnLoungeVehicle(playerid);
+public Lounge_CanSpawnLoungeVehicle(playerid)
 {
     if (User[playerid][isLogged] == false)
     {
@@ -34,6 +35,12 @@ stock CanSpawnLoungeVehicle(playerid)
     if (IsPlayerInDuel2v2(playerid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle during a 2v2 duel.");
+        return 0;
+    }
+
+    if (IsPlayerInTournamentMatch(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle during a tournament match.");
         return 0;
     }
 
@@ -91,7 +98,8 @@ stock CanSpawnLoungeVehicle(playerid)
     return true;
 }
 
-stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
+forward Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2);
+public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
 {
     if (vehicle < VEHICLE_ID_MIN || vehicle > VEHICLE_ID_MAX)
         return SendClientMessage(playerid, -1, "%s", INVALID_VEHICLE_MSG);
@@ -189,8 +197,11 @@ stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1)
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
     if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot use /lounge while in a duel.");
-    if(IsPlayerInDuel2v2(playerid))
+    if (IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /lounge while in a 2v2 duel. Use /cancel2v2 first.");
+
+    if (IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /lounge while playing a tournament match.");
 
     if (User[playerid][isAfk])
     {

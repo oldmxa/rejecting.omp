@@ -154,7 +154,8 @@ static stock ShowOnlineLookup(playerid, targetid)
     return true;
 }
 
-stock ShowNameHistory(playerid, targetid, page = 0)
+forward Invest_ShowNameHistory(playerid, targetid, page);
+public Invest_ShowNameHistory(playerid, targetid, page)
 {
     if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return false;

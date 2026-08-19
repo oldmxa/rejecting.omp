@@ -16,6 +16,9 @@
     if(targetid == playerid)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
+    if(IsPlayerInTournamentMatch(targetid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}This player is currently fighting in a tournament match!");
+
     new Float:ppos[3];
     GetPlayerPos(playerid, ppos[0], ppos[1], ppos[2]);
     SetPlayerPos(targetid, ppos[0], ppos[1], ppos[2]+3);

@@ -71,6 +71,7 @@ stock bool:IsPlayerBusy(playerid)
     if(User[playerid][isSpectating] || User[playerid][isAfk]) return true;
     if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE) return true;
     if(g_PlayerDuel2v2ID[playerid] != -1) return true;
+    if(g_PlayerTourneySlot[playerid] != -1) return true;
     if(g_PlayerTraining[playerid][pTrain_Active]) return true;
     if(g_Practice[playerid][pracActive]) return true;
     new PLAYER_STATE:pState = GetPlayerState(playerid);

@@ -201,3 +201,22 @@
 
 // gunmenu vw
 #define         SPAWN_VW            (30000)
+
+stock ShowPersonalizationMenu(playerid) return CallLocalFunction("Account_ShowPersonalizationMenu", "d", playerid);
+stock ShowSettingsMenu(playerid) return CallLocalFunction("Account_ShowSettingsMenu", "d", playerid);
+stock ChangeSkin(playerid, skinid) return CallLocalFunction("Stats_ChangeSkin", "dd", playerid, skinid);
+stock CanSpawnLoungeVehicle(playerid) return CallLocalFunction("Lounge_CanSpawnLoungeVehicle", "d", playerid);
+stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1) return CallLocalFunction("Lounge_SpawnLoungeVehicle", "dddd", playerid, vehicle, color1, color2);
+stock ChangeTime(playerid, timeid) return CallLocalFunction("Stats_ChangeTime", "dd", playerid, timeid);
+stock ChangeWeather(playerid, weatherid) return CallLocalFunction("Stats_ChangeWeather", "dd", playerid, weatherid);
+stock showMapListDialog(playerid) return CallLocalFunction("Stats_showMapListDialog", "d", playerid);
+stock ShowStats(playerid, targetid) return CallLocalFunction("Stats_ShowStats", "dd", playerid, targetid);
+stock ShowPlayerClanInfo(playerid, targetid) return CallLocalFunction("Stats_ShowPlayerClanInfo", "dd", playerid, targetid);
+stock ShowNameHistory(playerid, targetid, page = 0) return CallLocalFunction("Invest_ShowNameHistory", "ddd", playerid, targetid, page);
+stock ShowPenaltyHistory(playerid, const targetname[], page = 0) return CallLocalFunction("Punish_ShowPenaltyHistory", "dsd", playerid, targetname, page);
+stock ShowAdminConfig(playerid) return CallLocalFunction("Stats_ShowAdminConfig", "d", playerid);
+stock SendDiscordResponse(DCC_Channel:channel, const message[]) return CallLocalFunction("Discord_SendDiscordResponse", "ds", _:channel, message);
+stock SendDiscordEmbedReply(const title[], const description[], color = DISCORD_COLOR_DEFAULT) return CallLocalFunction("Discord_SendDiscordEmbedReply", "ssd", title, description, color);
+stock ShowBanDialog(playerid, const adminname[], const reason[], const banDate[], const unbanDate[]) return CallLocalFunction("Stats_ShowBanDialog", "dssss", playerid, adminname, reason, banDate, unbanDate);
+stock ShowSecurityMenu(playerid) return CallLocalFunction("Account_ShowSecurityMenu", "d", playerid);
+stock ShowCoinsMenu(playerid) return CallLocalFunction("Coinshop_ShowCoinsMenu", "d", playerid);

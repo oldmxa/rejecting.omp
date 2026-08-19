@@ -110,6 +110,18 @@ stock GetClanOnlineMembers(clanid)
     return count;
 }
 
+stock GetClanMemberCount(clanid)
+{
+    if (!IsValidClanID(clanid)) return 0;
+
+    new count = 0;
+    for (new i = 0; i < MAX_MEMBERS; i++)
+    {
+        if (ClanMembers[clanid][i][member_slotused]) count++;
+    }
+    return count;
+}
+
 stock GetClanLeaderName(clanid, dest[], size = sizeof(dest))
 {
     dest[0] = '\0';

@@ -1006,10 +1006,19 @@ new PlayerText:InfoStats[MAX_PLAYERS][4];
 new g_PlayerDuel2v2ID[MAX_PLAYERS] = {-1, ...};
 new g_PlayerDuel2v2Team[MAX_PLAYERS] = {-1, ...};
 
+new g_PlayerTourneySlot[MAX_PLAYERS] = {-1, ...};
+new g_PlayerTourneyMatch[MAX_PLAYERS] = {-1, ...};
+
 stock IsPlayerInDuel2v2(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
     return (g_PlayerDuel2v2ID[playerid] != -1) ? 1 : 0;
+}
+
+stock IsPlayerInTournamentMatch(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
+    return (g_PlayerTourneyMatch[playerid] != -1) ? 1 : 0;
 }
 
 stock bool:IsPlayerR2Client(playerid)

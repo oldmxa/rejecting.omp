@@ -59,6 +59,9 @@ StartChangeMode(playerid)
 	if(IsPlayerInDuel2v2(playerid))
 		return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot change modes while in a 2v2 duel. Use /cancel2v2 first.");
 
+	if(IsPlayerInTournamentMatch(playerid))
+		return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot change modes while playing a tournament match.");
+
 	if (g_PlayerTraining[playerid][pTrain_Active])
 	{
 		ExitTrainingArena(playerid);
@@ -196,6 +199,9 @@ forward LookupOfflineStats(playerid, const targetName[]);
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /gunmenu in a 2v2 duel.");
 
+    if(IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /gunmenu during a tournament match.");
+
     if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
     {
         if(gettime() - User[playerid][timerRespawn] > 15)
@@ -215,6 +221,9 @@ forward LookupOfflineStats(playerid, const targetName[]);
 
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot spectate while in a 2v2 duel.");
+
+    if(IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot spectate while playing a tournament match.");
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
 
@@ -264,6 +273,9 @@ forward LookupOfflineStats(playerid, const targetName[]);
 
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /respawn while in a 2v2 duel.");
+
+    if(IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /respawn while playing a tournament match.");
 
     new timestampRespawn = gettime();
     Respawn(playerid, timestampRespawn);

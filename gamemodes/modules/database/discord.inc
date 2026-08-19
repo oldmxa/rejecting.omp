@@ -273,10 +273,10 @@ public UnbanIspDiscord()
 		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "DELETE FROM `ispsbanidas` where `isp` = '%e'", isp);
 		mysql_tquery(dbHandle, queryGlobal);
 
-		SendDiscordResponse(comandos, "✅ ISP deleted.");
+		SendDiscordResponse( comandos, ":white_check_mark: ISP deleted.");
 	}
 	else
-		SendDiscordResponse(comandos, "This ISP does not exist.");
+		SendDiscordResponse( comandos, "This ISP does not exist.");
 }
 
 forward BanIspDiscord(isp[]);
@@ -287,10 +287,10 @@ public BanIspDiscord(isp[])
 		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "INSERT INTO `ispsbanidas` (`isp`) VALUES('%e')", isp);
 		mysql_tquery(dbHandle, queryGlobal);
 
-		SendDiscordResponse(comandos, "✅ ISP banned.");
+		SendDiscordResponse( comandos, ":white_check_mark: ISP banned.");
 	}
 	else
-		SendDiscordResponse(comandos, "This ISP already exists.");
+		SendDiscordResponse( comandos, "This ISP already exists.");
 }
 
 forward AkaDiscord(username[], admin[]);

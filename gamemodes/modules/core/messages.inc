@@ -142,7 +142,6 @@
 #define ACHIEVEMENT_UNLOCKED        "{MAIN}[ACH] {FFFFFF}You unlocked {MAIN}%s{FFFFFF}! Type {MAIN}/ach {FFFFFF}to check your reward."
 #define ACHIEVEMENT_RETRO           "{MAIN}[ACH] {FFFFFF}You unlocked {MAIN}%d achievements {FFFFFF}from your history! Type {MAIN}/ach {FFFFFF}to check your rewards."
 #define ACHIEVEMENT_NOT_LOGGED      "{MAIN}[ERROR] {FFFFFF}You must be logged in to view achievements."
-#define ACHIEVEMENT_EXCLUSIVE       "{MAIN}[ACH] {FFFFFF}Exclusive achievements are handed out personally. If you want one, talk to {MAIN}"SERVER_OWNER"{FFFFFF} - only he can grant them."
 #define ACHIEVEMENT_GIVE_HELP       "{MAIN}[USAGE] {FFFFFF}/giveach [id/name] [achievement id]"
 #define ACHIEVEMENT_GIVE_OWNER      "{MAIN}[ERROR] {FFFFFF}Only {MAIN}"SERVER_OWNER"{FFFFFF} can grant achievements."
 #define ACHIEVEMENT_GIVE_INVALID    "{MAIN}[ERROR] {FFFFFF}Invalid achievement ID. Use {MAIN}/giveach {FFFFFF}to see the list."

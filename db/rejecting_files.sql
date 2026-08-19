@@ -394,6 +394,63 @@ CREATE TABLE `zones` (
   `clancolor` varchar(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `tournaments` (
+  `id` int(11) NOT NULL,
+  `tournament_name` varchar(64) NOT NULL DEFAULT 'Rejecting Championship',
+  `achievement_tag` varchar(32) NOT NULL DEFAULT 'CHAMPION',
+  `mode` tinyint(4) NOT NULL DEFAULT 1,
+  `max_slots` int(11) NOT NULL DEFAULT 8,
+  `prize_coins` int(11) NOT NULL DEFAULT 0,
+  `prize_money` int(11) NOT NULL DEFAULT 0,
+  `entry_fee` int(11) NOT NULL DEFAULT 0,
+  `weapon_set` tinyint(4) NOT NULL DEFAULT 0,
+  `arena_id` int(11) NOT NULL DEFAULT -1,
+  `winner_id` int(11) DEFAULT NULL,
+  `winner_name` varchar(64) DEFAULT NULL,
+  `started_by` varchar(32) NOT NULL DEFAULT 'System',
+  `scheduled_time` varchar(64) NOT NULL DEFAULT 'Now',
+  `created_at` int(11) NOT NULL DEFAULT 0,
+  `finished_at` int(11) NOT NULL DEFAULT 0,
+  `status` varchar(20) NOT NULL DEFAULT 'finished'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `player_tournament_tags` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `tag_name` varchar(32) NOT NULL,
+  `tournament_name` varchar(64) NOT NULL,
+  `won_at` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `tournament_participants` (
+  `id` int(11) NOT NULL,
+  `tournament_id` int(11) NOT NULL,
+  `slot` int(11) NOT NULL DEFAULT 0,
+  `player1_id` int(11) NOT NULL DEFAULT 0,
+  `player1_name` varchar(32) NOT NULL DEFAULT '',
+  `player2_id` int(11) DEFAULT NULL,
+  `player2_name` varchar(32) DEFAULT NULL,
+  `clan_id` int(11) DEFAULT NULL,
+  `clan_name` varchar(32) DEFAULT NULL,
+  `eliminated` tinyint(1) NOT NULL DEFAULT 0,
+  `seed` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `tournament_matches` (
+  `id` int(11) NOT NULL,
+  `tournament_id` int(11) NOT NULL,
+  `round_number` int(11) NOT NULL DEFAULT 1,
+  `match_number` int(11) NOT NULL DEFAULT 1,
+  `slot_a` int(11) NOT NULL DEFAULT 0,
+  `slot_b` int(11) NOT NULL DEFAULT 0,
+  `winner_slot` int(11) DEFAULT NULL,
+  `score_a` int(11) NOT NULL DEFAULT 0,
+  `score_b` int(11) NOT NULL DEFAULT 0,
+  `arena_id` int(11) NOT NULL DEFAULT 0,
+  `wo_winner` tinyint(1) NOT NULL DEFAULT 0,
+  `status` varchar(20) NOT NULL DEFAULT 'finished'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `username` (`username`),
@@ -512,6 +569,23 @@ ALTER TABLE `videos`
 ALTER TABLE `zones`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `tournaments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_tourney_created` (`created_at`);
+
+ALTER TABLE `player_tournament_tags`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `idx_user_tag` (`user_id`,`tag_name`),
+  ADD KEY `idx_tag_won_at` (`won_at`);
+
+ALTER TABLE `tournament_participants`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_tourney_part` (`tournament_id`,`slot`);
+
+ALTER TABLE `tournament_matches`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_tourney_matches` (`tournament_id`,`round_number`);
+
 ALTER TABLE `accounts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -579,6 +653,18 @@ ALTER TABLE `videos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `zones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tournaments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `player_tournament_tags`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tournament_participants`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tournament_matches`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

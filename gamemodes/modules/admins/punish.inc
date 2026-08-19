@@ -511,7 +511,8 @@
     return true;
 }
 
-stock ShowPenaltyHistory(playerid, const targetname[], page = 0)
+forward Punish_ShowPenaltyHistory(playerid, const targetname[], page);
+public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 {
     SetPVarString(playerid, "hist_target_name", targetname);
     SetPVarInt(playerid, "hist_page", page);

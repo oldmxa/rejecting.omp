@@ -304,6 +304,9 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
     if (IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot access safehouse while in a 2v2 duel.");
 
+    if (IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot access safehouse while playing a tournament match.");
+
     new index = GetPlayerSafehouse(playerid);
     if (!IsValidSafehouseIndex(index))
         return SendClientMessage(playerid, -1, "%s", SH_NO_SAFEHOUSE);

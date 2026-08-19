@@ -21,6 +21,9 @@
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You are already in a 2v2 duel session!");
 
+    if(IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot create a 2v2 duel while playing a tournament match.");
+
     if(g_PlayerTraining[playerid][pTrain_Active])
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot create a 2v2 duel while in training mode.");
 
@@ -34,6 +37,9 @@
 @cmd(.alts = {"accept2v2"}) gx1(playerid, params[], help)
 {
     if(!User[playerid][isLogged]) return 1;
+
+    if(IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot join a 2v2 duel while playing a tournament match.");
 
     new matchid = g_PlayerDuel2v2ID[playerid];
     if(matchid == -1 || !g_Duel2v2Data[matchid][d2_Active] || g_Duel2v2Data[matchid][d2_State] != DUEL2V2_STATE_PENDING)

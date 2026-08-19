@@ -750,7 +750,21 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 	new bool:pInDuel2v2 = (IsPlayerInDuel2v2(playerid) != 0);
 	new bool:iInDuel2v2 = (IsPlayerInDuel2v2(issuerid) != 0);
 
-	if (pInDuel2v2 || iInDuel2v2)
+	new bool:pInTourney = IsPlayerInActiveTourneyMatch(playerid);
+	new bool:iInTourney = IsPlayerInActiveTourneyMatch(issuerid);
+
+	if (pInTourney || iInTourney)
+	{
+		if (!pInTourney || !iInTourney) return false;
+
+		new matchid = g_PlayerTourneyMatch[playerid];
+		if (matchid < 0 || matchid >= MAX_TOURNEY_MATCHES) return false;
+		if (g_PlayerTourneyMatch[issuerid] != matchid) return false;
+		if (!g_TourneyMatches[matchid][tm_Active] || g_TourneyMatches[matchid][tm_State] != MATCH_STATE_ACTIVE) return false;
+
+		if (g_PlayerTourneySlot[playerid] == g_PlayerTourneySlot[issuerid]) return false;
+	}
+	else if (pInDuel2v2 || iInDuel2v2)
 	{
 		if (!pInDuel2v2 || !iInDuel2v2) return false;
 
@@ -818,7 +832,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
     SetPVarInt(playerid, "LastBodyPart", bodypart);
 
 	new loc_issuer = User[issuerid][locationId];
-	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS) && loc_issuer != ARENA_AFK && !pInDuel && !iInDuel && !pInDuel2v2 && !iInDuel2v2 && !g_PlayerTraining[issuerid][pTrain_Active] && !g_Practice[issuerid][pracActive];
+	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS) && loc_issuer != ARENA_AFK && !pInDuel && !iInDuel && !pInDuel2v2 && !iInDuel2v2 && !pInTourney && !iInTourney && !g_PlayerTraining[issuerid][pTrain_Active] && !g_Practice[issuerid][pracActive];
 
 	if(loc_issuer_ok && (weapon == WEAPON_DEAGLE || weapon == WEAPON_SHOTGUN || weapon == WEAPON_M4 || weapon == WEAPON_SNIPER))
 	{

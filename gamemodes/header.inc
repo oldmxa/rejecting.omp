@@ -84,6 +84,7 @@
 #include "modules/safehouse/safehouse.inc"
 #include "modules/misc/random_death_tag.inc"
 #include "modules/achievements/core.inc"
+#include "modules/tournament/entry.inc"
 
 // commands
 #include "modules/players/commands.inc"

@@ -147,7 +147,8 @@ stock DSC_RequirePlayer(DCC_User:user)
     return DSC_Deny(":no_entry: Link your game account first (use /dvincular in-game) to unlock the bot commands.");
 }
 
-stock SendDiscordResponse(DCC_Channel:channel, const message[])
+forward Discord_SendDiscordResponse(DCC_Channel:channel, const message[]);
+public Discord_SendDiscordResponse(DCC_Channel:channel, const message[])
 {
 	new DCC_Interaction:interaction = DSC_TakeInteraction();
 	if(interaction != DCC_Interaction:0) return DCC_SendInteractionMessage(interaction, message);
@@ -163,7 +164,8 @@ stock SendDiscordEmbedResponse(DCC_Channel:channel, DCC_Embed:embed_data)
 	return DCC_SendChannelEmbedMessage(channel, embed_data);
 }
 
-stock SendDiscordEmbedReply(const title[], const description[], color = DISCORD_COLOR_DEFAULT)
+forward Discord_SendDiscordEmbedReply(const title[], const description[], color);
+public Discord_SendDiscordEmbedReply(const title[], const description[], color)
 {
 	return SendDiscordEmbedResponse(comandos, BuildDiscordEmbed(title, description, color));
 }
@@ -221,7 +223,8 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"online",          "Who is playing right now",      0},
 	{"link",            "How to link your account",      0},
 	{"vip",             "VIP packages and perks",        0},
-	{"top",             "Top 10 players by kills",       0}
+	{"top",             "Top 10 players by kills",       0},
+	{"tournament",      "Tournament application",        0}
 };
 
 forward RegisterSlashCommands();
@@ -1607,4 +1610,9 @@ DSLASH:top(user, params[])
 	MySQL_TQueryInline(dbHandle, using inline OnDiscordTop,
 		"SELECT `username`, `kills`, `deaths` FROM `accounts` ORDER BY `kills` DESC LIMIT 10");
 	return true;
+}
+
+DSLASH:tournament(user, params[])
+{
+	return ProcessDiscordTourneyApp(user, ch_tourney_register, params);
 }

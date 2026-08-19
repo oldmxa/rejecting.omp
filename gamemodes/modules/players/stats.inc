@@ -37,7 +37,8 @@ stock ShowMenu(playerid)
     return ShowPersonalizationMenu(playerid);
 }
 
-ShowAdminConfig(playerid)
+forward Stats_ShowAdminConfig(playerid);
+public Stats_ShowAdminConfig(playerid)
 {
     new strb[3072], count = 0, actions[48];
 
@@ -173,7 +174,8 @@ ShowAdminConfig(playerid)
     Dialog_ShowCallback(playerid, using public DIALOG_AMENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, strb, "Confirm", "Exit");
 }
 
-ShowStats(playerid, targetid)
+forward Stats_ShowStats(playerid, targetid);
+public Stats_ShowStats(playerid, targetid)
 {
     new strstts[4096], sampVERSION[24], ontime = (User[targetid][totalOnTime]+(gettime()-User[targetid][loginTime]));
     GetPlayerVersion(targetid, sampVERSION, sizeof(sampVERSION));
@@ -561,7 +563,8 @@ public LookupOfflineStats(playerid, const targetName[])
     return 1;
 }
 
-ShowPlayerClanInfo(playerid, targetid)
+forward Stats_ShowPlayerClanInfo(playerid, targetid);
+public Stats_ShowPlayerClanInfo(playerid, targetid)
 {
     new clanid = User[targetid][clanID];
     if(clanid == -1) return 0;
@@ -597,7 +600,8 @@ ShowPlayerClanInfo(playerid, targetid)
 
 
 
-ShowBanDialog(playerid, const adminname[], const reason[], const banDate[], const unbanDate[])
+forward Stats_ShowBanDialog(playerid, const adminname[], const reason[], const banDate[], const unbanDate[]);
+public Stats_ShowBanDialog(playerid, const adminname[], const reason[], const banDate[], const unbanDate[])
 {
     #pragma unused unbanDate
     
@@ -638,7 +642,8 @@ ShowBanDialog(playerid, const adminname[], const reason[], const banDate[], cons
     return 1;
 }
 
-ChangeTime(playerid, timeid)
+forward Stats_ChangeTime(playerid, timeid);
+public Stats_ChangeTime(playerid, timeid)
 {
 	if(timeid < 0 || timeid > 23) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid world time. Use a value between 0 and 23.");
 
@@ -649,7 +654,8 @@ ChangeTime(playerid, timeid)
 	return true;
 }
 
-ChangeWeather(playerid, weatherid)
+forward Stats_ChangeWeather(playerid, weatherid);
+public Stats_ChangeWeather(playerid, weatherid)
 {
 	if(weatherid < 0 || weatherid > 45) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid weather ID. Use a value between 0 and 45.");
 
@@ -660,7 +666,8 @@ ChangeWeather(playerid, weatherid)
     return true;
 }
 
-ChangeSkin(playerid, skinid)
+forward Stats_ChangeSkin(playerid, skinid);
+public Stats_ChangeSkin(playerid, skinid)
 {
 	if(skinid < 2 || skinid > 311) return SendClientMessage(playerid,-1, "%s", SKIN_HELP2);
 
@@ -698,7 +705,8 @@ ChangeFight(playerid)
     Dialog_ShowCallback(playerid, using public FIGHT<iiiis>, DIALOG_STYLE_LIST, title, fightstr, "Select", "Cancel");
 }
 
-showMapListDialog(playerid)
+forward Stats_showMapListDialog(playerid);
+public Stats_showMapListDialog(playerid)
 {
     new dialogStr[1024], currentPage, Float:arenaarea, arenaiddd;
     static const categoryNames[][] = {"Small", "Medium", "Big"};

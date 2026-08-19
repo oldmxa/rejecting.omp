@@ -484,6 +484,9 @@ stock DuelS_Host(playerid)
 		if(IsPlayerInDuel2v2(playerid))
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a 2v2 duel.");
 
+		if(IsPlayerInTournamentMatch(playerid))
+			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot create a duel while playing a tournament match.");
+
 		new Float:Armour, Float:Health, Float:Result;
 		GetPlayerHealth(playerid, Health);
 		GetPlayerArmour(playerid, Armour);
@@ -568,6 +571,9 @@ stock DuelS_Host(playerid)
 
 	if(IsPlayerInDuel2v2(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in a 2v2 duel.");
+
+	if(IsPlayerInTournamentMatch(playerid))
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot enter a duel while playing a tournament match.");
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);

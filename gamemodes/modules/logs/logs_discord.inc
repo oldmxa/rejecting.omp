@@ -19,6 +19,10 @@
 #define CH_COMANDOS         "1460838135045951796"
 #define CH_GAMECHAT         "1461088854185480296"
 #define CH_ADMINCHAT        "1461088997668290581"
+#define CH_TOURNEY_ANNOUNCE     "1539673557267644496"
+#define CH_TOURNEY_REGISTER     "1539673870657921135"
+#define CH_TOURNEY_ADMIN_LOGS   "1539674148752724108"
+#define CH_TOURNEY_APPLICATIONS "1539674434305007627"
 
 new
     DCC_Guild:guildaid,
@@ -38,7 +42,11 @@ new
     DCC_Channel:logs_connections,
     DCC_Channel:logs_nextmap,
     DCC_Channel:logs_vips,
-    DCC_Channel:PMPlayer;
+    DCC_Channel:PMPlayer,
+    DCC_Channel:ch_tourney_announce,
+    DCC_Channel:ch_tourney_register,
+    DCC_Channel:ch_tourney_admin_logs,
+    DCC_Channel:ch_tourney_applications;
 
 stock InitLogChannels()
 {
@@ -60,6 +68,10 @@ stock InitLogChannels()
     comandos        = DCC_FindChannelById(CH_COMANDOS);
     gamechat        = DCC_FindChannelById(CH_GAMECHAT);
     adminchat       = DCC_FindChannelById(CH_ADMINCHAT);
+    ch_tourney_announce     = DCC_FindChannelById(CH_TOURNEY_ANNOUNCE);
+    ch_tourney_register     = DCC_FindChannelById(CH_TOURNEY_REGISTER);
+    ch_tourney_admin_logs   = DCC_FindChannelById(CH_TOURNEY_ADMIN_LOGS);
+    ch_tourney_applications = DCC_FindChannelById(CH_TOURNEY_APPLICATIONS);
 
     StartConsoleLog();
     StartConsoleTail();

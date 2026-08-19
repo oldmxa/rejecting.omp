@@ -61,7 +61,8 @@ new const g_AchievementsData[][E_ACHIEVEMENT_DATA] = {
     {39, "Discord",            "Link your in-game account to Discord",    ACH_CAT_GENERAL, 1,       100000,  5000},
     {40, "Founder",            "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       150000,  3000},
     {41, "Legend",             "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       250000,  4000},
-    {42, "Hall of Fame",       "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       500000,  5000}
+    {42, "Hall of Fame",       "Awarded personally by the server owner",             ACH_CAT_UNIQUE,  1,       500000,  5000},
+    {43, "Tournament Champion","Win an official server tournament",                  ACH_CAT_UNIQUE,  1,       500000,  5000}
 };
 
 #define ACH_COUNT (sizeof(g_AchievementsData))
@@ -110,6 +111,7 @@ new const g_AchievementsData[][E_ACHIEVEMENT_DATA] = {
 #define ACH_FOUNDER             (40)
 #define ACH_LEGEND              (41)
 #define ACH_HALL_OF_FAME        (42)
+#define ACH_TOURNAMENT_CHAMPION (43)
 
 #define ACH_DOUBLE_KILL_WINDOW  (3000)
 #define ACH_BULLETPROOF_TIME    (900)
@@ -639,6 +641,12 @@ stock Ach_OnDuelWin(playerid)
     return 1;
 }
 
+// exclusiva: GivePlayerAchievement bloqueia ACH_CAT_UNIQUE sem o manual = true
+stock Ach_OnTournamentWin(playerid)
+{
+    return GivePlayerAchievement(playerid, ACH_TOURNAMENT_CHAMPION, true);
+}
+
 stock Ach_OnArenaMVP(playerid)
 {
     GivePlayerAchievement(playerid, ACH_FIRST_VICTORY);
@@ -854,12 +862,22 @@ public DIALOG_ACHIEVEMENTS_MAIN(playerid, dialogid, response, listitem, string:i
     return 1;
 }
 
+// Filtro unico de exibicao: a lista e o handler de clique remontam o indice pela mesma regra,
+// se as duas divergirem clicar numa linha abre a conquista errada.
+// Exclusivas: quem nao e dono so enxerga as que o alvo ja conquistou.
+stock bool:Ach_IsRowVisible(playerid, targetid, ach_index, ach_cat)
+{
+    if(g_AchievementsData[ach_index][ach_category] != ach_cat) return false;
+
+    if(ach_cat == ACH_CAT_UNIQUE && !IsServerOwner(playerid) && !HasPlayerAchievement(targetid, ach_index))
+        return false;
+
+    return true;
+}
+
 stock ShowAchievementsCategoryList(playerid, ach_cat)
 {
     if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 0;
-
-    if(ach_cat == ACH_CAT_UNIQUE && !IsServerOwner(playerid))
-        return SendClientMessage(playerid, -1, "%s", ACHIEVEMENT_EXCLUSIVE);
 
     SetPVarInt(playerid, "ach_current_cat", ach_cat);
 
@@ -887,7 +905,7 @@ stock ShowAchievementsCategoryList(playerid, ach_cat)
 
     for(new i = 0; i < ACH_COUNT; i++)
     {
-        if(g_AchievementsData[i][ach_category] != ach_cat) continue;
+        if(!Ach_IsRowVisible(playerid, targetid, i, ach_cat)) continue;
 
         new bool:unlocked = HasPlayerAchievement(targetid, i);
 
@@ -907,7 +925,12 @@ stock ShowAchievementsCategoryList(playerid, ach_cat)
     }
 
     if(count == 0)
-        strcat(g_achDialogBuf, "{BEBEBE}No achievements in this category\t{BEBEBE}None\n", sizeof(g_achDialogBuf));
+    {
+        if(ach_cat == ACH_CAT_UNIQUE)
+            strcat(g_achDialogBuf, "{BEBEBE}No exclusive achievements unlocked yet\t{BEBEBE}None\n", sizeof(g_achDialogBuf));
+        else
+            strcat(g_achDialogBuf, "{BEBEBE}No achievements in this category\t{BEBEBE}None\n", sizeof(g_achDialogBuf));
+    }
 
     format_MainColor(playerid, g_achDialogBuf, sizeof(g_achDialogBuf));
 
@@ -922,9 +945,11 @@ public DIALOG_ACHIEVEMENTS_LIST(playerid, dialogid, response, listitem, string:i
         new target_cat = GetPVarInt(playerid, "ach_current_cat");
         new matchCount = 0;
 
+        new targetid = Ach_GetViewTarget(playerid);
+
         for(new i = 0; i < ACH_COUNT; i++)
         {
-            if(g_AchievementsData[i][ach_category] != target_cat) continue;
+            if(!Ach_IsRowVisible(playerid, targetid, i, target_cat)) continue;
 
             if(matchCount == listitem)
             {

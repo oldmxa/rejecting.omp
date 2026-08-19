@@ -13,6 +13,9 @@
     if (IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot enter training while in a 2v2 duel.");
 
+    if (IsPlayerInTournamentMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot enter training while playing a tournament match.");
+
     if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot enter training while in a duel.");
 

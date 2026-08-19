@@ -17,6 +17,40 @@ static stock ApplyDiscordAdminLevel(DCC_User:user, level)
     return 1;
 }
 
+stock bool:IsDiscordUserVerified(DCC_User:user)
+{
+    if(user == DCC_INVALID_USER) return false;
+
+    new userid[DCC_ID_SIZE];
+    DCC_GetUserId(user, userid, sizeof(userid));
+    if(isnull(userid)) return false;
+
+    for(new i; i < sizeof(OWNER_COMMANDS_DISCORD); i++)
+    {
+        if(strequal(userid, OWNER_COMMANDS_DISCORD[i])) return true;
+    }
+
+    new DCC_Role:role = DCC_FindRoleById(DISCORD_ROLE_LINKED);
+    if(role != DCC_INVALID_ROLE)
+    {
+        new bool:has = false;
+        DCC_HasGuildMemberRole(guildaid, user, role, has);
+        if(has) return true;
+    }
+
+    for(new i; i < MAX_ADMIN_LEVEL; i++)
+    {
+        new DCC_Role:adminRole = DCC_FindRoleById(g_DiscordAdminRoles[i]);
+        if(adminRole != DCC_INVALID_ROLE)
+        {
+            new bool:has = false;
+            DCC_HasGuildMemberRole(guildaid, user, adminRole, has);
+            if(has) return true;
+        }
+    }
+    return false;
+}
+
 stock DCC_User:GetPlayerDiscordUser(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return DCC_INVALID_USER;
