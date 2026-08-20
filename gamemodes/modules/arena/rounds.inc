@@ -15,7 +15,7 @@ showLocationSelectDialog(playerid)
 	{
         new i = LOCATION_DISPLAY_ORDER[slot];
 
-        new mapName[48], slots[32], pCount = getLocationPlayers(i), mCount = arenaInfo[i][maxPlayers];
+        new mapName[48], slots[48], pCount = getLocationPlayers(i), mCount = arenaInfo[i][maxPlayers];
         new zoneid = arenaInfo[i][arenaId];
 
         if(i == ARENA_AFK)
@@ -764,7 +764,7 @@ PrepareChangeArena(location, finishingArenaId)
 	new namesList[512], damageList[512], killsList[512], ratioList[512];
 	new base = (location * 20) + 26;
 
-	new clanInfoStr[192];
+	new clanInfoStr[288];
 	new bClanName[MAX_CLAN_NAME] = "None";
 	new bClanKills = 0;
 	new bClanDmg = 0;

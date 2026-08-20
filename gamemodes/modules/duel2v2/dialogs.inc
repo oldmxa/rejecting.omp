@@ -267,7 +267,7 @@ stock ShowDuel2v2AcceptDialog(playerid)
     new title[64] = "{MAIN}Duel 2v2 Invitation";
     format_MainColor(playerid, title);
 
-    new buf[512];
+    new buf[640];
     format(buf, sizeof(buf),
         "{FFFFFF}You have been invited to a 2v2 duel challenge!\n\n" \
         "{MAIN}Challenger: {FFFFFF}%s\n" \

@@ -80,7 +80,7 @@ static stock ShowOnlineLookup(playerid, targetid)
 
     if (isnull(User[targetid][Isp]))
     {
-        new why[240];
+        new why[400];
 
         format(why, sizeof(why),
             "{FFFFFF}No network data was collected for this player.\n\n"\

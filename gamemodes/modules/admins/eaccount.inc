@@ -311,7 +311,7 @@ public DIALOG_EACC_LIST(playerid, dialogid, response, listitem, string:inputtext
 
     SetPVarInt(playerid, "EAccField", listitem);
 
-    new body[256], name[MAX_PLAYER_NAME + 1];
+    new body[320], name[MAX_PLAYER_NAME + 1];
     EAcc_TargetName(playerid, name);
 
     format(body, sizeof(body), "{FFFFFF}\x95 {B4B5B7}Player: "COL_WHITE"%s\n{FFFFFF}\x95 {B4B5B7}Setting: "COL_WHITE"%s\n{FFFFFF}\x95 {B4B5B7}Current: "COL_WHITE"%d\n\n{FFFFFF}\x95 {B4B5B7}Allowed range: "COL_WHITE"%d to %d",

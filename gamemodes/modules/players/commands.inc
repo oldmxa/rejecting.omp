@@ -12,7 +12,7 @@
     GetPlayerIp(targetid, pip, sizeof(pip));
     GetPlayerVersion(targetid, sampVERSION, sizeof(sampVERSION));
 
-    new strid[144];
+    new strid[224];
     format(strid, sizeof(strid), "{MAIN}[INFO] {FFFFFF}%s [%d] - {FFFFFF}PING: %d  PL: %.2f  FPS: %d  SA:MP Version: %s  %s",
         getPlayerName(targetid),
         targetid,

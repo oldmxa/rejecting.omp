@@ -278,7 +278,7 @@ public DIALOG_BUY_VIP(playerid, dialogid, response, listitem, string:inputtext[]
     new days  = VipPackages[listitem][vip_days];
     new coins = VipPackages[listitem][vip_price_coins];
 
-    new body[512], title[64];
+    new body[512], title[96];
     format(body, sizeof(body), "{MAIN}Payment\t{MAIN}Cost\t{MAIN}Your balance\n");
 
     format(title, sizeof(title), "{FFFFFF}Coins\t{FFFF00}%s\t%s%s",

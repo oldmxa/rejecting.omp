@@ -356,7 +356,7 @@ public OffDox(playerid)
 
 		if(isnull(isp))
 		{
-			new why[260];
+			new why[400];
 
 			format(why, sizeof(why),
 				"{FFFFFF}This account has no network data stored.\n\n"\

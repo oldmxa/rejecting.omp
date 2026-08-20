@@ -133,7 +133,7 @@ InitRoundStatsTD(playerid)
 	PlayerTextDrawBackgroundColor(playerid, topLocationTable[playerid][9], 0x0000004B);
 	PlayerTextDrawSetSelectable(playerid, topLocationTable[playerid][9], 0);
 
-    new defaultInfoStr[128];
+    new defaultInfoStr[192];
     new colorStr[20];
 
     if(strfind(GetPlayerHudTag(playerid, false), "~w~") != -1)
