@@ -84,5 +84,9 @@ RemoveObjectsLounge(playerid)
 	RemoveBuildingForPlayer(playerid, 1430, -800.9453, 500.8984, 1360.0313, 0.25);
 	RemoveBuildingForPlayer(playerid, 1430, -800.9453, 501.7422, 1360.0313, 0.25);
 
+	// Remove buildings for garbage dump
+	RemoveBuildingForPlayer(playerid, 5357, 2177.9922, -2006.7578, 23.2891, 0.25);
+	RemoveBuildingForPlayer(playerid, 5291, 2177.9922, -2006.7578, 23.2891, 0.25);
+
     return true;
 }
