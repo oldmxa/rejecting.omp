@@ -209,7 +209,7 @@ stock DeleteSafehouseRow(index)
     return 1;
 }
 
-stock InsertSafehouseRow(index)
+stock InsertSafehouseRow(index, playerid = INVALID_PLAYER_ID)
 {
     if (!IsValidSafehouseIndex(index) || dbHandle == MYSQL_INVALID_HANDLE)
         return 0;
@@ -221,21 +221,43 @@ ON DUPLICATE KEY UPDATE `zone_id` = `zone_id`",
         index, arenaData[index][arenaName], SAFEHOUSE_STATUS_AVAILABLE,
         SafehouseData[index][sh_ExtX], SafehouseData[index][sh_ExtY]);
 
-    mysql_tquery(dbHandle, query, "OnSafehouseInserted", "i", index);
+    mysql_tquery(dbHandle, query, "OnSafehouseInserted", "ii", index, playerid);
     return 1;
 }
 
-public OnSafehouseInserted(index)
+public OnSafehouseInserted(index, playerid)
 {
     if (!IsValidSafehouseIndex(index)) return 1;
 
+    new bool:notify = (playerid != INVALID_PLAYER_ID && IsPlayerConnected(playerid));
     new id = cache_insert_id();
-    if (id <= 0) return 1;
+
+    if (id <= 0)
+    {
+        ResetSafehouse(index);
+
+        if (notify)
+        {
+            va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The database did not create the safehouse in {MAIN}%s{FFFFFF}.", arenaData[index][arenaName]);
+            SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The zone may already have a row. Reload the safehouses and try again.");
+            ShowSafehouseAdminMenu(playerid);
+        }
+        return 1;
+    }
 
     SafehouseData[index][sh_SQLID] = id;
 
     SaveSafehouse(index);
     RefreshSafehousePickup(index);
+
+    if (notify)
+    {
+        va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Safehouse created in {MAIN}%s{FFFFFF} at your position.", arenaData[index][arenaName]);
+        SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Interior and exit use the level defaults. Adjust them in the edit menu if needed.");
+
+        g_PlayerSafehouseEdit[playerid] = index;
+        LogSafehouse(index, playerid, "admin_create", arenaData[index][arenaName]);
+    }
     return 1;
 }
 

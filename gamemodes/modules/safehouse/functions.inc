@@ -506,6 +506,21 @@ stock EnterSafehouse(playerid, index)
 {
     if (!IsValidSafehouseIndex(index)) return 0;
 
+    new loc = User[playerid][locationId];
+
+    if (loc != -1 && loc != ARENA_AFK)
+    {
+        ApplyArenaRpWalk(playerid, loc, ARENA_AFK);
+
+        User[playerid][isAfk] = true;
+        User[playerid][locationId] = ARENA_AFK;
+
+        GangZoneStopPulseForPlayer(playerid, e_ZONE_PULSE_ZONE, arenaInfo[loc][arenaId]);
+        HideRoundStatsTD(playerid);
+        updatePlayerHud(playerid);
+        CallLocalFunction("ResetPlayerOutpostCapture", "i", playerid);
+    }
+
     SetPlayerInterior(playerid, SafehouseData[index][sh_Interior]);
     SetPlayerVirtualWorld(playerid, SafehouseData[index][sh_VirtualWorld]);
     SetPlayerPos(playerid,
@@ -533,6 +548,21 @@ stock ExitSafehouse(playerid)
     g_PlayerInSafehouse[playerid] = -1;
 
     if (!IsPlayerConnected(playerid)) return 1;
+
+    if (User[playerid][isAfk] && User[playerid][locationId] == ARENA_AFK)
+    {
+        SetPlayerVirtualWorld(playerid, User[playerid][loungeVW]);
+        SetPlayerInterior(playerid, User[playerid][loungeINT]);
+        SetPlayerPos(playerid, User[playerid][loungeX], User[playerid][loungeY], User[playerid][loungeZ]);
+        SetPlayerFacingAngle(playerid, User[playerid][loungeA]);
+        SetCameraBehindPlayer(playerid);
+        SetPlayerArmour(playerid, 100.0);
+        SetPlayerHealth(playerid, 100.0);
+        givePlayerWeapons(playerid);
+
+        SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You left the safehouse and returned to the lounge.");
+        return 1;
+    }
 
     new Float:x = SafehouseData[index][sh_ExitX];
     new Float:y = SafehouseData[index][sh_ExitY];

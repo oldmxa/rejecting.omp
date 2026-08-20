@@ -128,13 +128,14 @@ stock CreateSafehouseHere(playerid)
     SafehouseData[index][sh_ExitY] = y;
     SafehouseData[index][sh_ExitZ] = z;
 
-    InsertSafehouseRow(index);
+    if (!InsertSafehouseRow(index, playerid))
+    {
+        ResetSafehouse(index);
+        SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The database is offline. Try again once the connection is back.");
+        return ShowSafehouseAdminMenu(playerid);
+    }
 
-    va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Safehouse created in {MAIN}%s{FFFFFF} at your position.", arenaData[index][arenaName]);
-    SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Interior and exit use the level defaults. Adjust them in the edit menu if needed.");
-
-    g_PlayerSafehouseEdit[playerid] = index;
-    LogSafehouse(index, playerid, "admin_create", arenaData[index][arenaName]);
+    va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Creating a safehouse in {MAIN}%s{FFFFFF}...", arenaData[index][arenaName]);
     return 1;
 }
 
