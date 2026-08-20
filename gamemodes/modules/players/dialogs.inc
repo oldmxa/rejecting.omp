@@ -1124,13 +1124,17 @@ stock ShowCustomTagOptionsMenu(playerid)
         return ShowTagMenu(playerid);
     }
 
-    new options[256];
-    format(options, sizeof(options), "1. Choose from Predefined List\n2. Enter Custom Tag Text (Max %d Chars)\n3. Remove Custom Tag", CUSTOM_TAG_MAX_LEN);
+    new body[512];
+    format(body, sizeof(body), "{MAIN}Option\t{MAIN}Description\t{MAIN}Action\n");
+    strcat(body, "{MAIN}Predefined Tags\t{BEBEBE}Choose from server preset tags\t{90C3D4}[Select]\n");
+    strcat(body, "{MAIN}Custom Tag Text\t{BEBEBE}Enter your own custom tag (2-16 chars)\t{90C3D4}[Enter]\n");
+    strcat(body, "{MAIN}Remove Tag\t{BEBEBE}Unequip current custom tag\t{FF6347}[Remove]\n");
 
-    new title[64] = "{MAIN}Custom Tag Options";
+    new title[64] = "{MAIN}Custom Tag - Options";
     format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
 
-    return Dialog_ShowCallback(playerid, using public DIALOG_CUSTOM_TAG_OPTIONS<iiiis>, DIALOG_STYLE_LIST, title, options, "Select", "Back");
+    return Dialog_ShowCallback(playerid, using public DIALOG_CUSTOM_TAG_OPTIONS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
 }
 
 static stock HandleCustomTagRemoval(playerid)
@@ -1143,6 +1147,34 @@ static stock HandleCustomTagRemoval(playerid)
 
     ClearCustomTag(playerid);
     return ShowTagMenu(playerid);
+}
+
+stock ShowPredefinedTagsDialog(playerid)
+{
+    if(!CanPlayerUseCustomTag(playerid))
+    {
+        SendClientMessage(playerid, -1, "%s", CUSTOM_TAG_NO_PERM);
+        return ShowTagMenu(playerid);
+    }
+
+    new listStr[1024];
+    format(listStr, sizeof(listStr), "{MAIN}#\t{MAIN}Tag Preview\t{MAIN}Status\n");
+
+    for(new i = 0; i < sizeof(g_PredefinedTags); i++)
+    {
+        new isEquipped = (!User[playerid][hideCustomTag] && !strcmp(User[playerid][customTag], g_PredefinedTags[i], true));
+        format(listStr, sizeof(listStr), "%s{FFFFFF}%02d.\t{FF4500}%s\t%s\n",
+            listStr,
+            i + 1,
+            g_PredefinedTags[i],
+            isEquipped ? "{23C552}[Equipped]" : "{90C3D4}[Select]");
+    }
+
+    new title[64] = "{MAIN}Predefined Tags";
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, listStr);
+
+    return Dialog_ShowCallback(playerid, using public DIALOG_PREDEFINED_TAGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, listStr, "Select", "Back");
 }
 
 forward DIALOG_CUSTOM_TAG_OPTIONS(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -1160,23 +1192,22 @@ public DIALOG_CUSTOM_TAG_OPTIONS(playerid, dialogid, response, listitem, string:
     {
         case 0: // Predefined list
         {
-            new listStr[512] = "";
-            for(new i = 0; i < sizeof(g_PredefinedTags); i++)
-            {
-                format(listStr, sizeof(listStr), "%s%d. %s\n", listStr, i + 1, g_PredefinedTags[i]);
-            }
-            new title[64] = "{MAIN}Predefined Tags";
-            format_MainColor(playerid, title);
-            return Dialog_ShowCallback(playerid, using public DIALOG_PREDEFINED_TAGS<iiiis>, DIALOG_STYLE_LIST, title, listStr, "Select", "Back");
+            return ShowPredefinedTagsDialog(playerid);
         }
         case 1: // Custom input
         {
-            new title[64] = "{MAIN}Custom Tag";
-            format_MainColor(playerid, title);
-
-            new body[192];
-            format(body, sizeof(body), "{FFFFFF}Enter your Custom Tag text (%d to %d characters):\n{B4B5B7}(Letters, numbers and basic symbols only - no brackets [] required)",
+            new title[64] = "{MAIN}Custom Tag - Enter Text";
+            new body[384];
+            format(body, sizeof(body),
+                "{FFFFFF}Enter your desired {MAIN}Custom Tag{FFFFFF} text below:\n\n"\
+                "{MAIN}\x95 {B4B5B7}Length: {FFFFFF}%d to %d characters\n"\
+                "{MAIN}\x95 {B4B5B7}Rules: {FFFFFF}Letters, numbers and basic symbols only\n"\
+                "{MAIN}\x95 {B4B5B7}Formatting: {FFFFFF}Brackets [] and colors are applied automatically\n\n"\
+                "{BEBEBE}Type {FF6347}none{BEBEBE} to unequip your current tag.",
                 CUSTOM_TAG_MIN_LEN, CUSTOM_TAG_MAX_LEN);
+
+            format_MainColor(playerid, title);
+            format_MainColor(playerid, body);
 
             return Dialog_ShowCallback(playerid, using public DIALOG_EDIT_CUSTOM_TAG<iiiis>, DIALOG_STYLE_INPUT, title, body, "Save", "Back");
         }
@@ -1199,7 +1230,7 @@ public DIALOG_PREDEFINED_TAGS(playerid, dialogid, response, listitem, string:inp
         return ShowTagMenu(playerid);
     }
 
-    if(listitem < 0 || listitem >= sizeof(g_PredefinedTags)) return ShowTagMenu(playerid);
+    if(listitem < 0 || listitem >= sizeof(g_PredefinedTags)) return ShowCustomTagOptionsMenu(playerid);
 
     ApplyCustomTag(playerid, g_PredefinedTags[listitem]);
     return ShowTagMenu(playerid);
@@ -1208,7 +1239,7 @@ public DIALOG_PREDEFINED_TAGS(playerid, dialogid, response, listitem, string:inp
 forward DIALOG_EDIT_CUSTOM_TAG(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_EDIT_CUSTOM_TAG(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!response) return ShowTagMenu(playerid);
+    if(!response) return ShowCustomTagOptionsMenu(playerid);
 
     if(!CanPlayerUseCustomTag(playerid))
     {
@@ -1226,7 +1257,7 @@ public DIALOG_EDIT_CUSTOM_TAG(playerid, dialogid, response, listitem, string:inp
     {
         va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid Custom Tag. Use %d to %d normal characters - colour codes and special symbols are not allowed.",
             CUSTOM_TAG_MIN_LEN, CUSTOM_TAG_MAX_LEN);
-        return ShowTagMenu(playerid);
+        return ShowCustomTagOptionsMenu(playerid);
     }
 
     ApplyCustomTag(playerid, cleanTag);
@@ -1259,10 +1290,14 @@ public OnPlayerTournamentTagsLoaded(playerid)
     if(rows == 0)
     {
         new title[64] = "{MAIN}Tournament Tags";
+        new body[384] =
+            "{FFFFFF}You have not won any tournament tags yet!\n\n"\
+            "{MAIN}\x95 {B4B5B7}Competitions: {FFFFFF}Compete in official server tournaments\n"\
+            "{MAIN}\x95 {B4B5B7}Rewards: {FFFFFF}Earn exclusive champion tags and prizes";
+
         format_MainColor(playerid, title);
-        return Dialog_ShowCallback(playerid, using public DIALOG_NO_TOURNEY_TAGS<iiiis>, DIALOG_STYLE_MSGBOX, title,
-            "{FFFFFF}You have not won any tournament tags yet!\n\n{BEBEBE}Compete and win official tournaments to earn exclusive champion tags.",
-            "Back", "");
+        format_MainColor(playerid, body);
+        return Dialog_ShowCallback(playerid, using public DIALOG_NO_TOURNEY_TAGS<iiiis>, DIALOG_STYLE_MSGBOX, title, body, "Back", "");
     }
 
     new listStr[2048];
@@ -1280,7 +1315,7 @@ public OnPlayerTournamentTagsLoaded(playerid)
             listStr,
             tTag,
             tTourney,
-            isEquipped ? "{23C552}[Equipped]" : "{00B6F6}[Equip]");
+            isEquipped ? "{23C552}[Equipped]" : "{90C3D4}[Equip]");
     }
 
     new title[64] = "{MAIN}My Tournament Tags";
@@ -1387,13 +1422,13 @@ stock ShowTagMenu(playerid)
     if(User[playerid][customTag][0] != '\0')
         format(customPreview, sizeof(customPreview), "{FF4500}%s", User[playerid][customTag]);
     else
-        format(customPreview, sizeof(customPreview), "{B4B5B7}(None)");
+        format(customPreview, sizeof(customPreview), "{BEBEBE}(None)");
 
     new customStatus[32];
     if(!CanPlayerUseCustomTag(playerid) && User[playerid][customTag][0] == '\0')
         format(customStatus, sizeof(customStatus), "{B4B5B7}[No Access]");
     else if(User[playerid][customTag][0] == '\0')
-        format(customStatus, sizeof(customStatus), "{B4B5B7}[Configure]");
+        format(customStatus, sizeof(customStatus), "{90C3D4}[Configure]");
     else
         format(customStatus, sizeof(customStatus), "%s", User[playerid][hideCustomTag] ? "{FF6347}[Hidden]" : "{23C552}[Visible]");
 
@@ -1406,12 +1441,12 @@ stock ShowTagMenu(playerid)
     if(CanPlayerUseCustomTag(playerid))
     {
         g_PlayerTagMenu[playerid][count++] = TAG_TYPE_EDIT_CUSTOM;
-        format(tagList, sizeof(tagList), "%s{MAIN}Configure Custom Tag\t{FFFFFF}Preset or Custom\t{90C3D4}[Configure]\n", tagList);
+        format(tagList, sizeof(tagList), "%s{MAIN}Configure Custom Tag\t{BEBEBE}Presets or Custom Text\t{90C3D4}[Configure]\n", tagList);
     }
 
     // 6. Manage Tournament Tags
     g_PlayerTagMenu[playerid][count++] = TAG_TYPE_TOURNAMENT;
-    format(tagList, sizeof(tagList), "%s{MAIN}Manage Tournament Tags\t{FFFFFF}Select won tags\t{90C3D4}[Select]\n", tagList);
+    format(tagList, sizeof(tagList), "%s{MAIN}Tournament Tags\t{BEBEBE}Manage won champion tags\t{90C3D4}[Select]\n", tagList);
 
     g_PlayerTagMenuCount[playerid] = count;
 
