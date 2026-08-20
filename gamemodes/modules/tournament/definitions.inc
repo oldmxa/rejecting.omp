@@ -103,7 +103,6 @@ new const g_TourneyWeaponSets[][e_TOURNEY_WEAPON_INFO] =
     {"Deagle + MP5",                   WEAPON_DEAGLE, 250, WEAPON_MP5, 300, 0, 0, 0, 0}
 };
 
-// Custom Arenas Information (Indices 68 to 72 in arenaData)
 new const g_TourneyCustomArenaNames[MAX_TOURNEY_CUSTOM_ARENAS][32] =
 {
     "Chinese Garden",
@@ -112,6 +111,11 @@ new const g_TourneyCustomArenaNames[MAX_TOURNEY_CUSTOM_ARENAS][32] =
     "Urbex",
     "Zoo"
 };
+
+#assert MAX_TOURNEY_CUSTOM_ARENAS == sizeof(g_TourneyCustomArenaNames)
+#assert MAX_TOURNEY_SERVER_ARENAS + MAX_TOURNEY_CUSTOM_ARENAS == MAX_ZONES
+#assert MAX_TOURNEY_DUEL_ARENAS == sizeof(DuelS_ArenaNames)
+#assert MAX_TOURNEY_SLOTS <= MAX_TOURNEY_MATCHES
 
 // Tournament Configuration & Global State
 enum e_TOURNAMENT_DATA

@@ -73,6 +73,8 @@ new const arenaData[MAX_ZONES][arenaa] =
 	{"Zoo",            {3466.0, -1019.0, 3537.0, -972.0},  ARENA_CATEGORY_CUSTOM, 1000.0, 0}
 };
 
+#assert MAX_ZONES == sizeof(arenaData)
+
 new Iterator:ArenaCategory<MAX_ARENA_CATEGORIES, MAX_ZONES>;
 
 createZones()

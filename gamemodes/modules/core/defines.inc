@@ -121,6 +121,7 @@
 #define MAX_ZONES 71
 
 #define MAX_LINES 			6
+#define DEATH_LINE_LEN		128
 #define BACKGROUND_COLOR	"30"
 
 #define	ROUND_TIME_LOW_PLAYERS_COUNT	5

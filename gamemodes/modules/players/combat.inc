@@ -143,7 +143,7 @@ rSpree(killerid, playerid)
 
 RandomDeathMessages(killerid, playerid, reason)
 {
-	new newline[64], fullLine[64*6];
+	new newline[DEATH_LINE_LEN], fullLine[(DEATH_LINE_LEN + 1) * MAX_LINES];
 
 	new playerColorOne[20], playerColorTwo[20];
 	format(playerColorOne, sizeof playerColorOne, "%s", GetPlayerHudTag(killerid, false));
@@ -151,7 +151,7 @@ RandomDeathMessages(killerid, playerid, reason)
 
 	switch(reason)
 	{
-			case 8: format(newline, sizeof(newline), "~n~%sYou kataned %s%s ~n~",
+			case 8: format(newline, sizeof(newline), "~n~%sYou sliced %s%s ~n~",
 			playerColorOne, playerColorTwo, getPlayerName(playerid));
 
 			case 16: format(newline, sizeof(newline), "~n~%sYou bombed %s%s ~n~",
@@ -233,7 +233,7 @@ RandomDeathMessages(killerid, playerid, reason)
 	}
 
 	StringToCat[killerid][lines[killerid]][0] = EOS;
-	strcat(StringToCat[killerid][lines[killerid]], newline, 64 + 1);
+	strcat(StringToCat[killerid][lines[killerid]], newline, DEATH_LINE_LEN + 1);
 	lines[killerid]++;
 
 	for(new i = 0; i < lines[killerid]; i++)

@@ -587,7 +587,7 @@ new pickupWeapon[MAX_PICKUPSS];
 
 new msgdiscord[512], msgencoded[1024], stringdiscord[512]; // strings discord
 
-new StringToCat[MAX_PLAYERS][MAX_LINES][64+1];
+new StringToCat[MAX_PLAYERS][MAX_LINES][DEATH_LINE_LEN + 1];
 new lines[MAX_PLAYERS];
 
 enum coloringHud {
