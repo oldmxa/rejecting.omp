@@ -8,7 +8,7 @@
 #define MAX_TOURNEY_SLOTS            (32)
 #define MAX_TOURNEY_MATCHES          (32)
 #define MAX_TOURNEY_ROUNDS           (6)
-#define TOURNEY_VW_BASE              (70000)
+#define TOURNEY_VW_BASE              (90000)
 #define TOURNEY_COUNTDOWN_TIME       (5)
 #define TOURNEY_DEFAULT_ROUND_TIME   (90)
 #define TOURNEY_WO_COUNTDOWN_TIME    (30)

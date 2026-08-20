@@ -34,6 +34,7 @@ enum E_SAFEHOUSE
     sh_NextCharge,
     sh_LastCharge,
     sh_Status,
+    bool:sh_ExpiringShown,
 
     STREAMER_TAG_PICKUP:sh_Pickup,
     STREAMER_TAG_MAP_ICON:sh_MapIcon,

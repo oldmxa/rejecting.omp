@@ -140,7 +140,7 @@ public DIALOG_SAFE_MAIN(playerid, dialogid, response, listitem, string:inputtext
             if (!IsSafehouseLeader(playerid, index))
                 return ShowSafehouseDenied(playerid, "Only the clan leader can sell the safehouse.");
 
-            new refund = (SH_BUY_PRICE * SH_REFUND_PCT) / 100;
+            new refund = (SH_BUY_PRICE / 100) * SH_REFUND_PCT + ((SH_BUY_PRICE % 100) * SH_REFUND_PCT) / 100;
             new refundStr[36], vaultStr[36], totalStr[36];
             format(refundStr, sizeof(refundStr), "%s", FormatMoney(refund));
             format(vaultStr, sizeof(vaultStr), "%s", FormatMoney(SafehouseData[index][sh_Vault]));

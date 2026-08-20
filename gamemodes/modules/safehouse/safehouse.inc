@@ -50,6 +50,8 @@ public OnPlayerConnect(playerid)
     g_PlayerSafehousePrompt[playerid] = -1;
     g_PlayerSafehouseEdit[playerid] = -1;
     g_PlayerSafehouseCfg[playerid] = -1;
+    g_PlayerSafehouseEditField[playerid] = -1;
+    g_SafehouseEditCount[playerid] = 0;
 
     #if defined SH_OnPlayerConnect
         return SH_OnPlayerConnect(playerid);
@@ -72,6 +74,9 @@ public OnPlayerDisconnect(playerid, reason)
     g_PlayerInSafehouse[playerid] = -1;
     g_PlayerSafehousePrompt[playerid] = -1;
     g_PlayerSafehouseEdit[playerid] = -1;
+    g_PlayerSafehouseCfg[playerid] = -1;
+    g_PlayerSafehouseEditField[playerid] = -1;
+    g_SafehouseEditCount[playerid] = 0;
 
     #if defined SH_OnPlayerDisconnect
         return SH_OnPlayerDisconnect(playerid, reason);
@@ -134,54 +139,68 @@ public RestoreSafehouseSpawn(playerid)
     return 1;
 }
 
+static stock HandleSafehouseAltKey(playerid)
+{
+    if (!User[playerid][isLogged] || IsPlayerInAnyVehicle(playerid)) return 0;
+
+    new PLAYER_STATE:pState = GetPlayerState(playerid);
+    if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
+        return 0;
+
+    if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+    {
+        new index = g_PlayerInSafehouse[playerid];
+        if (IsPlayerInRangeOfPoint(playerid, 2.0,
+            SafehouseData[index][sh_IntX], SafehouseData[index][sh_IntY], SafehouseData[index][sh_IntZ]))
+        {
+            ExitSafehouse(playerid);
+        }
+        return 1;
+    }
+
+    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid) ||
+        IsPlayerInTournamentMatch(playerid) ||
+        g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive] ||
+        User[playerid][isFrozen] || User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
+        return 0;
+
+    new index = GetSafehouseAtPosition(playerid);
+    if (!IsValidSafehouseIndex(index)) return 0;
+
+    if (SafehouseData[index][sh_Status] != SAFEHOUSE_STATUS_OWNED)
+    {
+        ShowSafehouseBuyDialog(playerid, index);
+        return 1;
+    }
+
+    new bool:isMember = IsSafehouseMember(playerid, index);
+
+    if (!isMember && SafehouseData[index][sh_Password][0] == '\0')
+    {
+        SendClientMessage(playerid, -1, "%s", SH_LOCKED);
+        return 1;
+    }
+
+    if (IsPlayerInSafehouseCombat(playerid))
+    {
+        SendClientMessage(playerid, -1, "%s", SH_IN_COMBAT);
+        return 1;
+    }
+
+    if (!isMember && SafehouseData[index][sh_Password][0] != '\0')
+    {
+        ShowSafehousePasswordPrompt(playerid, index);
+        return 1;
+    }
+
+    EnterSafehouse(playerid, index);
+    return 1;
+}
+
 public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if (PRESSED(KEY_SECONDARY_ATTACK))
-    {
-        if (User[playerid][isLogged] && !IsPlayerInAnyVehicle(playerid))
-        {
-            new PLAYER_STATE:pState = GetPlayerState(playerid);
-            if (pState != PLAYER_STATE_NONE && pState != PLAYER_STATE_WASTED && pState != PLAYER_STATE_SPECTATING)
-            {
-                if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
-                {
-                    new index = g_PlayerInSafehouse[playerid];
-                    if (IsPlayerInRangeOfPoint(playerid, 2.0,
-                        SafehouseData[index][sh_IntX], SafehouseData[index][sh_IntY], SafehouseData[index][sh_IntZ]))
-                    {
-                        ExitSafehouse(playerid);
-                    }
-                    return 1;
-                }
-
-                if (GetPVarInt(playerid, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(playerid) &&
-                    !IsPlayerInTournamentMatch(playerid) &&
-                    !g_PlayerTraining[playerid][pTrain_Active] && !g_Practice[playerid][pracActive] &&
-                    !User[playerid][isFrozen] && !User[playerid][isSpectating] && playerSpecID[playerid] == INVALID_PLAYER_ID)
-                {
-                    new index = GetSafehouseAtPosition(playerid);
-                    if (IsValidSafehouseIndex(index))
-                    {
-                        if (SafehouseData[index][sh_Status] != SAFEHOUSE_STATUS_OWNED)
-                            return ShowSafehouseBuyDialog(playerid, index);
-
-                        new bool:isMember = IsSafehouseMember(playerid, index);
-
-                        if (!isMember && SafehouseData[index][sh_Password][0] == '\0')
-                            return SendClientMessage(playerid, -1, "%s", SH_LOCKED);
-
-                        if (IsPlayerInSafehouseCombat(playerid))
-                            return SendClientMessage(playerid, -1, "%s", SH_IN_COMBAT);
-
-                        if (!isMember && SafehouseData[index][sh_Password][0] != '\0')
-                            return ShowSafehousePasswordPrompt(playerid, index);
-
-                        return EnterSafehouse(playerid, index);
-                    }
-                }
-            }
-        }
-    }
+        HandleSafehouseAltKey(playerid);
 
     #if defined SH_OnPlayerKeyStateChange
         return SH_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);

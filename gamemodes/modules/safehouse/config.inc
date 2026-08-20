@@ -25,14 +25,18 @@
 // how often the server looks for due charges and expirations
 #define SAFEHOUSE_TICK_INTERVAL (60000)
 
-// property_green / property_locked
-#define SAFEHOUSE_PICKUP_FREE   (1273)
-#define SAFEHOUSE_PICKUP_OWNED  (1272)
+// property_green / property_locked / property_orange
+#define SAFEHOUSE_PICKUP_FREE     (1273)
+#define SAFEHOUSE_PICKUP_OWNED    (1272)
+#define SAFEHOUSE_PICKUP_EXPIRING (19523)
+
+#define SAFEHOUSE_EXPIRING_WINDOW (86400)
 #define SAFEHOUSE_VW_BASE       (70000)
 
 // radar_propertyG (green house) / radar_propertyR (red house)
-#define SAFEHOUSE_ICON_FREE     (31)
-#define SAFEHOUSE_ICON_OWNED    (32)
+#define SAFEHOUSE_ICON_FREE      (31)
+#define SAFEHOUSE_ICON_OWNED     (32)
+#define SAFEHOUSE_ICON_EXPIRING  (52)
 
 
 #define SAFEHOUSE_MAX_LEVEL     (5)

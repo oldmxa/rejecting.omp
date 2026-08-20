@@ -222,6 +222,7 @@ stock ResetSafehouse(index)
     SafehouseData[index][sh_NextCharge] = 0;
     SafehouseData[index][sh_LastCharge] = 0;
     SafehouseData[index][sh_Status] = SAFEHOUSE_STATUS_AVAILABLE;
+    SafehouseData[index][sh_ExpiringShown] = false;
     return 1;
 }
 
@@ -249,6 +250,38 @@ stock DestroySafehousePickup(index)
     return 1;
 }
 
+stock bool:IsSafehouseExpiring(index)
+{
+    if (!IsValidSafehouseIndex(index)) return false;
+    if (SafehouseData[index][sh_Status] != SAFEHOUSE_STATUS_OWNED) return false;
+    if (SafehouseData[index][sh_ExpiresAt] <= 0) return false;
+
+    new left = SafehouseData[index][sh_ExpiresAt] - gettime();
+    return (left > 0 && left <= SAFEHOUSE_EXPIRING_WINDOW);
+}
+
+stock GetSafehousePickupModel(index)
+{
+    if (SafehouseData[index][sh_Status] != SAFEHOUSE_STATUS_OWNED)
+        return SAFEHOUSE_PICKUP_FREE;
+
+    if (IsSafehouseExpiring(index))
+        return SAFEHOUSE_PICKUP_EXPIRING;
+
+    return SAFEHOUSE_PICKUP_OWNED;
+}
+
+stock GetSafehouseMapIcon(index)
+{
+    if (SafehouseData[index][sh_Status] != SAFEHOUSE_STATUS_OWNED)
+        return SAFEHOUSE_ICON_FREE;
+
+    if (IsSafehouseExpiring(index))
+        return SAFEHOUSE_ICON_EXPIRING;
+
+    return SAFEHOUSE_ICON_OWNED;
+}
+
 stock RefreshSafehousePickup(index)
 {
     if (!IsValidSafehouseIndex(index)) return 0;
@@ -265,10 +298,12 @@ stock RefreshSafehousePickup(index)
 
     new bool:owned = (SafehouseData[index][sh_Status] == SAFEHOUSE_STATUS_OWNED);
 
+    SafehouseData[index][sh_ExpiringShown] = IsSafehouseExpiring(index);
+
     SafehouseData[index][sh_Pickup] = CreateDynamicPickup(
-        owned ? SAFEHOUSE_PICKUP_OWNED : SAFEHOUSE_PICKUP_FREE, 1, x, y, z, -1);
+        GetSafehousePickupModel(index), 1, x, y, z, -1);
     SafehouseData[index][sh_MapIcon] = CreateDynamicMapIcon(x, y, z,
-        owned ? SAFEHOUSE_ICON_OWNED : SAFEHOUSE_ICON_FREE,
+        GetSafehouseMapIcon(index),
         0, -1, -1, -1, SH_ICON_DISTANCE, MAPICON_LOCAL);
 
     new interiorName[24];
@@ -414,7 +449,7 @@ stock SellSafehouse(playerid, index)
     if (!IsSafehouseLeader(playerid, index))
         return SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Only the clan leader can sell the safehouse.");
 
-    new refund = (SH_BUY_PRICE * SH_REFUND_PCT) / 100;
+    new refund = (SH_BUY_PRICE / 100) * SH_REFUND_PCT + ((SH_BUY_PRICE % 100) * SH_REFUND_PCT) / 100;
     refund += SafehouseData[index][sh_Vault];
 
     GivePlayerMoney(playerid, refund);
@@ -453,6 +488,7 @@ stock ReleaseSafehouse(index, const reason[])
     SafehouseData[index][sh_NextCharge] = 0;
     SafehouseData[index][sh_LastCharge] = 0;
     SafehouseData[index][sh_Status] = SAFEHOUSE_STATUS_AVAILABLE;
+    SafehouseData[index][sh_ExpiringShown] = false;
     ApplySafehouseLevel(index, 1);
 
     SaveSafehouse(index);
@@ -673,7 +709,21 @@ public SafehouseTick()
         }
 
         if (SafehouseData[i][sh_NextCharge] > 0 && timestamp >= SafehouseData[i][sh_NextCharge])
+        {
             ProcessSafehouseCharge(i);
+            continue;
+        }
+
+        if (IsSafehouseExpiring(i) != SafehouseData[i][sh_ExpiringShown])
+        {
+            RefreshSafehousePickup(i);
+
+            if (SafehouseData[i][sh_ExpiringShown])
+            {
+                SendSafehouseClanMessage(i, SAFEHOUSE_PREFIX"Less than {F3230E}24 hours{FFFFFF} left on the safehouse contract. Renew it before it expires.");
+                LogSafehouse(i, INVALID_PLAYER_ID, "expiring", "less than 24h left on the contract");
+            }
+        }
     }
     return 1;
 }
