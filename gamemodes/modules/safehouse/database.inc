@@ -197,7 +197,7 @@ public OnSafehousesLoad()
     return 1;
 }
 
-stock DeleteSafehouseRow(index)
+stock DeleteSafehouseRow(index, playerid = INVALID_PLAYER_ID)
 {
     if (!IsValidSafehouseIndex(index) || dbHandle == MYSQL_INVALID_HANDLE) return 0;
     if (SafehouseData[index][sh_SQLID] <= 0) return 0;
@@ -205,7 +205,43 @@ stock DeleteSafehouseRow(index)
     new query[128];
     mysql_format(dbHandle, query, sizeof(query),
         "DELETE FROM `safehouses` WHERE `id` = %d", SafehouseData[index][sh_SQLID]);
-    mysql_tquery(dbHandle, query);
+    mysql_tquery(dbHandle, query, "OnSafehouseDeleted", "ii", index, playerid);
+    return 1;
+}
+
+public OnSafehouseDeleted(index, playerid)
+{
+    if (!IsValidSafehouseIndex(index)) return 1;
+
+    new bool:notify = (playerid != INVALID_PLAYER_ID && IsPlayerConnected(playerid));
+
+    if (cache_affected_rows() <= 0)
+    {
+        if (notify)
+        {
+            va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The database did not delete the safehouse in {MAIN}%s{FFFFFF}.", arenaData[index][arenaName]);
+            ShowSafehouseEditMenu(playerid);
+        }
+        return 1;
+    }
+
+    LogSafehouse(index, playerid, "admin_delete", arenaData[index][arenaName]);
+
+    foreach (new i : Player)
+    {
+        if (g_PlayerInSafehouse[i] == index)
+            ExitSafehouse(i);
+    }
+
+    ResetSafehouse(index);
+
+    if (notify)
+    {
+        va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Safehouse in {MAIN}%s{FFFFFF} deleted, the zone is free again.", arenaData[index][arenaName]);
+
+        g_PlayerSafehouseEdit[playerid] = -1;
+        ShowSafehouseAdminMenu(playerid);
+    }
     return 1;
 }
 

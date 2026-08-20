@@ -7,6 +7,7 @@ forward InitSafehouseSystem();
 forward OnSafehousesLoad();
 forward OnSafehouseConfigLoad();
 forward OnSafehouseInserted(index, playerid);
+forward OnSafehouseDeleted(index, playerid);
 forward SafehouseTick();
 forward RestoreSafehouseSpawn(playerid);
 

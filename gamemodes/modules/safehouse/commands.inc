@@ -26,7 +26,7 @@ enum
 
 stock IsSafehouseAdmin(playerid)
 {
-    return (User[playerid][adminLevel] >= 5 || IsPlayerAdmin(playerid)) ? 1 : 0;
+    return (User[playerid][adminLevel] >= MAX_ADMIN_LEVEL && IsPlayerAdmin(playerid)) ? 1 : 0;
 }
 
 stock ShowSafehouseAdminMenu(playerid)
@@ -336,7 +336,7 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (!IsSafehouseAdmin(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need Admin Level 5 or RCON to use this command.");
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need Admin Level 5 and RCON to use this command.");
 
     CheckAdminAuth(playerid);
 
@@ -396,6 +396,11 @@ stock ShowSafehouseEditMenu(playerid)
 
     strcat(buf, "{23C552}Teleport here\t{BEBEBE}Go to the exterior position\n");
     strcat(buf, "{FFFFFF}Rebuild pickup\t{BEBEBE}Recreate pickup, icon and label\n");
+
+    if (SafehouseData[index][sh_Status] == SAFEHOUSE_STATUS_OWNED)
+        strcat(buf, "{F3230E}Delete safehouse\t{BEBEBE}Blocked, a clan owns this safehouse\n");
+    else
+        strcat(buf, "{F3230E}Delete safehouse\t{BEBEBE}Remove the row and free the zone\n");
 
     format_MainColor(playerid, buf);
 
@@ -547,12 +552,12 @@ public DIALOG_SAFE_DELETE(playerid, dialogid, response, listitem, string:inputte
     if (SafehouseData[index][sh_Status] == SAFEHOUSE_STATUS_OWNED)
         return ShowSafehouseEditMenu(playerid);
 
-    LogSafehouse(index, playerid, "admin_delete", arenaData[index][arenaName]);
-    DeleteSafehouseRow(index);
-    ResetSafehouse(index);
+    if (!DeleteSafehouseRow(index, playerid))
+    {
+        SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The database is offline. Try again once the connection is back.");
+        return ShowSafehouseEditMenu(playerid);
+    }
 
-    va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Safehouse in {MAIN}%s{FFFFFF} deleted, the zone is free again.", arenaData[index][arenaName]);
-
-    g_PlayerSafehouseEdit[playerid] = -1;
-    return ShowSafehouseAdminMenu(playerid);
+    va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Deleting the safehouse in {MAIN}%s{FFFFFF}...", arenaData[index][arenaName]);
+    return 1;
 }
