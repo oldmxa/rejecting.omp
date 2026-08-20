@@ -39,8 +39,8 @@
 #define NOT_SPAWNED_MSG             "{MAIN}[ERROR] {FFFFFF} You are not spawned."
 #define CANNOT_DO_THIS              "{MAIN}[ERROR] {FFFFFF} You cannot do this now."
 #define CANNOT_RESPAWN              "{MAIN}**{FFFFFF} You cannot respawn."
-#define IN_VEHICLE_ERROR            "{MAIN}**{FFFFFF} Use in the machine is prohibited!"
-#define IS_NOT_NUMERIC              "{MAIN}**{FFFFFF} Insert the number."
+#define IN_VEHICLE_ERROR            "{MAIN}**{FFFFFF}You cannot use this while inside a vehicle."
+#define IS_NOT_NUMERIC              "{MAIN}**{FFFFFF}Enter a valid number."
 #define KEEP_CALM_MSG               "{MAIN}[ERROR] {FFFFFF}Please wait %d seconds."
 #define HEALTH_ERROR_MSG            "{MAIN}[ERROR] {FFFFFF} You need at least %d health"
 #define LOW_HEALTH_ERROR            "{MAIN}[ERROR] {FFFFFF} You need to have full health to change mode."
@@ -84,10 +84,10 @@
 
 // LOUNGE
 
-#define AFK_MSG_FIRST               ""COL_GRAY"[LNG] %s went to rest his fingers (/lounge)"
+#define AFK_MSG_FIRST               ""COL_GRAY"[LNG] %s went to rest their fingers (/lounge)"
 #define LEFT_LOUNGE_MSG             ""COL_GRAY"[LNG] You left the lounge."
 #define AFK_MSG_2                   ""COL_GRAY"[LNG] You can teleport. Use {b4b3b3}ESC > maps"
-#define AFK_MSG_3                   ""COL_GRAY"[LNG] Lounge comands (get gun, car etc): {b4b3b3}/lcmds"
+#define AFK_MSG_3                   ""COL_GRAY"[LNG] Lounge commands (get gun, car etc): {b4b3b3}/lcmds"
 #define AFK_MSG_4                   ""COL_GRAY"[LNG] Server commands /cmds"
 #define AFK_ERROR_MSG               "{MAIN}**{FFFFFF} To leave the lounge type {MAIN}/lounge"
 #define NEED_BE_AFK                 "{MAIN}**{FFFFFF} You need to be in the lounge to use this command"
@@ -112,11 +112,11 @@
 #define CHANGED_ARENA_MSG           ADM_TAG_NORM"%s changed to arena %s (ID: "COL_BEIGE"%d"COL_ADM_CMD")"
 #define RANDOM_CHANGED_ARENA_MSG    ADM_TAG_NORM"%s randomly changed arena to %s (ID: "COL_BEIGE"%d"COL_ADM_CMD")"
 #define CHANGEARENA_DELAY           "{MAIN}**{FFFFFF} Change arena command is delayed, please wait %s or use "COL_GYELLOW"/queuearena."
-#define QUEUED_ARENA                "{MAIN}**{FFFFFF} Arena {MAIN}%s (ID: %d) {FFFFFF}is queued successfully, please wait please wait the current arena end."
+#define QUEUED_ARENA                "{MAIN}**{FFFFFF}Arena {MAIN}%s (ID: %d) {FFFFFF}was queued successfully, please wait for the current arena to end."
 #define NOT_VALID_ARENA             "{MAIN}[ERROR] {FFFFFF}The specified value exceeds the maximum value %d"
 #define ARENA_ENDED_MSG             "{MAIN}[LOCATION %d] {FFFFFF}Current arena {MAIN}%s (ID: %d) {FFFFFF}has ended, the next one is {MAIN}%s (ID: %d)."
 #define ARENA_START_MSG             "{MAIN}[INFO] {FFFFFF}Arena {MAIN}%s #%d {FFFFFF}has started!"
-#define ARENA_CLAN_DOMINATED        "{MAIN}[INFO]{FFFFFF}The arena {MAIN}%s #%d {FFFFFF}is dominated by the clan %s."
+#define ARENA_CLAN_DOMINATED        "{MAIN}[INFO] {FFFFFF}The arena {MAIN}%s #%d {FFFFFF}is dominated by the clan %s."
 #define ARENA_JUST_PLAYED           "{MAIN}[ERROR] {FFFFFF}%s {FFFFFF}was the last arena played. Wait for the current one to finish."
 #define ARENA_R2_REQUIRED_ERROR     "{MAIN}[ERROR] {FFFFFF}This arena requires an R2+ client (SA-MP R2/R3/R4/R5 or open.mp). Update your client to enter."
 #define ARENA_FPS_LOCK_ERROR        "{MAIN}[ERROR] {FFFFFF}This arena requires your FPS locked at exactly %d. Your current FPS is %d."
@@ -135,7 +135,7 @@
 
 #define WEEKLY_KILLS                ""COL_PINK"[Kills Rank] {MAIN}%s {FFFFFF}placed {MAIN}1st {FFFFFF}in the weekly rank with {MAIN}%d kills {FFFFFF}and was rewarded."
 #define WEEKLY_DAMAGE               ""COL_PINK"[Damage Rank] {MAIN}%s {FFFFFF}placed {MAIN}1st {FFFFFF}in the weekly rank with {MAIN}%d damage {FFFFFF}and was rewarded."
-#define WEEKLY_RESET                ""COL_PINK"[Weekly Ranks] {FFFFFF} Weekly ranks have been reseted!"
+#define WEEKLY_RESET                ""COL_PINK"[Weekly Ranks] {FFFFFF}Weekly ranks have been reset!"
 
 // ACHIEVEMENTS & LEVEL PROGRESSION
 
@@ -167,7 +167,7 @@
 #define DC_COOLDOWN                 "{MAIN}[ERROR] {FFFFFF}You are blocked from using this command. Please wait a few minutes."
 #define DC_LINKSUCCESS              "{MAIN}[DISCORD] {FFFFFF}Your account is now linked to Discord!"
 #define DC_LINKED                   "{MAIN}[ERROR] {FFFFFF}Your account is already linked to a Discord user (%s#%s)."
-#define DC_NOTLINKED                "{MAIN}[ERROR] {FFFFFF}Your account is no linked to a Discord user."
+#define DC_NOTLINKED                "{MAIN}[ERROR] {FFFFFF}Your account is not linked to a Discord user."
 #define DC_UNLINKSUCESS             "{MAIN}[DISCORD] {FFFFFF}You unlinked your Discord account successfully."
 #define DC_INUSE                    "{MAIN}[ERROR] {FFFFFF}That Discord user is already linked to another account."
 #define DC_LEFT                     "{MAIN}[DISCORD] {FFFFFF}You left our Discord server and your account was unlinked."
@@ -181,13 +181,13 @@
 
 #define NOT_ADMIN_MSG               "{MAIN}[ERROR] {FFFFFF} You need to be admin to use this command!"
 #define NEED_ADMIN_LEVEL            "{MAIN}[ERROR] {FFFFFF} You need to be a higher admin level."
-#define SUPERIOR_RIGHTS             "{MAIN}**{FFFFFF} You cant use admin cmds against an administrator with a higher/equal level than you."
-#define SUPERIOR_RIGHTS_DISCORD     "** You cant use admin cmds against an administrator with a higher/equal level than you."
+#define SUPERIOR_RIGHTS             "{MAIN}**{FFFFFF} You can't use admin commands against an administrator with a level equal to or higher than yours."
+#define SUPERIOR_RIGHTS_DISCORD     "** You can't use admin commands against an administrator with a level equal to or higher than yours."
 
 // --- Staff Promotion / Demotion ---
 #define CREATE_ADMIN_HELP           "{MAIN}[ERROR] {FFFFFF}/setadmin [name/id] [level]"
 #define CREATE_ADMIN_HELP2          "{MAIN}[ERROR] {FFFFFF}The admin level needs to be between 0 and 5."
-#define CREATE_ADMIN_HELP3          "{MAIN}[ERROR] {FFFFFF}The level cannot be higher/equal than yours."
+#define CREATE_ADMIN_HELP3          "{MAIN}[ERROR] {FFFFFF}The level cannot be equal to or higher than yours."
 #define REMOVED_ADMIN_MSG           ADM_TAG_NORM"You removed admin privileges from %s!"
 #define REMOVED_ADMIN_MSG_PLAYER    ADM_TAG_NORM"%s removed your admin privileges!"
 #define CREATED_ADMIN_MSG           ADM_TAG_NORM"You promoted %s to admin level %d."
@@ -208,14 +208,14 @@
 // --- Spectate ---
 #define SPEC_HELP                   "{MAIN}[ERROR] {FFFFFF}/spec [name/id]"
 #define SPEC_HELP2                  "{MAIN}**{FFFFFF} You can't watch yourself"
-#define NO_MORE_PLAYERS             "{MAIN}**{FFFFFF} No more players to spectate on this direction."
-#define NO_SPEC_MODE                "{MAIN}**{FFFFFF} You're not spectating anyone."
-#define IN_SPEC_MODE                "{MAIN}**{FFFFFF} You're in spec mode type /specoff to left."
+#define NO_MORE_PLAYERS             "{MAIN}**{FFFFFF}No more players to spectate in this direction."
+#define NO_SPEC_MODE                "{MAIN}**{FFFFFF}You're not spectating anyone."
+#define IN_SPEC_MODE                "{MAIN}**{FFFFFF}You're in spectate mode. Type {MAIN}/specoff {FFFFFF}to leave."
 
 // --- Mute ---
 #define MUTE_HELP                   "{MAIN}[ERROR] {FFFFFF}/mute [name/id] [minutes] [reason]"
 #define MUTE_HELP2                  "{MAIN}[ERROR] {FFFFFF}Enter a number between 1 and 500."
-#define MUTE_REASON                 ADM_TAG_PUN"%s (%d) muted %s (%d) for %d minutes. reason: %s"
+#define MUTE_REASON                 ADM_TAG_PUN"%s (%d) muted %s (%d) for %d minutes. Reason: %s"
 #define MUTED_PLAYER                ADM_TAG_PUN"%s (%d) muted you for %d minutes"
 #define UNMUTED_MSG                 ADM_TAG_NORM"Admin %s (%d) has unmuted you. Be more careful when using the chat!"
 #define UNMUTED_AUTO                ADM_TAG_NORM"** Your mute time is up. Be more careful when using the chat!"
@@ -225,31 +225,31 @@
 
 // --- Kick ---
 #define KICK_HELP                   "{MAIN}[ERROR] {FFFFFF}/kick [ID] [reason] - Kick player from the server."
-#define KICK_HELP2                  "{MAIN}[ERROR] {FFFFFF} You can't kick an administrator with a higher/equal level than you."
+#define KICK_HELP2                  "{MAIN}[ERROR] {FFFFFF} You can't kick an administrator with a level equal to or higher than yours."
 #define KICK_NO_REASON              ADM_TAG_PUN"Admin %s kicked %s (%d)."
-#define KICK_REASON                 ADM_TAG_PUN"Admin %s kicked %s (%d). reason: %s"
+#define KICK_REASON                 ADM_TAG_PUN"Admin %s kicked %s (%d). Reason: %s"
 
 // --- Ban ---
-#define BAN_BANNED                  ""COL_ADM_PUNISH"[ACCOUNT] You're banned, make a review on our discord."
+#define BAN_BANNED                  ""COL_ADM_PUNISH"[ACCOUNT] You are banned. Open an appeal on our Discord."
 #define BAN_WHOBANNED               ""COL_ADM_PUNISH"The account %s was banned by admin %s, reason: %s, on %s, your unban was scheduled for %s. (GMT-03:00)"
-#define BAN_MISTAKE                 ""COL_ADM_PUNISH"If you think this is a mistake take a ss and try unban appeal on our discord"
+#define BAN_MISTAKE                 ""COL_ADM_PUNISH"If you think this is a mistake, take a screenshot and open an unban appeal on our Discord."
 #define BAN_DCLINK                  ""COL_DISCORD"rejectingflles.com"
 #define BAN_HELP                    "{MAIN}[ERROR] {FFFFFF}/ban [id] [hours] [reason] - Ban player."
 #define BAN_HELP2                   "{MAIN}**{FFFFFF} Enter a number between 1 and 9999."
-#define BAN_HELP3                   "{MAIN}**{FFFFFF} You can't ban an administrator with a higher/equal level than you."
+#define BAN_HELP3                   "{MAIN}**{FFFFFF} You can't ban an administrator with a level equal to or higher than yours."
 #define BAN_NO_REASON               ADM_TAG_PUN"Admin %s banned %s (%d)."
-#define BAN_REASON                  ADM_TAG_PUN"Admin %s (%d) banned %s for %d hours. The reason: %s"
+#define BAN_REASON                  ADM_TAG_PUN"Admin %s (%d) banned %s for %d hours. Reason: %s"
 #define BANOFF_HELP                 "{MAIN}[ERROR] {FFFFFF}/offban [name] [hours] [reason] - Ban player."
 #define UNBAN_HELP                  "{MAIN}[ERROR] {FFFFFF}/unban [player/ip]"
 #define UNBAN_MESSAGE               ADM_TAG_NORM"Admin "COL_WHITE"%s "COL_ADM_CMD"unbanned player "COL_WHITE"%s"COL_ADM_CMD"."
-#define BAN_TEMPREC_REASON          ADM_TAG_PUN"%s banned %s for %d hours. reason: %s"
-#define BAN_TEMPREC_MINUTES         ADM_TAG_PUN"5 minutes has passed. Post your review in our server."
+#define BAN_TEMPREC_REASON          ADM_TAG_PUN"%s banned %s for %d hours. Reason: %s"
+#define BAN_TEMPREC_MINUTES         ADM_TAG_PUN"5 minutes have passed. Post your recording on our Discord."
 #define BAN_TEMPREC_WHOBANNED       ADM_TAG_PUN"You were banned by %s, reason: %s. Your IP: %s."
 
 // --- open.mp launcher force ---
 #define FORCE_OMP_HELP              "{MAIN}[ERROR] {FFFFFF}/banomp [id] - Force player to open.mp launcher."
 #define FORCED_OMP_BAN              ADM_TAG_PUN"Admin %s forced open.mp launcher on %s"
-#define OMP_UNBAN                   ADM_TAG_NORM"The player "COL_WHITE"%s "COL_ADM_CMD"got open.mp unbanned."
+#define OMP_UNBAN                   ADM_TAG_NORM"The player "COL_WHITE"%s "COL_ADM_CMD"is no longer locked to the open.mp launcher."
 #define UNBAN_OMP_HELP              "{MAIN}[ERROR] {FFFFFF}/unbanomp [nick] - Unban a player that has been forced to play with open.mp launcher."
 
 // --- Network & Client Limits ---

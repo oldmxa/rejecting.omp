@@ -263,7 +263,7 @@ public UnBanOMP(adminid, admin[], player[])
 
 	else
 	{
-		SendClientMessage(adminid, -1, "{MAIN}**{FFFFFF} This player isnt open.mp Banned.");
+		SendClientMessage(adminid, -1, "{MAIN}**{FFFFFF} This player is not locked to the open.mp launcher.");
 	}
 
 	return true;

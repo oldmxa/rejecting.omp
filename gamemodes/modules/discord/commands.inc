@@ -696,12 +696,12 @@ DSLASH:setmoney(user, params[])
         ResetPlayerMoney(targetid);
         GivePlayerMoney(targetid, amount);
         User[targetid][playerMoney] = amount;
-        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Sua grana foi setada para %s.", FormatMoney(amount));
+        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Your money was set to %s.", FormatMoney(amount));
         
         mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `player_money` = %d WHERE `username` = '%e'", amount, target_nick);
         mysql_tquery(dbHandle, queryGlobal);
         
-        SendDiscordResponse(comandos, sprintf(":white_check_mark: Grana de **%s** setada para **%s**!", target_nick, FormatMoney(amount)));
+        SendDiscordResponse(comandos, sprintf(":white_check_mark: Money of **%s** set to **%s**!", target_nick, FormatMoney(amount)));
         return true;
     }
     return true;
