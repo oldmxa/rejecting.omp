@@ -5,12 +5,14 @@
 
 new const g_SafehouseLevels[SAFEHOUSE_MAX_LEVEL][E_SAFEHOUSE_LEVEL] =
 {
-    {"Burglary House 13", 0,       0,     5,  5,  140.3679,  1367.8837,  1083.8621, 0.0},
-    {"Burglary House 7",  500000,  11000,  10, 5,  227.7559,  1114.3844,  1080.9922, 0.0},
-    {"Safehouse 4",       1000000, 22000, 15, 10, 2261.0977, -1137.8833, 1050.6328, 0.0},
-    {"Johnson House",     1500000, 45000, 20, 3,  2496.0549, -1695.1749, 1014.7422, 0.0},
-    {"Unused Safe House", 3000000, 90000, 25, 12, 2323.7063, -1147.6509, 1050.7101, 0.0}
+    {"Angel Pine Trailer", 0,       0,     5,  2, 1.1853,   -3.2387,    999.4284,  87.5718},
+    {"Burglary House 1",   500000,  11000, 10, 3, 234.6087, 1187.8195,  1080.2578, 349.4844},
+    {"Burglary House 2",   1000000, 22000, 15, 2, 225.5707, 1240.0643,  1082.1406, 96.2852},
+    {"Burglary House 14",  1500000, 45000, 20, 6, 234.2826, 1065.2290,  1084.2101, 4.3864},
+    {"Below The Belt Gym", 3000000, 90000, 25, 7, 773.7318, -74.6957,   1000.6542, 5.2304}
 };
+
+#assert SAFEHOUSE_MAX_LEVEL == sizeof(g_SafehouseLevels)
 
 stock bool:IsValidSafehouseLevel(level)
 {

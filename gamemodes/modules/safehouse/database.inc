@@ -165,11 +165,18 @@ public OnSafehousesLoad()
         cache_get_value_name_int(r, "last_charge", SafehouseData[zoneid][sh_LastCharge]);
         cache_get_value_name_int(r, "status", SafehouseData[zoneid][sh_Status]);
 
-        if (!IsValidSafehouseLevel(SafehouseData[zoneid][sh_Level]))
+        if (SafehouseData[zoneid][sh_Level] > SAFEHOUSE_MAX_LEVEL)
+        {
+            SafehouseData[zoneid][sh_Level] = SAFEHOUSE_MAX_LEVEL;
+            ApplySafehouseLevel(zoneid, SAFEHOUSE_MAX_LEVEL);
+            SaveSafehouse(zoneid);
+        }
+        else if (!IsValidSafehouseLevel(SafehouseData[zoneid][sh_Level]))
+        {
             SafehouseData[zoneid][sh_Level] = 1;
+        }
 
 
-        // an owner that no longer exists leaves the safehouse dangling
         if (SafehouseData[zoneid][sh_Status] == SAFEHOUSE_STATUS_OWNED &&
             !IsValidClanID(SafehouseData[zoneid][sh_ClanID]))
         {

@@ -288,6 +288,8 @@ stock RefreshSafehousePickup(index)
 
     DestroySafehousePickup(index);
 
+    SafehouseData[index][sh_ExpiringShown] = IsSafehouseExpiring(index);
+
     if (!IsSafehouseZone(index) || !SafehouseExists(index)) return 0;
 
     new Float:x = SafehouseData[index][sh_ExtX];
@@ -297,8 +299,6 @@ stock RefreshSafehousePickup(index)
     if (z == 0.0) return 0;
 
     new bool:owned = (SafehouseData[index][sh_Status] == SAFEHOUSE_STATUS_OWNED);
-
-    SafehouseData[index][sh_ExpiringShown] = IsSafehouseExpiring(index);
 
     SafehouseData[index][sh_Pickup] = CreateDynamicPickup(
         GetSafehousePickupModel(index), 1, x, y, z, -1);
