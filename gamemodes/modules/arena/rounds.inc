@@ -202,6 +202,9 @@ public ChangeArena(location)
 
 	MySQL_TQueryInline(dbHandle, using inline ZoneClanMessage, "SELECT `clanid` FROM `zones` WHERE `zoneid` = %d", arenaInfo[location][arenaId]);
 
+	arenaInfo[location][roundMints] = RoundTime;
+	arenaInfo[location][isRunningArena] = true;
+
 	foreach(new i : Player)
 	{
 		if (User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i))
@@ -236,8 +239,6 @@ public ChangeArena(location)
 		playerArenaInfo[location][i][arenaHeadshots] = 0;
 	}
 
-	arenaInfo[location][roundMints] = RoundTime;
-	arenaInfo[location][isRunningArena] = true;
 	return true;
 }
 
@@ -595,6 +596,15 @@ spawnOnLocation(playerid)
 		KillTimer(SpawnProtectTimer[playerid]);
 		SpawnProtectTimer[playerid] = SetTimerEx("RestoreSpawnWorld", SPAWN_PROTECT_TIME, false, "i", playerid);
 	}
+
+	new location = User[playerid][locationId];
+
+	if(location != ARENA_AFK && !arenaInfo[location][isRunningArena])
+	{
+		TogglePlayerControllable(playerid, false);
+		GameTextForPlayer(playerid, "~r~ROUND FINISHED", 2000, 1);
+	}
+
 	return true;
 }
 

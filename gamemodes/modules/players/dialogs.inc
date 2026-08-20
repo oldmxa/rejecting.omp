@@ -1002,16 +1002,66 @@ enum
     TAG_TYPE_CLAN,
     TAG_TYPE_ADMIN,
     TAG_TYPE_CUSTOM,
-    TAG_TYPE_EDIT_CUSTOM
+    TAG_TYPE_EDIT_CUSTOM,
+    TAG_TYPE_TOURNAMENT
 };
 
-static g_PlayerTagMenu[MAX_PLAYERS][6];
+new const g_PredefinedTags[][] = {
+    "PRO PLAYER",
+    "LEGEND",
+    "LEGENDARY",
+    "DM KING",
+    "MONSTER",
+    "HEADSHOOTER",
+    "MYTH",
+    "BAD BOY",
+    "SUPREME",
+    "DOMINATOR",
+    "IMMORTAL",
+    "EXECUTOR"
+};
+
+static g_PlayerTagMenu[MAX_PLAYERS][8];
 static g_PlayerTagMenuCount[MAX_PLAYERS];
+
+#define CUSTOM_TAG_MIN_LEN  (2)
+#define CUSTOM_TAG_MAX_LEN  (16)
+#define CUSTOM_TAG_NO_PERM  "{MAIN}[ERROR] {FFFFFF}You must be VIP, Admin Level 5 or have special permission to use Custom Tags."
 
 stock ResetPlayerTagMenu(playerid)
 {
     g_PlayerTagMenuCount[playerid] = 0;
     return 1;
+}
+
+stock CanPlayerUseCustomTag(playerid)
+{
+    if(IsPlayerVip(playerid) || User[playerid][adminLevel] >= 5 || User[playerid][customTagPerm]) return true;
+    return false;
+}
+
+stock bool:SanitizeCustomTag(const input[], dest[], size = sizeof(dest))
+{
+    dest[0] = '\0';
+
+    new end = strlen(input) - 1, start = 0;
+    while(start <= end && input[start] == ' ') start++;
+    while(end >= start && input[end] == ' ') end--;
+
+    new outLen = end - start + 1;
+    if(outLen < CUSTOM_TAG_MIN_LEN || outLen > CUSTOM_TAG_MAX_LEN) return false;
+    if(outLen >= size) return false;
+
+    for(new i = start; i <= end; i++)
+    {
+        new c = input[i];
+        if(c < ' ' || c > '~') return false;
+        if(c == '{' || c == '}') return false;
+        if(c == '~') return false;
+    }
+
+    strmid(dest, input, start, end + 1, size);
+    return true;
 }
 
 stock SaveCustomTag(playerid)
@@ -1021,6 +1071,17 @@ stock SaveCustomTag(playerid)
         "UPDATE accounts SET custom_tag = '%e', hide_custom_tag = %d WHERE id = %d",
         User[playerid][customTag], User[playerid][hideCustomTag], User[playerid][user_sqlid]);
     mysql_tquery(dbHandle, query);
+    return 1;
+}
+
+stock ApplyCustomTag(playerid, const tag[])
+{
+    format(User[playerid][customTag], 32, "%s", tag);
+    User[playerid][hideCustomTag] = false;
+
+    SaveCustomTag(playerid);
+    SetClanColor(playerid);
+    va_SendClientMessage(playerid, -1, "{MAIN}[TAG] {FFFFFF}Your Custom Tag has been set to {FF4500}%s{FFFFFF}!", User[playerid][customTag]);
     return 1;
 }
 
@@ -1051,8 +1112,125 @@ stock ClearCustomTag(playerid)
 
     SaveCustomTag(playerid);
     SetClanColor(playerid);
-    SendClientMessage(playerid, -1, "{MAIN}[TAG] {FFFFFF}Your Tournament Tag has been unequipped.");
+    SendClientMessage(playerid, -1, "{MAIN}[TAG] {FFFFFF}Your Tag has been unequipped.");
     return 1;
+}
+
+stock ShowCustomTagOptionsMenu(playerid)
+{
+    if(!CanPlayerUseCustomTag(playerid))
+    {
+        SendClientMessage(playerid, -1, "%s", CUSTOM_TAG_NO_PERM);
+        return ShowTagMenu(playerid);
+    }
+
+    new options[256];
+    format(options, sizeof(options), "1. Choose from Predefined List\n2. Enter Custom Tag Text (Max %d Chars)\n3. Remove Custom Tag", CUSTOM_TAG_MAX_LEN);
+
+    new title[64] = "{MAIN}Custom Tag Options";
+    format_MainColor(playerid, title);
+
+    return Dialog_ShowCallback(playerid, using public DIALOG_CUSTOM_TAG_OPTIONS<iiiis>, DIALOG_STYLE_LIST, title, options, "Select", "Back");
+}
+
+static stock HandleCustomTagRemoval(playerid)
+{
+    if(User[playerid][customTag][0] == '\0')
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You do not have a Custom Tag set to remove.");
+        return ShowTagMenu(playerid);
+    }
+
+    ClearCustomTag(playerid);
+    return ShowTagMenu(playerid);
+}
+
+forward DIALOG_CUSTOM_TAG_OPTIONS(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_CUSTOM_TAG_OPTIONS(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response) return ShowTagMenu(playerid);
+
+    if(!CanPlayerUseCustomTag(playerid))
+    {
+        SendClientMessage(playerid, -1, "%s", CUSTOM_TAG_NO_PERM);
+        return ShowTagMenu(playerid);
+    }
+
+    switch(listitem)
+    {
+        case 0: // Predefined list
+        {
+            new listStr[512] = "";
+            for(new i = 0; i < sizeof(g_PredefinedTags); i++)
+            {
+                format(listStr, sizeof(listStr), "%s%d. %s\n", listStr, i + 1, g_PredefinedTags[i]);
+            }
+            new title[64] = "{MAIN}Predefined Tags";
+            format_MainColor(playerid, title);
+            return Dialog_ShowCallback(playerid, using public DIALOG_PREDEFINED_TAGS<iiiis>, DIALOG_STYLE_LIST, title, listStr, "Select", "Back");
+        }
+        case 1: // Custom input
+        {
+            new title[64] = "{MAIN}Custom Tag";
+            format_MainColor(playerid, title);
+
+            new body[192];
+            format(body, sizeof(body), "{FFFFFF}Enter your Custom Tag text (%d to %d characters):\n{B4B5B7}(Letters, numbers and basic symbols only - no brackets [] required)",
+                CUSTOM_TAG_MIN_LEN, CUSTOM_TAG_MAX_LEN);
+
+            return Dialog_ShowCallback(playerid, using public DIALOG_EDIT_CUSTOM_TAG<iiiis>, DIALOG_STYLE_INPUT, title, body, "Save", "Back");
+        }
+        case 2: // Remove
+        {
+            return HandleCustomTagRemoval(playerid);
+        }
+    }
+    return 1;
+}
+
+forward DIALOG_PREDEFINED_TAGS(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_PREDEFINED_TAGS(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response) return ShowCustomTagOptionsMenu(playerid);
+
+    if(!CanPlayerUseCustomTag(playerid))
+    {
+        SendClientMessage(playerid, -1, "%s", CUSTOM_TAG_NO_PERM);
+        return ShowTagMenu(playerid);
+    }
+
+    if(listitem < 0 || listitem >= sizeof(g_PredefinedTags)) return ShowTagMenu(playerid);
+
+    ApplyCustomTag(playerid, g_PredefinedTags[listitem]);
+    return ShowTagMenu(playerid);
+}
+
+forward DIALOG_EDIT_CUSTOM_TAG(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_EDIT_CUSTOM_TAG(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response) return ShowTagMenu(playerid);
+
+    if(!CanPlayerUseCustomTag(playerid))
+    {
+        SendClientMessage(playerid, -1, "%s", CUSTOM_TAG_NO_PERM);
+        return ShowTagMenu(playerid);
+    }
+
+    if(isnull(inputtext) || strcmp(inputtext, "none", true) == 0)
+    {
+        return HandleCustomTagRemoval(playerid);
+    }
+
+    new cleanTag[32];
+    if(!SanitizeCustomTag(inputtext, cleanTag, sizeof(cleanTag)))
+    {
+        va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid Custom Tag. Use %d to %d normal characters - colour codes and special symbols are not allowed.",
+            CUSTOM_TAG_MIN_LEN, CUSTOM_TAG_MAX_LEN);
+        return ShowTagMenu(playerid);
+    }
+
+    ApplyCustomTag(playerid, cleanTag);
+    return ShowTagMenu(playerid);
 }
 
 stock SaveWonTournamentTag(userid, const tag[], const tourneyName[])
@@ -1203,7 +1381,7 @@ stock ShowTagMenu(playerid)
             User[playerid][hideAdminTag] ? "{FF6347}[Hidden]" : "{23C552}[Visible]");
     }
 
-    // 4. Tournament Tag
+    // 4. Custom Tag
     g_PlayerTagMenu[playerid][count++] = TAG_TYPE_CUSTOM;
     new customPreview[64];
     if(User[playerid][customTag][0] != '\0')
@@ -1212,18 +1390,27 @@ stock ShowTagMenu(playerid)
         format(customPreview, sizeof(customPreview), "{B4B5B7}(None)");
 
     new customStatus[32];
-    if(User[playerid][customTag][0] == '\0')
-        format(customStatus, sizeof(customStatus), "{B4B5B7}[Select Tag]");
+    if(!CanPlayerUseCustomTag(playerid) && User[playerid][customTag][0] == '\0')
+        format(customStatus, sizeof(customStatus), "{B4B5B7}[No Access]");
+    else if(User[playerid][customTag][0] == '\0')
+        format(customStatus, sizeof(customStatus), "{B4B5B7}[Configure]");
     else
         format(customStatus, sizeof(customStatus), "%s", User[playerid][hideCustomTag] ? "{FF6347}[Hidden]" : "{23C552}[Visible]");
 
-    format(tagList, sizeof(tagList), "%s{FFFFFF}Tournament Tag\t%s\t%s\n",
+    format(tagList, sizeof(tagList), "%s{FFFFFF}Custom Tag\t%s\t%s\n",
         tagList,
         customPreview,
         customStatus);
 
-    // 5. Manage Tournament Tags
-    g_PlayerTagMenu[playerid][count++] = TAG_TYPE_EDIT_CUSTOM;
+    // 5. Configure Custom Tag
+    if(CanPlayerUseCustomTag(playerid))
+    {
+        g_PlayerTagMenu[playerid][count++] = TAG_TYPE_EDIT_CUSTOM;
+        format(tagList, sizeof(tagList), "%s{MAIN}Configure Custom Tag\t{FFFFFF}Preset or Custom\t{90C3D4}[Configure]\n", tagList);
+    }
+
+    // 6. Manage Tournament Tags
+    g_PlayerTagMenu[playerid][count++] = TAG_TYPE_TOURNAMENT;
     format(tagList, sizeof(tagList), "%s{MAIN}Manage Tournament Tags\t{FFFFFF}Select won tags\t{90C3D4}[Select]\n", tagList);
 
     g_PlayerTagMenuCount[playerid] = count;
@@ -1301,19 +1488,34 @@ public DIALOG_TAG_MANAGER(playerid, dialogid, response, listitem, string:inputte
         }
         case TAG_TYPE_CUSTOM:
         {
+            if(!CanPlayerUseCustomTag(playerid) && User[playerid][customTag][0] == '\0')
+            {
+                SendClientMessage(playerid, -1, "%s", CUSTOM_TAG_NO_PERM);
+                return ShowTagMenu(playerid);
+            }
+
             if(User[playerid][customTag][0] == '\0')
             {
-                return ShowPlayerTournamentTagsDialog(playerid);
+                return ShowCustomTagOptionsMenu(playerid);
             }
 
             User[playerid][hideCustomTag] = !User[playerid][hideCustomTag];
             SaveCustomTag(playerid);
             SetClanColor(playerid);
 
-            va_SendClientMessage(playerid, -1, "{MAIN}[TAG] {FFFFFF}Tournament Tag is now %s{FFFFFF}.", User[playerid][hideCustomTag] ? "{FF6347}Hidden" : "{23C552}Visible");
+            va_SendClientMessage(playerid, -1, "{MAIN}[TAG] {FFFFFF}Custom Tag is now %s{FFFFFF}.", User[playerid][hideCustomTag] ? "{FF6347}Hidden" : "{23C552}Visible");
             ShowTagMenu(playerid);
         }
         case TAG_TYPE_EDIT_CUSTOM:
+        {
+            if(!CanPlayerUseCustomTag(playerid))
+            {
+                SendClientMessage(playerid, -1, "%s", CUSTOM_TAG_NO_PERM);
+                return ShowTagMenu(playerid);
+            }
+            return ShowCustomTagOptionsMenu(playerid);
+        }
+        case TAG_TYPE_TOURNAMENT:
         {
             return ShowPlayerTournamentTagsDialog(playerid);
         }
