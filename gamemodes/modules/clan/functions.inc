@@ -257,6 +257,7 @@ stock LeaveClan(playerid)
 
     User[playerid][clanID] = -1;
     User[playerid][clanRole] = -1;
+    User[playerid][spawnSafehouse] = false;
 
     SetClanColor(playerid);
     UpdatePlayerData(playerid);
@@ -283,6 +284,7 @@ stock ChangePlayerRank(playerid, clanid, slot, rank)
             va_SendClientMessage(targetid, -1, CLAN_KICKED, ClanInfo[clanid][clanName]);
             User[targetid][clanID] = -1;
             User[targetid][clanRole] = -1;
+            User[targetid][spawnSafehouse] = false;
             SetClanColor(targetid);
             PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
             UpdatePlayerData(targetid);

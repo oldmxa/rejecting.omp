@@ -344,10 +344,21 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(g_PlayerTraining[playerid][pTrain_Active] || IsPracticeActive(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge inside training or practice.");
 
-    if(g_PlayerInSafehouse[playerid] != -1 || User[playerid][spawnSafehouse])
+    if(g_PlayerInSafehouse[playerid] != -1)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge inside a safehouse.");
+
+    if(User[playerid][spawnSafehouse])
     {
-        SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You spawn at your clan safehouse, so a custom lounge would be ignored.");
-        return SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Disable {MAIN}Safehouse Spawn{FFFFFF} in {MAIN}/clan{FFFFFF} first.");
+        if(GetPlayerSafehouse(playerid) == -1)
+        {
+            User[playerid][spawnSafehouse] = false;
+            UpdatePlayerData(playerid);
+        }
+        else
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You spawn at your clan safehouse, so a custom lounge would be ignored.");
+            return SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Disable {MAIN}Safehouse Spawn{FFFFFF} in {MAIN}/clan{FFFFFF} first.");
+        }
     }
 
     new PLAYER_STATE:pState = GetPlayerState(playerid);

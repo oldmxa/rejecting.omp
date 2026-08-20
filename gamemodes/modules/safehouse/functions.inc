@@ -473,10 +473,27 @@ stock ReleaseSafehouse(index, const reason[])
 {
     if (!IsValidSafehouseIndex(index)) return 0;
 
+    new oldClanID = SafehouseData[index][sh_ClanID];
+
     foreach (new i : Player)
     {
         if (g_PlayerInSafehouse[i] == index)
             ExitSafehouse(i);
+
+        if (oldClanID != -1 && User[i][isLogged] && User[i][clanID] == oldClanID)
+        {
+            if (User[i][spawnSafehouse])
+            {
+                User[i][spawnSafehouse] = false;
+                UpdatePlayerData(i);
+            }
+        }
+    }
+
+    if (oldClanID != -1)
+    {
+        mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `spawn_safehouse` = 0 WHERE `clanID` = %d", oldClanID);
+        mysql_tquery(dbHandle, queryGlobal);
     }
 
     SafehouseData[index][sh_ClanID] = -1;

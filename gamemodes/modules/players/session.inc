@@ -250,6 +250,11 @@ setAfk(playerid)
 	{
 		new safehouse = GetPlayerSafehouse(playerid);
 		if(safehouse != -1) EnterSafehouse(playerid, safehouse);
+		else
+		{
+			User[playerid][spawnSafehouse] = false;
+			UpdatePlayerData(playerid);
+		}
 	}
 }
 

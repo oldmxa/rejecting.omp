@@ -135,6 +135,11 @@ public RestoreSafehouseSpawn(playerid)
     new home = GetPlayerSafehouse(playerid);
     if (IsValidSafehouseIndex(home))
         EnterSafehouse(playerid, home);
+    else
+    {
+        User[playerid][spawnSafehouse] = false;
+        UpdatePlayerData(playerid);
+    }
 
     return 1;
 }

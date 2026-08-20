@@ -193,6 +193,13 @@ stock ToggleClanSafehouseSpawn(playerid, clanid)
 {
     if (GetSafehouseByClan(clanid) == -1)
     {
+        if (User[playerid][spawnSafehouse])
+        {
+            User[playerid][spawnSafehouse] = false;
+            UpdatePlayerData(playerid);
+            SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}Your clan does not own a safehouse. Safehouse spawn has been disabled.");
+            return ShowClanMenu(playerid);
+        }
         SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}Your clan does not own a safehouse.");
         return ShowClanMenu(playerid);
     }

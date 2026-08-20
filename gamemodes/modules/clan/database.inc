@@ -172,7 +172,7 @@ stock SaveClanMemberRank(memberSQLID, rank)
 stock ClearClanMemberAccount(memberSQLID)
 {
     mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
-        "UPDATE `accounts` SET `clanID` = -1, `clanRole` = -1 WHERE `id` = %d", memberSQLID);
+        "UPDATE `accounts` SET `clanID` = -1, `clanRole` = -1, `spawn_safehouse` = 0 WHERE `id` = %d", memberSQLID);
 
     mysql_tquery(dbHandle, queryGlobal);
     return 1;
@@ -183,7 +183,7 @@ stock DeleteClanRows(clanid)
     mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "DELETE FROM `clans` WHERE `clan_id` = %d", clanid);
     mysql_tquery(dbHandle, queryGlobal);
 
-    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `clanID` = -1, `clanRole` = -1 WHERE `clanID` = %d", clanid);
+    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `clanID` = -1, `clanRole` = -1, `spawn_safehouse` = 0 WHERE `clanID` = %d", clanid);
     mysql_tquery(dbHandle, queryGlobal);
     return 1;
 }
