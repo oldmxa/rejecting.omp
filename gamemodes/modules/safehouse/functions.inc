@@ -549,21 +549,6 @@ stock ExitSafehouse(playerid)
 
     if (!IsPlayerConnected(playerid)) return 1;
 
-    if (User[playerid][isAfk] && User[playerid][locationId] == ARENA_AFK)
-    {
-        SetPlayerVirtualWorld(playerid, User[playerid][loungeVW]);
-        SetPlayerInterior(playerid, User[playerid][loungeINT]);
-        SetPlayerPos(playerid, User[playerid][loungeX], User[playerid][loungeY], User[playerid][loungeZ]);
-        SetPlayerFacingAngle(playerid, User[playerid][loungeA]);
-        SetCameraBehindPlayer(playerid);
-        SetPlayerArmour(playerid, 100.0);
-        SetPlayerHealth(playerid, 100.0);
-        givePlayerWeapons(playerid);
-
-        SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You left the safehouse and returned to the lounge.");
-        return 1;
-    }
-
     new Float:x = SafehouseData[index][sh_ExitX];
     new Float:y = SafehouseData[index][sh_ExitY];
     new Float:z = SafehouseData[index][sh_ExitZ];
@@ -575,8 +560,12 @@ stock ExitSafehouse(playerid)
         z = SafehouseData[index][sh_ExtZ];
     }
 
+    new world = 0;
+    if (User[playerid][isAfk] && User[playerid][locationId] == ARENA_AFK)
+        world = User[playerid][loungeVW];
+
     SetPlayerInterior(playerid, 0);
-    SetPlayerVirtualWorld(playerid, 0);
+    SetPlayerVirtualWorld(playerid, world);
     SetPlayerPos(playerid, x, y, z);
     SetCameraBehindPlayer(playerid);
     return 1;

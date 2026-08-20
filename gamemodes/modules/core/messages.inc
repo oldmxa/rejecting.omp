@@ -301,7 +301,7 @@ public SendMSG(playerid)
     format(stringe[9], 160, "{MAIN}[INFO] {FFFFFF}Manage your clan, invite members and customize colors using {MAIN}'/clan'{FFFFFF}.");
     format(stringe[10], 160, "{MAIN}[INFO] {FFFFFF}Need to take a break or chat in peace? Go to the Lounge using {MAIN}'/lounge'{FFFFFF} or {MAIN}'/afk'{FFFFFF}.");
     format(stringe[11], 160, "{MAIN}[INFO] {FFFFFF}Select and customize your favorite weapon loadout in {MAIN}'/gunmenu'{FFFFFF}.");
-    format(stringe[12], 160, "{MAIN}[INFO] {FFFFFF}Customize your environment: change weather ({MAIN}'/weather [id]'{FFFFFF}) and world time ({MAIN}'/t [0-23]'{FFFFFF}).");
+    format(stringe[12], 160, "{MAIN}[INFO] {FFFFFF}Customize your change weather ({MAIN}'/weather [id]'{FFFFFF}) and world time ({MAIN}'/t [0-23]'{FFFFFF}).");
     format(stringe[13], 160, "{MAIN}[INFO] {FFFFFF}Change your skin anytime using {MAIN}'/setskin (/ss) [skin id]'{FFFFFF}.");
     format(stringe[14], 160, "{MAIN}[INFO] {FFFFFF}Change your melee fighting style using {MAIN}'/fightstyle'{FFFFFF}.");
     format(stringe[15], 160, "{MAIN}[INFO] {FFFFFF}Customize your hit sound (Bell), Headshot text, and HUD in Settings ({MAIN}'N'{FFFFFF} key).");
