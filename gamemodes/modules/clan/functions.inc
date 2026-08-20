@@ -627,7 +627,7 @@ public RewardClanTerritories()
         if (!User[i][hideGlobalMsg])
         {
             va_SendClientMessage(i, -1, "{MAIN}[TERRITORIES] {FFFFFF}You received "COL_MONEY"%s {FFFFFF}for your clan holding %d territories! %s",
-                FormatMoney(reward), count, (IsPlayerVip(i)) ? ("{00FF00}(2x VIP Bonus!)") : (""));
+                FormatMoney(reward), count, (IsPlayerVip(i)) ? (""COL_MONEY"(2x VIP Bonus!)") : (""));
         }
     }
     return 1;
