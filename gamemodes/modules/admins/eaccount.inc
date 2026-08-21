@@ -357,7 +357,7 @@ public DIALOG_EACC_INPUT(playerid, dialogid, response, listitem, string:inputtex
     new details[160];
     format(details, sizeof(details), "%s: %d -> %d (target %s%s)", EAccField[field][eaccLabel], before, value, name,
         EAcc_IsOffline(playerid) ? (", offline") : (""));
-    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "ADMIN", "/eaccount", details);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "/eaccount", details);
 
     return ShowEAccountDialog(playerid);
 }
@@ -424,7 +424,7 @@ public DIALOG_EACC_CLANINPUT(playerid, dialogid, response, listitem, string:inpu
 
     new details[160];
     format(details, sizeof(details), "%s: %d -> %d (clan %s)", EClanField[field][eaccLabel], before, value, ClanInfo[clanid][clanName]);
-    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "ADMIN", "/eaccount", details);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "/eaccount", details);
 
     return ShowEAccountClanDialog(playerid);
 }
