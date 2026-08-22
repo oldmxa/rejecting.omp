@@ -932,6 +932,15 @@ stock FinishTrainingChallenge(playerid)
 
     Ach_OnTrainingChallengeFinish(playerid, damage, accuracy, record);
 
+    new trLog[256], trStatus[32];
+    if(record == TRAINING_RECORD_SERVER) format(trStatus, sizeof(trStatus), "New Server Record");
+    else if(record == TRAINING_RECORD_PERSONAL) format(trStatus, sizeof(trStatus), "New Personal Record");
+    else format(trStatus, sizeof(trStatus), "Completed");
+
+    format(trLog, sizeof(trLog), "**Player:** %s\n**Arena:** %s\n**Damage:** %s dmg\n**Hits:** %d/%d (%.1f%% Accuracy)\n**Result:** %s",
+        User[playerid][userName], trArenaName, FormatMoney(score), hits, shots, accuracy, trStatus);
+    SendDiscordEmbed(logs_training, "Training Challenge", trLog, (record == TRAINING_RECORD_SERVER) ? DISCORD_COLOR_SUCCESS : DISCORD_COLOR_INFO);
+
     ExitTrainingArena(playerid);
     SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You were sent back to the lounge.");
     return 1;

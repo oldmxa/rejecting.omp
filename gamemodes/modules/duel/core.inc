@@ -380,6 +380,16 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 		}
 	}
 
+	new duelLog[256], duelRes[64];
+	if(forfeited) format(duelRes, sizeof(duelRes), "Forfeit (Ran away)");
+	else if(disconnected) format(duelRes, sizeof(duelRes), "Disconnect");
+	else if(Result >= 200.0) format(duelRes, sizeof(duelRes), "Perfect Victory");
+	else format(duelRes, sizeof(duelRes), "Normal Victory (%d HP/Armour)", floatround(Result));
+
+	format(duelLog, sizeof(duelLog), "**Winner:** %s\n**Loser:** %s\n**Result:** %s\n**Reward:** $2,000\n**Duration:** %d seconds",
+		winnerName, loserName, duelRes, duration);
+	SendDiscordEmbed(logs_duel, "1v1 Duel Finished", duelLog, DISCORD_COLOR_INFO);
+
 	if(IsPlayerConnected(winner))
 	{
 		User[winner][isAfk] = false;

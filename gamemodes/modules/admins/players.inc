@@ -305,6 +305,11 @@
 
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You set the money from %s to %s.", User[targetid][userName], FormatMoney(amount));
     va_SendClientMessage(targetid, -1, ADM_TAG_NORM"The admin %s set their money to %s.", User[playerid][userName], FormatMoney(amount));
+
+    new mLog[256];
+    format(mLog, sizeof(mLog), "**Admin:** %s\n**Player:** %s\n**New Balance:** $%s",
+        User[playerid][userName], User[targetid][userName], FormatMoney(amount));
+    SendDiscordEmbed(logs_money, "Admin Money Set", mLog, DISCORD_COLOR_ADMIN);
     return true;
 }
 
@@ -564,6 +569,10 @@ public OnAdminSetNickCheck(playerid, targetid, const newnick[], const oldnick[])
             new log_details[256];
             format(log_details, sizeof(log_details), "Admin %s changed %s's name to %s (No cost)", User[playerid][userName], oldnick, newnick);
             LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "names", "Admin SetNick", log_details);
+
+            new nickMsg[256];
+            format(nickMsg, sizeof(nickMsg), "**Admin:** %s\n**Old Name:** %s\n**New Name:** %s", User[playerid][userName], oldnick, newnick);
+            SendDiscordEmbed(logs_nick, "Admin Nickname Change", nickMsg, DISCORD_COLOR_ADMIN);
         }
     }
 
@@ -603,6 +612,10 @@ public OnAdminOfflineSetNickExec(playerid, const oldnick[], const newnick[])
     new log_details[256];
     format(log_details, sizeof(log_details), "Admin %s changed offline account %s's name to %s", User[playerid][userName], oldnick, newnick);
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "names", "Admin SetNick Offline", log_details);
+
+    new nickMsg[256];
+    format(nickMsg, sizeof(nickMsg), "**Admin:** %s\n**Old Name:** %s (Offline)\n**New Name:** %s", User[playerid][userName], oldnick, newnick);
+    SendDiscordEmbed(logs_nick, "Admin Nickname Change", nickMsg, DISCORD_COLOR_ADMIN);
 
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You changed offline account %s's nickname to: %s.", oldnick, newnick);
     return 1;

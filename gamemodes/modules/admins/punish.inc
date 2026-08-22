@@ -229,6 +229,11 @@
     format(log_details, sizeof(log_details), "Muted player %s (ID: %d) for %d minutes. Reason: %s", User[targetid][userName], targetid, minutes, reason);
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "mutes", "Mute", log_details);
 
+    new dMsg[256];
+    format(dMsg, sizeof(dMsg), "**Admin:** %s\n**Player:** %s\n**Duration:** %d minutes\n**Reason:** %s",
+        User[playerid][userName], User[targetid][userName], minutes, reason);
+    SendDiscordEmbed(logs_punish, "New Mute", dMsg, DISCORD_COLOR_WARNING);
+
     User[targetid][muteTimestamp] = gettime()+minutes*60;
 
     return true;
@@ -266,6 +271,11 @@
     new log_details[256];
     format(log_details, sizeof(log_details), "Unmuted player %s (ID: %d)", User[targetid][userName], targetid);
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "mutes", "Unmute", log_details);
+
+    new dMsg[256];
+    format(dMsg, sizeof(dMsg), "**Admin:** %s\n**Player:** %s",
+        User[playerid][userName], User[targetid][userName]);
+    SendDiscordEmbed(logs_punish, "New Unmute", dMsg, DISCORD_COLOR_SUCCESS);
 
     User[targetid][muteTimestamp] = 0;
 
@@ -426,6 +436,11 @@
     new log_details[256];
     format(log_details, sizeof(log_details), "Gave warning to %s [%d/%d]. Reason: %s", User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "warns", "Warn", log_details);
+
+    new dMsg[256];
+    format(dMsg, sizeof(dMsg), "**Admin:** %s\n**Player:** %s\n**Warning:** %d/%d\n**Reason:** %s",
+        User[playerid][userName], User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
+    SendDiscordEmbed(logs_punish, "New Warning", dMsg, DISCORD_COLOR_WARNING);
 
     va_SendClientMessageToAll(-1, ADM_TAG_PUN"Admin %s gave a warning to %s [%d/%d]. reason: %s", User[playerid][userName], User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
     

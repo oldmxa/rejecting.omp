@@ -892,6 +892,10 @@ public OnPlayerTryChangeNick(playerid, newnick[], oldnick[])
                     format(log_details, sizeof(log_details), "Player %s changed name to %s", oldnick, newnick);
                     LogServerAction(User[playerid][user_sqlid], newnick, "names", "Name Change", log_details);
 
+                    new nickMsg[256];
+                    format(nickMsg, sizeof(nickMsg), "**Old Name:** %s\n**New Name:** %s\n**Cost:** $300,000", oldnick, newnick);
+                    SendDiscordEmbed(logs_nick, "Nickname Change", nickMsg, DISCORD_COLOR_INFO);
+
 					new DCC_User:user = DCC_FindUserByName(User[playerid][dc_username], User[playerid][dc_discriminator]);
 
 					if (user != DCC_INVALID_USER)

@@ -627,6 +627,14 @@ SetOutpostOwner(arenaid, outpost_idx, clanid, bool:save = true, bool:announce = 
                  }
             }
         }
+
+        if(clanid >= 0 && clanid < MAX_CLANS)
+        {
+            new oLog[256];
+            format(oLog, sizeof(oLog), "**Clan:** [%s] %s\n**Arena:** %s (ID: %d)\n**Outpost:** #%d",
+                ClanInfo[clanid][clanTag], ClanInfo[clanid][clanName], arenaData[arenaid][arenaName], arenaid, outpost_idx + 1);
+            SendDiscordEmbed(logs_arena, "Outpost Captured", oLog, DISCORD_COLOR_ARENA);
+        }
     }
     return 1;
 }

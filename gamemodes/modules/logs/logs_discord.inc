@@ -28,6 +28,11 @@
 #define CH_TOURNEY_APPLICATIONS "1539674434305007627"
 #define CH_LOGS_PASSWORD        "1539760216915054733"
 #define CH_WEEK_RESULTS         "1540751644923527311"
+#define CH_LOGS_PUNISH          "1540756249841500160"
+#define CH_LOGS_TRAINING        "1540756510630477874"
+#define CH_LOGS_NICK            "1540756679623319593"
+#define CH_LOGS_MONEY           "1540756774229901413"
+#define CH_LOGS_DUEL            "1540757017910710312"
 
 new
     DCC_Guild:guildaid,
@@ -56,7 +61,12 @@ new
     DCC_Channel:ch_tourney_admin_logs,
     DCC_Channel:ch_tourney_applications,
     DCC_Channel:logs_password,
-    DCC_Channel:ch_week_results;
+    DCC_Channel:ch_week_results,
+    DCC_Channel:logs_punish,
+    DCC_Channel:logs_training,
+    DCC_Channel:logs_nick,
+    DCC_Channel:logs_money,
+    DCC_Channel:logs_duel;
 
 stock InitLogChannels()
 {
@@ -87,6 +97,11 @@ stock InitLogChannels()
     ch_tourney_admin_logs   = DCC_FindChannelById(CH_TOURNEY_ADMIN_LOGS);
     ch_tourney_applications = DCC_FindChannelById(CH_TOURNEY_APPLICATIONS);
     ch_week_results         = DCC_FindChannelById(CH_WEEK_RESULTS);
+    logs_punish             = DCC_FindChannelById(CH_LOGS_PUNISH);
+    logs_training           = DCC_FindChannelById(CH_LOGS_TRAINING);
+    logs_nick               = DCC_FindChannelById(CH_LOGS_NICK);
+    logs_money              = DCC_FindChannelById(CH_LOGS_MONEY);
+    logs_duel               = DCC_FindChannelById(CH_LOGS_DUEL);
 
     StartConsoleLog();
     StartConsoleTail();

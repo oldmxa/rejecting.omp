@@ -267,5 +267,10 @@
     format(givenMoneyString, sizeof(givenMoneyString), TRANSFERMONEY_GIVEN, FormatMoney(money), getPlayerName(playerid));
     SendClientMessage(targetid, -1, "%s", givenMoneyString);
 
+    new mLog[256];
+    format(mLog, sizeof(mLog), "**Sender:** %s (ID: %d)\n**Recipient:** %s (ID: %d)\n**Amount:** $%s",
+        getPlayerName(playerid), playerid, getPlayerName(targetid), targetid, FormatMoney(money));
+    SendDiscordEmbed(logs_money, "Money Transfer", mLog, DISCORD_COLOR_INFO);
+
     return true;
 }

@@ -560,6 +560,26 @@ stock FinishDuel2v2Match(matchid, winning_team)
 
     AwardDuel2v2Result(matchid, winning_team);
 
+    new pNames[4][MAX_PLAYER_NAME + 1];
+    for(new i = 0; i < 4; i++)
+    {
+        if(IsValidDuel2v2Player(players[i])) GetPlayerName(players[i], pNames[i], MAX_PLAYER_NAME + 1);
+        else format(pNames[i], MAX_PLAYER_NAME + 1, "Player %d", i + 1);
+    }
+
+    new d2Log[256];
+    if(winning_team == 0)
+    {
+        format(d2Log, sizeof(d2Log), "**Winners (Team 1):** %s & %s\n**Losers (Team 2):** %s & %s\n**Score:** %d vs %d\n**Reward:** $5,000",
+            pNames[0], pNames[1], pNames[2], pNames[3], winScore, loseScore);
+    }
+    else
+    {
+        format(d2Log, sizeof(d2Log), "**Winners (Team 2):** %s & %s\n**Losers (Team 1):** %s & %s\n**Score:** %d vs %d\n**Reward:** $5,000",
+            pNames[2], pNames[3], pNames[0], pNames[1], winScore, loseScore);
+    }
+    SendDiscordEmbed(logs_duel, "2v2 Duel Finished", d2Log, DISCORD_COLOR_INFO);
+
     g_Duel2v2Data[matchid][d2_MatchTimer] = SetTimerEx("ResetMatchAfterFinish", DUEL2V2_FINISH_DELAY, false, "i", matchid);
     return 1;
 }

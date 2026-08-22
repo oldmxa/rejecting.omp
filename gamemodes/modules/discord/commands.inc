@@ -570,7 +570,12 @@ DSLASH:warn(user, params[])
     format(log_details, sizeof(log_details), "Discord Admin %s warned player %s. Reason: %s", username, target_nick, reason);
     LogServerAction(0, username, "warns", "Warn (Discord)", log_details);
 
-    SendDiscordResponse(comandos, sprintf(":white_check_mark: Warning applied to player **%s**!", target_nick));
+    new dMsg[256];
+    format(dMsg, sizeof(dMsg), "**Admin:** %s (Discord)\n**Player:** %s\n**Warning:** %d/5\n**Reason:** %s",
+        username, target_nick, (targetid != INVALID_PLAYER_ID) ? User[targetid][warnings] : 1, reason);
+    SendDiscordEmbed(logs_punish, "New Warning", dMsg, DISCORD_COLOR_WARNING);
+
+    SendDiscordResponse(comandos, sprintf("Warning applied to player **%s**!", target_nick));
     return true;
 }
 
@@ -703,7 +708,15 @@ DSLASH:setmoney(user, params[])
         mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `player_money` = %d WHERE `username` = '%e'", amount, target_nick);
         mysql_tquery(dbHandle, queryGlobal);
         
-        SendDiscordResponse(comandos, sprintf(":white_check_mark: Money of **%s** set to **%s**!", target_nick, FormatMoney(amount)));
+        new username[DCC_USERNAME_SIZE];
+        DCC_GetUserName(user, username, sizeof(username));
+
+        new mLog[256];
+        format(mLog, sizeof(mLog), "**Admin:** %s (Discord)\n**Player:** %s\n**New Balance:** $%s",
+            username, target_nick, FormatMoney(amount));
+        SendDiscordEmbed(logs_money, "Admin Money Set", mLog, DISCORD_COLOR_ADMIN);
+
+        SendDiscordResponse(comandos, sprintf("Money of **%s** set to **%s**!", target_nick, FormatMoney(amount)));
         return true;
     }
     return true;
