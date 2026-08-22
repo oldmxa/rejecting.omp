@@ -36,8 +36,9 @@ forward DIALOG_PRAC_SPEED(playerid, dialogid, response, listitem, string:inputte
 forward DIALOG_PRAC_HEIGHT(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_PRAC_TOLERANCE(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_PRAC_LATENCY(playerid, dialogid, response, listitem, string:inputtext[]);
+forward ShowPracticeDialog(playerid);
 
-stock ShowPracticeDialog(playerid)
+public ShowPracticeDialog(playerid)
 {
     new body[1600], idx = g_Practice[playerid][pracModel];
     if (idx < 0 || idx >= sizeof(g_PracticeModels)) idx = 0;
