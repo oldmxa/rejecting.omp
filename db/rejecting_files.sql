@@ -456,6 +456,18 @@ CREATE TABLE `videos` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `web_commands` (
+  `id` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL,
+  `admin_name` varchar(100) NOT NULL,
+  `admin_level` int(11) NOT NULL DEFAULT 0,
+  `command` varchar(160) NOT NULL,
+  `status` enum('pending','running','done','failed') NOT NULL DEFAULT 'pending',
+  `response` varchar(500) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `executed_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `zones` (
   `id` int(11) NOT NULL,
   `zoneid` int(11) NOT NULL,
@@ -657,6 +669,11 @@ ALTER TABLE `training_records`
 ALTER TABLE `videos`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `web_commands`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_fila` (`status`,`id`),
+  ADD KEY `idx_recentes` (`created_at`);
+
 ALTER TABLE `zones`
   ADD PRIMARY KEY (`id`);
 
@@ -753,6 +770,9 @@ ALTER TABLE `training_records`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `videos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `web_commands`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `zones`

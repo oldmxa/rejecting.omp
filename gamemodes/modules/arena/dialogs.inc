@@ -42,7 +42,7 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
         return true;
     }
 
-    if(ArenaRequiresFpsLock(listitem) && User[playerid][FPS] != ARENA_FPS_LOCK_VALUE)
+    if(ArenaRequiresFpsLock(listitem) && User[playerid][FPS] > ARENA_FPS_LOCK_VALUE)
     {
         va_SendClientMessage(playerid, -1, ARENA_FPS_LOCK_ERROR, ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
         showLocationSelectDialog(playerid);
@@ -86,6 +86,13 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
     playerArenaInfo[listitem][playerid][hitedShots] = 0;
     SetPVarInt(playerid, "CurrentShotId", 0);
     SetPVarInt(playerid, "LastHitedShotId", 0);
+
+    if(GetPVarInt(playerid, "Spree") > User[playerid][maxStreak])
+    {
+        User[playerid][maxStreak] = GetPVarInt(playerid, "Spree");
+    }
+    DeletePVar(playerid, "Spree");
+    User[playerid][spreeTime] = 0;
 
     ApplyArenaRpWalk(playerid, oldLocation, listitem);
 

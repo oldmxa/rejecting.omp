@@ -741,7 +741,16 @@ PrepareChangeArena(location, finishingArenaId)
 	foreach(new i : Player)
 	{
 		if(User[i][isLogged] && User[i][locationId] == location && !User[i][isAfk] && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i))
+		{
+			if(GetPVarInt(i, "Spree") > User[i][maxStreak])
+			{
+				User[i][maxStreak] = GetPVarInt(i, "Spree");
+				SendClientMessage(i, COLOR_ORANGE, "{MAIN}[INFO] {FFFFFF}Your killing streak has been successfully updated!");
+			}
+			DeletePVar(i, "Spree");
+			User[i][spreeTime] = 0;
 			Ach_OnArenaRoundEnd(i);
+		}
 	}
 
 	new bestClanID = -1;

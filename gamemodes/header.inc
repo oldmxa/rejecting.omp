@@ -55,6 +55,7 @@
 // utilities and functions
 #include "modules/util/utils.inc"
 #include "modules/util/server.inc"
+#include "modules/util/web_console.inc"
 #include "modules/players/session.inc"
 #include "modules/players/spectate.inc"
 #include "modules/players/combat.inc"

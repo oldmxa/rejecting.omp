@@ -321,7 +321,7 @@ public UpdateServerStats()
 
 	new query[512];
 	mysql_format(dbHandle, query, sizeof(query), 
-		"UPDATE `server_status` SET `current_arena_id` = %d, `current_arena_name` = '%e', `players_online` = %d WHERE `id` = 1",
+		"UPDATE `server_status` SET `current_arena_id` = %d, `current_arena_name` = '%e', `players_online` = %d, `last_updated` = NOW() WHERE `id` = 1",
 		arenaIdVal, szArenaName, Iter_Count(Player));
 	mysql_tquery(dbHandle, query);
 
@@ -478,7 +478,7 @@ public OnScriptUpdate()
 				else DeletePVar(i, "lowFpsTicks");
 			}
 
-			if(ArenaRequiresFpsLock(User[i][locationId]) && User[i][FPS] > 5 && User[i][FPS] != ARENA_FPS_LOCK_VALUE)
+			if(ArenaRequiresFpsLock(User[i][locationId]) && User[i][FPS] > ARENA_FPS_LOCK_VALUE)
 			{
 				new count = GetPVarInt(i, "lock102Ticks") + 1;
 				SetPVarInt(i, "lock102Ticks", count);
@@ -594,6 +594,7 @@ initializeServer(const gamemodeName[])
 	SetTimer("UpdateFastHUD", 200, true);
 	SetTimer("UpdateLifeLabels", 400, true);
 	SetTimer("UpdateServerStats", 120000, true);
+	WebConsoleInit();
 	SetTimer("RewardClanTerritories", (5 * 60000), true);
 	SetTimer("deleteDuplicateRows", (30*60000), true);
 	SetTimer("CheckTime", 1000, true); // DATE/TIME SYSTEM

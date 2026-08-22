@@ -142,11 +142,11 @@ setAfkReason(playerid, const reasonn[])
 			}
 			case 6:
 			{
-				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: FPS DRIFTED FROM %d (yours: %d)", ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
+				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: FPS EXCEEDED LIMIT %d (yours: %d)", ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: FPS LOCK", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: HIGH FPS", getPlayerName(playerid));
 				}
 			}
 		}
@@ -238,6 +238,13 @@ setAfk(playerid)
 
 	User[playerid][isAfk] = true;
 	User[playerid][locationId] = ARENA_AFK;
+
+	if(GetPVarInt(playerid, "Spree") > User[playerid][maxStreak])
+	{
+		User[playerid][maxStreak] = GetPVarInt(playerid, "Spree");
+	}
+	DeletePVar(playerid, "Spree");
+	User[playerid][spreeTime] = 0;
 
 	GangZoneStopPulseForPlayer(playerid, e_ZONE_PULSE_ZONE, arenaInfo[ARENA_AFK][arenaId]);
 	LoadMap(playerid, 0);
