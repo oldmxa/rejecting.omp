@@ -198,6 +198,15 @@ public OnNPCTakeDamage(npcid, issuerid, Float:amount, WEAPON:weaponid, bodypart)
 
     WC_ShowDamageFeedGiven(owner, owner, amount, weaponid);
 
+    new Float:fOriginX, Float:fOriginY, Float:fOriginZ, Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ;
+    GetPlayerLastShotVectors(owner, fOriginX, fOriginY, fOriginZ, fHitPosX, fHitPosY, fHitPosZ);
+    if (fHitPosX == 0.0 && fHitPosY == 0.0 && fHitPosZ == 0.0)
+    {
+        NPC_GetPos(npcid, fHitPosX, fHitPosY, fHitPosZ);
+        fHitPosZ += 0.5;
+    }
+    ShowPracticeDamageInformer(owner, amount, fHitPosX, fHitPosY, fHitPosZ);
+
     NPC_SetHealth(npcid, PRACTICE_NPC_HP);
     return 1;
 }

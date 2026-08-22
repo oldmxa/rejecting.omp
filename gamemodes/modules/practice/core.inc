@@ -467,10 +467,42 @@ stock HandlePracticeShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hit
     if (snd == 0) snd = PRACTICE_HIT_SOUND;
     PlayerPlaySound(playerid, snd, 0.0, 0.0, 0.0);
 
+    new Float:fOrigX, Float:fOrigY, Float:fOrigZ, Float:fHitX, Float:fHitY, Float:fHitZ;
+    GetPlayerLastShotVectors(playerid, fOrigX, fOrigY, fOrigZ, fHitX, fHitY, fHitZ);
+    if (fHitX == 0.0 && fHitY == 0.0 && fHitZ == 0.0)
+    {
+        fHitX = objX; fHitY = objY; fHitZ = objZ;
+    }
+    ShowPracticeDamageInformer(playerid, dmg, fHitX, fHitY, fHitZ);
+
     if (g_Practice[playerid][pracHealth] <= 0.0)
     {
         DestroyPracticeBall(playerid);
         SetTimerEx("OnPracticeRespawn", PRACTICE_RESPAWN_DELAY, false, "i", playerid);
+    }
+    return 1;
+}
+
+stock ShowPracticeDamageInformer(playerid, Float:amount, Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ)
+{
+    new PlayerText3D:hitbar, string[51];
+
+    switch(User[playerid][dmgInformerStyle])
+    {
+        case 2: format(string, sizeof(string), "*");
+        case 3: format(string, sizeof(string), "X");
+        default: format(string, sizeof(string), "%.0f", amount);
+    }
+
+    if(User[playerid][dmgInformerStyle] == 0)
+    {
+        hitbar = CreatePlayer3DTextLabel(playerid, string, User[playerid][hitmarkColor], fHitPosX, fHitPosY, fHitPosZ, 70);
+        User[playerid][hitmarkTimer] = SetTimerEx("updateDynamicHitmark", 30, false, "dfdffff", playerid, amount, _:hitbar, fHitPosX, fHitPosY, fHitPosZ, 0.03);
+    }
+    else
+    {
+        hitbar = CreatePlayer3DTextLabel(playerid, string, User[playerid][hitmarkColor], fHitPosX, fHitPosY, fHitPosZ, 70);
+        SetTimerEx("destroyHidBar", 2000, false, "dd", playerid, _:hitbar);
     }
     return 1;
 }

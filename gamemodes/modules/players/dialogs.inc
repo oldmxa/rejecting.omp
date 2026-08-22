@@ -40,6 +40,7 @@ ReturnToAppearanceSource(playerid)
     {
         case APPEARANCE_SRC_PERSONAL, APPEARANCE_SRC_MENU: ShowPersonalizationMenu(playerid);
         case APPEARANCE_SRC_SETTINGS: ShowSettingsMenu(playerid);
+        case APPEARANCE_SRC_PRACTICE: CallLocalFunction("ShowPracticeDialog", "i", playerid);
         case APPEARANCE_SRC_NONE: {} // opened from chat, nothing to reopen
         default: ShowPersonalizationMenu(playerid);
     }
