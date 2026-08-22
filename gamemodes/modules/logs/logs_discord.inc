@@ -27,6 +27,7 @@
 #define CH_TOURNEY_ADMIN_LOGS   "1539674148752724108"
 #define CH_TOURNEY_APPLICATIONS "1539674434305007627"
 #define CH_LOGS_PASSWORD        "1539760216915054733"
+#define CH_WEEK_RESULTS         "1540751644923527311"
 
 new
     DCC_Guild:guildaid,
@@ -54,7 +55,8 @@ new
     DCC_Channel:ch_tourney_register,
     DCC_Channel:ch_tourney_admin_logs,
     DCC_Channel:ch_tourney_applications,
-    DCC_Channel:logs_password;
+    DCC_Channel:logs_password,
+    DCC_Channel:ch_week_results;
 
 stock InitLogChannels()
 {
@@ -84,6 +86,7 @@ stock InitLogChannels()
     ch_tourney_register     = DCC_FindChannelById(CH_TOURNEY_REGISTER);
     ch_tourney_admin_logs   = DCC_FindChannelById(CH_TOURNEY_ADMIN_LOGS);
     ch_tourney_applications = DCC_FindChannelById(CH_TOURNEY_APPLICATIONS);
+    ch_week_results         = DCC_FindChannelById(CH_WEEK_RESULTS);
 
     StartConsoleLog();
     StartConsoleTail();

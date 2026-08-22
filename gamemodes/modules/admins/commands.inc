@@ -87,6 +87,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/unlockserver", "Unlocks the server.", 4},
     {"/viewpass [id/name]", "Show player password (hash).", 4},
     {"/warn [id] [reason]", "Give a warning to a player. (5 = ban).", 4},
+    {"/weekresults", "Broadcast weekly results to Discord.", 4},
     {"/ac", "Anti cheat settings: actions, punishment and flagged players.", 5},
     {"/actest", "Anti cheat tests: simulation of cheat detections.", 5},
     {"/acdebug", "Anti cheat debug.", 5},
@@ -480,3 +481,14 @@ ShowAdminCmds(playerid)
     }
     return true;
 }
+
+@cmd(.alts = {"sendweekresults", "weeklyresults"}) weekresults(playerid, params[], help)
+{
+    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ADMIN] {FFFFFF}You do not have permission to use this command.");
+    CheckAdminAuth(playerid);
+
+    SendWeeklyResultsDiscord(false);
+    SendClientMessage(playerid, COLOR_KGREEN, "{MAIN}[DISCORD] {FFFFFF}Weekly results have been broadcasted to the Discord results channel!");
+    return true;
+}
+

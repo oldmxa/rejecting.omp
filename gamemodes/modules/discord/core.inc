@@ -262,3 +262,24 @@ stock ProcessDiscordVerifyCmd(DCC_User:user, DCC_Channel:channel = DCC_INVALID_C
     MySQL_TQueryInline(dbHandle, using inline OnCheckDiscordLinked, q);
     return 1;
 }
+
+forward UpdateDiscordBotActivity();
+public UpdateDiscordBotActivity()
+{
+    new count = 0;
+    foreach(new i : Player)
+    {
+        if(User[i][isLogged]) count++;
+    }
+
+    new actStr[64];
+    if(count == 1)
+        format(actStr, sizeof(actStr), "%d player online | %s", count, SERVER_IP);
+    else
+        format(actStr, sizeof(actStr), "%d players online | %s", count, SERVER_IP);
+
+    DCC_SetBotActivity(actStr);
+    DCC_SetBotPresenceStatus(DCC_BotPresenceStatus:ONLINE);
+    return 1;
+}
+

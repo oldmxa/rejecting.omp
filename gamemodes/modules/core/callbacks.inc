@@ -39,6 +39,8 @@ public OnGameModeInit()
 
 	// websocket
 	SetTimer("RegisterSlashCommands", 15000, false);
+	SetTimer("UpdateDiscordBotActivity", 5000, false);
+	SetTimer("UpdateDiscordBotActivity", 30000, true);
 
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -123,6 +125,7 @@ public OnPlayerDisconnect(playerid, reason)
 
 	UpdatePlayerData(playerid, 1);
 	hidePlayerTextdraw(playerid);
+	UpdateDiscordBotActivity();
 
 	if(pVehicle[playerid] != 999)
 		DestroyVehicle(pVehicle[playerid]);

@@ -299,6 +299,7 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"d",               "Answer a player question",      1},
 	{"r",               "Reply to a player report",      1},
 	{"reply",           "Reply to a player report",      1},
+	{"weekresults",     "Broadcast weekly results",      4},
 
 	// publicos
 	{"help",            "List player commands and help", 0},
@@ -343,6 +344,7 @@ public RegisterSlashCommands()
 
 	// printf("[DSC] %d slash commands registered in guild %d.", sizeof(g_SlashCommands), _:guildaid);
 
+	UpdateDiscordBotActivity();
 	return 1;
 }
 
@@ -1790,7 +1792,18 @@ DSLASH:link(user, params[])
 	new DCC_Interaction:it = DSC_TakeInteraction();
 	if(it != DCC_Interaction:0)
 	{
-		DCC_SendInteractionMessage(it, ":envelope_with_arrow: A verification code has been sent to your **Discord DMs**!");
+		DCC_SendInteractionMessage(it, "A verification code has been sent to your **Discord DMs**!");
 	}
 	return ProcessDiscordVerifyCmd(user, DCC_INVALID_CHANNEL);
 }
+
+DSLASH:weekresults(user, params[])
+{
+	#pragma unused params
+	if(!DSC_RequireLevel(user, 4)) return 1;
+
+	SendWeeklyResultsDiscord(false);
+	SendDiscordResponse(comandos, "**Weekly results** have been broadcasted to <#" CH_WEEK_RESULTS ">!");
+	return true;
+}
+

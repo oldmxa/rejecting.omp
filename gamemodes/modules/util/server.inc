@@ -549,6 +549,7 @@ public CheckDay()
 			{
 				CheckTOP1Kills();
 				CheckTOP1Damage();
+				SendWeeklyResultsDiscord(true);
 			}
 		}
 	}

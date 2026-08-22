@@ -177,6 +177,7 @@
 #define         SERVER_RCON			"rejectingflles"
 #define         SERVER_MAP			"San Andreas"
 #define         SERVER_WEBSITE		"rejectingflles.com"
+#define         SERVER_IP           "127.0.0.1:7777"
 #define         SERVER_MODE			"Build 2.0.0"
 #define         SERVER_LANGUAGE     "ENG"
 //access restricted to owner
