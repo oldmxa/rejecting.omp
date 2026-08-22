@@ -195,7 +195,7 @@
 #define         DISCORD_ROLE_MODERATOR "1532823261308518530"   // adminLevel 2
 #define         DISCORD_ROLE_ADMIN     "1460104459811033361"   // adminLevel 3
 #define         DISCORD_ROLE_COORD     "1532822549811957841"   // adminLevel 4
-#define         DISCORD_ROLE_DEV       "1460119782627213353"   // adminLevel 5
+#define         DISCORD_ROLE_DEV       "1540753317246804108"   // adminLevel 5
 
 #define         MAX_ADMIN_LEVEL        (5)
 

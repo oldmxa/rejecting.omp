@@ -55,9 +55,14 @@ stock DCC_User:GetPlayerDiscordUser(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return DCC_INVALID_USER;
     if(!User[playerid][isLogged]) return DCC_INVALID_USER;
-    if(strequal(User[playerid][dc_uid], "-1", true)) return DCC_INVALID_USER;
 
-    return DCC_FindUserById(User[playerid][dc_uid]);
+    if(!strequal(User[playerid][dc_uid], "-1", true) && User[playerid][dc_uid][0] != EOS)
+        return DCC_FindUserById(User[playerid][dc_uid]);
+
+    if(!strequal(User[playerid][dc_username], "-1", true) && User[playerid][dc_username][0] != EOS)
+        return DCC_FindUserByName(User[playerid][dc_username], User[playerid][dc_discriminator]);
+
+    return DCC_INVALID_USER;
 }
 
 stock SyncPlayerDiscordRoles(playerid)
@@ -68,6 +73,19 @@ stock SyncPlayerDiscordRoles(playerid)
     ApplyDiscordRole(user, DISCORD_ROLE_LINKED, true);
     ApplyDiscordRole(user, DISCORD_ROLE_VIP, IsPlayerVip(playerid) != 0);
     ApplyDiscordAdminLevel(user, User[playerid][adminLevel]);
+
+    if(guildaid == DCC_INVALID_GUILD)
+        guildaid = DCC_FindGuildById(DISCORD_GUILD_ID);
+
+    if(guildaid != DCC_INVALID_GUILD)
+    {
+        new currentNick[DCC_NICKNAME_SIZE];
+        DCC_GetGuildMemberNickname(guildaid, user, currentNick, sizeof(currentNick));
+        if(!strequal(currentNick, User[playerid][userName]))
+        {
+            DCC_SetGuildMemberNickname(guildaid, user, User[playerid][userName]);
+        }
+    }
     return 1;
 }
 

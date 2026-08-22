@@ -65,6 +65,7 @@ stock IsPlayerVip(playerid)
                 User[playerid][userName], playerid, User[playerid][user_sqlid]
             );
             LogDiscordVipAction("VIP Expired", expVipStr, DISCORD_COLOR_WARNING);
+            SyncPlayerDiscordRoles(playerid);
             return 0;
         }
         return 1;
@@ -99,6 +100,8 @@ stock CheckPlayerVipOnLogin(playerid)
             User[playerid][userName], playerid, User[playerid][user_sqlid]
         );
         LogDiscordVipAction("VIP Expired", expVipStr, DISCORD_COLOR_WARNING);
+
+        SyncPlayerDiscordRoles(playerid);
 
         va_SendClientMessage(playerid, -1, "{MAIN}[VIP] {FFFFFF}Your VIP subscription has expired. To activate another package use {MAIN}'/buyvip'{FFFFFF}.");
         return 0;
@@ -879,6 +882,7 @@ ShowVipTagDialog(playerid)
         User[targetid][userName], targetid, User[targetid][user_sqlid]
     );
     LogDiscordVipAction("VIP Removed by Admin", remVipStr, DISCORD_COLOR_ERROR);
+    SyncPlayerDiscordRoles(targetid);
 
     return true;
 }
