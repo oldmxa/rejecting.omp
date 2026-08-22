@@ -408,6 +408,8 @@ public OnScriptUpdate()
 
 	foreach(new i : Player)
 	{
+		if (IsPlayerNPC(i)) continue;
+
 		if(User[i][lastDamagerId] != INVALID_PLAYER_ID && User[i][lastDamageTime] != -1 && gettime() >= User[i][lastDamageTime])
 			User[i][lastDamagerId] = INVALID_PLAYER_ID, User[i][lastDamageTime] = -1;
 

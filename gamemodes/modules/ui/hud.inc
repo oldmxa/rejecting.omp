@@ -280,6 +280,7 @@ public UpdateFastHUD()
 {
     foreach(new i : Player)
     {
+        if(IsPlayerNPC(i)) continue;
         if(!User[i][isLogged] || !User[i][isAlreadySpawned]) continue;
         if(!User[i][showPlayerHud]) continue;
         if(User[i][isSpectating] || playerSpecID[i] != INVALID_PLAYER_ID) continue;

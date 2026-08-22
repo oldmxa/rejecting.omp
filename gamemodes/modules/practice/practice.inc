@@ -12,6 +12,15 @@
 
 public OnPlayerConnect(playerid)
 {
+    if (IsPlayerNPC(playerid))
+    {
+        #if defined PRAC_OnPlayerConnect
+            return PRAC_OnPlayerConnect(playerid);
+        #else
+            return 1;
+        #endif
+    }
+
     ResetPracticeState(playerid);
     PracticeDropRecordFile(playerid);
 
@@ -33,6 +42,15 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+    if (IsPlayerNPC(playerid))
+    {
+        #if defined PRAC_OnPlayerDisconnect
+            return PRAC_OnPlayerDisconnect(playerid, reason);
+        #else
+            return 1;
+        #endif
+    }
+
     if (g_Practice[playerid][pracRecording]) StopRecordingPlayerData(playerid);
 
     PracticeDropRecord(playerid);

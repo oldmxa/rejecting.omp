@@ -60,6 +60,7 @@ public AC_CheckLimits()
 
     foreach (new playerid : Player)
     {
+        if (IsPlayerNPC(playerid)) continue;
         if (!User[playerid][isLogged] || User[playerid][isAfk]) continue;
         if (User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK) continue;
         if (GetPlayerState(playerid) == PLAYER_STATE_SPECTATING) continue;

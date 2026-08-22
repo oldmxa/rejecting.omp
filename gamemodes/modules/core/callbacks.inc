@@ -469,6 +469,8 @@ public OnPlayerRequestSpawn(playerid)
 
 public OnPlayerSpawn(playerid)
 {
+	if (IsPlayerNPC(playerid)) return true;
+
 	new bool:inTourneyMatch = (IsPlayerInTournament(playerid) && g_PlayerTourneyMatch[playerid] != -1);
 	new bool:inDuel = (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE);
 	new bool:inDuel2v2 = (IsPlayerInDuel2v2(playerid) != 0);
@@ -1139,6 +1141,8 @@ public OnPlayerText(playerid, text[])
 
 public OnPlayerUpdate(playerid)
 {
+	if (IsPlayerNPC(playerid)) return true;
+
 	new Float:health, Float:armour, fullHealth;
 	GetPlayerHealth(playerid, health);
 	GetPlayerArmour(playerid, armour);
