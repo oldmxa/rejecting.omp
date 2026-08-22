@@ -178,6 +178,18 @@ CREATE TABLE `banimentos` (
   `gpci` varchar(41) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `changelog` (
+  `id` int(11) NOT NULL,
+  `title` varchar(120) NOT NULL,
+  `content` mediumtext NOT NULL,
+  `author_id` int(11) NOT NULL,
+  `author_name` varchar(100) NOT NULL,
+  `is_pinned` tinyint(1) NOT NULL DEFAULT 0,
+  `views` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `chat_logs` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -209,6 +221,38 @@ CREATE TABLE `clans` (
   `clan_created_at` int(11) NOT NULL DEFAULT 0,
   `clan_avatar` varchar(255) DEFAULT 'assets/images/default-avatar.jpg'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPACT;
+
+CREATE TABLE `info_posts` (
+  `id` int(11) NOT NULL,
+  `section` varchar(40) NOT NULL,
+  `title` varchar(120) NOT NULL,
+  `content` mediumtext NOT NULL,
+  `link_url` varchar(500) DEFAULT NULL,
+  `link_label` varchar(60) DEFAULT NULL,
+  `author_id` int(11) NOT NULL,
+  `author_name` varchar(100) NOT NULL,
+  `is_pinned` tinyint(1) NOT NULL DEFAULT 0,
+  `is_locked` tinyint(1) NOT NULL DEFAULT 0,
+  `views` int(11) NOT NULL DEFAULT 0,
+  `replies` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by_id` int(11) DEFAULT NULL,
+  `deleted_by_name` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `info_replies` (
+  `id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by_id` int(11) DEFAULT NULL,
+  `deleted_by_name` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `ip_whitelist` (
   `id` int(11) NOT NULL,
@@ -324,6 +368,15 @@ CREATE TABLE `server_logs` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `site_config` (
+  `key` varchar(32) NOT NULL,
+  `value` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `site_config` (`key`, `value`) VALUES
+('applications_open', 0),
+('ideas_open', 0);
+
 CREATE TABLE `server_stats` (
   `id` int(11) NOT NULL,
   `online_count` int(11) NOT NULL,
@@ -343,6 +396,23 @@ CREATE TABLE `server_status` (
 
 INSERT INTO `server_status` (`id`, `current_arena_id`, `current_arena_name`, `players_online`) VALUES
 (1, -1, 'Lounge', 0);
+
+CREATE TABLE `staff_applications` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `level_at_apply` int(11) NOT NULL DEFAULT 0,
+  `played_time_at_apply` int(11) NOT NULL DEFAULT 0,
+  `time_playing` varchar(255) NOT NULL,
+  `cheater_knowledge` text NOT NULL,
+  `motivation` text NOT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `reviewed_by_id` int(11) DEFAULT NULL,
+  `reviewed_by_name` varchar(100) DEFAULT NULL,
+  `review_note` varchar(500) DEFAULT NULL,
+  `reviewed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `tickets` (
   `id` int(11) NOT NULL,
@@ -491,6 +561,10 @@ ALTER TABLE `banimentos`
   ADD KEY `ip` (`ip`),
   ADD KEY `gpci` (`gpci`);
 
+ALTER TABLE `changelog`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_listagem` (`is_pinned`,`created_at`);
+
 ALTER TABLE `chat_logs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `channel_idx` (`channel`),
@@ -505,6 +579,15 @@ ALTER TABLE `clans`
   ADD PRIMARY KEY (`clan_id`),
   ADD KEY `clan_tag` (`clan_tag`),
   ADD KEY `clan_name` (`clan_name`);
+
+ALTER TABLE `info_posts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_secao` (`section`,`is_pinned`,`created_at`),
+  ADD KEY `idx_vivos` (`section`,`deleted_at`,`is_pinned`,`created_at`);
+
+ALTER TABLE `info_replies`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_post` (`post_id`,`deleted_at`,`created_at`);
 
 ALTER TABLE `ip_whitelist`
   ADD PRIMARY KEY (`id`);
@@ -547,11 +630,19 @@ ALTER TABLE `safehouse_logs`
 ALTER TABLE `server_logs`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `site_config`
+  ADD PRIMARY KEY (`key`);
+
 ALTER TABLE `server_stats`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `server_status`
   ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `staff_applications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_status` (`status`,`created_at`),
+  ADD KEY `idx_autor` (`user_id`,`status`);
 
 ALTER TABLE `tickets`
   ADD PRIMARY KEY (`id`);
@@ -604,6 +695,9 @@ ALTER TABLE `arena_logs`
 ALTER TABLE `banimentos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `changelog`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `chat_logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -611,6 +705,12 @@ ALTER TABLE `coins_logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `ip_whitelist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `info_posts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `info_replies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `ispsbanidas`
@@ -638,6 +738,9 @@ ALTER TABLE `server_stats`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `server_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `staff_applications`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `tickets`
