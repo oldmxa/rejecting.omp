@@ -114,10 +114,7 @@ Enter your Discord username or ID below to receive a verification code:\n\n\
             DCC_SetGuildMemberNickname(guildaid, user, getPlayerName(playerid));
         }
 
-        new msg[128];
-        format(msg, sizeof(msg), "<@%s> Successfully linked and verified account! <3", User[playerid][dc_uid]);
-        if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
-        if(logs_linked != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(logs_linked, msg);
+        LogDiscordVerification(playerid);
 
         CallLocalFunction("Ach_OnDiscordLink", "i", playerid);
 

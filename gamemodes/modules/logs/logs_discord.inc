@@ -21,7 +21,7 @@
 #define CH_ADMINCHAT        "1461088997668290581"
 #define CH_LOGS_PM          "1539748119112187964"
 #define CH_LOGS_CLAN_CHAT   "1539748245096366171"
-#define CH_LOGS_LINKED      "1460111666724212788"
+#define CH_LOGS_LINKED      "1540763697721647264"
 #define CH_TOURNEY_ANNOUNCE     "1539673557267644496"
 #define CH_TOURNEY_REGISTER     "1539673870657921135"
 #define CH_TOURNEY_ADMIN_LOGS   "1539674148752724108"
@@ -267,3 +267,38 @@ stock LogDiscordClanChat(playerid, const clanTag[], const clanName[], const role
     DCC_SendChannelMessage(logs_clan_chat, encodedMsg);
     return 1;
 }
+
+stock LogDiscordVerification(playerid)
+{
+    if(!IsPlayerConnected(playerid)) return 0;
+
+    if(logs_linked == DCC_INVALID_CHANNEL)
+        logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+
+    if(logs_linked == DCC_INVALID_CHANNEL) return 0;
+
+    new rolesStr[256];
+    format(rolesStr, sizeof(rolesStr), "<@&" DISCORD_ROLE_LINKED ">");
+
+    if(IsPlayerVip(playerid))
+    {
+        format(rolesStr, sizeof(rolesStr), "%s, <@&" DISCORD_ROLE_VIP ">", rolesStr);
+    }
+
+    if(User[playerid][adminLevel] >= 1 && User[playerid][adminLevel] <= MAX_ADMIN_LEVEL)
+    {
+        format(rolesStr, sizeof(rolesStr), "%s, <@&%s>", rolesStr, g_DiscordAdminRoles[User[playerid][adminLevel] - 1]);
+    }
+
+    new vLog[512];
+    format(vLog, sizeof(vLog),
+        "**Player:** %s [ID: %d | SQL ID: %d]\n**Discord:** <@%s> (`%s`)\n**Assigned Roles:** %s",
+        User[playerid][userName], playerid, User[playerid][user_sqlid],
+        User[playerid][dc_uid], User[playerid][dc_username],
+        rolesStr
+    );
+
+    SendDiscordEmbed(logs_linked, "Account Verified", vLog, DISCORD_COLOR_SUCCESS);
+    return 1;
+}
+

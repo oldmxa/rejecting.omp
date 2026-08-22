@@ -141,12 +141,9 @@ public DIALOG_VALI_DISCORD(playerid, dialogid, response, listitem, string:inputt
 
                 SyncPlayerDiscordRoles(playerid);
 
-                new msg[128];
-                format(msg, sizeof(msg), "<@%s> Successfully linked account! <3", User[playerid][dc_uid]);
-                if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
-                if(logs_linked != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(logs_linked, msg);
-
                 DCC_SetGuildMemberNickname(guildaid, user, getPlayerName(playerid));
+
+                LogDiscordVerification(playerid);
 
                 CallLocalFunction("Ach_OnDiscordLink", "i", playerid);
             }
