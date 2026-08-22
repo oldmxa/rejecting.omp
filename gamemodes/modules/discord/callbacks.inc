@@ -66,7 +66,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			return true;
 		}
 
-		ProcessDiscordVerifyCmd(author, channel);
+		ProcessDiscordVerifyCmd(author, DCC_INVALID_CHANNEL);
 		return true;
 	}
 

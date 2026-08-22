@@ -1768,7 +1768,12 @@ DSLASH:verify(user, params[])
 			return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
 		}
 	}
-	return ProcessDiscordVerifyCmd(user, logs_linked);
+	new DCC_Interaction:it = DSC_TakeInteraction();
+	if(it != DCC_Interaction:0)
+	{
+		DCC_SendInteractionMessage(it, ":envelope_with_arrow: A verification code has been sent to your **Discord DMs**!");
+	}
+	return ProcessDiscordVerifyCmd(user, DCC_INVALID_CHANNEL);
 }
 
 DSLASH:link(user, params[])
@@ -1782,5 +1787,10 @@ DSLASH:link(user, params[])
 			return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
 		}
 	}
-	return ProcessDiscordVerifyCmd(user, logs_linked);
+	new DCC_Interaction:it = DSC_TakeInteraction();
+	if(it != DCC_Interaction:0)
+	{
+		DCC_SendInteractionMessage(it, ":envelope_with_arrow: A verification code has been sent to your **Discord DMs**!");
+	}
+	return ProcessDiscordVerifyCmd(user, DCC_INVALID_CHANNEL);
 }

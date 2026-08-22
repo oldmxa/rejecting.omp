@@ -244,6 +244,7 @@ stock ProcessDiscordVerifyCmd(DCC_User:user, DCC_Channel:channel = DCC_INVALID_C
             new errMsg[256];
             format(errMsg, sizeof(errMsg), "<@%s> :warning: Your Discord account is already linked to the in-game account **%s**! (Use `/udiscord` in-game to unlink first if needed).", userid, linkedNick);
             if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, errMsg);
+            else DCC_CreatePrivateChannel(user, "OnDiscordPrivateMsg", "s", errMsg);
             return 1;
         }
 
@@ -253,10 +254,6 @@ stock ProcessDiscordVerifyCmd(DCC_User:user, DCC_Channel:channel = DCC_INVALID_C
         CreatePendingDCVerify(userid, username, discriminator, genCode, 600);
 
         DCC_CreatePrivateChannel(user, "OnDiscordVerifyDMCreated", "s", genCode);
-
-        new resp[256];
-        format(resp, sizeof(resp), "<@%s> :envelope_with_arrow: A verification code has been sent to your **Discord DMs**!\nLog into the server and type `/dcode %s` to complete your verification.", userid, genCode);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, resp);
         return 1;
     }
 
