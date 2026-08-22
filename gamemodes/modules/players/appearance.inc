@@ -174,24 +174,28 @@ stock GetSoundName(sound_id)
     return name;
 }
 
-stock ShowHitSoundDialog(playerid)
+stock ShowHitSoundDialog(playerid, source = APPEARANCE_SRC_PERSONAL)
 {
-    new title[64] = "{MAIN}Personalization - Hit Sound Selection";
+    SetAppearanceSource(playerid, source);
+
+    new title[64] = "{MAIN}Personalization - Hit Sound";
     format_MainColor(playerid, title);
 
-    new str[1200] = "{MAIN}ID\t{MAIN}Sound Name\n";
+    new str[3500] = "{MAIN}ID\t{MAIN}Sound Name\t{MAIN}Preview / Status\n";
     for(new i = 0; i < sizeof(g_SoundList); i++)
     {
-        format(str, sizeof(str), "%s{FFFFFF}%d\t%s{FFFFFF}%s\n",
+        new bool:isSelected = (User[playerid][hitSoundID] == g_SoundList[i][soundID]);
+        format(str, sizeof(str), "%s{FFFFFF}%d\t%s{FFFFFF}%s\t%s\n",
             str,
             g_SoundList[i][soundID],
-            STYLE_MARK(User[playerid][hitSoundID] == g_SoundList[i][soundID]),
-            g_SoundList[i][soundName]
+            STYLE_MARK(isSelected),
+            g_SoundList[i][soundName],
+            isSelected ? ("{23C552}Active (Playing)") : ("{BEBEBE}[Click to Test]")
         );
     }
     format_MainColor(playerid, str);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_HIT_SOUND_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, str, "Select", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_HIT_SOUND_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, str, "Test / Select", "Close");
     return 1;
 }
 
@@ -199,7 +203,7 @@ forward DIALOG_HIT_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
 public DIALOG_HIT_SOUND_LIST(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response)
-        return ShowPersonalizationMenu(playerid);
+        return ReturnToAppearanceSource(playerid);
 
     if(listitem >= 0 && listitem < sizeof(g_SoundList))
     {
@@ -208,30 +212,33 @@ public DIALOG_HIT_SOUND_LIST(playerid, dialogid, response, listitem, string:inpu
         {
             PlayerPlaySound(playerid, User[playerid][hitSoundID], 0.0, 0.0, 0.0);
         }
-        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
-        ShowHitSoundDialog(playerid);
+        ShowHitSoundDialog(playerid, GetPVarInt(playerid, "appearance_source"));
     }
     return 1;
 }
 
-stock ShowKillSoundDialog(playerid)
+stock ShowKillSoundDialog(playerid, source = APPEARANCE_SRC_PERSONAL)
 {
-    new title[64] = "{MAIN}Personalization - Kill Sound Selection";
+    SetAppearanceSource(playerid, source);
+
+    new title[64] = "{MAIN}Personalization - Kill Sound";
     format_MainColor(playerid, title);
 
-    new str[1200] = "{MAIN}ID\t{MAIN}Sound Name\n";
+    new str[3500] = "{MAIN}ID\t{MAIN}Sound Name\t{MAIN}Preview / Status\n";
     for(new i = 0; i < sizeof(g_SoundList); i++)
     {
-        format(str, sizeof(str), "%s{FFFFFF}%d\t%s{FFFFFF}%s\n",
+        new bool:isSelected = (User[playerid][killSoundID] == g_SoundList[i][soundID]);
+        format(str, sizeof(str), "%s{FFFFFF}%d\t%s{FFFFFF}%s\t%s\n",
             str,
             g_SoundList[i][soundID],
-            STYLE_MARK(User[playerid][killSoundID] == g_SoundList[i][soundID]),
-            g_SoundList[i][soundName]
+            STYLE_MARK(isSelected),
+            g_SoundList[i][soundName],
+            isSelected ? ("{23C552}Active (Playing)") : ("{BEBEBE}[Click to Test]")
         );
     }
     format_MainColor(playerid, str);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_KILL_SOUND_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, str, "Select", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_KILL_SOUND_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, str, "Test / Select", "Close");
     return 1;
 }
 
@@ -239,7 +246,7 @@ forward DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:in
 public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response)
-        return ShowPersonalizationMenu(playerid);
+        return ReturnToAppearanceSource(playerid);
 
     if(listitem >= 0 && listitem < sizeof(g_SoundList))
     {
@@ -248,8 +255,7 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
         {
             PlayerPlaySound(playerid, User[playerid][killSoundID], 0.0, 0.0, 0.0);
         }
-        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
-        ShowKillSoundDialog(playerid);
+        ShowKillSoundDialog(playerid, GetPVarInt(playerid, "appearance_source"));
     }
     return 1;
 }
