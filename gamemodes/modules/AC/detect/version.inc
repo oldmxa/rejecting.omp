@@ -71,6 +71,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
 hook OnPlayerUpdate(playerid)
 {
+    if (IsPlayerNPC(playerid)) return 1;
     if (ACClient[playerid][acUpdateCount] == -1) return 1;
 
     if (++ACClient[playerid][acUpdateCount] < AC_R2_GRACE_UPDATES) return 1;

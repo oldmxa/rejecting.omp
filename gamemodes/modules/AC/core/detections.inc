@@ -204,6 +204,7 @@ static AC_KickPlayer(playerid, code, const detection[])
 
 public OnRejectingACDetection(playerid, code)
 {
+    if (IsPlayerNPC(playerid)) return 1;
     if (!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 1;
 
     if (code < 0 || code >= MAX_AC_DETECTIONS) return 1;

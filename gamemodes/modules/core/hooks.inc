@@ -347,6 +347,8 @@ public EnviarMsgCheat(playerid)
 
 hook OnPlayerConnect(playerid)
 {
+    if (IsPlayerNPC(playerid)) return 1;
+
     User[playerid][adminLevel] = 0;
     User[playerid][hudColor] = 0;
     User[playerid][hudShadeOne] = -1;
@@ -379,6 +381,8 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
+    if (IsPlayerNPC(playerid)) return 1;
+
     MsgCheat[playerid] = false;
     if(ClanLabel[playerid] != Text3D:INVALID_3DTEXT_ID)
     {

@@ -44,6 +44,14 @@ public OnPlayerDisconnect(playerid, reason)
 {
     if (IsPlayerNPC(playerid))
     {
+        new owner = PracticeNPCOwner(playerid);
+        if (owner != INVALID_PLAYER_ID && g_Practice[owner][pracActive] && g_Practice[owner][pracTargetType] == PRACTICE_TYPE_NPC)
+        {
+            g_Practice[owner][pracNpcId] = INVALID_NPC_ID;
+            g_PracticeNPCOwner[playerid] = INVALID_PLAYER_ID;
+            SetTimerEx("OnPracticeNPCRespawn", 500, false, "i", owner);
+        }
+
         #if defined PRAC_OnPlayerDisconnect
             return PRAC_OnPlayerDisconnect(playerid, reason);
         #else

@@ -618,7 +618,7 @@ public AC_TickMovement()
 {
     foreach (new playerid : Player)
     {
-        if (!User[playerid][isLogged]) continue;
+        if (IsPlayerNPC(playerid) || !User[playerid][isLogged]) continue;
 
         AC_CheckSurf(playerid);
         AC_MovementTick(playerid);

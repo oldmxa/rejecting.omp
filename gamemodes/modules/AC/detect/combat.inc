@@ -97,6 +97,8 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
+    if (IsPlayerNPC(playerid)) return 1;
+
     new minDelay = AC_MinFireDelay(weaponid);
     if (!minDelay) return 1;
 

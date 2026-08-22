@@ -249,6 +249,8 @@ RegisterVote(playerid, bool:choice)
 
 KickEx(playerid, delayms = 1000)
 {
+	if (IsPlayerNPC(playerid)) return false;
+
 	PlayerPlaySound(playerid, 12605, 0.0, 0.0, 0.0);
 	SetTimerEx("KickPlayerEx", delayms, false, "i", playerid);
 
@@ -343,7 +345,9 @@ public UpdateServerStats()
 forward KickPlayerEx(playerid);
 public KickPlayerEx(playerid)
 {
+	if (IsPlayerNPC(playerid)) return 1;
 	Kick(playerid);
+	return 1;
 }
 
 public OnVehicleDeath(vehicleid, killerid)

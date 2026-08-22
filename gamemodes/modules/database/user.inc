@@ -2,6 +2,8 @@
 forward LoginTimeout(playerid);
 public LoginTimeout(playerid)
 {
+    if (IsPlayerNPC(playerid)) return 1;
+
     if(!User[playerid][isLogged])
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You took too long to login and were kicked.");
