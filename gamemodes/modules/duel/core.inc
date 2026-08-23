@@ -495,6 +495,12 @@ stock DuelS_Host(playerid)
 		if(IsPlayerInTournamentMatch(playerid))
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot create a duel while playing a tournament match.");
 
+		if(g_PlayerTraining[playerid][pTrain_Active])
+			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in training mode.");
+
+		if(g_Practice[playerid][pracActive])
+			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in practice mode.");
+
 		new Float:Armour, Float:Health, Float:Result;
 		GetPlayerHealth(playerid, Health);
 		GetPlayerArmour(playerid, Armour);
@@ -582,6 +588,12 @@ stock DuelS_Host(playerid)
 
 	if(IsPlayerInTournamentMatch(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot enter a duel while playing a tournament match.");
+
+	if(g_PlayerTraining[playerid][pTrain_Active])
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in training mode.");
+
+	if(g_Practice[playerid][pracActive])
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in practice mode.");
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);

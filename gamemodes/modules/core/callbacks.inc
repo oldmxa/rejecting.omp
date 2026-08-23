@@ -132,11 +132,32 @@ public OnPlayerDisconnect(playerid, reason)
 
 	pVehicle[playerid] = 999;
 	User[playerid][isAfk] = false;
-	if(objecthporarmour[playerid] != INVALID_OBJECT_ID)
+
+	CleanupPlayerTimers(playerid);
+	if(SpawnGuardTimer[playerid])
 	{
-		DestroyObject(objecthporarmour[playerid]);
-		KillTimer(hpandarmourtimer[playerid]);
-		objecthporarmour[playerid] = INVALID_OBJECT_ID;
+		KillTimer(SpawnGuardTimer[playerid]);
+		SpawnGuardTimer[playerid] = 0;
+	}
+	if(SpawnProtectTimer[playerid])
+	{
+		KillTimer(SpawnProtectTimer[playerid]);
+		SpawnProtectTimer[playerid] = 0;
+	}
+	if(DuelS_Timer[playerid])
+	{
+		KillTimer(DuelS_Timer[playerid]);
+		DuelS_Timer[playerid] = 0;
+	}
+	if(BodyDeathTimer[playerid])
+	{
+		KillTimer(BodyDeathTimer[playerid]);
+		BodyDeathTimer[playerid] = 0;
+	}
+	if(Timer3DText[playerid])
+	{
+		KillTimer(Timer3DText[playerid]);
+		Timer3DText[playerid] = 0;
 	}
 
 	for(new i; i < MAX_ZONES; i++)
@@ -171,8 +192,6 @@ public OnPlayerDisconnect(playerid, reason)
 		playerArenaInfo[i][playerid][arenaExp] = 0;
 		playerArenaInfo[i][playerid][arenaHeadshots] = 0;
 	}
-
-	KillTimer(piscaTimer[playerid]);
 
 	if(User[playerid][OnTempREC])
 	{

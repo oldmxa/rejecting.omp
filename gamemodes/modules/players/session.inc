@@ -408,3 +408,50 @@ PreloadAnims(playerid)
 	ApplyAnimation(playerid, "ped", "null", 0.0, 0, 0, 0, 0, 0);
 	return true;
 }
+
+stock CleanupPlayerTimers(playerid)
+{
+	if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
+
+	if(TeleLockTimer[playerid])
+	{
+		KillTimer(TeleLockTimer[playerid]);
+		TeleLockTimer[playerid] = 0;
+	}
+	if(piscaTimer[playerid])
+	{
+		KillTimer(piscaTimer[playerid]);
+		piscaTimer[playerid] = 0;
+	}
+	if(objecthporarmour[playerid] != INVALID_OBJECT_ID)
+	{
+		DestroyObject(objecthporarmour[playerid]);
+		objecthporarmour[playerid] = INVALID_OBJECT_ID;
+	}
+	if(hpandarmourtimer[playerid])
+	{
+		KillTimer(hpandarmourtimer[playerid]);
+		hpandarmourtimer[playerid] = 0;
+	}
+	if(User[playerid][hitmarkTimer] != -1)
+	{
+		KillTimer(User[playerid][hitmarkTimer]);
+		User[playerid][hitmarkTimer] = -1;
+	}
+	if(User[playerid][loginTimer])
+	{
+		KillTimer(User[playerid][loginTimer]);
+		User[playerid][loginTimer] = 0;
+	}
+	if(User[playerid][adminLoginTimer])
+	{
+		KillTimer(User[playerid][adminLoginTimer]);
+		User[playerid][adminLoginTimer] = 0;
+	}
+	if(User[playerid][adminAuthTimer])
+	{
+		KillTimer(User[playerid][adminAuthTimer]);
+		User[playerid][adminAuthTimer] = 0;
+	}
+	return 1;
+}

@@ -56,6 +56,9 @@ StartChangeMode(playerid)
 	if(GetPVarInt(playerid, "isSpec") != 0)
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
+	if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING)
+		return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot change modes while in a duel session.");
+
 	if(IsPlayerInDuel2v2(playerid))
 		return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot change modes while in a 2v2 duel. Use /cancel2v2 first.");
 
@@ -65,6 +68,11 @@ StartChangeMode(playerid)
 	if (g_PlayerTraining[playerid][pTrain_Active])
 	{
 		ExitTrainingArena(playerid);
+	}
+
+	if (g_Practice[playerid][pracActive])
+	{
+		CallLocalFunction("StopPracticeSession", "i", playerid);
 	}
 
     new Float:hp;
