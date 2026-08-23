@@ -112,7 +112,7 @@ rSpree(killerid, playerid)
             }
             case 25: {
                 format(Stringa, sizeof(Stringa), "%sApex Predator!", (spreeColor[0] == '\0') ? ("~r~~h~") : (spreeColor));
-                va_SendClientMessageToAll(-1, "{MAIN}%s - APEX PREDATOR (25 KILLS)!", getPlayerName(killerid));
+                va_SendClientMessageToAll(-1, "{MAIN}%s - APEX PREDATOR!", getPlayerName(killerid));
             }
             case 26: {
                 format(Stringa, sizeof(Stringa), "%sDemigod!", (spreeColor[0] == '\0') ? ("~y~~h~") : (spreeColor));
@@ -128,7 +128,7 @@ rSpree(killerid, playerid)
             }
             case 30: {
                 format(Stringa, sizeof(Stringa), "%sGrandmaster!", (spreeColor[0] == '\0') ? ("~y~~h~") : (spreeColor));
-                va_SendClientMessageToAll(-1, "{MAIN}%s - GRANDMASTER SPREE (30 KILLS)!", getPlayerName(killerid));
+                va_SendClientMessageToAll(-1, "{MAIN}%s - GRANDMASTER SPREE!", getPlayerName(killerid));
             }
             default: {
                 format(Stringa, sizeof(Stringa), "%sLegendary!", (spreeColor[0] == '\0') ? ("~y~~h~") : (spreeColor));
