@@ -332,6 +332,64 @@ static stock Float:GetSpawnClearance(playerid, Float:x, Float:y, Float:z)
     return closest;
 }
 
+static stock Float:GetOptimalSpawnFacingAngle(playerid, zone, Float:spawnX, Float:spawnY, Float:spawnZ)
+{
+    new Float:targetX = (arenaData[zone][arenaPos][0] + arenaData[zone][arenaPos][2]) / 2.0;
+    new Float:targetY = (arenaData[zone][arenaPos][1] + arenaData[zone][arenaPos][3]) / 2.0;
+    new Float:closestDist = 99999.0;
+    new location = User[playerid][locationId];
+
+    foreach(new i : Player)
+    {
+        if(i == playerid) continue;
+        if(!IsPlayerConnected(i) || !User[i][isLogged] || User[i][isAfk]) continue;
+        if(User[i][locationId] != location) continue;
+
+        new Float:d = GetPlayerDistanceFromPoint(i, spawnX, spawnY, spawnZ);
+        if(d < closestDist)
+        {
+            closestDist = d;
+            new Float:pz;
+            GetPlayerPos(i, targetX, targetY, pz);
+        }
+    }
+
+    new Float:baseAngle = atan2(targetY - spawnY, targetX - spawnX) - 90.0;
+    while(baseAngle < 0.0) baseAngle += 360.0;
+    while(baseAngle >= 360.0) baseAngle -= 360.0;
+
+    static const Float:testOffsets[] = {0.0, 45.0, -45.0, 90.0, -90.0, 180.0};
+    new Float:bestAngle = baseAngle;
+    new Float:maxClearance = -1.0;
+
+    for(new o = 0; o < sizeof(testOffsets); o++)
+    {
+        new Float:testAngle = baseAngle + testOffsets[o];
+        while(testAngle < 0.0) testAngle += 360.0;
+        while(testAngle >= 360.0) testAngle -= 360.0;
+
+        new Float:rad = testAngle * (3.14159265 / 180.0);
+        new Float:frontX = spawnX - (3.5 * floatsin(rad));
+        new Float:frontY = spawnY + (3.5 * floatcos(rad));
+        new Float:hitX, Float:hitY, Float:hitZ;
+
+        new hitModel = CA_RayCastLine(spawnX, spawnY, spawnZ + 0.8, frontX, frontY, spawnZ + 0.8, hitX, hitY, hitZ);
+        if(!hitModel)
+        {
+            return testAngle;
+        }
+
+        new Float:hitDist = floatsqroot((hitX - spawnX)*(hitX - spawnX) + (hitY - spawnY)*(hitY - spawnY));
+        if(hitDist > maxClearance)
+        {
+            maxClearance = hitDist;
+            bestAngle = testAngle;
+        }
+    }
+
+    return bestAngle;
+}
+
 static stock GetCustomArenaIndex(zone)
 {
     if (!IsCustomArena(zone)) return -1;
@@ -519,10 +577,19 @@ spawnOnLocation(playerid)
 		floorLimit = GetCustomArenaFloor(zone) - SPAWN_FLOOR_TOLERANCE;
 	}
 
+	new Float:diffX = (arenaData[zone][arenaPos][2] - arenaData[zone][arenaPos][0]) * 0.1;
+	new Float:diffY = (arenaData[zone][arenaPos][3] - arenaData[zone][arenaPos][1]) * 0.1;
+	new Float:padX = (diffX < 4.0) ? diffX : 4.0;
+	new Float:padY = (diffY < 4.0) ? diffY : 4.0;
+	new Float:minX = arenaData[zone][arenaPos][0] + padX;
+	new Float:maxX = arenaData[zone][arenaPos][2] - padX;
+	new Float:minY = arenaData[zone][arenaPos][1] + padY;
+	new Float:maxY = arenaData[zone][arenaPos][3] - padY;
+
 	for(new attempt = 0; bestClearance < 0.0 && attempt < SPAWN_MAX_ATTEMPTS; attempt++)
 	{
-		posX = RandomFloat(arenaData[zone][arenaPos][0], arenaData[zone][arenaPos][2]);
-		posY = RandomFloat(arenaData[zone][arenaPos][1], arenaData[zone][arenaPos][3]);
+		posX = RandomFloat(minX, maxX);
+		posY = RandomFloat(minY, maxY);
 
 		new modelid = CA_RayCastLine(posX, posY, ceiling, posX, posY, -1000.0, posX, posY, posZ);
 
@@ -533,6 +600,18 @@ spawnOnLocation(playerid)
 			if(posZ < floorLimit) continue;
 		}
 		else if(IsModelBuilding(modelid)) continue;
+
+		// 1. Verificacao de espaco livre vertical para a cabeca/corpo (evita tetos baixos e decoracoes ocas)
+		new Float:cx, Float:cy, Float:cz;
+		if(CA_RayCastLine(posX, posY, posZ + 0.3, posX, posY, posZ + 2.1, cx, cy, cz))
+			continue;
+
+		// 2. Verificacao de colisao lateral imediata (evita spawnar preso dentro de quinas/colunas)
+		if(CA_RayCastLine(posX, posY, posZ + 0.8, posX + 0.4, posY, posZ + 0.8, cx, cy, cz) ||
+		   CA_RayCastLine(posX, posY, posZ + 0.8, posX - 0.4, posY, posZ + 0.8, cx, cy, cz) ||
+		   CA_RayCastLine(posX, posY, posZ + 0.8, posX, posY + 0.4, posZ + 0.8, cx, cy, cz) ||
+		   CA_RayCastLine(posX, posY, posZ + 0.8, posX, posY - 0.4, posZ + 0.8, cx, cy, cz))
+			continue;
 
 		new Float:clearance = GetSpawnClearance(playerid, posX, posY, posZ);
 
@@ -568,7 +647,9 @@ spawnOnLocation(playerid)
 		Streamer_UpdateEx(playerid, bestX, bestY, bestZ, -1, arenaData[zone][arenaInterior], STREAMER_TYPE_OBJECT);
 
 	SetPlayerPos(playerid, bestX, bestY, bestZ);
-	SetPlayerFacingAngle(playerid, RandomFloat(0.0, 360.0));
+
+	new Float:spawnAngle = GetOptimalSpawnFacingAngle(playerid, zone, bestX, bestY, bestZ);
+	SetPlayerFacingAngle(playerid, spawnAngle);
 	SetCameraBehindPlayer(playerid);
 
 	KillTimer(SpawnGuardTimer[playerid]);
