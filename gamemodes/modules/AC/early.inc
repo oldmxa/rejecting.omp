@@ -58,7 +58,9 @@ static
 
     Float:ACMoveZ[MAX_PLAYERS],
     Float:ACFallTop[MAX_PLAYERS],
+    Float:ACFallStartHealth[MAX_PLAYERS],
     bool:ACFalling[MAX_PLAYERS],
+    ACFallStrikes[MAX_PLAYERS],
     ACSurfStrike[MAX_PLAYERS],
     ACSurfLogged[MAX_PLAYERS],
     Float:ACNullX[MAX_PLAYERS],
@@ -234,9 +236,15 @@ static AC_CheckSurf(playerid)
     return 1;
 }
 
-static AC_CheckFall(playerid, Float:drop)
+static AC_CheckFall(playerid, Float:drop, Float:x, Float:y, Float:z)
 {
-    if (ACNoFallDamage || GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK)
+    if (ACNoFallDamage 
+     || GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK 
+     || GetPlayerWeapon(playerid) == WEAPON_PARACHUTE
+     || GetPlayerSurfingObjectID(playerid) != INVALID_OBJECT_ID 
+     || GetPlayerSurfingVehicleID(playerid) != INVALID_VEHICLE_ID
+     || GetPVarInt(playerid, "spawn_protect") == 1
+     || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)
     {
         ACFalling[playerid] = false;
         ACFallTop[playerid] = 0.0;
@@ -249,6 +257,7 @@ static AC_CheckFall(playerid, Float:drop)
         {
             ACFalling[playerid] = true;
             ACFallTop[playerid] = 0.0;
+            GetPlayerHealth(playerid, ACFallStartHealth[playerid]);
         }
 
         ACFallTop[playerid] += drop;
@@ -260,13 +269,32 @@ static AC_CheckFall(playerid, Float:drop)
     new Float:total = ACFallTop[playerid], Float:health;
     GetPlayerHealth(playerid, health);
 
+    new Float:startHp = ACFallStartHealth[playerid];
     ACFalling[playerid] = false;
     ACFallTop[playerid] = 0.0;
 
-    AC_Debug(playerid, AC_NO_FALL, "landed after %.1f (limit %.1f), health %.0f", total, AC_FALL_HEIGHT, health);
+    new Float:hx, Float:hy, Float:hz;
+    new modelid = CA_RayCastLine(x, y, z + 1.0, x, y, z - 2.5, hx, hy, hz);
+    if (modelid == WATER_OBJECT || z <= 1.0)
+    {
+        ACFallStrikes[playerid] = 0;
+        return 1;
+    }
 
-    if (total >= AC_FALL_HEIGHT && health >= 100.0)
-        CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_NO_FALL);
+    AC_Debug(playerid, AC_NO_FALL, "landed after %.1f (limit %.1f), start hp %.0f -> landing hp %.0f", total, AC_FALL_HEIGHT, startHp, health);
+
+    if (total >= AC_FALL_HEIGHT && health >= (startHp - 1.0))
+    {
+        if (++ACFallStrikes[playerid] >= 2)
+        {
+            ACFallStrikes[playerid] = 0;
+            CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_NO_FALL);
+        }
+    }
+    else
+    {
+        ACFallStrikes[playerid] = 0;
+    }
 
     return 1;
 }
@@ -491,7 +519,7 @@ static AC_MovementTick(playerid)
 
     if (elapsed < 1) return 1;
 
-    AC_CheckFall(playerid, drop);
+    AC_CheckFall(playerid, drop, x, y, z);
 
     if (GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !User[playerid][isSpectating] && !User[playerid][isAfk])
     {
@@ -653,6 +681,10 @@ hook OnPlayerConnect(playerid)
     ACRunStrike[playerid] = ACAirStrike[playerid] = 0;
     ACVehSpeedStrike[playerid] = ACCarFlyStrike[playerid] = 0;
     ACMegaJumpStrike[playerid] = 0;
+    ACFallStrikes[playerid] = 0;
+    ACFalling[playerid] = false;
+    ACFallTop[playerid] = 0.0;
+    ACFallStartHealth[playerid] = 100.0;
     ACNullSince[playerid] = ACNullLog[playerid] = ACNullTick[playerid] = 0;
     ACBproofSince[playerid] = ACBproofLog[playerid] = 0;
     ACArmourSince[playerid] = ACArmourLog[playerid] = 0;
@@ -673,6 +705,10 @@ hook OnPlayerSpawn(playerid)
     ACBproofSince[playerid] = 0;
     ACArmourSince[playerid] = 0;
     ACMegaJumpStrike[playerid] = 0;
+    ACFallStrikes[playerid] = 0;
+    ACFalling[playerid] = false;
+    ACFallTop[playerid] = 0.0;
+    ACFallStartHealth[playerid] = 100.0;
     ACVehSpeedStrike[playerid] = ACCarFlyStrike[playerid] = 0;
     return 1;
 }

@@ -92,7 +92,7 @@ stock ApplyArenaChange(playerid, location, zone)
 determineArenaID(location)
 {
 	new const LOCATION_PLAYERS = getLocationPlayers(location);
-	new type, rand;
+	new type;
 
 	if (location == ARENA_CUSTOM)
 	{
@@ -111,23 +111,55 @@ determineArenaID(location)
 		type = ARENA_CATEGORY_SMALL;
 	}
 
+	new currentArena = arenaInfo[location][arenaId];
+	new prevArena = lastArenaId[location];
+
 	if (Iter_IsEmpty(ArenaQueue<type>))
 	{
 		foreach (new i : ArenaCategory<type>)
 		{
-			if (arenaInfo[location][arenaId] != i)
+			Iter_Add(ArenaQueue<type>, i);
+		}
+	}
+
+	if (Iter_Contains(ArenaQueue<type>, currentArena))
+	{
+		Iter_Remove(ArenaQueue<type>, currentArena);
+	}
+
+	if (Iter_Count(ArenaQueue<type>) > 1 && prevArena != -1 && Iter_Contains(ArenaQueue<type>, prevArena))
+	{
+		Iter_Remove(ArenaQueue<type>, prevArena);
+	}
+
+	if (Iter_IsEmpty(ArenaQueue<type>))
+	{
+		foreach (new i : ArenaCategory<type>)
+		{
+			if (i != currentArena && i != prevArena)
 			{
 				Iter_Add(ArenaQueue<type>, i);
 			}
 		}
+
+		if (Iter_IsEmpty(ArenaQueue<type>))
+		{
+			foreach (new i : ArenaCategory<type>)
+			{
+				if (i != currentArena)
+				{
+					Iter_Add(ArenaQueue<type>, i);
+				}
+			}
+		}
 	}
 
-	if (Iter_Count(ArenaQueue<type>) > 1 && Iter_Contains(ArenaQueue<type>, lastArenaId[location]))
+	if (Iter_IsEmpty(ArenaQueue<type>))
 	{
-		Iter_Remove(ArenaQueue<type>, lastArenaId[location]);
+		return currentArena;
 	}
 
-	rand = Iter_Random(ArenaQueue<type>);
+	new rand = Iter_Random(ArenaQueue<type>);
 	Iter_Remove(ArenaQueue<type>, rand);
 
 	return rand;
@@ -601,12 +633,10 @@ spawnOnLocation(playerid)
 		}
 		else if(IsModelBuilding(modelid)) continue;
 
-		// 1. Verificacao de espaco livre vertical para a cabeca/corpo (evita tetos baixos e decoracoes ocas)
 		new Float:cx, Float:cy, Float:cz;
 		if(CA_RayCastLine(posX, posY, posZ + 0.3, posX, posY, posZ + 2.1, cx, cy, cz))
 			continue;
 
-		// 2. Verificacao de colisao lateral imediata (evita spawnar preso dentro de quinas/colunas)
 		if(CA_RayCastLine(posX, posY, posZ + 0.8, posX + 0.4, posY, posZ + 0.8, cx, cy, cz) ||
 		   CA_RayCastLine(posX, posY, posZ + 0.8, posX - 0.4, posY, posZ + 0.8, cx, cy, cz) ||
 		   CA_RayCastLine(posX, posY, posZ + 0.8, posX, posY + 0.4, posZ + 0.8, cx, cy, cz) ||
