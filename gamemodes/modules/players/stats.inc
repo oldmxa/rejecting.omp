@@ -764,13 +764,14 @@ ShowGunMenu(playerid)
 	if(GetPVarInt(playerid, "isSpec") != 0)
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
-    if(User[playerid][isAfk])
-        return SendClientMessage(playerid, 0xFFFFFFFF, "%s", AFK_ERROR_MSG);
-
-    new Float:Armour;
-    GetPlayerArmour(playerid, Armour);
-    if(Armour < 20.0)
-        return SendClientMessage(playerid, -1, "%s", CANNOT_DO_THIS);
+    new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
+    if(!isLoungeOrAfk)
+    {
+        new Float:Armour;
+        GetPlayerArmour(playerid, Armour);
+        if(Armour < 20.0)
+            return SendClientMessage(playerid, -1, "%s", CANNOT_DO_THIS);
+    }
 
     gunMenu(playerid);
     return true;

@@ -431,9 +431,13 @@ public CHANGE(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response)
     {
+        new bool:fromPersonal = bool:GetPVarInt(playerid, "gunmenu_from_personalization");
+        DeletePVar(playerid, "gunmenu_from_personalization");
+
         if(User[playerid][playerWeapons][0] == 0 && User[playerid][playerWeapons][1] == 0 && User[playerid][playerWeapons][2] == 0 && User[playerid][playerWeapons][3] == 0 && User[playerid][isAlreadySpawned])
         {
             SendClientMessage(playerid, -1, "%s", CHOOSE_WEAPON_MSG);
+            if(fromPersonal) SetPVarInt(playerid, "gunmenu_from_personalization", 1);
             gunMenu(playerid);
             DeletePVar(playerid, "slotName");
             return false;
@@ -445,13 +449,20 @@ public CHANGE(playerid, dialogid, response, listitem, string:inputtext[])
         	DeletePVar(playerid, "showGunmenuFirst");
         }
 
-        givePlayerWeapons(playerid);
+        if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK && !User[playerid][isAfk])
+            givePlayerWeapons(playerid);
 
         if(GetPVarInt(playerid, "gunmenu_world"))
         {
         	DeletePVar(playerid, "gunmenu_world");
         	if(User[playerid][locationId] != -1)
         		SetPlayerVirtualWorld(playerid, User[playerid][locationId]*99);
+        }
+
+        if(fromPersonal)
+        {
+            ShowPersonalizationMenu(playerid);
+            return true;
         }
 
         return true;
@@ -490,7 +501,8 @@ public CHANGE(playerid, dialogid, response, listitem, string:inputtext[])
             gunMenu(playerid);
     }
 
-    givePlayerWeapons(playerid);
+    if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK && !User[playerid][isAfk])
+        givePlayerWeapons(playerid);
     return true;
 }
 
@@ -530,7 +542,9 @@ public CHANGE1(playerid, dialogid, response, listitem, string:inputtext[])
 		case 4:	User[playerid][playerWeapons][slotid] = 0;
 	}
 
-	givePlayerWeapons(playerid);
+	if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK && !User[playerid][isAfk])
+		givePlayerWeapons(playerid);
+
 	gunMenu(playerid);
 
     return true;

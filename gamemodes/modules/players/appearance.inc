@@ -131,7 +131,17 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
         case 9: ShowChatColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 10: ShowSkinDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 11: { strcopy(cmd, "/fight"); Command_ReProcess(playerid, cmd, 0); }
-        case 12: { strcopy(cmd, "/gunmenu"); Command_ReProcess(playerid, cmd, 0); }
+        case 12: {
+            new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
+            if(!isLoungeOrAfk)
+            {
+                SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}You can only configure weapon loadout via menu while in the Lounge.");
+                ShowPersonalizationMenu(playerid);
+                return 1;
+            }
+            SetPVarInt(playerid, "gunmenu_from_personalization", 1);
+            gunMenu(playerid);
+        }
         case 13: { ShowPlayerHudTypesList(playerid); }
         case 14: {
             User[playerid][show3DDeathTag] = !User[playerid][show3DDeathTag];

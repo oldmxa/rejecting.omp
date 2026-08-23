@@ -202,7 +202,8 @@ forward LookupOfflineStats(playerid, const targetName[]);
     if(IsPlayerInTournamentMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /gunmenu during a tournament match.");
 
-    if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
+    new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
+    if(!isLoungeOrAfk)
     {
         if(gettime() - User[playerid][timerRespawn] > 15)
         {
@@ -210,6 +211,7 @@ forward LookupOfflineStats(playerid, const targetName[]);
         }
     }
 
+    DeletePVar(playerid, "gunmenu_from_personalization");
 	ShowGunMenu(playerid);
     return true;
 }

@@ -201,7 +201,8 @@ gunMenu(playerid)
 		default: format(strr, sizeof(strr), "Slot #\tGun\nOne\t{229954}%s\nTwo\t{229954}%s\nThree \t{229954}%s\nFourth\t{229954}%s",
 			weaponName[0], weaponName[1], weaponName[2], weaponName[3]);
 	}
-	Dialog_ShowCallback(playerid, using public CHANGE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{ff3c00}Selection guns", strr, "Select", "Play");
+	new bool:fromPersonal = bool:GetPVarInt(playerid, "gunmenu_from_personalization");
+	Dialog_ShowCallback(playerid, using public CHANGE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{ff3c00}Selection guns", strr, "Select", fromPersonal ? "Back" : "Play");
 	return true;
 }
 
