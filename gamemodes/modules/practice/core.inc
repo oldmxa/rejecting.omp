@@ -37,7 +37,11 @@ stock ResetPracticeState(playerid)
     g_Practice[playerid][pracObject]   = INVALID_STREAMER_ID;
     g_Practice[playerid][pracHealth]   = 0.0;
     g_Practice[playerid][pracWaypoint] = 0;
-    g_Practice[playerid][pracMoveTimer] = 0;
+    if (g_Practice[playerid][pracMoveTimer])
+    {
+        KillTimer(g_Practice[playerid][pracMoveTimer]);
+        g_Practice[playerid][pracMoveTimer] = 0;
+    }
     g_Practice[playerid][pracHits]     = 0;
     g_Practice[playerid][pracShots]    = 0;
     g_Practice[playerid][pracShotId]     = 0;
