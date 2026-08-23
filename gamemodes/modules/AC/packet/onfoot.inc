@@ -3,6 +3,22 @@
 #endif
 #define _ac_parkour_included
 
+stock AC_CheckNoFallAnim(playerid, animationId)
+{
+    if (!ACNoFallAnimation || !User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
+
+    switch (animationId)
+    {
+        case 1128, 1129, 1131, 1132, 1208, 1209, 1210:
+        {
+            ClearAnimations(playerid, SYNC_ALL);
+            return 1;
+        }
+    }
+    return 0;
+}
+
 const AC_PM_PLAYER_SYNC = 207;
 
 IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
@@ -30,6 +46,7 @@ IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
 
     AC_CheckUpsideDown(playerid, onFootData[PR_quaternion][1], onFootData[PR_quaternion][2]);
     AC_CheckStun(playerid, onFootData[PR_animationId]);
+    AC_CheckNoFallAnim(playerid, onFootData[PR_animationId]);
     AC_CheckHealthSync(playerid, onFootData[PR_health]);
     AC_CheckArmourSync(playerid, onFootData[PR_armour]);
     AC_CheckMegaJump(playerid, onFootData[PR_velocity][2]);
