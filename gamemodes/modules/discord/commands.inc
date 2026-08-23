@@ -694,7 +694,10 @@ DSLASH:setmoney(user, params[])
 
     new target_nick[24], amount;
     if(sscanf(params, "s[24]d", target_nick, amount))
-        return SendDiscordResponse(comandos, "/setmoney [nick] [amount]");
+        return SendDiscordResponse(comandos, "Usage: /setmoney [nick] [amount]");
+
+    if(amount < 0 || amount > 1000000000)
+        return SendDiscordResponse(comandos, "Error: Amount must be between 0 and 1,000,000,000.");
 
     new targetid = GetOnlinePlayerIDByName(target_nick);
 
@@ -719,7 +722,22 @@ DSLASH:setmoney(user, params[])
         SendDiscordResponse(comandos, sprintf("Money of **%s** set to **%s**!", target_nick, FormatMoney(amount)));
         return true;
     }
-    return true;
+    else
+    {
+        mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `player_money` = %d WHERE `username` = '%e'", amount, target_nick);
+        mysql_tquery(dbHandle, queryGlobal);
+
+        new username[DCC_USERNAME_SIZE];
+        DCC_GetUserName(user, username, sizeof(username));
+
+        new mLog[256];
+        format(mLog, sizeof(mLog), "**Admin:** %s (Discord)\n**Player:** %s (Offline)\n**New Balance:** $%s",
+            username, target_nick, FormatMoney(amount));
+        SendDiscordEmbed(logs_money, "Admin Money Set", mLog, DISCORD_COLOR_ADMIN);
+
+        SendDiscordResponse(comandos, sprintf("Money of offline player **%s** set to **%s**!", target_nick, FormatMoney(amount)));
+        return true;
+    }
 }
 
 #define RESETPASS_LENGTH (10)
