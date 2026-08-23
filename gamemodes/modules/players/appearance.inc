@@ -73,6 +73,11 @@
     {
         case 1:
         {
+            if(piscaTimer[playerid])
+            {
+                KillTimer(piscaTimer[playerid]);
+                piscaTimer[playerid] = 0;
+            }
             SetPlayerColor(playerid, (randomcolor[random(sizeof(randomcolor))] & 0xFFFFFF00) | 0x65);
             piscaTimer[playerid] = SetTimerEx("updateColor", 1000, true, "i", playerid);
             User[playerid][isPiscando] = true;
@@ -80,7 +85,11 @@
         }
         case 2:
         {
-            KillTimer(piscaTimer[playerid]);
+            if(piscaTimer[playerid])
+            {
+                KillTimer(piscaTimer[playerid]);
+                piscaTimer[playerid] = 0;
+            }
             SetClanColor(playerid);
             User[playerid][isPiscando] = false;
             SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Flashing colors disabled.");
