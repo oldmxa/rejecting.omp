@@ -567,17 +567,30 @@ ShowCommandCategory(playerid, catid)
     strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Administration Team: {FFFFFF}For helping keep the servers in order\n");
     strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Community: {FFFFFF}To all players for their continuous support\n\n");
 
-    strcat(creditsStr, "{00CED1}Plugins & Libraries:\n");
+    strcat(creditsStr, "{00CED1}Core & Framework:\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}open.mp: {FFFFFF}open.mp Team & Community\n");
     strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}YSI Framework: {FFFFFF}Y_Less\n");
-    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}sscanf2: {FFFFFF}Y_Less\n");
-    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Streamer: {FFFFFF}Incognito\n");
-    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}MySQL: {FFFFFF}BlueG, madvsh\n");
-    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Pawn.RakNet: {FFFFFF}urShadow\n");
-    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}ColAndreas: {FFFFFF}Pottus, Vince\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}sscanf2: {FFFFFF}Y_Less\n\n");
+
+    strcat(creditsStr, "{00CED1}Plugins & Networking:\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Streamer Plugin: {FFFFFF}Incognito\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}MySQL: {FFFFFF}BlueG, maddinat0r\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Pawn.RakNet: {FFFFFF}urShadow, Katursis\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}ColAndreas: {FFFFFF}Pottus, Vince, Slice, Kar\n");
     strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Discord Connector: {FFFFFF}maddinat0r\n");
     strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Requests: {FFFFFF}Southclaws\n");
     strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Bcrypt: {FFFFFF}s00p, SgtPez\n");
-    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}SKY: {FFFFFF}Osas, Zash");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}Crashdetect: {FFFFFF}Zeex\n\n");
+
+    strcat(creditsStr, "{00CED1}Libraries & Contributions:\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}weapon-config: {FFFFFF}Slice, OscarWos\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}PreviewModelDialog: {FFFFFF}Mellnik\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}zmessage: {FFFFFF}Ziggi\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}md-sort & sort-inline: {FFFFFF}Mergevos\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}strlib: {FFFFFF}Slice\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}a_zone: {FFFFFF}Mellnik, Cu10\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}alpha-fix: {FFFFFF}oscar-broman, Nexius\n");
+    strcat(creditsStr, "{FFFFFF}\x95 {08A3FD}visual-areas: {FFFFFF}Mergevos\n");
 
     Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "{00CED1}Server Credits", creditsStr, "Close", "");
     return true;
