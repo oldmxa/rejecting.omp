@@ -73,14 +73,15 @@ public DCC_OnMessageCreate(DCC_Message:message)
 	if(!strcmp(str, "/tournament", true, 11) || !strcmp(str, ".tournament", true, 11) || !strcmp(str, "!tournament", true, 11))
 	{
 		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);
+		if(comandos == DCC_INVALID_CHANNEL) comandos = DCC_FindChannelById(CH_COMANDOS);
 		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
 
-		if(channel != ch_tourney_register && channel != logs_linked)
+		if(channel != ch_tourney_register && channel != comandos && channel != logs_linked)
 		{
 			new uid[DCC_ID_SIZE];
 			DCC_GetUserId(author, uid, sizeof(uid));
 			new denyMsg[256];
-			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Tournament registration can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_LOGS_LINKED ">!", uid);
+			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Tournament registration can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_COMANDOS ">!", uid);
 			DCC_SendChannelMessage(channel, denyMsg);
 			return true;
 		}

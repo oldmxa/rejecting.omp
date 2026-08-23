@@ -1,6 +1,7 @@
 start-server.bat
 _downloads/
 log.txt
+desktop.ini
 base.amx
 *.log
 tools/

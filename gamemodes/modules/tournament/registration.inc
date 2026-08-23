@@ -29,7 +29,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
         if(!IsPlayerRegisteredOnDiscord(playerid))
         {
             SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You must complete your application on Discord first!");
-            SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Go to Discord channel {23C552}#1539673870657921135 {FFFFFF}and use: {MAIN}/tournament <nick> <ucp_profile>");
+            SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Go to Discord channel {23C552}#" CH_TOURNEY_REGISTER " {FFFFFF}and use: {MAIN}/tournament <nick>");
             SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Without a Discord application, you can only spectate with {MAIN}/bracket {FFFFFF}or {MAIN}/spectournament{FFFFFF}.");
             return -1;
         }
@@ -102,7 +102,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
             if(g_TourneyData[t_RequireDiscord] && !IsPlayerRegisteredOnDiscord(teammateid))
             {
                 va_SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Your teammate %s has not completed their Discord application yet!", User[teammateid][userName]);
-                SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}They must go to Discord channel {23C552}#1539673870657921135 {FFFFFF}and use: {MAIN}/tournament <nick> <ucp_profile>");
+                SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}They must go to Discord channel {23C552}#" CH_TOURNEY_REGISTER " {FFFFFF}and use: {MAIN}/tournament <nick>");
                 return -1;
             }
 
@@ -423,7 +423,7 @@ stock StartTournamentRegistration(adminid)
         "- **Entry Fee:** `%s`\n"\
         "- **Weapon Loadout:** `%s`\n\n"\
         "**How to Participate**\n"\
-        "Use `/tournament <InGame_Nick>` in <#1539673870657921135> to apply!",
+        "Use `/tournament <InGame_Nick>` in <#" CH_TOURNEY_REGISTER "> to apply!",
         g_TourneyData[t_Name], g_TourneyData[t_Schedule], modeName, g_TourneyData[t_MaxSlots],
         g_TourneyData[t_AchievementTag], g_TourneyData[t_PrizeCoins], FormatMoney(g_TourneyData[t_PrizeMoney]),
         feeStr, g_TourneyWeaponSets[g_TourneyData[t_WeaponSet]][twi_Name]

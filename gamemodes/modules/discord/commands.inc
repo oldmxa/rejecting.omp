@@ -1780,14 +1780,15 @@ DSLASH:tournament(user, params[])
 	if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
 	{
 		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);
+		if(comandos == DCC_INVALID_CHANNEL) comandos = DCC_FindChannelById(CH_COMANDOS);
 		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
 
-		if(g_CurrentInteractionChannel != ch_tourney_register && g_CurrentInteractionChannel != logs_linked)
+		if(g_CurrentInteractionChannel != ch_tourney_register && g_CurrentInteractionChannel != comandos && g_CurrentInteractionChannel != logs_linked)
 		{
-			return DSC_Deny(":no_entry: Tournament registration commands can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_LOGS_LINKED ">!");
+			return DSC_Deny(":no_entry: Tournament registration commands can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_COMANDOS ">!");
 		}
 	}
-	return ProcessDiscordTourneyApp(user, (ch_tourney_register != DCC_INVALID_CHANNEL) ? (ch_tourney_register) : (logs_linked), params);
+	return ProcessDiscordTourneyApp(user, (g_CurrentInteractionChannel != DCC_INVALID_CHANNEL) ? (g_CurrentInteractionChannel) : ((ch_tourney_register != DCC_INVALID_CHANNEL) ? (ch_tourney_register) : ((comandos != DCC_INVALID_CHANNEL) ? (comandos) : (logs_linked))), params);
 }
 
 DSLASH:verify(user, params[])
