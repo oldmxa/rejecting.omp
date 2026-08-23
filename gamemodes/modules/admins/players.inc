@@ -295,6 +295,9 @@
     if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
+    if(amount < 0 || amount > 1000000000)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Money amount must be between 0 and 1,000,000,000.");
+
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])
         return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
 
@@ -362,6 +365,9 @@
     if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
+    if(vw < 0)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Virtual world cannot be negative.");
+
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])
         return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
 
@@ -379,6 +385,9 @@
     if(sscanf(params, "ui", targetid, interior)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/setinterior [id] [interior]");
     if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
+
+    if(interior < 0 || interior > 255)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Interior ID must be between 0 and 255.");
 
     if(User[targetid][adminLevel] >= User[playerid][adminLevel])
         return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);

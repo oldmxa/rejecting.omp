@@ -330,7 +330,7 @@ ShowAdminCmds(playerid)
 
     if (sscanf(params, "ud", idplayer, level))
         return SendClientMessage(playerid, -1, "%s", CREATE_ADMIN_HELP);
-    if (!IsPlayerConnected(idplayer))
+    if (!IsPlayerConnected(idplayer) || !User[idplayer][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(idplayer == playerid)

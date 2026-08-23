@@ -276,8 +276,12 @@ public DuelS_Countdown(playerid, challengerid, pos)
 forward DuelS_UpdateInfo(playerid, challengerid);
 public DuelS_UpdateInfo(playerid, challengerid)
 {
-	if(!IsPlayerConnected(playerid) || !IsPlayerConnected(challengerid)) return 1;
-	if(GetPVarInt(playerid, "DuelS_State") != challengerid || GetPVarInt(challengerid, "DuelS_State") != playerid) return 1;
+	if(!IsPlayerConnected(playerid) || !IsPlayerConnected(challengerid) || GetPVarInt(playerid, "DuelS_State") != challengerid || GetPVarInt(challengerid, "DuelS_State") != playerid)
+	{
+		if(DuelS_Timer[playerid]) { KillTimer(DuelS_Timer[playerid]); DuelS_Timer[playerid] = 0; }
+		if(DuelS_Timer[challengerid]) { KillTimer(DuelS_Timer[challengerid]); DuelS_Timer[challengerid] = 0; }
+		return 1;
+	}
 
 	new Float:pHealth, Float:cHealth, Float:pArmour, Float:cArmour, pAmount, cAmount;
 	new strum[50], strdos[50];
@@ -309,12 +313,15 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 	SetPVarInt(loser, "DuelS_State", DUELS_STATE_NONE);
 
 	if(DuelS_Timer[winner])
+	{
 		KillTimer(DuelS_Timer[winner]);
-	else if(DuelS_Timer[loser])
+		DuelS_Timer[winner] = 0;
+	}
+	if(DuelS_Timer[loser])
+	{
 		KillTimer(DuelS_Timer[loser]);
-
-	DuelS_Timer[winner] = 0;
-	DuelS_Timer[loser] = 0;
+		DuelS_Timer[loser] = 0;
+	}
 
 	PlayerTextDrawHide(winner, TDTimerDuelS[winner]);
 	PlayerTextDrawHide(loser, TDTimerDuelS[loser]);

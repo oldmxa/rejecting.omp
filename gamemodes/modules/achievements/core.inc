@@ -1019,6 +1019,8 @@ public DIALOG_ACHIEVEMENTS_DETAIL(playerid, dialogid, response, listitem, string
     if(!IsServerOwner(playerid))
         return SendClientMessage(playerid, -1, "%s", ACHIEVEMENT_GIVE_OWNER);
 
+    CheckAdminAuth(playerid);
+
     new targetid, achid;
     if(sscanf(params, "ui", targetid, achid))
     {

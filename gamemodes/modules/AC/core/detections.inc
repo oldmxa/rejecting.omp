@@ -271,6 +271,8 @@ public OnRejectingACDetection(playerid, code)
     if (User[playerid][adminLevel] < AC_MIN_ADMIN_LEVEL)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
+    CheckAdminAuth(playerid);
+
     new code;
     if (sscanf(params, "D(0)", code)) code = 0;
     if (code < 0 || code >= MAX_AC_DETECTIONS) code = 0;

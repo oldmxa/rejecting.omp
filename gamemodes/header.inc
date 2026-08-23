@@ -65,13 +65,12 @@
 #include "modules/discord/core.inc"
 #include "modules/admins/lookup.inc"
 
-// game systems
+#include "modules/admins/auth.inc"
 #include "modules/misc/top5.inc"
 #include "modules/misc/tickets.inc"
 #include "modules/vip/core.inc"
 #include "modules/outposts/core.inc"
 #include "modules/interiors/core.inc"
-#include "modules/admins/auth.inc"
 
 // anti cheat
 #tryinclude "modules/AC/entry.inc"

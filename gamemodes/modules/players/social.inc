@@ -10,7 +10,7 @@
     new targetid, reason[100];
 	if(sscanf(params, "us[100]", targetid, reason))
 		return SendClientMessage(playerid, -1, "%s", REPORT_HELP);
-	if(!IsPlayerConnected(targetid))
+	if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
 		return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 	if(targetid == playerid)
 		return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_SELF);
@@ -245,11 +245,14 @@
     if(money <= 0)
         return SendClientMessage(playerid, -1, "%s", TRANSFERMONEY_AMOUNT);
 
+    if(money > 100000000)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Maximum transfer limit per transaction is $100,000,000.");
+
     if(money > User[playerid][playerMoney])
         return SendClientMessage(playerid, -1, "%s", TRANSFERMONEY_NOMONEY);
 
-    if(!User[targetid][isLogged])
-        return SendClientMessage(playerid, -1, "%s", IS_NOT_LOGGED);
+    if(User[targetid][playerMoney] + money > 2000000000)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Target player's bank/wallet would exceed the maximum limit.");
 
     GivePlayerMoney(playerid, -money);
     GivePlayerMoney(targetid, money);

@@ -777,6 +777,8 @@ ShowVipTagDialog(playerid)
         return true;
     }
 
+    CheckAdminAuth(playerid);
+
     new targetid, days;
     if(sscanf(params, "rd", targetid, days))
     {
@@ -844,6 +846,8 @@ ShowVipTagDialog(playerid)
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You do not have permission to use this command (Admin Level 4 Required).");
         return true;
     }
+
+    CheckAdminAuth(playerid);
 
     new targetid;
     if(sscanf(params, "r", targetid))

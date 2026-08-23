@@ -229,11 +229,20 @@ forward LookupOfflineStats(playerid, const targetName[]);
     if(!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING)
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot spectate while in a duel.");
+
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot spectate while in a 2v2 duel.");
 
     if(IsPlayerInTournamentMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot spectate while playing a tournament match.");
+
+    if(g_PlayerTraining[playerid][pTrain_Active])
+        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot spectate while in training mode.");
+
+    if(g_Practice[playerid][pracActive])
+        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot spectate while in practice mode.");
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
 
@@ -247,14 +256,12 @@ forward LookupOfflineStats(playerid, const targetName[]);
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "%s", SPEC_HELP);
 
-    if(!IsPlayerConnected(targetid))
+    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(User[targetid][isAfk] && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", TARGET_AFK);
 
-    if (User[targetid][isLogged] == false)
-        return SendClientMessage(playerid, -1, "%s", IS_NOT_LOGGED);
     if(targetid == playerid)
         return SendClientMessage(playerid, -1, "%s", SPEC_HELP2);
 
@@ -281,11 +288,20 @@ forward LookupOfflineStats(playerid, const targetName[]);
     if(!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING)
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot use /respawn while in a duel.");
+
     if(IsPlayerInDuel2v2(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /respawn while in a 2v2 duel.");
 
     if(IsPlayerInTournamentMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /respawn while playing a tournament match.");
+
+    if(g_PlayerTraining[playerid][pTrain_Active])
+        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot use /respawn while in training mode.");
+
+    if(g_Practice[playerid][pracActive])
+        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot use /respawn while in practice mode.");
 
     new timestampRespawn = gettime();
     Respawn(playerid, timestampRespawn);
