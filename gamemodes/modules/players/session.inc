@@ -323,9 +323,6 @@ dropPlayerSniper(playerid)
 
 	if(weap == WEAPON_SNIPER && weapammo > 0)
 	{
-		if(weapammo > SNIPER_DROP_AMMO)
-			weapammo = SNIPER_DROP_AMMO;
-
 		CreateWeaponDrop(playerid, WEAPON_SNIPER, weapammo, PICKUP_MODEL_SNIPER);
 	}
 
