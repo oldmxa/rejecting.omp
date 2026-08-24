@@ -96,57 +96,57 @@ setAfkReason(playerid, const reasonn[])
 		{
 			case 1:
 			{
-				SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: PAUSED");
+				SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.");
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: PAUSED", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.", getPlayerName(playerid));
 				}
 
 			}
 			case 2:
 			{
-				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: TOO HIGH FPS %d/%d", User[playerid][FPS], ServerMaxFPS);
+				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High FPS (%d/%d){FFFFFF}.", User[playerid][FPS], ServerMaxFPS);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: HIGH FPS", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH FPS{FFFFFF}.", getPlayerName(playerid));
 				}
 			}
 			case 3:
 			{
-				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: TOO LOW FPS %d/%d", User[playerid][FPS], ServerMinFPS);
+				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}Low FPS (%d/%d){FFFFFF}.", User[playerid][FPS], ServerMinFPS);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: LOW FPS", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}LOW FPS{FFFFFF}.", getPlayerName(playerid));
 				}
 			}
 			case 4:
 			{
-				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: TOO HIGH PING %d/%d", GetPlayerPing(playerid), ServerMaxPing);
+				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High Ping (%d/%d ms){FFFFFF}.", GetPlayerPing(playerid), ServerMaxPing);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: HIGH PING", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH PING{FFFFFF}.", getPlayerName(playerid));
 				}
 			}
 			case 5:
 			{
-				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: TOO HIGH PL %.2f/%.2f", NetStats_PacketLossPercent(playerid), ServerMaxPacketLoss);
+				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High Packet Loss (%.2f%%/%.2f%%){FFFFFF}.", NetStats_PacketLossPercent(playerid), ServerMaxPacketLoss);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: HIGH PL", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH PL{FFFFFF}.", getPlayerName(playerid));
 				}
 			}
 			case 6:
 			{
-				va_SendClientMessage(playerid, -1, ""COL_GRAY"[LNG] You have been teleported to the lounge. Reason: FPS EXCEEDED LIMIT %d (yours: %d)", ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
+				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}FPS exceeded arena limit of %d FPS (Yours: %d FPS){FFFFFF}.", ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, ""COL_GRAY"[LNG] %s Was teleported to the lounge. Reason: HIGH FPS", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}Arena FPS Limit (%d FPS){FFFFFF}.", getPlayerName(playerid), ARENA_FPS_LOCK_VALUE);
 				}
 			}
 		}

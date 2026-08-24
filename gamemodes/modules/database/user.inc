@@ -100,12 +100,6 @@ public OnLoginVerify(playerid, bool:success)
 	{
         KillTimer(User[playerid][loginTimer]);
 		HideLoginScreen(playerid);
-		new rearrangedAdminLevel[25];
-		if(User[playerid][adminLevel] < 1)
-			format(rearrangedAdminLevel, sizeof(rearrangedAdminLevel), "{MAIN}Regular player");
-		else
-			strcopy(rearrangedAdminLevel, adminnames[User[playerid][adminLevel]][ingame], sizeof(rearrangedAdminLevel));
-
 		new planeString[250];
 		strcopy(planeString, returnDate(User[playerid][lastLogin]-10800, 5), sizeof(planeString));
 
@@ -116,7 +110,15 @@ public OnLoginVerify(playerid, bool:success)
 				GetPlayerDisplayColour(playerid), User[playerid][userName]);
 
 			va_SendClientMessage(playerid, -1, GetRandomWelcomeGreeting(), coloredNick);
-			va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG2, rearrangedAdminLevel);
+
+			if(User[playerid][adminLevel] >= 1)
+			{
+				va_SendClientMessage(playerid, -1, GetRandomAdminAccountMsg(), adminnames[User[playerid][adminLevel]][ingame]);
+			}
+			else
+			{
+				va_SendClientMessage(playerid, -1, GetRandomPlayerAccountMsg());
+			}
 
 			if(!strcmp(User[playerid][dc_username], "-1", true))
 			{
@@ -137,10 +139,10 @@ public OnLoginVerify(playerid, bool:success)
 				format(clanColorHex, sizeof(clanColorHex), "%06x", ClanInfo[cid][clanColor] >>> 8);
 				format(coloredClanName, sizeof(coloredClanName), "{%s}%s", clanColorHex, ClanInfo[cid][clanName]);
 
-				va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG3, coloredClanName);
+				va_SendClientMessage(playerid, -1, GetRandomClanWelcomeMsg(), coloredClanName);
 			}
 
-			va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG4, planeString);
+			va_SendClientMessage(playerid, -1, GetRandomLastLoginMsg(), planeString);
 		}
 
 		User[playerid][isLogged] = true;

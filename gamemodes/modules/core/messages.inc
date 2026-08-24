@@ -119,7 +119,7 @@
 #define ARENA_CLAN_DOMINATED        "{MAIN}[INFO] {FFFFFF}The arena {MAIN}%s #%d {FFFFFF}is dominated by the clan %s."
 #define ARENA_JUST_PLAYED           "{MAIN}[ERROR] {FFFFFF}%s {FFFFFF}was the last arena played. Wait for the current one to finish."
 #define ARENA_R2_REQUIRED_ERROR     "{MAIN}[ERROR] {FFFFFF}This arena requires an R2+ client (SA-MP R2/R3/R4/R5 or open.mp). Update your client to enter."
-#define ARENA_FPS_LOCK_ERROR        "{MAIN}[ERROR] {FFFFFF}This arena has a maximum limit of %d FPS. Your current FPS is %d."
+#define ARENA_FPS_LOCK_ERROR        "{MAIN}[ERROR] {FFFFFF}This arena has a maximum limit of {MAIN}%d FPS{FFFFFF}. Your current FPS is {MAIN}%d{FFFFFF}."
 #define NOT_EMPTY_SPACES            "{MAIN}**{FFFFFF} There are no empty spaces in this location"
 #define JOINED_ROOM_MSG             "{MAIN}**{FFFFFF} You have chosen room #%d"
 
@@ -273,7 +273,46 @@ stock const g_PlayerWelcomeGreetings[][] = {
     "{MAIN}**{FFFFFF} Welcome back to the fight, %s{FFFFFF}!"
 };
 
+stock const g_PlayerAccountMsgs[][] = {
+    "{MAIN}**{FFFFFF} Account Status: {MAIN}Regular Player{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Account Type: {MAIN}Regular Player{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Membership: {MAIN}Standard Player{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Account Tier: {MAIN}Regular Player{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Access Level: {MAIN}Player{FFFFFF}."
+};
+
+stock const g_AdminAccountMsgs[][] = {
+    "{MAIN}**{FFFFFF} Staff Rank: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Admin Role: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Administrative Access: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Staff Privilege: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Logged in as: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Staff Level: {MAIN}%s{FFFFFF}."
+};
+
+stock const g_PlayerClanWelcomeMsgs[][] = {
+    "{MAIN}**{FFFFFF} You are representing the %s{FFFFFF} clan.",
+    "{MAIN}**{FFFFFF} You are a proud member of %s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Clan Affiliation: %s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Active Clan: %s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Member of clan %s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Fighting under the %s{FFFFFF} clan banner."
+};
+
+stock const g_PlayerLastLoginMsgs[][] = {
+    "{MAIN}**{FFFFFF} Last Session: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Last Connection: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Previously seen on: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Your last visit was at: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Last active timestamp: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Previous login recorded at: {MAIN}%s{FFFFFF}."
+};
+
 #define GetRandomWelcomeGreeting()  (g_PlayerWelcomeGreetings[random(sizeof(g_PlayerWelcomeGreetings))])
+#define GetRandomPlayerAccountMsg() (g_PlayerAccountMsgs[random(sizeof(g_PlayerAccountMsgs))])
+#define GetRandomAdminAccountMsg()  (g_AdminAccountMsgs[random(sizeof(g_AdminAccountMsgs))])
+#define GetRandomClanWelcomeMsg()   (g_PlayerClanWelcomeMsgs[random(sizeof(g_PlayerClanWelcomeMsgs))])
+#define GetRandomLastLoginMsg()     (g_PlayerLastLoginMsgs[random(sizeof(g_PlayerLastLoginMsgs))])
 
 #define PLAYER_WELCOME_MSG1         "{MAIN}**{FFFFFF} Welcome back, %s{FFFFFF}!"
 #define PLAYER_WELCOME_MSG2         "{MAIN}**{FFFFFF} Your account is that of a %s."
