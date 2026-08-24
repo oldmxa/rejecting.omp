@@ -432,7 +432,7 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/flip\t{FFFFFF}Flip vehicle in Lounge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/fix\t{FFFFFF}Repair vehicle in Lounge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/getgun\t{FFFFFF}Get weapons in Lounge\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changelounge\t{FFFFFF}Change Lounge spawn location\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changelounge (/msp)\t{FFFFFF}Change Lounge spawn location\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/lcmds\t{FFFFFF}List all Lounge commands\n");
         }
         case 3:

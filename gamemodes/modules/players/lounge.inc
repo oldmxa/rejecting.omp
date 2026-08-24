@@ -333,7 +333,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     return true;
 }
 
-@cmd() changelounge(playerid, params[], help)
+@cmd(.alts = {"msp"}) changelounge(playerid, params[], help)
 {
     if(!User[playerid][isAfk])
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
