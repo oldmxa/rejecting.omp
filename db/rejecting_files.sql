@@ -675,10 +675,14 @@ ALTER TABLE `staff_applications`
   ADD KEY `idx_autor` (`user_id`,`status`);
 
 ALTER TABLE `tickets`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_tickets_type_status` (`ticket_type`, `status`),
+  ADD KEY `idx_tickets_user` (`user_id`),
+  ADD KEY `idx_tickets_created` (`created_at`);
 
 ALTER TABLE `ticket_messages`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_ticket_msg_ticket` (`ticket_id`);
 
 ALTER TABLE `training_records`
   ADD PRIMARY KEY (`id`),
