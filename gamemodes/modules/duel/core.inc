@@ -508,6 +508,9 @@ stock DuelS_Host(playerid)
 		if(g_Practice[playerid][pracActive])
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in practice mode.");
 
+		if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while inside a safehouse.");
+
 		new Float:Armour, Float:Health, Float:Result;
 		GetPlayerHealth(playerid, Health);
 		GetPlayerArmour(playerid, Armour);
@@ -601,6 +604,9 @@ stock DuelS_Host(playerid)
 
 	if(g_Practice[playerid][pracActive])
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in practice mode.");
+
+	if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while inside a safehouse.");
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);

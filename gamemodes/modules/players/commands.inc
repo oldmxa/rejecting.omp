@@ -75,6 +75,11 @@ StartChangeMode(playerid)
 		CallLocalFunction("StopPracticeSession", "i", playerid);
 	}
 
+	if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+	{
+		ExitSafehouse(playerid);
+	}
+
     new Float:hp;
     GetPlayerHealth(playerid, hp);
 
@@ -210,6 +215,15 @@ forward LookupOfflineStats(playerid, const targetName[]);
     if(IsPlayerInTournamentMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /gunmenu during a tournament match.");
 
+    if(g_PlayerTraining[playerid][pTrain_Active])
+        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot use /gunmenu in training mode.");
+
+    if(g_Practice[playerid][pracActive])
+        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot use /gunmenu in practice mode.");
+
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot use /gunmenu while inside a safehouse.");
+
     new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
     if(!isLoungeOrAfk)
     {
@@ -243,6 +257,9 @@ forward LookupOfflineStats(playerid, const targetName[]);
 
     if(g_Practice[playerid][pracActive])
         return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot spectate while in practice mode.");
+
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot spectate while inside a safehouse. Use /exitsafehouse first.");
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
 
@@ -302,6 +319,9 @@ forward LookupOfflineStats(playerid, const targetName[]);
 
     if(g_Practice[playerid][pracActive])
         return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot use /respawn while in practice mode.");
+
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot use /respawn while inside a safehouse. Use /exitsafehouse first.");
 
     new timestampRespawn = gettime();
     Respawn(playerid, timestampRespawn);

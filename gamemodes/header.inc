@@ -77,11 +77,11 @@
 #include "modules/training/training.pwn"
 #include "modules/practice/practice.inc"
 
-// duel and random_death_tag hook OnPlayerDeath via ALS:
+// duel, safehouse and random_death_tag hook OnPlayerDeath via ALS:
 // they must come before the base.pwn callbacks.
+#include "modules/safehouse/safehouse.inc"
 #include "modules/duel/core.inc"
 #include "modules/duel2v2/entry.inc"
-#include "modules/safehouse/safehouse.inc"
 #include "modules/misc/random_death_tag.inc"
 #include "modules/achievements/core.inc"
 #include "modules/tournament/entry.inc"

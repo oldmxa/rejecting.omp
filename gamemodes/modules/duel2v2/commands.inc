@@ -30,6 +30,9 @@
     if(g_Practice[playerid][pracActive])
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot create a 2v2 duel while in practice mode.");
 
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot create a 2v2 duel while inside a safehouse.");
+
     ShowDuel2v2ArenaDialog(playerid);
     return 1;
 }
@@ -54,7 +57,8 @@
 
     if(User[playerid][isSpectating] || User[playerid][isAfk] ||
        GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE ||
-       g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive])
+       g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive] ||
+       IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
     {
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You are busy and cannot accept a 2v2 duel right now.");
     }

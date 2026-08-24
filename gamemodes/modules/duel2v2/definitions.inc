@@ -74,6 +74,7 @@ stock bool:IsPlayerBusy(playerid)
     if(g_PlayerTourneySlot[playerid] != -1) return true;
     if(g_PlayerTraining[playerid][pTrain_Active]) return true;
     if(g_Practice[playerid][pracActive]) return true;
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid])) return true;
     new PLAYER_STATE:pState = GetPlayerState(playerid);
     if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING) return true;
     return false;

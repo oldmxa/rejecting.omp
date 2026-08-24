@@ -203,6 +203,15 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
     if (IsPlayerInTournamentMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /lounge while playing a tournament match.");
 
+    if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot use this while inside a safehouse. Use /exitsafehouse first.");
+
+    if (g_PlayerTraining[playerid][pTrain_Active])
+        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot use this while in training mode. Use /exittraining first.");
+
+    if (g_Practice[playerid][pracActive])
+        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot use this while in practice mode. Use /prac exit first.");
+
     if (User[playerid][isAfk])
     {
         if(User[playerid][locationId] == -1)
