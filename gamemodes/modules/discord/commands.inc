@@ -168,10 +168,10 @@ stock DSC_RequireLevel(DCC_User:user, level)
 {
     if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
     {
-        if(comandos == DCC_INVALID_CHANNEL) comandos = DCC_FindChannelById(CH_COMANDOS);
-        if(g_CurrentInteractionChannel != comandos)
+        if(ch_comandos_admin == DCC_INVALID_CHANNEL) ch_comandos_admin = DCC_FindChannelById(CH_COMANDOS_ADMIN);
+        if(g_CurrentInteractionChannel != ch_comandos_admin)
         {
-            return DSC_Deny(":no_entry: Administrative commands can only be used in <#" CH_COMANDOS ">!");
+            return DSC_Deny(":no_entry: Administrative commands can only be used in <#" CH_COMANDOS_ADMIN ">!");
         }
     }
 
@@ -186,10 +186,10 @@ stock DSC_RequirePlayer(DCC_User:user)
 {
     if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
     {
-        if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
-        if(g_CurrentInteractionChannel != logs_linked)
+        if(ch_comandos_players == DCC_INVALID_CHANNEL) ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
+        if(g_CurrentInteractionChannel != ch_comandos_players)
         {
-            return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
+            return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_COMANDOS_PLAYERS ">!");
         }
     }
 
@@ -1771,10 +1771,10 @@ DSLASH:verify(user, params[])
 	#pragma unused params
 	if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
 	{
-		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
-		if(g_CurrentInteractionChannel != logs_linked)
+		if(ch_comandos_players == DCC_INVALID_CHANNEL) ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
+		if(g_CurrentInteractionChannel != ch_comandos_players)
 		{
-			return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
+			return DSC_Deny(":no_entry: Verification commands can only be used in <#" CH_COMANDOS_PLAYERS ">!");
 		}
 	}
 	new DCC_Interaction:it = DSC_TakeInteraction();
@@ -1790,10 +1790,10 @@ DSLASH:link(user, params[])
 	#pragma unused params
 	if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
 	{
-		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
-		if(g_CurrentInteractionChannel != logs_linked)
+		if(ch_comandos_players == DCC_INVALID_CHANNEL) ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
+		if(g_CurrentInteractionChannel != ch_comandos_players)
 		{
-			return DSC_Deny(":no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!");
+			return DSC_Deny(":no_entry: Verification commands can only be used in <#" CH_COMANDOS_PLAYERS ">!");
 		}
 	}
 	new DCC_Interaction:it = DSC_TakeInteraction();

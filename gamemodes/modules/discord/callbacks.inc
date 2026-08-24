@@ -55,13 +55,13 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
 	if(!strcmp(str, "/verify", true, 7) || !strcmp(str, ".verify", true, 7) || !strcmp(str, "!verify", true, 7) || !strcmp(str, "/link", true, 5) || !strcmp(str, ".link", true, 5))
 	{
-		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
-		if(channel != logs_linked)
+		if(ch_comandos_players == DCC_INVALID_CHANNEL) ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
+		if(channel != ch_comandos_players)
 		{
 			new uid[DCC_ID_SIZE];
 			DCC_GetUserId(author, uid, sizeof(uid));
 			new denyMsg[256];
-			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Public commands can only be used in <#" CH_LOGS_LINKED ">!", uid);
+			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Verification commands can only be used in <#" CH_COMANDOS_PLAYERS ">!", uid);
 			DCC_SendChannelMessage(channel, denyMsg);
 			return true;
 		}

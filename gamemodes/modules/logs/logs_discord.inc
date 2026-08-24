@@ -16,6 +16,8 @@
 #define CH_LOGS_CONNECTIONS "1538769355687596062"
 #define CH_LOGS_NEXTMAP     "1538771407310159892"
 #define CH_LOGS_VIPS        "1538771961734234192"
+#define CH_COMANDOS_ADMIN   "1460838135045951796"
+#define CH_COMANDOS_PLAYERS "1460111666724212788"
 #define CH_COMANDOS         "1460838135045951796"
 #define CH_GAMECHAT         "1461088854185480296"
 #define CH_ADMINCHAT        "1461088997668290581"
@@ -44,6 +46,8 @@ new
     DCC_Channel:logs_promotions,
     DCC_Channel:logs_arena,
     DCC_Channel:comandos,
+    DCC_Channel:ch_comandos_admin,
+    DCC_Channel:ch_comandos_players,
     DCC_Channel:gamechat,
     DCC_Channel:adminchat,
     DCC_Channel:logs_admin_cmds,
@@ -88,7 +92,9 @@ stock InitLogChannels()
     logs_pm         = DCC_FindChannelById(CH_LOGS_PM);
     logs_clan_chat  = DCC_FindChannelById(CH_LOGS_CLAN_CHAT);
     logs_linked     = DCC_FindChannelById(CH_LOGS_LINKED);
-    comandos        = DCC_FindChannelById(CH_COMANDOS);
+    ch_comandos_admin   = DCC_FindChannelById(CH_COMANDOS_ADMIN);
+    ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
+    comandos        = ch_comandos_admin;
     logs_password   = DCC_FindChannelById(CH_LOGS_PASSWORD);
     gamechat        = DCC_FindChannelById(CH_GAMECHAT);
     adminchat       = DCC_FindChannelById(CH_ADMINCHAT);
