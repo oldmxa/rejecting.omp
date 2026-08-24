@@ -216,13 +216,23 @@ stock ShowPlayerHudTypesList(playerid)
 {
     if (!IsPlayerConnected(playerid)) return 0;
 
-    new string[1024];
-    string[0] = '\0';
+    new title[64] = "{MAIN}\xA4 {FFFFFF}Custom HUD Styles";
+    format_MainColor(playerid, title);
+
+    new body[512];
+    body[0] = '\0';
 
     for (new i = 0; i < sizeof(HUD_TYPES); i++)
-        AppendStyleRow(string, HUD_TYPES[i], (User[playerid][hudType] == i));
+    {
+        if (User[playerid][hudType] == i)
+            strcat(body, fmat_return("{MAIN}> {FFFFFF}%s\n", HUD_TYPES[i]), sizeof(body));
+        else
+            strcat(body, fmat_return("{MAIN}\xA4 {FFFFFF}%s\n", HUD_TYPES[i]), sizeof(body));
+    }
 
-    return ShowStylePicker(playerid, DIALOG_HUD_TYPE, "{MAIN}HUD Styles", string);
+    format_MainColor(playerid, body, sizeof(body));
+
+    return ShowPlayerDialog(playerid, DIALOG_HUD_TYPE, DIALOG_STYLE_LIST, title, body, "Select", "Back");
 }
 
 forward updatePlayerHud(playerid);

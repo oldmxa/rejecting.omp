@@ -252,13 +252,23 @@ stock ShowPlayerLifeTypesList(playerid)
 {
     if (!IsPlayerConnected(playerid)) return 0;
 
-    new string[1024];
-    string[0] = '\0';
+    new title[64] = "{MAIN}\xA4 {FFFFFF}Life Bar Styles";
+    format_MainColor(playerid, title);
+
+    new body[512];
+    body[0] = '\0';
 
     for (new i = 0; i < MAX_LIFE_TYPES; i++)
-        AppendStyleRow(string, LifeStyle[i][lsLabel], (User[playerid][lifeType] == i));
+    {
+        if (User[playerid][lifeType] == i)
+            strcat(body, fmat_return("{MAIN}> {FFFFFF}%s\n", LifeStyle[i][lsLabel]), sizeof(body));
+        else
+            strcat(body, fmat_return("{MAIN}\xA4 {FFFFFF}%s\n", LifeStyle[i][lsLabel]), sizeof(body));
+    }
 
-    return ShowStylePicker(playerid, DIALOG_LIFE_TYPE, "{MAIN}Life Styles", string);
+    format_MainColor(playerid, body, sizeof(body));
+
+    return ShowPlayerDialog(playerid, DIALOG_LIFE_TYPE, DIALOG_STYLE_LIST, title, body, "Select", "Back");
 }
 
 public OnGameModeInit()
