@@ -143,34 +143,7 @@ forward DIALOG_ADMINCMDS(playerid, dialogid, response, listitem, string:inputtex
 public DIALOG_ADMINCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 {
     new current_page = GetPVarInt(playerid, "acmds_page");
-    if(!response)
-    {
-        if(current_page > 0)
-        {
-            SetPVarInt(playerid, "acmds_page", current_page - 1);
-            ShowAdminCmds(playerid);
-        }
-        return 1;
-    }
-
-    if(strfind(inputtext, "Next Page") != -1)
-    {
-        SetPVarInt(playerid, "acmds_page", current_page + 1);
-        ShowAdminCmds(playerid);
-    }
-    return 1;
-}
-
-ShowAdminCmds(playerid)
-{
-    new cmdsstr[3000];
-    strcat(cmdsstr, "Command\tDescription\n");
-
-    new page = GetPVarInt(playerid, "acmds_page");
     new items_per_page = 15;
-    new start_index = page * items_per_page;
-    new count = 0;
-    new shown_count = 0;
     new total_available = 0;
 
     for(new i = 0; i < sizeof(AdminCmdsList); i++)
@@ -181,29 +154,96 @@ ShowAdminCmds(playerid)
         }
     }
 
+    new total_pages = (total_available + items_per_page - 1) / items_per_page;
+    if(total_pages <= 0) total_pages = 1;
+
+    if(response)
+    {
+        if(current_page + 1 < total_pages)
+        {
+            SetPVarInt(playerid, "acmds_page", current_page + 1);
+            ShowAdminCmds(playerid);
+        }
+        return 1;
+    }
+    else
+    {
+        if(current_page > 0)
+        {
+            SetPVarInt(playerid, "acmds_page", current_page - 1);
+            ShowAdminCmds(playerid);
+        }
+        return 1;
+    }
+}
+
+ShowAdminCmds(playerid)
+{
+    new cmdsstr[3072];
+    format(cmdsstr, sizeof(cmdsstr), "{BEBEBE}Command\t{BEBEBE}Parameters\t{BEBEBE}Description\n");
+
+    new page = GetPVarInt(playerid, "acmds_page");
+    new items_per_page = 15;
+    new total_available = 0;
+
+    for(new i = 0; i < sizeof(AdminCmdsList); i++)
+    {
+        if(User[playerid][adminLevel] >= AdminCmdsList[i][cmd_level])
+        {
+            total_available++;
+        }
+    }
+
+    new total_pages = (total_available + items_per_page - 1) / items_per_page;
+    if(total_pages <= 0) total_pages = 1;
+
+    if(page >= total_pages)
+    {
+        page = total_pages - 1;
+        SetPVarInt(playerid, "acmds_page", page);
+    }
+    if(page < 0)
+    {
+        page = 0;
+        SetPVarInt(playerid, "acmds_page", 0);
+    }
+
+    new start_index = page * items_per_page;
+    new count = 0;
+    new shown_count = 0;
+
     for(new i = 0; i < sizeof(AdminCmdsList); i++)
     {
         if(User[playerid][adminLevel] >= AdminCmdsList[i][cmd_level])
         {
             if(count >= start_index && shown_count < items_per_page)
             {
-                strcat(cmdsstr, "{36cf85}");
-                strcat(cmdsstr, AdminCmdsList[i][cmd_name]);
-                strcat(cmdsstr, "\t{BEBEBE}");
-                strcat(cmdsstr, AdminCmdsList[i][cmd_desc]);
-                strcat(cmdsstr, "\n");
+                new cmdName[32], cmdArgs[48];
+                new spacePos = strfind(AdminCmdsList[i][cmd_name], " ");
+                if(spacePos != -1)
+                {
+                    strmid(cmdName, AdminCmdsList[i][cmd_name], 0, spacePos, sizeof(cmdName));
+                    format(cmdArgs, sizeof(cmdArgs), "%s", AdminCmdsList[i][cmd_name][spacePos + 1]);
+                    format(cmdsstr, sizeof(cmdsstr), "%s{FFFFFF}%s\t{B4B5B7}%s\t{BEBEBE}%s\n", cmdsstr, cmdName, cmdArgs, AdminCmdsList[i][cmd_desc]);
+                }
+                else
+                {
+                    format(cmdsstr, sizeof(cmdsstr), "%s{FFFFFF}%s\t{7F8C8D}-\t{BEBEBE}%s\n", cmdsstr, AdminCmdsList[i][cmd_name], AdminCmdsList[i][cmd_desc]);
+                }
                 shown_count++;
             }
             count++;
         }
     }
 
-    if(start_index + items_per_page < total_available)
-    {
-        strcat(cmdsstr, ""COL_KGREEN">>> Next Page\tGo next\n");
-    }
+    new title[64];
+    format(title, sizeof(title), "{BEBEBE}Commands Admin - Page {23C552}%d", page + 1);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_ADMINCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{FF4500}Commands Admin - Page {23C552}%d", page + 1), cmdsstr, "Select", (page > 0) ? ("<") : ("Close"));
+    new btn_next[16], btn_back[16];
+    format(btn_next, sizeof(btn_next), (page + 1 < total_pages) ? (">") : ("Close"));
+    format(btn_back, sizeof(btn_back), (page > 0) ? ("<") : ((page + 1 < total_pages) ? ("Close") : ("")));
+
+    Dialog_ShowCallback(playerid, using public DIALOG_ADMINCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, btn_next, btn_back);
     return 1;
 }
 
