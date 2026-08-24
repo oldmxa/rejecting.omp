@@ -389,7 +389,7 @@ public CHAT_COLORS(playerid, dialogid, response, listitem, string:inputtext[])
     }
 
     new selectedIdx = listitem - 2;
-    if(0 <= selectedIdx < sizeof(hudPersonalization))
+    if(0 <= selectedIdx < sizeof(hudShades))
     {
         if(color_type == 2)
         {

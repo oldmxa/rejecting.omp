@@ -472,7 +472,7 @@ public OnPlayerJoin(playerid)
 
 		cache_get_value_int(0, "chat_color", User[playerid][chatColor]);
 		cache_get_value_int(0, "chat_id_color", User[playerid][chatIDColor]);
-		User[playerid][chatMainColor] = -1;
+		User[playerid][chatMainColor] = 0;
 		cache_get_value_int(0, "chat_main_color", User[playerid][chatMainColor]);
 		cache_get_value_int(0, "vip_level", User[playerid][vipLevel]);
 		cache_get_value_int(0, "vip_expire", User[playerid][vipExpire]);

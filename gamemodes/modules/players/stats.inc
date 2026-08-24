@@ -102,7 +102,7 @@ public Stats_ShowAdminConfig(playerid)
                 format(defChatColorName, sizeof(defChatColorName), "{%06x}#%06x", ServerDefaultChatMainColor & 0xFFFFFF, ServerDefaultChatMainColor & 0xFFFFFF);
             else
                 format(defChatColorName, sizeof(defChatColorName), "{BEBEBE}Interface preset");
-            format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Default Chat Color\t%s\t{BEBEBE}Main accent {MAIN} new players start with\n", strb, defChatColorName);
+            format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Default Chat Color\t%s\t{BEBEBE}Main accent color new players start with\n", strb, defChatColorName);
             actions[count++] = 26; // Default Chat Color
 
             strcat(strb, "{MAIN}\xA4 Moderation\t \t \n");

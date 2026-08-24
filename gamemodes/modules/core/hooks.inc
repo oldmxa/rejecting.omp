@@ -315,6 +315,9 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][hudColor] = 0;
     User[MAX_PLAYERS][hudShadeOne] = -1;
     User[MAX_PLAYERS][hudShadeTwo] = -1;
+    User[MAX_PLAYERS][chatColor] = 0;
+    User[MAX_PLAYERS][chatIDColor] = 0;
+    User[MAX_PLAYERS][chatMainColor] = 0;
     User[MAX_PLAYERS][clanID] = -1;
     User[MAX_PLAYERS][clanRole] = -1;
     User[MAX_PLAYERS][clanIDInvite] = -1;
@@ -373,7 +376,7 @@ hook OnPlayerConnect(playerid)
     User[playerid][hudShadeTwo] = -1;
     User[playerid][chatColor] = 0;
     User[playerid][chatIDColor] = 0;
-    User[playerid][chatMainColor] = -1;
+    User[playerid][chatMainColor] = 0;
     User[playerid][vipLevel] = 0;
     User[playerid][vipExpire] = 0;
     User[playerid][vipHeadTag] = 1;
