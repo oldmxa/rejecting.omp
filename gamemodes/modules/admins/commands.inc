@@ -224,11 +224,11 @@ ShowAdminCmds(playerid)
                 {
                     strmid(cmdName, AdminCmdsList[i][cmd_name], 0, spacePos, sizeof(cmdName));
                     format(cmdArgs, sizeof(cmdArgs), "%s", AdminCmdsList[i][cmd_name][spacePos + 1]);
-                    format(cmdsstr, sizeof(cmdsstr), "%s{FFFFFF}%s\t{B4B5B7}%s\t{BEBEBE}%s\n", cmdsstr, cmdName, cmdArgs, AdminCmdsList[i][cmd_desc]);
+                    format(cmdsstr, sizeof(cmdsstr), "%s{B4B5B7}\x95 {FFFFFF}%s\t{B4B5B7}%s\t{BEBEBE}%s\n", cmdsstr, cmdName, cmdArgs, AdminCmdsList[i][cmd_desc]);
                 }
                 else
                 {
-                    format(cmdsstr, sizeof(cmdsstr), "%s{FFFFFF}%s\t{7F8C8D}-\t{BEBEBE}%s\n", cmdsstr, AdminCmdsList[i][cmd_name], AdminCmdsList[i][cmd_desc]);
+                    format(cmdsstr, sizeof(cmdsstr), "%s{B4B5B7}\x95 {FFFFFF}%s\t{7F8C8D}-\t{BEBEBE}%s\n", cmdsstr, AdminCmdsList[i][cmd_name], AdminCmdsList[i][cmd_desc]);
                 }
                 shown_count++;
             }
@@ -240,7 +240,7 @@ ShowAdminCmds(playerid)
     format(title, sizeof(title), "{BEBEBE}Commands Admin - Page {23C552}%d", page + 1);
 
     new btn_next[16], btn_back[16];
-    format(btn_next, sizeof(btn_next), (page + 1 < total_pages) ? (">") : ("Close"));
+    format(btn_next, sizeof(btn_next), (page + 1 < total_pages) ? ("\xBB") : ("Close"));
     format(btn_back, sizeof(btn_back), (page > 0) ? ("<") : ((page + 1 < total_pages) ? ("Close") : ("")));
 
     Dialog_ShowCallback(playerid, using public DIALOG_ADMINCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, btn_next, btn_back);
