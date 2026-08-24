@@ -317,7 +317,8 @@ public Account_ShowPersonalizationMenu(playerid)
     new space = strfind(name, " ");
     if(space != -1 && name[space+1] >= 'a' && name[space+1] <= 'z') name[space+1] -= 32;
 
-    new idHex[7], textHex[7];
+    new mainHex[7], idHex[7], textHex[7];
+    GetPlayerChatMainColorHex(playerid, mainHex);
     GetPlayerChatIDColorHex(playerid, idHex);
     GetPlayerChatTextColorHex(playerid, textHex);
 
@@ -331,7 +332,7 @@ public Account_ShowPersonalizationMenu(playerid)
     if(shadeTwo == -1) format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Secondary Color\t{BEBEBE}Interface preset\n", pStr);
     else format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Secondary Color\t{%06x}%s\n", pStr, hudShades[shadeTwo][shadeHex], hudShades[shadeTwo][shadeName]);
 
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Chat Color\t{%s}ID: #%s {FFFFFF}/ {%s}Text: #%s\n", pStr, idHex, idHex, textHex, textHex);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Chat Color\t{%s}Main: #%s {FFFFFF}/ {%s}Text: #%s\n", pStr, mainHex, mainHex, textHex, textHex);
 
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", pStr, GetPlayerSkin(playerid));
 

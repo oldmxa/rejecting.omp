@@ -285,3 +285,10 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     ShowPlayerHudTypesList(playerid);
     return 1;
 }
+
+@cmd(.alts = {"maincolor", "corchat", "chatcor"}) chatcolor(playerid, params[], help)
+{
+    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    ShowChatColorDialog(playerid, APPEARANCE_SRC_NONE);
+    return 1;
+}

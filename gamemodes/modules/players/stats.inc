@@ -95,6 +95,16 @@ public Stats_ShowAdminConfig(playerid)
             format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Default HUD Secondary\t%s\t{BEBEBE}Overrides the preset's secondary color\n", strb, secondaryName);
             actions[count++] = 24; // Default HUD Secondary
 
+            new defChatColorName[40];
+            if(1 <= ServerDefaultChatMainColor <= sizeof(hudShades))
+                format(defChatColorName, sizeof(defChatColorName), "{%06x}%s", hudShades[ServerDefaultChatMainColor - 1][shadeHex], hudShades[ServerDefaultChatMainColor - 1][shadeName]);
+            else if(ServerDefaultChatMainColor & 0x10000000)
+                format(defChatColorName, sizeof(defChatColorName), "{%06x}#%06x", ServerDefaultChatMainColor & 0xFFFFFF, ServerDefaultChatMainColor & 0xFFFFFF);
+            else
+                format(defChatColorName, sizeof(defChatColorName), "{BEBEBE}Interface preset");
+            format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Default Chat Color\t%s\t{BEBEBE}Main accent {MAIN} new players start with\n", strb, defChatColorName);
+            actions[count++] = 26; // Default Chat Color
+
             strcat(strb, "{MAIN}\xA4 Moderation\t \t \n");
             actions[count++] = 0;
 

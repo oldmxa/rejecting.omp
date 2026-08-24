@@ -286,6 +286,25 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 format_MainColor(playerid, body);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTSHADE2<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default HUD Secondary", body, "*", "<");
             }
+            case 26: // Default Chat Color
+            {
+                if(User[playerid][adminLevel] < 5)
+                    return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default chat color.");
+
+                new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
+                new bool:isDef = (ServerDefaultChatMainColor <= 0);
+                strcat(body, fmat_return("%s{FFFFFF}Use Interface Color (Default)\t{BEBEBE}Follows the HUD color\n",
+                    isDef ? ("{23C552}> ") : ("{B4B5B7}\x95 ")), sizeof(body));
+
+                for(new i; i < sizeof(hudShades); i++)
+                {
+                    new bool:isSelected = (ServerDefaultChatMainColor == (i + 1));
+                    strcat(body, fmat_return("%s{%06x}%s\t{%06x}[MAIN] Message\n",
+                        isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+                }
+                format_MainColor(playerid, body);
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTCHATCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default Chat Color", body, "*", "<");
+            }
         }
     }
 
@@ -638,6 +657,33 @@ public DIALOG_ADM_DEFAULTSHADE2(playerid, dialogid, response, listitem, string:i
         else format(shadeName_, sizeof(shadeName_), "%s", hudShades[value][shadeName]);
 
         va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD secondary color updated to: %s (applies to new accounts).", shadeName_);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_DEFAULTCHATCOLOR(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_DEFAULTCHATCOLOR(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response)
+    {
+        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+
+        new value = listitem;
+        if(value < 0 || value > sizeof(hudShades))
+        {
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+
+        ServerDefaultChatMainColor = value;
+        SaveServerConfig();
+
+        new cName[32];
+        if(value == 0) format(cName, sizeof(cName), "Interface preset");
+        else format(cName, sizeof(cName), "%s", hudShades[value - 1][shadeName]);
+
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default chat color ({MAIN}) updated to: %s (applies to new accounts).", cName);
     }
     ShowAdminConfig(playerid);
     return 1;

@@ -91,6 +91,11 @@ stock LoadServerConfig()
             ServerDefaultHudShadeTwo = strval(val);
             if(ServerDefaultHudShadeTwo < -1 || ServerDefaultHudShadeTwo >= sizeof(hudShades)) ServerDefaultHudShadeTwo = -1;
         }
+        else if(!strcmp(key, "DefaultChatMainColor", true))
+        {
+            ServerDefaultChatMainColor = strval(val);
+            if(ServerDefaultChatMainColor < 0 || ServerDefaultChatMainColor > sizeof(hudShades)) ServerDefaultChatMainColor = 0;
+        }
     }
     fclose(file);
     return 1;
@@ -129,6 +134,9 @@ stock SaveServerConfig()
     format(str, sizeof(str), "DefaultHudShadeOne=%d\r\nDefaultHudShadeTwo=%d\r\n", ServerDefaultHudShadeOne, ServerDefaultHudShadeTwo);
     fwrite(file, str);
 
+    format(str, sizeof(str), "DefaultChatMainColor=%d\r\n", ServerDefaultChatMainColor);
+    fwrite(file, str);
+
     format(str, sizeof(str), "MaxWarnings=%d\r\nMaxLoginAttempts=%d\r\nMaxAccountsPerIP=%d\r\nACCooldown=%d\r\n",
         ServerMaxWarnings, ServerMaxLoginAttempts, ServerMaxAccountsPerIP, ServerACCooldown);
     fwrite(file, str);
@@ -138,7 +146,7 @@ stock SaveServerConfig()
     fwrite(file, str);
 
     fclose(file);
-    printf("[SERVER CONFIG] Saved: MaxPing=%d, MaxPL=%.2f, MinFPS=%d, MaxFPS=%d, R2Kick=%d, DefaultHud=%d, DefaultHudColor=%d", ServerMaxPing, ServerMaxPacketLoss, ServerMinFPS, ServerMaxFPS, _:R2KickEnabled, ServerDefaultHud, ServerDefaultHudColor);
+    printf("[SERVER CONFIG] Saved: MaxPing=%d, MaxPL=%.2f, MinFPS=%d, MaxFPS=%d, R2Kick=%d, DefaultHud=%d, DefaultHudColor=%d, DefaultChatMainColor=%d", ServerMaxPing, ServerMaxPacketLoss, ServerMinFPS, ServerMaxFPS, _:R2KickEnabled, ServerDefaultHud, ServerDefaultHudColor, ServerDefaultChatMainColor);
     return 1;
 }
 

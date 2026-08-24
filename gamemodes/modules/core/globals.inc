@@ -433,6 +433,7 @@ enum e_USER
     hudShadeTwo,
     chatColor,
     chatIDColor,
+    chatMainColor,
     vipLevel,
     vipExpire,
     vipHeadTag,
@@ -676,31 +677,6 @@ new hudPersonalization[30][coloringHud] =
 
 #define HUD_COLOR_DEFAULT   (0) // "white green"
 
-enum chatColorStruct {
-    chatColorHex[7],
-    chatColorName[24]
-};
-
-new chatPersonalization[16][chatColorStruct] =
-{
-    {"FFFFFF", "White Default"},
-    {"00FF00", "Bright Green"},
-    {"FF0000", "Bright Red"},
-    {"00BFFF", "Sky Blue"},
-    {"FFFF00", "Yellow"},
-    {"FF00FF", "Pink / Magenta"},
-    {"00FFFF", "Cyan"},
-    {"FFA500", "Orange"},
-    {"A020F0", "Purple"},
-    {"FFD700", "Gold"},
-    {"32CD32", "Lime Green"},
-    {"FF69B4", "Hot Pink"},
-    {"1E90FF", "Dodger Blue"},
-    {"FF4500", "Orange Red"},
-    {"CCCCCC", "Light Grey"},
-    {"404EA4", "Royal Blue"}
-};
-
 enum gunmenuEnum {
     weaponID,
     weaponAmmo
@@ -803,6 +779,7 @@ new ServerDefaultHud = 1;
 new ServerDefaultHudColor = 0;
 new ServerDefaultHudShadeOne = -1;
 new ServerDefaultHudShadeTwo = -1;
+new ServerDefaultChatMainColor = 0;
 
 new MySQL: dbHandle;
 new queryGlobal[4096];

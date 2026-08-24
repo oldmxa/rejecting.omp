@@ -28,6 +28,7 @@ CREATE TABLE `accounts` (
   `hud_shade_two` int(11) NOT NULL DEFAULT -1,
   `chat_color` int(11) NOT NULL DEFAULT 0,
   `chat_id_color` int(11) NOT NULL DEFAULT 0,
+  `chat_main_color` int(11) NOT NULL DEFAULT 0,
   `hud_type` int(11) NOT NULL DEFAULT 0,
   `life_type` int(11) NOT NULL DEFAULT 0,
   `adminlevel` int(11) NOT NULL DEFAULT 0,

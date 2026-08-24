@@ -111,21 +111,23 @@ ShowChatColorDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
 
-    new idHex[7], textHex[7];
+    new mainHex[7], idHex[7], textHex[7];
+    GetPlayerChatMainColorHex(playerid, mainHex);
     GetPlayerChatIDColorHex(playerid, idHex);
     GetPlayerChatTextColorHex(playerid, textHex);
 
-    new body[512];
+    new body[768];
     format(body, sizeof(body),
-"Option\tPreview\n\
-Color ID in chat\t{%s}[%d] Sample ID\n\
-Text color in chat\t{%s}Sample Chat Text",
-        idHex, playerid, textHex);
+"{BEBEBE}Option\t{BEBEBE}Preview\n\
+{B4B5B7}\xBB {FFFFFF}Main Accent Color ({MAIN})\t{%s}[MAIN] Sample Message\n\
+{B4B5B7}\xBB {FFFFFF}Color ID in chat\t{%s}[%d] Sample ID\n\
+{B4B5B7}\xBB {FFFFFF}Text color in chat\t{%s}Sample Chat Text",
+        mainHex, idHex, playerid, textHex);
 
     new title[64] = "{MAIN}Personalization - Chat Color";
     format_MainColor(playerid, title);
 
-    return Dialog_ShowCallback(playerid, using public CHAT_COLOR_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
+    return Dialog_ShowCallback(playerid, using public CHAT_COLOR_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
 forward CHAT_COLOR_MAIN(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -136,9 +138,13 @@ public CHAT_COLOR_MAIN(playerid, dialogid, response, listitem, string:inputtext[
 
     if(listitem == 0)
     {
-        ShowChatColorSelectionDialog(playerid, 0, GetAppearanceSource(playerid));
+        ShowChatColorSelectionDialog(playerid, 2, GetAppearanceSource(playerid));
     }
     else if(listitem == 1)
+    {
+        ShowChatColorSelectionDialog(playerid, 0, GetAppearanceSource(playerid));
+    }
+    else if(listitem == 2)
     {
         ShowChatColorSelectionDialog(playerid, 1, GetAppearanceSource(playerid));
     }
@@ -153,36 +159,69 @@ ShowChatColorSelectionDialog(playerid, color_type, source)
 
     new curHex[7];
     if(color_type == 0) GetPlayerChatIDColorHex(playerid, curHex);
-    else GetPlayerChatTextColorHex(playerid, curHex);
+    else if(color_type == 1) GetPlayerChatTextColorHex(playerid, curHex);
+    else GetPlayerChatMainColorHex(playerid, curHex);
 
-    new body[2048];
-    format(body, sizeof(body), "Color Name\tSample Text\n");
+    new body[3500];
+    format(body, sizeof(body), "{BEBEBE}Name\t{BEBEBE}Preview\n");
 
-    strcat(body, fmat_return("{MAIN}Custom HEX Color\t{%s}#%s\n", curHex, curHex), sizeof(body));
-
-    for(new i; i < sizeof(chatPersonalization); i++)
+    if(color_type == 2)
     {
-        new bool:isSelected = false;
-        if(color_type == 0)
-        {
-            if(User[playerid][chatIDColor] == i) isSelected = true;
-        }
-        else
-        {
-            if(User[playerid][chatColor] == i) isSelected = true;
-        }
+        new bool:isDef = (User[playerid][chatMainColor] <= 0);
+        strcat(body, fmat_return("%s{FFFFFF}Use Interface Color (Default)\t{BEBEBE}Follows your HUD color\n",
+            isDef ? ("{23C552}> ") : ("{B4B5B7}\x95 ")), sizeof(body));
 
-        strcat(body, fmat_return("%s{%s}%s\t{%s}Sample Chat Text\n",
-            STYLE_MARK(isSelected), chatPersonalization[i][chatColorHex], chatPersonalization[i][chatColorName],
-            chatPersonalization[i][chatColorHex]), sizeof(body));
+        new bool:isCustom = (User[playerid][chatMainColor] & 0x10000000) != 0;
+        strcat(body, fmat_return("%s{FFFFFF}Custom HEX Color\t{%s}#%s\n",
+            isCustom ? ("{23C552}> ") : ("{B4B5B7}\x95 "), curHex, curHex), sizeof(body));
+
+        for(new i; i < sizeof(hudShades); i++)
+        {
+            new bool:isSelected = (User[playerid][chatMainColor] == (i + 1));
+            strcat(body, fmat_return("%s{%06x}%s\t{%06x}[MAIN] Sample Message\n",
+                isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+        }
+    }
+    else
+    {
+        new bool:isDef = false;
+        if(color_type == 0 && User[playerid][chatIDColor] <= 0) isDef = true;
+        if(color_type == 1 && User[playerid][chatColor] <= 0) isDef = true;
+
+        new bool:isCustom = false;
+        if(color_type == 0 && (User[playerid][chatIDColor] & 0x10000000)) isCustom = true;
+        if(color_type == 1 && (User[playerid][chatColor] & 0x10000000)) isCustom = true;
+
+        strcat(body, fmat_return("%s{FFFFFF}Default White (Chat)\t{FFFFFF}Sample Text\n",
+            isDef ? ("{23C552}> ") : ("{B4B5B7}\x95 ")), sizeof(body));
+
+        strcat(body, fmat_return("%s{FFFFFF}Custom HEX Color\t{%s}#%s\n",
+            isCustom ? ("{23C552}> ") : ("{B4B5B7}\x95 "), curHex, curHex), sizeof(body));
+
+        for(new i; i < sizeof(hudShades); i++)
+        {
+            new bool:isSelected = false;
+            if(color_type == 0)
+            {
+                if(User[playerid][chatIDColor] == (i + 1)) isSelected = true;
+            }
+            else
+            {
+                if(User[playerid][chatColor] == (i + 1)) isSelected = true;
+            }
+
+            strcat(body, fmat_return("%s{%06x}%s\t{%06x}Sample Chat Text\n",
+                isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+        }
     }
 
     new title[64];
-    format(title, sizeof(title), "{MAIN}Chat Color - %s", (color_type == 0) ? ("Color ID") : ("Text Color"));
+    if(color_type == 2) format(title, sizeof(title), "{MAIN}Chat Color - Main Accent ({MAIN})");
+    else format(title, sizeof(title), "{MAIN}Chat Color - %s", (color_type == 0) ? ("Color ID") : ("Text Color"));
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
 
-    return Dialog_ShowCallback(playerid, using public CHAT_COLORS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
+    return Dialog_ShowCallback(playerid, using public CHAT_COLORS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
 ShowChatColorCustomHexDialog(playerid, color_type, source)
@@ -192,21 +231,26 @@ ShowChatColorCustomHexDialog(playerid, color_type, source)
 
     new curHex[7];
     if(color_type == 0) GetPlayerChatIDColorHex(playerid, curHex);
-    else GetPlayerChatTextColorHex(playerid, curHex);
+    else if(color_type == 1) GetPlayerChatTextColorHex(playerid, curHex);
+    else GetPlayerChatMainColorHex(playerid, curHex);
 
     new body[512];
+    new typeName[16];
+    if(color_type == 2) format(typeName, sizeof(typeName), "Main {MAIN}");
+    else format(typeName, sizeof(typeName), "%s", (color_type == 0) ? ("ID") : ("Text"));
+
     format(body, sizeof(body),
 "{FFFFFF}Current %s Color: {%s}#%s\n\n\
-{BEBEBE}Enter your new 6-digit HEX color code below (e.g. {MAIN}FF0000{BEBEBE} for Red, {MAIN}00FF00{BEBEBE} for Green).\n\
+{BEBEBE}Enter your new 6-digit HEX color code below (e.g. {23C552}23C552{BEBEBE} for Green, {F84F31}F84F31{BEBEBE} for Red).\n\
 {BEBEBE}Valid characters: 0-9, A-F.",
-        (color_type == 0) ? ("ID") : ("Text"), curHex, curHex);
+        typeName, curHex, curHex);
 
     new title[64];
-    format(title, sizeof(title), "{MAIN}Custom HEX Color - %s", (color_type == 0) ? ("Color ID") : ("Text Color"));
+    format(title, sizeof(title), "{MAIN}Custom HEX Color - %s", typeName);
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
 
-    return Dialog_ShowCallback(playerid, using public CHAT_COLOR_CUSTOM_HEX<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
+    return Dialog_ShowCallback(playerid, using public CHAT_COLOR_CUSTOM_HEX<iiiis>, DIALOG_STYLE_INPUT, title, body, "*", "<");
 }
 
 ShowDamageStyleDialog(playerid, source)
@@ -220,17 +264,19 @@ ShowDamageStyleDialog(playerid, source)
         "X (X)"
     };
 
-    new body[384];
-    body[0] = '\0';
-
+    new body[512] = "{BEBEBE}Style ID\t{BEBEBE}Style Name\n";
     for(new i; i < sizeof(damageStyles); i++)
-        AppendStyleRow(body, damageStyles[i], (User[playerid][dmgInformerStyle] == i));
+    {
+        new bool:isSelected = (User[playerid][dmgInformerStyle] == i);
+        strcat(body, fmat_return("%s{FFFFFF}%d\t{FFFFFF}%s\n",
+            isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), i, damageStyles[i]), sizeof(body));
+    }
 
-    new title[64] = "{MAIN}Damage Informer Style";
+    new title[64] = "{MAIN}Personalization - Damage Style";
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
 
-    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_LIST, title, body, "Select", "Back");
+    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
 ShowHitmarkColorDialog(playerid, source)
@@ -330,19 +376,32 @@ public CHAT_COLORS(playerid, dialogid, response, listitem, string:inputtext[])
 
     if(listitem == 0)
     {
+        if(color_type == 2) User[playerid][chatMainColor] = 0;
+        else if(color_type == 0) User[playerid][chatIDColor] = 0;
+        else User[playerid][chatColor] = 0;
+
+        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        return ShowChatColorSelectionDialog(playerid, color_type, GetAppearanceSource(playerid));
+    }
+    else if(listitem == 1)
+    {
         return ShowChatColorCustomHexDialog(playerid, color_type, GetAppearanceSource(playerid));
     }
 
-    new selectedIdx = listitem - 1;
-    if(0 <= selectedIdx < sizeof(chatPersonalization))
+    new selectedIdx = listitem - 2;
+    if(0 <= selectedIdx < sizeof(hudPersonalization))
     {
-        if(color_type == 0)
+        if(color_type == 2)
         {
-            User[playerid][chatIDColor] = selectedIdx;
+            User[playerid][chatMainColor] = selectedIdx + 1;
+        }
+        else if(color_type == 0)
+        {
+            User[playerid][chatIDColor] = selectedIdx + 1;
         }
         else
         {
-            User[playerid][chatColor] = selectedIdx;
+            User[playerid][chatColor] = selectedIdx + 1;
         }
         SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
     }
@@ -386,9 +445,13 @@ public CHAT_COLOR_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inpu
     {
         User[playerid][chatIDColor] = storedVal;
     }
-    else
+    else if(color_type == 1)
     {
         User[playerid][chatColor] = storedVal;
+    }
+    else
+    {
+        User[playerid][chatMainColor] = storedVal;
     }
 
     SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);

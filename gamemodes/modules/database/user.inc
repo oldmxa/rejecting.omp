@@ -243,8 +243,8 @@ public OnRegisterHash(playerid, accountname[])
 	format(User[playerid][user_regdate], 32, "%s", returnDate(gettime() - 10800));
 
 	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
-		"INSERT INTO `accounts`(`username`, `regip`, `password`, `gpci`, `is_online`, `hud_type`, `hudcolor`) VALUES('%e', '%e', '%e', '%e', 1, %d, %d)",
-		User[playerid][userName], pip, password, User[playerid][user_gpci], ServerDefaultHud, ServerDefaultHudColor);
+		"INSERT INTO `accounts`(`username`, `regip`, `password`, `gpci`, `is_online`, `hud_type`, `hudcolor`, `hud_shade_one`, `hud_shade_two`, `chat_main_color`) VALUES('%e', '%e', '%e', '%e', 1, %d, %d, %d, %d, %d)",
+		User[playerid][userName], pip, password, User[playerid][user_gpci], ServerDefaultHud, ServerDefaultHudColor, ServerDefaultHudShadeOne, ServerDefaultHudShadeTwo, ServerDefaultChatMainColor);
 
 	mysql_tquery(dbHandle, queryGlobal , "InsertDataSQL", "i", playerid);
 
@@ -269,6 +269,7 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][hudColor] = ServerDefaultHudColor;
     User[playerid][hudShadeOne] = ServerDefaultHudShadeOne;
     User[playerid][hudShadeTwo] = ServerDefaultHudShadeTwo;
+    User[playerid][chatMainColor] = ServerDefaultChatMainColor;
     User[playerid][weather] = 32;
     User[playerid][time] = 7;
     SetPlayerWeather(playerid, 32);
@@ -471,6 +472,8 @@ public OnPlayerJoin(playerid)
 
 		cache_get_value_int(0, "chat_color", User[playerid][chatColor]);
 		cache_get_value_int(0, "chat_id_color", User[playerid][chatIDColor]);
+		User[playerid][chatMainColor] = -1;
+		cache_get_value_int(0, "chat_main_color", User[playerid][chatMainColor]);
 		cache_get_value_int(0, "vip_level", User[playerid][vipLevel]);
 		cache_get_value_int(0, "vip_expire", User[playerid][vipExpire]);
 		cache_get_value_int(0, "vip_head_tag", User[playerid][vipHeadTag]);
@@ -697,6 +700,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		`hud_shade_two`=%d,\
 		`chat_color`=%d,\
 		`chat_id_color`=%d,\
+		`chat_main_color`=%d,\
 		`hud_type`=%d,\
 		`life_type`=%d,\
 		`adminlevel`=%d,\
@@ -781,6 +785,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][hudShadeTwo],
 		User[playerid][chatColor],
 		User[playerid][chatIDColor],
+		User[playerid][chatMainColor],
 		User[playerid][hudType],
 		User[playerid][lifeType],
 		User[playerid][adminLevel],

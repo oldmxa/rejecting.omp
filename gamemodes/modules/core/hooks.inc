@@ -10,8 +10,26 @@
 
 stock GetPlayerMainHex(playerid, dest[], len = sizeof(dest))
 {
-    new shade = User[playerid][hudShadeOne];
+    if(playerid < 0 || playerid >= MAX_PLAYERS)
+    {
+        format(dest, len, "FFFFFF");
+        return 1;
+    }
 
+    new mainVal = User[playerid][chatMainColor];
+    if(1 <= mainVal <= sizeof(hudShades))
+    {
+        format(dest, len, "%06x", hudShades[mainVal - 1][shadeHex]);
+        return 1;
+    }
+    else if(mainVal & 0x10000000)
+    {
+        format(dest, len, "%06x", mainVal & 0xFFFFFF);
+        return 1;
+    }
+
+    // Default / 0 / -1: Follows HUD primary shade or HUD preset color
+    new shade = User[playerid][hudShadeOne];
     if(0 <= shade < sizeof(hudShades))
     {
         format(dest, len, "%06x", hudShades[shade][shadeHex]);
@@ -355,6 +373,7 @@ hook OnPlayerConnect(playerid)
     User[playerid][hudShadeTwo] = -1;
     User[playerid][chatColor] = 0;
     User[playerid][chatIDColor] = 0;
+    User[playerid][chatMainColor] = -1;
     User[playerid][vipLevel] = 0;
     User[playerid][vipExpire] = 0;
     User[playerid][vipHeadTag] = 1;

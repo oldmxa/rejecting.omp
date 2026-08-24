@@ -147,13 +147,17 @@ stock GetPlayerChatIDColorHex(playerid, dest[], len = sizeof(dest))
         return 1;
     }
     new val = User[playerid][chatIDColor];
-    if(0 <= val < sizeof(chatPersonalization))
+    if(1 <= val <= sizeof(hudShades))
     {
-        format(dest, len, "%s", chatPersonalization[val][chatColorHex]);
+        format(dest, len, "%06x", hudShades[val - 1][shadeHex]);
+    }
+    else if(val & 0x10000000)
+    {
+        format(dest, len, "%06x", val & 0xFFFFFF);
     }
     else
     {
-        format(dest, len, "%06x", val & 0xFFFFFF);
+        format(dest, len, "FFFFFF");
     }
     return 1;
 }
@@ -166,13 +170,40 @@ stock GetPlayerChatTextColorHex(playerid, dest[], len = sizeof(dest))
         return 1;
     }
     new val = User[playerid][chatColor];
-    if(0 <= val < sizeof(chatPersonalization))
+    if(1 <= val <= sizeof(hudShades))
     {
-        format(dest, len, "%s", chatPersonalization[val][chatColorHex]);
+        format(dest, len, "%06x", hudShades[val - 1][shadeHex]);
+    }
+    else if(val & 0x10000000)
+    {
+        format(dest, len, "%06x", val & 0xFFFFFF);
     }
     else
     {
+        format(dest, len, "FFFFFF");
+    }
+    return 1;
+}
+
+stock GetPlayerChatMainColorHex(playerid, dest[], len = sizeof(dest))
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS)
+    {
+        format(dest, len, "FFFFFF");
+        return 1;
+    }
+    new val = User[playerid][chatMainColor];
+    if(1 <= val <= sizeof(hudShades))
+    {
+        format(dest, len, "%06x", hudShades[val - 1][shadeHex]);
+    }
+    else if(val & 0x10000000)
+    {
         format(dest, len, "%06x", val & 0xFFFFFF);
+    }
+    else
+    {
+        GetPlayerMainHex(playerid, dest, len);
     }
     return 1;
 }
