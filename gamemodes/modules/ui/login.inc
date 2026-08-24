@@ -25,14 +25,6 @@ new CameraLoginTimer[MAX_PLAYERS];
 #define LOGIN_CORNER_T    (LOGIN_PANEL_TOP - LOGIN_CORNER_FIT)
 #define LOGIN_CORNER_B    (LOGIN_PANEL_BOTTOM - (LOGIN_PANEL_R * 2.0) - LOGIN_CORNER_FIT)
 
-// functions
-stock GetName(playerid)
-{
-    new name[MAX_PLAYER_NAME + 1];
-    GetPlayerName(playerid, name, sizeof(name));
-    return name;
-}
-
 public OnPlayerConnect(playerid)
 {
     for(new i = 0; i < sizeof(LoginRC[]); i++)

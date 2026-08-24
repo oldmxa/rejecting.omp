@@ -130,15 +130,6 @@ stock GetPlayerHudTag(playerid, bool:secondary)
     return tag;
 }
 
-stock GetPlayerChatColorIndex(playerid)
-{
-    if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
-
-    new idx = User[playerid][chatColor];
-    if(idx < 0 || idx >= sizeof(chatPersonalization)) return 0;
-    return idx;
-}
-
 stock GetPlayerChatIDColorHex(playerid, dest[], len = sizeof(dest))
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS)
@@ -208,14 +199,6 @@ stock GetPlayerChatMainColorHex(playerid, dest[], len = sizeof(dest))
     return 1;
 }
 
-stock ret_MainColor(playerid)
-{
-    new hex[7];
-    GetPlayerMainHex(playerid, hex);
-
-    return hex;
-}
-
 stock bool:IsServerOwner(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
@@ -239,21 +222,6 @@ stock format_MainColor(playerid, string[], len = sizeof(string))
         from = pos + taglen;
     }
     return 1;
-}
-
-stock strtoupper(const string[])
-{
-	new upperString[256];
-	new len = strlen(string);
-
-	if(len >= sizeof(upperString)) len = sizeof(upperString) - 1;
-
-	for (new character = 0; character < len; character++)
-	{
-		upperString[character] = toupper(string[character]);
-	}
-	upperString[len] = EOS;
-	return upperString;
 }
 
 stock strtodown(const string[])
@@ -369,14 +337,6 @@ getPlayerIp(playerid)
 	static ip[18];
 	GetPlayerIp(playerid, ip, sizeof(ip));
 	return ip;
-}
-
-stock IsPlayerInArea(playerid, Float:minx, Float:maxx, Float:miny, Float:maxy)
-{
-	new Float:x, Float:y, Float:z;
-	GetPlayerPos(playerid, x, y, z);
-	if (x > minx && x < maxx && y > miny && y < maxy) return 1;
-	return 0;
 }
 
 convertTime(timee)

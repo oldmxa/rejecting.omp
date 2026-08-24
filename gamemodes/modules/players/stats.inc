@@ -813,12 +813,3 @@ public MSGVALIDATION(playerid, const code[])
     SendClientMessage(playerid, 0xFFFFFFFF, "{MAIN}[DISCORD] {FFFFFF}Validation code sent to your Discord DM.");
     return 1;
 }
-
-stock DCC_GetISOTimestamp()
-{
-    new timestamp[25], year, month, day, hour, minute, second;
-    getdate(year, month, day);
-    gettime(hour, minute, second);
-    format(timestamp, sizeof(timestamp), "%04d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, minute, second);
-    return timestamp;
-}

@@ -326,8 +326,6 @@ SpawnPlayerEx(playerid)
 	return 1;
 }
 
-#define SNIPER_DROP_AMMO (30)
-
 #define M4_DROP_AMMO     (50)
 
 #define PICKUP_MODEL_M4     (356)

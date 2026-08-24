@@ -271,12 +271,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     forward HSTY_OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]);
 #endif
 
-stock ToggleCustomHudTextDraws(playerid, hud_type, bool:toggle)
-{
-    #pragma unused playerid, hud_type, toggle
-    return 1;
-}
-
 stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col[], fps, ping, Float:packet_loss, output[], len = sizeof(output))
 {
     switch (hud_type)
@@ -317,18 +311,6 @@ stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col
     return 1;
 }
 
-stock FormatDeathMessageForHud(hud_type, const primary_col[], const secondary_col[], const killer_name[], output[], len = sizeof(output))
-{
-    switch (hud_type)
-    {
-        case HUD_REJECTING, HUD_UNDERLINE, HUD_REJECTING_01:
-            format(output, len, "%sKilled by %s%s", primary_col, secondary_col, killer_name);
-        default:
-            format(output, len, "%sKilled by %s%s", primary_col, secondary_col, killer_name);
-    }
-    return 1;
-}
-
 stock GetCustomClockString(hud_type, const primary_col[] = "", const secondary_col[] = "", timestamp = 0, utc = -3, bool:is_pt_br = true)
 {
     #pragma unused timestamp, utc, is_pt_br
@@ -357,18 +339,5 @@ stock GetCustomClockString(hud_type, const primary_col[] = "", const secondary_c
     }
 
     return string;
-}
-
-stock GetHudTypeName(hud_type, destination[], len = sizeof(destination))
-{
-    if (0 <= hud_type < MAX_HUD_TYPES)
-    {
-        format(destination, len, "%s", HUD_TYPES[hud_type]);
-    }
-    else
-    {
-        format(destination, len, "%s", HUD_TYPES[HUD_REJECTING]);
-    }
-    return 1;
 }
 

@@ -22,15 +22,12 @@ stock GetVipPackageDays(idx)    return (0 <= idx < sizeof(VipPackages)) ? VipPac
 stock GetVipPackageMoney(idx)   return (0 <= idx < sizeof(VipPackages)) ? VipPackages[idx][vip_price_money] : 0;
 stock GetVipPackageCoins(idx)   return (0 <= idx < sizeof(VipPackages)) ? VipPackages[idx][vip_price_coins] : 0;
 
-#define VIP_PAY_MONEY (0)
-
 #define VIP_CMD_COLOR "{C0504D}"
 #define COL_VIP_TEXT  "{B4B5B7}"
 
 #define VIP_PAY_INTERVAL (50 * 60)
 #define VIP_PAY_AMOUNT   (5000)
 #define VIP_PAY_TICK     (60000)
-#define VIP_PAY_COINS (1)
 
 forward DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputtext[]);
 
@@ -127,16 +124,6 @@ stock CheckPlayerVipOnLogin(playerid)
 
     return 0;
 }
-
-stock GetVipRankName(vip_level)
-{
-    new rank_name[16];
-    if(vip_level > 0) format(rank_name, sizeof(rank_name), "VIP");
-    else format(rank_name, sizeof(rank_name), "None");
-    return rank_name;
-}
-
-
 
 stock GetVipTagColorHex(playerid, dest[], len = sizeof(dest))
 {

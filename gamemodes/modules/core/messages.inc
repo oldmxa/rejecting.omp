@@ -49,8 +49,6 @@
 
 // PLAYER COMMANDS & PREFERENCES
 
-#define STATS_HELP                  "{MAIN}[ERROR] {FFFFFF}/stats [ID]"
-#define AKA_HELP                    "{MAIN}[ERROR] {FFFFFF}/Aka [ID] - Check if player has other accounts."
 #define NAMES_HELP                  "{MAIN}[ERROR] {FFFFFF}/names [ID] - Check the player's name history."
 #define DANCE_HELP                  "{MAIN}[ERROR] {FFFFFF} /dance [1-4]"
 
@@ -128,7 +126,6 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 #define CHANGED_ARENA_MSG           ADM_TAG_NORM"%s changed to arena %s (ID: "COL_BEIGE"%d"COL_ADM_CMD")"
 #define RANDOM_CHANGED_ARENA_MSG    ADM_TAG_NORM"%s randomly changed arena to %s (ID: "COL_BEIGE"%d"COL_ADM_CMD")"
 #define CHANGEARENA_DELAY           "{MAIN}**{FFFFFF} Change arena command is delayed, please wait %s or use "COL_GYELLOW"/queuearena."
-#define QUEUED_ARENA                "{MAIN}**{FFFFFF}Arena {MAIN}%s (ID: %d) {FFFFFF}was queued successfully, please wait for the current arena to end."
 #define NOT_VALID_ARENA             "{MAIN}[ERROR] {FFFFFF}The specified value exceeds the maximum value %d"
 #define ARENA_ENDED_MSG             "{MAIN}[LOCATION %d] {FFFFFF}Current arena {MAIN}%s (ID: %d) {FFFFFF}has ended, the next one is {MAIN}%s (ID: %d)."
 #define ARENA_START_MSG             "{MAIN}[INFO] {FFFFFF}Arena {MAIN}%s #%d {FFFFFF}has started!"
@@ -143,8 +140,6 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 
 #define FIRST_BLOOD                 RDM_TAG"{FFFFFF}First blood! {%06x}%s {FFFFFF}opened the round."
 #define END_KILLSPREE               RDM_TAG"{FFFFFF}Your spree is over. You killed {MAIN}%d {FFFFFF}players in {MAIN}%s {FFFFFF}seconds."
-#define KILL_MACHINE                RDM_TAG"{%06x}%s {FFFFFF}is on a {MAIN}killing machine {FFFFFF}run!"
-#define REACHED_RAMPAGE             RDM_TAG"{%06x}%s {FFFFFF}reached a {MAIN}rampage{FFFFFF}!"
 #define DOWN_SPREE_MSG              RDM_TAG"{%06x}%s {FFFFFF}has ended the kill-streak of {%06x}%s {MAIN}(%d kills)"
 
 // WEEKLY RANKINGS
@@ -168,9 +163,7 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 
 // COINS & VIP PACKAGES
 
-#define VIP_NO_MONEY                "{MAIN}[ERROR] {FFFFFF}You need {00FF00}%s {FFFFFF}more to activate this VIP package."
 #define VIP_NO_COINS                "{MAIN}[ERROR] {FFFFFF}You need {FFFF00}%s {FFFFFF}more to activate this VIP package. Earn Coins by unlocking achievements ({MAIN}/ach{FFFFFF})."
-#define COINS_BALANCE               "{MAIN}[COINS] {FFFFFF}You have {FFFF00}%s{FFFFFF}. Earn more by unlocking achievements ({MAIN}/ach{FFFFFF})."
 #define COINS_SET_HELP              "{MAIN}[USAGE] {FFFFFF}/setcoins [id/name] [amount] {BEBEBE}- works on offline accounts too."
 #define COINS_SET_NEGATIVE          "{MAIN}[ERROR] {FFFFFF}The Coins amount cannot be negative."
 #define COINS_SET_NOACC             "{MAIN}[ERROR] {FFFFFF}No account found with the name {MAIN}%s{FFFFFF}."
@@ -224,7 +217,6 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 // --- Spectate ---
 #define SPEC_HELP                   "{MAIN}[ERROR] {FFFFFF}/spec [name/id]"
 #define SPEC_HELP2                  "{MAIN}**{FFFFFF} You can't watch yourself"
-#define NO_MORE_PLAYERS             "{MAIN}**{FFFFFF}No more players to spectate in this direction."
 #define NO_SPEC_MODE                "{MAIN}**{FFFFFF}You're not spectating anyone."
 #define IN_SPEC_MODE                "{MAIN}**{FFFFFF}You're in spectate mode. Type {MAIN}/specoff {FFFFFF}to leave."
 
@@ -241,20 +233,11 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 
 // --- Kick ---
 #define KICK_HELP                   "{MAIN}[ERROR] {FFFFFF}/kick [ID] [reason] - Kick player from the server."
-#define KICK_HELP2                  "{MAIN}[ERROR] {FFFFFF} You can't kick an administrator with a level equal to or higher than yours."
-#define KICK_NO_REASON              ADM_TAG_PUN"Admin %s kicked %s (%d)."
 #define KICK_REASON                 ADM_TAG_PUN"Admin %s kicked %s (%d). Reason: %s"
 
 // --- Ban ---
-#define BAN_BANNED                  ""COL_ADM_PUNISH"[ACCOUNT] You are banned. Open an appeal on our Discord."
-#define BAN_WHOBANNED               ""COL_ADM_PUNISH"The account %s was banned by admin %s, reason: %s, on %s, your unban was scheduled for %s. (GMT-03:00)"
-#define BAN_MISTAKE                 ""COL_ADM_PUNISH"If you think this is a mistake, take a screenshot and open an unban appeal on our Discord."
-#define BAN_DCLINK                  ""COL_DISCORD"rejectingflles.com"
 #define BAN_HELP                    "{MAIN}[ERROR] {FFFFFF}/ban [id] [hours] [reason] - Ban player."
 #define BAN_HELP2                   "{MAIN}**{FFFFFF} Enter a number between 1 and 9999."
-#define BAN_HELP3                   "{MAIN}**{FFFFFF} You can't ban an administrator with a level equal to or higher than yours."
-#define BAN_NO_REASON               ADM_TAG_PUN"Admin %s banned %s (%d)."
-#define BAN_REASON                  ADM_TAG_PUN"Admin %s (%d) banned %s for %d hours. Reason: %s"
 #define BANOFF_HELP                 "{MAIN}[ERROR] {FFFFFF}/offban [name] [hours] [reason] - Ban player."
 #define UNBAN_HELP                  "{MAIN}[ERROR] {FFFFFF}/unban [player/ip]"
 #define UNBAN_MESSAGE               ADM_TAG_NORM"Admin "COL_WHITE"%s "COL_ADM_CMD"unbanned player "COL_WHITE"%s"COL_ADM_CMD"."
@@ -267,11 +250,6 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 #define FORCED_OMP_BAN              ADM_TAG_PUN"Admin %s forced open.mp launcher on %s"
 #define OMP_UNBAN                   ADM_TAG_NORM"The player "COL_WHITE"%s "COL_ADM_CMD"is no longer locked to the open.mp launcher."
 #define UNBAN_OMP_HELP              "{MAIN}[ERROR] {FFFFFF}/unbanomp [nick] - Unban a player that has been forced to play with open.mp launcher."
-
-// --- Network & Client Limits ---
-#define TOO_HIGH_FPS                "FPS TOO HIGH (%d/%d)"
-#define TOO_LOW_FPS                 "FPS TOO LOW (%d/%d)"
-#define TOO_HIGH_PING               "PING TOO HIGH (%d/%d)"
 
 // --- Vehicle Admin Spawn ---
 #define VEHICLE_SPAWN_HELP          "{MAIN}[ERROR] {FFFFFF}/car [veh name] [color 1; -1 = random] [color 2; -1 = random]"
