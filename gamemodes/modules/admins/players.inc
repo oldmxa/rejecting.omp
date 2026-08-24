@@ -31,6 +31,11 @@
             va_SendClientMessage(i, -1, ADM_TAG_NORM"%s brought %s to his position. ", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, ADM_TAG_NORM"%s brought him to his position!", User[playerid][userName]);
+
+    new log_details[128];
+    format(log_details, sizeof(log_details), "Brought %s to position", User[targetid][userName]);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "Get", log_details);
+
     return true;
 }
 
@@ -80,6 +85,11 @@
             va_SendClientMessage(i, -1, ADM_TAG_NORM"%s went to %s's position. ", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, ADM_TAG_NORM"%s came to your position!", User[playerid][userName]);
+
+    new log_details[128];
+    format(log_details, sizeof(log_details), "Teleported to %s's position", User[targetid][userName]);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "Go", log_details);
+
     return true;
 }
 
@@ -113,6 +123,11 @@
             va_SendClientMessage(i, -1, ADM_TAG_PUN"%s slapped %s", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, SLAP_MSG, User[playerid][userName]);
+
+    new log_details[128];
+    format(log_details, sizeof(log_details), "Slapped player %s", User[targetid][userName]);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "Slap", log_details);
+
     return true;
 }
 
@@ -146,6 +161,11 @@
     }
 
     va_SendClientMessage(targetid, -1, FREEZE_MSG, User[playerid][userName]);
+
+    new log_details[128];
+    format(log_details, sizeof(log_details), "Froze player %s", User[targetid][userName]);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "Freeze", log_details);
+
     return true;
 }
 
@@ -177,6 +197,11 @@
             va_SendClientMessage(i, -1, ADM_TAG_NORM"%s unfroze %s", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, UNFREEZE_MSG_ADM, User[playerid][userName]);
+
+    new log_details[128];
+    format(log_details, sizeof(log_details), "Unfroze player %s", User[targetid][userName]);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "Unfreeze", log_details);
+
     return true;
 }
 
@@ -200,6 +225,11 @@
     SpawnPlayerEx(targetid);
     va_SendClientMessage(targetid, -1, SPAWN_MSG, User[playerid][userName]);
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You spawned %s.", User[targetid][userName]);
+
+    new log_details[128];
+    format(log_details, sizeof(log_details), "Spawned player %s", User[targetid][userName]);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "Spawn", log_details);
+
     return true;
 }
 
@@ -313,6 +343,11 @@
     format(mLog, sizeof(mLog), "**Admin:** %s\n**Player:** %s\n**New Balance:** $%s",
         User[playerid][userName], User[targetid][userName], FormatMoney(amount));
     SendDiscordEmbed(logs_money, "Admin Money Set", mLog, DISCORD_COLOR_ADMIN);
+
+    new log_m_details[128];
+    format(log_m_details, sizeof(log_m_details), "Set money of %s to $%s", User[targetid][userName], FormatMoney(amount));
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "SetMoney", log_m_details);
+
     return true;
 }
 
@@ -352,6 +387,11 @@
         return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
 
     OnPlayerText(targetid, text);
+
+    new log_ft_details[256];
+    format(log_ft_details, sizeof(log_ft_details), "Forced %s to say: %s", User[targetid][userName], text);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "ForceText", log_ft_details);
+
     return true;
 }
 
@@ -373,6 +413,11 @@
 
     SetPlayerVirtualWorld(targetid, vw);
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You set %s's virtual world to %d.", User[targetid][userName], vw);
+
+    new log_vw_details[128];
+    format(log_vw_details, sizeof(log_vw_details), "Set %s's virtual world to %d", User[targetid][userName], vw);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "SetVW", log_vw_details);
+
     return true;
 }
 
@@ -394,6 +439,11 @@
 
     SetPlayerInterior(targetid, interior);
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You set %s's interior to %d.", User[targetid][userName], interior);
+
+    new log_int_details[128];
+    format(log_int_details, sizeof(log_int_details), "Set %s's interior to %d", User[targetid][userName], interior);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "SetInterior", log_int_details);
+
     return true;
 }
 
@@ -407,6 +457,10 @@
     {
         SetPlayerName(playerid, User[playerid][userName]);
         va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Your nick has been reset to %s.", User[playerid][userName]);
+
+        new log_fake_reset[128];
+        format(log_fake_reset, sizeof(log_fake_reset), "Reset fake nick to %s", User[playerid][userName]);
+        LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "FakeNick", log_fake_reset);
         return true;
     }
     new fakenick[MAX_PLAYER_NAME + 1];
@@ -418,6 +472,10 @@
     }
         
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Your nick has been changed to %s.", fakenick);
+
+    new log_fake_set[128];
+    format(log_fake_set, sizeof(log_fake_set), "Changed fake nick to %s", fakenick);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "FakeNick", log_fake_set);
     return true;
 }
 

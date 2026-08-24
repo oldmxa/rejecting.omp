@@ -652,7 +652,10 @@ ALTER TABLE `safehouse_logs`
   ADD KEY `clan` (`clan_id`);
 
 ALTER TABLE `server_logs`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_server_logs_category` (`category`),
+  ADD KEY `idx_server_logs_user` (`user_id`),
+  ADD KEY `idx_server_logs_created` (`created_at`);
 
 ALTER TABLE `site_config`
   ADD PRIMARY KEY (`key`);

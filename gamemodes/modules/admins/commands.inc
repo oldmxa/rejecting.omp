@@ -306,6 +306,10 @@ ShowAdminCmds(playerid)
     utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
     SendDiscordEmbed(logs_ask, "Question Reply", msgencoded, DISCORD_COLOR_INFO);
 
+    new log_details[256];
+    format(log_details, sizeof(log_details), "Admin %s answered %s: %s", User[playerid][userName], User[targetid][userName], message);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "asks", "Ask Reply", log_details);
+
     return true;
 }
 
@@ -355,6 +359,10 @@ ShowAdminCmds(playerid)
     format(msgdiscord, sizeof(msgdiscord), "**Admin:** %s\n**Target:** %s\n**Message:** %s", User[playerid][userName], User[targetid][userName], message);
     utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
     SendDiscordEmbed(logs_report, "Report Reply", msgencoded, DISCORD_COLOR_INFO);
+
+    new log_rep_details[256];
+    format(log_rep_details, sizeof(log_rep_details), "Admin %s replied to %s: %s", User[playerid][userName], User[targetid][userName], message);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "reports", "Report Reply", log_rep_details);
 
     return true;
 }
@@ -519,6 +527,11 @@ ShowAdminCmds(playerid)
         va_SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FFFFFF}You revoked Custom Tag permission from %s.", getPlayerName(targetid));
         va_SendClientMessage(targetid, -1, "{MAIN}[TAG] {FFFFFF}Your Custom Tag permission was revoked by Admin %s.", getPlayerName(playerid));
     }
+
+    new tag_log[256];
+    format(tag_log, sizeof(tag_log), "Admin %s %s Custom Tag permission for %s", User[playerid][userName], User[targetid][customTagPerm] ? "granted" : "revoked", getPlayerName(targetid));
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "GiveCustomTag", tag_log);
+
     return true;
 }
 

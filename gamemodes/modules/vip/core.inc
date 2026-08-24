@@ -821,6 +821,10 @@ ShowVipTagDialog(playerid)
     );
     LogDiscordVipAction("VIP Granted by Admin", giveVipStr, DISCORD_COLOR_ADMIN);
 
+    new log_gv_details[256];
+    format(log_gv_details, sizeof(log_gv_details), "Granted %s VIP (%d days) to %s (ID %d)", (days > 0) ? ("Temporary") : ("Permanent"), days, User[targetid][userName], targetid);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "promotions", "GiveVIP", log_gv_details);
+
     return true;
 }
 
@@ -874,6 +878,10 @@ ShowVipTagDialog(playerid)
     );
     LogDiscordVipAction("VIP Removed by Admin", remVipStr, DISCORD_COLOR_ERROR);
     SyncPlayerDiscordRoles(targetid);
+
+    new log_rv_details[256];
+    format(log_rv_details, sizeof(log_rv_details), "Removed VIP status from %s (ID %d)", User[targetid][userName], targetid);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "promotions", "RemoveVIP", log_rv_details);
 
     return true;
 }

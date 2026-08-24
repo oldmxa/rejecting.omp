@@ -119,6 +119,10 @@
         KickEx(targetid, 2000);
     }
 
+    new log_details[256];
+    format(log_details, sizeof(log_details), "Fake banned %s for %d hours. Reason: %s", targetName, hours, reason);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "bans", "FakeBan", log_details);
+
     return true;
 }
 
@@ -502,6 +506,11 @@
     mysql_tquery(dbHandle, queryGlobal);
     
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You changed the ban reason of %s to: %s", target, reason);
+
+    new log_cbr_details[256];
+    format(log_cbr_details, sizeof(log_cbr_details), "Changed ban reason of %s to: %s", target, reason);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "bans", "ChangeBanReason", log_cbr_details);
+
     return true;
 }
 
@@ -523,6 +532,11 @@
     mysql_tquery(dbHandle, queryGlobal);
 
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You changed the ban expiry time of %s. New unban in %d %s.", target, amount, (unit[0] == 'h' ? "hours" : "days"));
+
+    new log_cbt_details[256];
+    format(log_cbt_details, sizeof(log_cbt_details), "Changed ban expiry of %s by %d %s", target, amount, (unit[0] == 'h' ? "hours" : "days"));
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "bans", "ChangeBanTime", log_cbt_details);
+
     return true;
 }
 
@@ -635,6 +649,11 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
     mysql_tquery(dbHandle, queryGlobal);
     
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"You unbanned the serial: "COL_WHITE"%s", serial_gpci);
+
+    new log_ug_details[128];
+    format(log_ug_details, sizeof(log_ug_details), "Unbanned GPCI serial: %s", serial_gpci);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "unbans", "UnbanGPCI", log_ug_details);
+
     return true;
 }
 
@@ -798,6 +817,11 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
     format(msgdiscord, sizeof(msgdiscord), "**Admin:** %s\n**Target:** %s", User[playerid][userName], target);
     utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
     SendDiscordEmbed(adminchat, "Account Reset", msgencoded, DISCORD_COLOR_ERROR);
+
+    new log_ra_details[128];
+    format(log_ra_details, sizeof(log_ra_details), "Reset account data for %s", target);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "security", "ResetAccount", log_ra_details);
+
     return true;
 }
 

@@ -108,6 +108,10 @@
     utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
     SendDiscordEmbed(adminchat, "Set Lounge", msgencoded, DISCORD_COLOR_ADMIN);
 
+    new log_lng[256];
+    format(log_lng, sizeof(log_lng), "Sent %s to lounge. Reason: %s", User[targetid][userName], reason);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "SetLounge", log_lng);
+
     return true;
 }
 
@@ -157,6 +161,10 @@
         if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
             va_SendClientMessage(i, -1, CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[arenaid][arenaName], arenaid);
     }
+
+    new log_ca[256];
+    format(log_ca, sizeof(log_ca), "Changed arena to %s (ID %d) in location %d", arenaData[arenaid][arenaName], arenaid, location);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "arenas", "ChangeArena", log_ca);
 
     if(User[playerid][adminLevel] < 4)
         changeArenaDelay = gettime()+(3*60);
@@ -229,6 +237,10 @@
         if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
             va_SendClientMessage(i, -1, RANDOM_CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[newArenaId][arenaName], newArenaId);
     }
+
+    new log_rca[256];
+    format(log_rca, sizeof(log_rca), "Random changed arena to %s (ID %d) in location %d", arenaData[newArenaId][arenaName], newArenaId, location);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "arenas", "RandomChangeArena", log_rca);
 
     if(User[playerid][adminLevel] < 4)
         changeArenaDelay = gettime()+(3*60);
@@ -335,6 +347,11 @@ public AdminCountdown(count)
     SendRconCommand(str);
     
     va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s changed the server hostname to: %s", User[playerid][userName], params);
+
+    new log_hn[256];
+    format(log_hn, sizeof(log_hn), "Changed hostname to: %s", params);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "ChangeHostname", log_hn);
+
     return true;
 }
 
@@ -385,6 +402,11 @@ public AdminCountdown(count)
     ServerLocked = true;
     
     va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s locked the server.", User[playerid][userName]);
+
+    new log_ls[128];
+    format(log_ls, sizeof(log_ls), "Locked the server with password");
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "security", "LockServer", log_ls);
+
     return true;
 }
 
@@ -398,6 +420,11 @@ public AdminCountdown(count)
     SendRconCommand("password 0");
     ServerLocked = false;
     va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s unlocked the server.", User[playerid][userName]);
+
+    new log_uls[128];
+    format(log_uls, sizeof(log_uls), "Unlocked the server");
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "security", "UnlockServer", log_uls);
+
     return true;
 }
 
