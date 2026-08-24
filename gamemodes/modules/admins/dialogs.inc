@@ -39,19 +39,19 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 2: // Ping
             {
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXPING<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Ping", "{FFFFFF}Enter the new maximum ping allowed:", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXPING<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Ping", "{BEBEBE}Enter the new maximum ping allowed:", "*", "<");
             }
             case 3: // PL
             {
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXPL<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Packetloss", "{FFFFFF}Enter the new maximum packet loss allowed (float):", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXPL<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Packetloss", "{BEBEBE}Enter the new maximum packet loss allowed (float):", "*", "<");
             }
             case 4: // Min FPS
             {
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MINFPS<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Min FPS", "{FFFFFF}Enter the new minimum FPS allowed:", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MINFPS<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Min FPS", "{BEBEBE}Enter the new minimum FPS allowed:", "*", "<");
             }
             case 12: // Max FPS
             {
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXFPS<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max FPS", "{FFFFFF}Enter the new maximum FPS allowed:", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXFPS<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max FPS", "{BEBEBE}Enter the new maximum FPS allowed:", "*", "<");
             }
             case 5: // Server Lock
             {
@@ -66,7 +66,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 }
                 else
                 {
-                    Dialog_ShowCallback(playerid, using public DIALOG_ADM_LOCKPASS<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Server Lock", "{FFFFFF}Enter the password to lock the server:", "Lock", "Back");
+                    Dialog_ShowCallback(playerid, using public DIALOG_ADM_LOCKPASS<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Server Lock", "{BEBEBE}Enter the password to lock the server:", "*", "<");
                 }
             }
             case 13: // Fake Version server-wide
@@ -98,26 +98,26 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             case 16: // Max Warnings
             {
                 if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXWARN<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Warnings", "{FFFFFF}Warnings before an automatic ban:", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXWARN<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Warnings", "{BEBEBE}Warnings before an automatic ban:", "*", "<");
             }
             case 17: // Max Login Attempts
             {
                 if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXLOGIN<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Login Attempts", "{FFFFFF}Wrong passwords before the account is locked:", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXLOGIN<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Login Attempts", "{BEBEBE}Wrong passwords before the account is locked:", "*", "<");
             }
             case 18: // Max Accounts per IP/GPCI
             {
                 if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXACC<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Accounts", "{FFFFFF}Accounts allowed per IP or serial (0 = no limit):", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXACC<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Accounts", "{BEBEBE}Accounts allowed per IP or serial (0 = no limit):", "*", "<");
             }
             case 22: // AC detection cooldown
             {
                 if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
                 new acStr[160];
-                format(acStr, sizeof(acStr), "{FFFFFF}Current: {418cb0}%d seconds\n\n{FFFFFF}Seconds before the same detection counts again (1-60):", ServerACCooldown);
+                format(acStr, sizeof(acStr), "{FFFFFF}Current: {23C552}%d seconds\n\n{BEBEBE}Seconds before the same detection counts again (1-60):", ServerACCooldown);
 
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_ACCOOLDOWN<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Anti Cheat Cooldown", acStr, "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_ACCOOLDOWN<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Anti Cheat Cooldown", acStr, "*", "<");
             }
             case 19: // Anti Spam
             {
@@ -192,7 +192,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 if(User[playerid][adminLevel] < 4 || !IsPlayerAdmin(playerid))
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ and RCON login required.");
 
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_HOSTNAME<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Server Name", "{FFFFFF}Enter the new server name to display in the launcher:", "Update", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_HOSTNAME<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Server Name", "{BEBEBE}Enter the new server name to display in the launcher:", "*", "<");
             }
             case 11:
             {
@@ -200,8 +200,8 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ and RCON login required.");
 
                 new infoStr[128];
-                format(infoStr, sizeof(infoStr), "{FFFFFF}Current Max Players: {418cb0}%d\n\n{FFFFFF}Enter the new maximum player limit (1-1000):", GetMaxPlayers());
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXPLAYERS<iiiis>, DIALOG_STYLE_INPUT, "{418cb0}Max Players", infoStr, "Update", "Back");
+                format(infoStr, sizeof(infoStr), "{FFFFFF}Current Max Players: {23C552}%d\n\n{BEBEBE}Enter the new maximum player limit (1-1000):", GetMaxPlayers());
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXPLAYERS<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Slots", infoStr, "*", "<");
             }
             case 14: // Default Server HUD
             {
@@ -209,20 +209,21 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HUD style.");
 
                 new string[512];
-                strcopy(string, "ID\tHUD Style\n");
+                strcopy(string, "{BEBEBE}ID\t{BEBEBE}HUD Style\n");
                 for (new i = 0; i < sizeof(HUD_TYPES); i++)
                 {
-                    strcat(string, fmat_return("%d\t%s{FFFFFF}%s\n", i, STYLE_MARK(ServerDefaultHud == i), HUD_TYPES[i]));
+                    new bool:isSelected = (ServerDefaultHud == i);
+                    strcat(string, fmat_return("%d\t%s%s\n", i, isSelected ? ("{23C552}> {FFFFFF}") : ("{B4B5B7}\x95 {FFFFFF}"), HUD_TYPES[i]));
                 }
                 format_MainColor(playerid, string);
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default Server HUD", string, "Select", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default Server HUD", string, "*", "<");
             }
             case 15: // Default HUD Color
             {
                 if(User[playerid][adminLevel] < 5)
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HUD color.");
 
-                new body[2048] = "Name\tColor 1\tColor 2\n";
+                new body[2048] = "{BEBEBE}Name\t{BEBEBE}Color 1\t{BEBEBE}Color 2\n";
                 for(new i; i < sizeof(hudPersonalization); i++)
                 {
                     new name[24], hex1[7], hex2[7];
@@ -234,11 +235,12 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     hex1 = GetColorHexTag(hudPersonalization[i][colorOne]);
                     hex2 = GetColorHexTag(hudPersonalization[i][colorTwo]);
 
+                    new bool:isSelected = (ServerDefaultHudColor == i);
                     strcat(body, fmat_return("%s{%s}%s\t{%s}Preview\t{%s}Preview\n",
-                        STYLE_MARK(ServerDefaultHudColor == i), CoresDoBglh[i], name, hex1, hex2), sizeof(body));
+                        isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), CoresDoBglh[i], name, hex1, hex2), sizeof(body));
                 }
                 format_MainColor(playerid, body);
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUDCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default HUD Color", body, "Select", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUDCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default HUD Color", body, "*", "<");
             }
             case 23: // Default HUD Primary
             {
@@ -249,17 +251,18 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 new hex1[7];
                 hex1 = GetColorHexTag(hudPersonalization[presetColor][colorOne]);
 
-                new body[3500] = "Name\tPreview\n";
+                new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
                 strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{%s}Preview\n",
-                    STYLE_MARK(ServerDefaultHudShadeOne == -1), hex1), sizeof(body));
+                    (ServerDefaultHudShadeOne == -1) ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hex1), sizeof(body));
 
                 for(new i; i < sizeof(hudShades); i++)
                 {
+                    new bool:isSelected = (ServerDefaultHudShadeOne == i);
                     strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
-                        STYLE_MARK(ServerDefaultHudShadeOne == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+                        isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
                 }
                 format_MainColor(playerid, body);
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTSHADE1<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default HUD Primary", body, "Select", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTSHADE1<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default HUD Primary", body, "*", "<");
             }
             case 24: // Default HUD Secondary
             {
@@ -270,17 +273,18 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 new hex2[7];
                 hex2 = GetColorHexTag(hudPersonalization[presetColor][colorTwo]);
 
-                new body[3500] = "Name\tPreview\n";
+                new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
                 strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{%s}Preview\n",
-                    STYLE_MARK(ServerDefaultHudShadeTwo == -1), hex2), sizeof(body));
+                    (ServerDefaultHudShadeTwo == -1) ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hex2), sizeof(body));
 
                 for(new i; i < sizeof(hudShades); i++)
                 {
+                    new bool:isSelected = (ServerDefaultHudShadeTwo == i);
                     strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
-                        STYLE_MARK(ServerDefaultHudShadeTwo == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+                        isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
                 }
                 format_MainColor(playerid, body);
-                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTSHADE2<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{418cb0}Default HUD Secondary", body, "Select", "Back");
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTSHADE2<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default HUD Secondary", body, "*", "<");
             }
         }
     }
