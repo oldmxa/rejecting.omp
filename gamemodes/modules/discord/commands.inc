@@ -348,31 +348,6 @@ public RegisterSlashCommands()
 	return 1;
 }
 
-forward CleanupGlobalSlashCommands();
-public CleanupGlobalSlashCommands()
-{
-	new cmdName[DCC_COMMAND_SIZE], cmdDesc[DCC_COMMAND_DESCRIPTION_SIZE];
-	new callbackName[DCC_COMMAND_SIZE + 8];
-	new removed = 0;
-
-	for(new i = 0; i < sizeof(g_SlashCommands); i++)
-	{
-		format(cmdName, sizeof(cmdName), "%s", g_SlashCommands[i][slash_name]);
-		format(cmdDesc, sizeof(cmdDesc), "%s", g_SlashCommands[i][slash_desc]);
-		format(callbackName, sizeof(callbackName), "DSC_%s", cmdName);
-
-		new DCC_Command:c = DCC_CreateCommand(cmdName, cmdDesc, callbackName, true, DCC_INVALID_GUILD);
-		if(c != DCC_Command:0)
-		{
-			DCC_DeleteCommand(c);
-			removed++;
-		}
-	}
-
-	printf("[DSC] limpeza de comandos globais duplicados: %d", removed);
-	return 1;
-}
-
 DSLASH:setadmin(user, params[])
 {
 	new username[33];

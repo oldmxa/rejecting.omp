@@ -17,7 +17,7 @@ Respawn(playerid, timestamp)
     if(User[playerid][timerRespawn] > timestamp)
         return SendClientMessage(playerid, -1, "%s", ERROR_RESPAWN);
 
-    if(GetPVarInt(playerid, "isSpec") != 0)
+    if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
     new Float:Armour;
@@ -771,7 +771,7 @@ public Stats_showMapListDialog(playerid)
 
 ShowGunMenu(playerid)
 {
-	if(GetPVarInt(playerid, "isSpec") != 0)
+	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
     new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);

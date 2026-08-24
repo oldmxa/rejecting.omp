@@ -14,14 +14,6 @@ enum e_AC_CLIENT
 
 static ACClient[MAX_PLAYERS][e_AC_CLIENT];
 
-forward AC_DelayedKick(playerid);
-
-public AC_DelayedKick(playerid)
-{
-    if (IsPlayerConnected(playerid)) Kick(playerid);
-    return 1;
-}
-
 stock AC_SendClientChecks(playerid)
 {
     if (!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;

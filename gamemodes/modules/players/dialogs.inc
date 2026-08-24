@@ -1,26 +1,4 @@
 
-forward TIME(playerid, dialogid, response, listitem, string:inputtext[]);
-public TIME(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    if(response)
-    {
-        new timeID = strval(inputtext);
-        ChangeTime(playerid, timeID);
-    }
-    return ShowPersonalizationMenu(playerid);
-}
-
-forward WEATHER(playerid, dialogid, response, listitem, string:inputtext[]);
-public WEATHER(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    if(response)
-    {
-        new weatherID = strval(inputtext);
-        ChangeWeather(playerid, weatherID);
-    }
-    return ShowPersonalizationMenu(playerid);
-}
-
 // Dialogs Settings e Personalization.
 
 SetAppearanceSource(playerid, source)

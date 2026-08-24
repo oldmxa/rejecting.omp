@@ -14,7 +14,6 @@
 // Forward declarations
 forward OnTourneyCountdownTick(matchid, count);
 forward OnTourneyMatchTimer(matchid);
-forward OnTourneyWOCountdownTick(matchid);
 forward StartNextTourneyRoundDelayed(round);
 forward OnTourneyFinishedDelay();
 

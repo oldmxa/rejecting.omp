@@ -53,7 +53,7 @@ StartChangeMode(playerid)
     if(!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-	if(GetPVarInt(playerid, "isSpec") != 0)
+	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
 	if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING)

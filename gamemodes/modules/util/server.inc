@@ -26,16 +26,6 @@ public PrintServerBanner()
 	return 1;
 }
 
-public IsR2KickEnabled()
-{
-    return _:R2KickEnabled;
-}
-
-public IsOMPKickEnabled()
-{
-    return _:OMPKickEnabled;
-}
-
 stock LoadServerConfig()
 {
     if(!fexist("server_config.ini"))

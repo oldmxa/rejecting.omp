@@ -749,10 +749,7 @@ new changeArenaDelay = -1;
 new g_Object;
 
 new bool:R2KickEnabled = false;
-forward IsR2KickEnabled();
-
 new bool:OMPKickEnabled = false;
-forward IsOMPKickEnabled();
 
 new playerAccounts[MAX_PLAYERS];
 
