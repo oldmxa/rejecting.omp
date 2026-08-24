@@ -280,8 +280,9 @@ ShowACAction(playerid, detection)
 
     for (new a; a < sizeof(AC_ACTION_NAME); a++)
     {
-        strcat(body, fmat_return("%s{B4B5B7}\x95 %s%s\t{B4B5B7}%s\n",
-            STYLE_MARK(AC_DETECTION_ACTION[detection] == a),
+        new bool:isSelected = (AC_DETECTION_ACTION[detection] == a);
+        strcat(body, fmat_return("%s%s%s\t{B4B5B7}%s\n",
+            isSelected ? ("{MAIN}> ") : ("{B4B5B7}\x95 "),
             AC_ACTION_COLOR[a], AC_ACTION_NAME[a], AC_ACTION_HELP[a]), sizeof(body));
 
         rows[count++] = a;
