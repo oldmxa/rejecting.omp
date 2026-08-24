@@ -84,9 +84,9 @@ new const AC_ACTION_HELP[][] =
 new const AC_ACTION_COLOR[][] =
 {
     "{B4B5B7}",
-    "{DEAD10}",
-    "{FFA500}",
     "{f1802d}",
+    "{F84F31}",
+    "{3098FF}",
     "{F84F31}"
 };
 
