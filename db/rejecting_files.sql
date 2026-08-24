@@ -554,7 +554,9 @@ ALTER TABLE `accounts`
   ADD KEY `clanid` (`clanid`),
   ADD KEY `regip` (`regip`),
   ADD KEY `dc_username` (`dc_username`),
-  ADD KEY `dc_uid` (`dc_uid`);
+  ADD KEY `dc_uid` (`dc_uid`),
+  ADD KEY `idx_accounts_unmute` (`unmute_timestamp`),
+  ADD KEY `idx_accounts_warnings` (`warnings`);
 
 ALTER TABLE `ac_detections`
   ADD PRIMARY KEY (`id`),
@@ -583,7 +585,8 @@ ALTER TABLE `banimentos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `username` (`username`),
   ADD KEY `ip` (`ip`),
-  ADD KEY `gpci` (`gpci`);
+  ADD KEY `gpci` (`gpci`),
+  ADD KEY `idx_ban_unban` (`unban_timestamp`);
 
 ALTER TABLE `changelog`
   ADD PRIMARY KEY (`id`),
