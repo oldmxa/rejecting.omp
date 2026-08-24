@@ -602,8 +602,14 @@ public FIGHT(playerid, dialogid, response, listitem, string:inputtext[])
             SetPlayerFightingStyle(playerid, User[playerid][fightStyle]);
             UpdatePlayerData(playerid);
             va_SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Your fighting style has been updated to: {MAIN}%s", fightStyles[listitem][fightname]);
+            ChangeFight(playerid);
+            return 1;
         }
 	}
+    else
+    {
+        ShowPersonalizationMenu(playerid);
+    }
 
 	return true;
 }

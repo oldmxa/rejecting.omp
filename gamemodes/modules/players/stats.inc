@@ -704,14 +704,18 @@ ChangeFight(playerid)
 	fightstr[0] = '\0';
 
     for(new i; i < sizeof(fightStyles); i++)
-        AppendStyleRow(fightstr, fightStyles[i][fightname], (User[playerid][fightStyle] == fightStyles[i][styleid]));
+    {
+        if (User[playerid][fightStyle] == fightStyles[i][styleid])
+            strcat(fightstr, fmat_return("{MAIN}> {FFFFFF}%s\n", fightStyles[i][fightname]), sizeof(fightstr));
+        else
+            strcat(fightstr, fmat_return("{MAIN}\xA4 {FFFFFF}%s\n", fightStyles[i][fightname]), sizeof(fightstr));
+    }
 
-    new title[64];
-    format(title, sizeof(title), "{MAIN}Select Fighting Style");
+    new title[64] = "{MAIN}\xA4 {FFFFFF}Select Fighting Style";
     format_MainColor(playerid, title);
     format_MainColor(playerid, fightstr);
 
-    Dialog_ShowCallback(playerid, using public FIGHT<iiiis>, DIALOG_STYLE_LIST, title, fightstr, "Select", "Cancel");
+    Dialog_ShowCallback(playerid, using public FIGHT<iiiis>, DIALOG_STYLE_LIST, title, fightstr, "Select", "Back");
 }
 
 forward Stats_showMapListDialog(playerid);
