@@ -40,17 +40,7 @@
     if(User[playerid][dc_codetimer] > gettime())
         return SendClientMessage(playerid, COLOR_TOMATO, "%s", DC_COOLDOWN);
 
-    new strC[512], title[64] = "{MAIN}Link Discord Account";
-    format_MainColor(playerid, title);
-
-    format(strC, sizeof(strC),
-"{FFFFFF}Join our Discord server: {MAIN}%s{FFFFFF}\n\n\
-Enter your Discord username or ID below to receive a verification code:\n\n\
-{BEBEBE}Examples: {MAIN}username{BEBEBE} or {MAIN}username#0000{BEBEBE} or {MAIN}Discord ID", ServerHostname);
-    format_MainColor(playerid, strC);
-
-    Dialog_ShowCallback(playerid, using public DIALOG_LINK_DISCORD<iiiis>, DIALOG_STYLE_INPUT, title, strC, "Confirm", "Cancel");
-    return true;
+    return ShowDiscordLinkDialog(playerid);
 }
 
 @cmd(.alts = {"unlinkdiscord"}) udiscord(playerid, params[], help)
@@ -63,8 +53,21 @@ Enter your Discord username or ID below to receive a verification code:\n\n\
     new title[64] = "{MAIN}Unlink Discord Account";
     format_MainColor(playerid, title);
 
-    new body[256];
-    format(body, sizeof(body), "{FFFFFF}Are you sure you want to unlink your Discord account ({MAIN}%s#%s{FFFFFF})?", User[playerid][dc_username], User[playerid][dc_discriminator]);
+    new body[512], userTag[128];
+    if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
+        format(userTag, sizeof(userTag), "%s", User[playerid][dc_username]);
+    else
+        format(userTag, sizeof(userTag), "%s#%s", User[playerid][dc_username], User[playerid][dc_discriminator]);
+
+    format(body, sizeof(body),
+"{MAIN}\xA4 Account Unlinking{FFFFFF}\n\
+{FFFFFF}\x95 {B4B5B7}Linked Account: {MAIN}%s{FFFFFF}\n\
+{FFFFFF}\x95 {B4B5B7}Discord ID: {MAIN}%s{FFFFFF}\n\n\
+{MAIN}\xA4 Security Warning{FFFFFF}\n\
+{FFFFFF}\x95 {B4B5B7}Unlinking will immediately {F84F31}disable Auto-Login{B4B5B7}.\n\
+{FFFFFF}\x95 {B4B5B7}Discord roles and bot sync will be revoked.\n\n\
+{FFFFFF}Are you sure you want to unlink your Discord account?",
+        userTag, User[playerid][dc_uid]);
     format_MainColor(playerid, body);
 
     Dialog_ShowCallback(playerid, using public DIALOG_UNLINK_DISCORD<iiiis>, DIALOG_STYLE_MSGBOX, title, body, "Unlink", "Cancel");
@@ -127,6 +130,14 @@ Enter your Discord username or ID below to receive a verification code:\n\n\
     mysql_format(dbHandle, checkQ, sizeof(checkQ), "SELECT `id` FROM `accounts` WHERE `dc_uid` = '%e' LIMIT 1", g_PendingDCVerify[slot][pv_DiscordID]);
     MySQL_TQueryInline(dbHandle, using inline OnVerifyCodeChecked, checkQ);
     return 1;
+}
+
+@cmd(.alts = {"dcid"}) discordid(playerid, params[], help)
+{
+    if(!User[playerid][isLogged])
+        return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
+
+    return Account_ShowDiscordIDDialog(playerid);
 }
 
 ShowMyAccountMenu(playerid)
@@ -289,6 +300,37 @@ public DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inp
     return 1;
 }
 
+forward Account_ShowDiscordIDDialog(playerid);
+public Account_ShowDiscordIDDialog(playerid)
+{
+    new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
+    new dcStr[512], title[64] = "{MAIN}Discord ID Info";
+    format_MainColor(playerid, title);
+
+    format(dcStr, sizeof(dcStr), "{MAIN}Field\t{MAIN}Information\n");
+
+    if(isLinked)
+    {
+        new userTag[128];
+        if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
+            format(userTag, sizeof(userTag), "%s", User[playerid][dc_username]);
+        else
+            format(userTag, sizeof(userTag), "%s#%s", User[playerid][dc_username], User[playerid][dc_discriminator]);
+
+        format(dcStr, sizeof(dcStr), "%s{FFFFFF}\x95 {B4B5B7}Discord User\t{7289DA}%s\n", dcStr, userTag);
+        format(dcStr, sizeof(dcStr), "%s{FFFFFF}\x95 {B4B5B7}Discord ID\t{MAIN}%s", dcStr, User[playerid][dc_uid]);
+    }
+    else
+    {
+        strcat(dcStr, "{FFFFFF}\x95 {B4B5B7}Discord Status\t{F84F31}Not Linked\n");
+        strcat(dcStr, "{FFFFFF}\x95 {B4B5B7}Discord ID\t{BEBEBE}None");
+    }
+
+    format_MainColor(playerid, dcStr);
+    Dialog_ShowCallback(playerid, using public DIALOG_HELP_DISCORDID<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, dcStr, "Back", "");
+    return 1;
+}
+
 forward DIALOG_HELP_DISCORDID(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_HELP_DISCORDID(playerid, dialogid, response, listitem, string:inputtext[])
 {
@@ -398,18 +440,7 @@ public DIALOG_HELP_MYACCOUNT(playerid, dialogid, response, listitem, string:inpu
         }
         case 3:
         {
-            new dcIDStr[256];
-            if(strcmp(User[playerid][dc_username], "-1", true))
-            {
-                format(dcIDStr, sizeof(dcIDStr), "Username: %s\nDiscriminator: %s\nID: %s", User[playerid][dc_username], User[playerid][dc_discriminator], User[playerid][dc_uid]);
-            }
-            else
-            {
-                format(dcIDStr, sizeof(dcIDStr), "Account not linked to Discord.");
-            }
-            new dcTitle[64] = "{MAIN}Discord ID Info";
-            format_MainColor(playerid, dcTitle);
-            Dialog_ShowCallback(playerid, using public DIALOG_HELP_DISCORDID<iiiis>, DIALOG_STYLE_MSGBOX, dcTitle, dcIDStr, "Close", "Back");
+            Account_ShowDiscordIDDialog(playerid);
         }
     }
     return 1;

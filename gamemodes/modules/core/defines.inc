@@ -222,4 +222,5 @@ stock SendDiscordResponse(DCC_Channel:channel, const message[]) return CallLocal
 stock SendDiscordEmbedReply(const title[], const description[], color = DISCORD_COLOR_DEFAULT) return CallLocalFunction("Discord_SendDiscordEmbedReply", "ssd", title, description, color);
 stock ShowBanDialog(playerid, const adminname[], const reason[], const banDate[], const unbanDate[]) return CallLocalFunction("Stats_ShowBanDialog", "dssss", playerid, adminname, reason, banDate, unbanDate);
 stock ShowSecurityMenu(playerid) return CallLocalFunction("Account_ShowSecurityMenu", "d", playerid);
+stock ShowDiscordIDDialog(playerid) return CallLocalFunction("Account_ShowDiscordIDDialog", "d", playerid);
 stock ShowCoinsMenu(playerid) return CallLocalFunction("Coinshop_ShowCoinsMenu", "d", playerid);
