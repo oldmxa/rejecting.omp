@@ -115,7 +115,7 @@ public OnLoginVerify(playerid, bool:success)
 			format(coloredNick, sizeof(coloredNick), "{%06x}%s",
 				GetPlayerDisplayColour(playerid), User[playerid][userName]);
 
-			va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG1, coloredNick);
+			va_SendClientMessage(playerid, -1, GetRandomWelcomeGreeting(), coloredNick);
 			va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG2, rearrangedAdminLevel);
 
 			if(!strcmp(User[playerid][dc_username], "-1", true))
@@ -124,7 +124,10 @@ public OnLoginVerify(playerid, bool:success)
 			}
 			else
 			{
-				SendClientMessage(playerid, -1, fmat_return("{MAIN}**{FFFFFF} Discord: {7289da}%s#%s\n", User[playerid][dc_username], User[playerid][dc_discriminator]));
+				if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
+					SendClientMessage(playerid, -1, fmat_return("{MAIN}**{FFFFFF} Discord: {7289da}%s", User[playerid][dc_username]));
+				else
+					SendClientMessage(playerid, -1, fmat_return("{MAIN}**{FFFFFF} Discord: {7289da}%s#%s", User[playerid][dc_username], User[playerid][dc_discriminator]));
 			}
 
 			if(User[playerid][clanID] != -1)

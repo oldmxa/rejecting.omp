@@ -193,7 +193,8 @@ public DIALOG_UNLINK_DISCORD(playerid, dialogid, response, listitem, string:inpu
         if(!strcmp(User[playerid][dc_username], "-1", true))
             return SendClientMessage(playerid, COLOR_TOMATO, "%s", DC_NOTLINKED);
 
-        mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `dc_username` = '-1', `dc_discriminator` = '-1', `dc_uid` = '-1' WHERE `id` = %d", User[playerid][user_sqlid]);
+        User[playerid][autoLogin] = false;
+        mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `dc_username` = '-1', `dc_discriminator` = '-1', `dc_uid` = '-1', `auto_login` = 0 WHERE `id` = %d", User[playerid][user_sqlid]);
         mysql_tquery(dbHandle, queryGlobal);
 
         ClearPlayerDiscordRoles(playerid);

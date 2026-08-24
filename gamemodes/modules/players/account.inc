@@ -303,6 +303,8 @@ public DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inp
 forward Account_ShowDiscordIDDialog(playerid);
 public Account_ShowDiscordIDDialog(playerid)
 {
+    if(playerid == INVALID_PLAYER_ID || !User[playerid][isLogged]) return 0;
+
     new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
     new dcStr[512], title[64] = "{MAIN}Discord ID Info";
     format_MainColor(playerid, title);

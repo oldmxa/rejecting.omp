@@ -263,7 +263,19 @@
 
 // PLAYER WELCOME 
 
-#define PLAYER_WELCOME_MSG1         "{MAIN}**{FFFFFF} Welcome again, %s{FFFFFF}!"
+stock const g_PlayerWelcomeGreetings[][] = {
+    "{MAIN}**{FFFFFF} Welcome back, %s{FFFFFF}!",
+    "{MAIN}**{FFFFFF} Welcome again, %s{FFFFFF}!",
+    "{MAIN}**{FFFFFF} Good to see you back, %s{FFFFFF}!",
+    "{MAIN}**{FFFFFF} Great to have you back, %s{FFFFFF}!",
+    "{MAIN}**{FFFFFF} Glad to see you again, %s{FFFFFF}!",
+    "{MAIN}**{FFFFFF} Nice to see you again, %s{FFFFFF}!",
+    "{MAIN}**{FFFFFF} Welcome back to the fight, %s{FFFFFF}!"
+};
+
+#define GetRandomWelcomeGreeting()  (g_PlayerWelcomeGreetings[random(sizeof(g_PlayerWelcomeGreetings))])
+
+#define PLAYER_WELCOME_MSG1         "{MAIN}**{FFFFFF} Welcome back, %s{FFFFFF}!"
 #define PLAYER_WELCOME_MSG2         "{MAIN}**{FFFFFF} Your account is that of a %s."
 #define PLAYER_WELCOME_MSG3         "{MAIN}**{FFFFFF} You are a member of the %s{FFFFFF} clan."
 #define PLAYER_WELCOME_MSG4         "{MAIN}**{FFFFFF} Your last login was at: {MAIN}%s."
