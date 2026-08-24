@@ -164,7 +164,7 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Arcane",          "Arcane cheat client",                     AC_CAT_CHEATS,   true},
     {"Stealth",         "Stealth cheat client",                    AC_CAT_CHEATS,   true},
     {"ExtremeCheats",   "ExtremeCheats client",                    AC_CAT_CHEATS,   true},
-    {"Trash Cheats",    "Unrecognized injection at a known spot",  AC_CAT_CHEATS,   true},
+    {"External Cheats", "Unrecognized injection at a known spot",  AC_CAT_CHEATS,   true},
     {"Bypass",          "Attempt to fool the memory probe",        AC_CAT_EXPLOIT,  true},
     {"Fake FPS",        "Forged FPS counter",                      AC_CAT_EXPLOIT,  true},
     {"VP Cheat",        "VP cheat client",                         AC_CAT_CHEATS,   true},
