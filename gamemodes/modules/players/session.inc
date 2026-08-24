@@ -100,13 +100,13 @@ setAfkReason(playerid, const reasonn[])
 			case 1:
 			{
 				static const afk_self[][] = {
-					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.",
-					"{MAIN}[LNG] {FFFFFF}Sent to the lounge due to inactivity: {MAIN}AFK / Paused{FFFFFF}.",
-					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}Player Inactive (AFK){FFFFFF}."
+					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}PAUSED / lounge{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Sent to the lounge due to inactivity: {MAIN}lounge / Paused{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}Player Inactive lounge{FFFFFF}."
 				};
 				static const afk_all[][] = {
-					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.",
-					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge due to inactivity {MAIN}(AFK){FFFFFF}."
+					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}PAUSED / lounge{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge due to inactivity {MAIN}lounge{FFFFFF}."
 				};
 				SendClientMessage(playerid, -1, afk_self[random(sizeof(afk_self))]);
 				foreach(new i : Player)
