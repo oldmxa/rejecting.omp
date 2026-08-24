@@ -84,14 +84,32 @@
 
 // LOUNGE
 
-#define AFK_MSG_FIRST               ""COL_GRAY"[LNG] %s went to rest their fingers (/lounge)"
-#define LEFT_LOUNGE_MSG             ""COL_GRAY"[LNG] You left the lounge."
-#define AFK_MSG_2                   ""COL_GRAY"[LNG] You can teleport. Use {b4b3b3}ESC > maps"
-#define AFK_MSG_3                   ""COL_GRAY"[LNG] Lounge commands (get gun, car etc): {b4b3b3}/lcmds"
-#define AFK_MSG_4                   ""COL_GRAY"[LNG] Server commands /cmds"
-#define AFK_ERROR_MSG               "{MAIN}**{FFFFFF} To leave the lounge type {MAIN}/lounge"
-#define NEED_BE_AFK                 "{MAIN}**{FFFFFF} You need to be in the lounge to use this command"
-#define TARGET_AFK                  "{MAIN}**{FFFFFF} You can't spectate players in lounge."
+stock const g_PlayerEnterLoungeMsgs[][] = {
+    "{MAIN}[LNG] {FFFFFF}%s went to rest their fingers.",
+    "{MAIN}[LNG] {FFFFFF}%s entered the lounge to chill.",
+    "{MAIN}[LNG] {FFFFFF}%s took a break in the lounge.",
+    "{MAIN}[LNG] {FFFFFF}%s stepped out of the arena into the lounge.",
+    "{MAIN}[LNG] {FFFFFF}%s is now relaxing in the lounge."
+};
+
+stock const g_PlayerLeaveLoungeMsgs[][] = {
+    "{MAIN}[LNG] {FFFFFF}You left the lounge and returned to the arena.",
+    "{MAIN}[LNG] {FFFFFF}Welcome back to the fight! You left the lounge.",
+    "{MAIN}[LNG] {FFFFFF}You returned to combat from the lounge.",
+    "{MAIN}[LNG] {FFFFFF}You left the lounge area."
+};
+
+#define GetRandomEnterLoungeMsg()   (g_PlayerEnterLoungeMsgs[random(sizeof(g_PlayerEnterLoungeMsgs))])
+#define GetRandomLeaveLoungeMsg()   (g_PlayerLeaveLoungeMsgs[random(sizeof(g_PlayerLeaveLoungeMsgs))])
+
+#define AFK_MSG_FIRST               "{MAIN}[LNG] {FFFFFF}%s went to rest their fingers."
+#define LEFT_LOUNGE_MSG             "{MAIN}[LNG] {FFFFFF}You left the lounge."
+#define AFK_MSG_2                   "{MAIN}[LNG] {FFFFFF}You can teleport. Use {B4B5B7}ESC > maps{FFFFFF}."
+#define AFK_MSG_3                   "{MAIN}[LNG] {FFFFFF}Lounge commands (get gun, car etc): {B4B5B7}/lcmds{FFFFFF}."
+#define AFK_MSG_4                   "{MAIN}[LNG] {FFFFFF}Change your lounge spawn location: {B4B5B7}/changelounge{FFFFFF}."
+#define AFK_ERROR_MSG               "{MAIN}[ERROR] {FFFFFF}To leave the lounge type {MAIN}/lounge"
+#define NEED_BE_AFK                 "{MAIN}[ERROR] {FFFFFF}You need to be in the lounge to use this command."
+#define TARGET_AFK                  "{MAIN}[ERROR] {FFFFFF}You cannot spectate players who are in the lounge."
 
 // 7. WEAPONS, RESPAWN & COMBAT
 

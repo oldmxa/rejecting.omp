@@ -94,8 +94,12 @@
     if (User[targetid][isAfk])
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}This player is already in the lounge.");
 
-    va_SendClientMessageToAll(-1, "{MAIN}[LOUNGE] {FFFFFF}Admin %s[%d] sent %s[%d] to the lounge. Reason: %s", User[playerid][userName], playerid, User[targetid][userName], targetid, reason);
-    va_SendClientMessage(targetid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been sent to the lounge by Admin %s. Reason: %s", User[playerid][userName], reason);
+    new coloredAdmin[MAX_PLAYER_NAME + 18], coloredTarget[MAX_PLAYER_NAME + 18];
+    format(coloredAdmin, sizeof(coloredAdmin), "{%06x}%s{FFFFFF}", GetPlayerDisplayColour(playerid), User[playerid][userName]);
+    format(coloredTarget, sizeof(coloredTarget), "{%06x}%s{FFFFFF}", GetPlayerDisplayColour(targetid), User[targetid][userName]);
+
+    va_SendClientMessageToAll(-1, "{MAIN}[LNG] {FFFFFF}Admin %s[%d] sent %s[%d] to the lounge. Reason: %s", coloredAdmin, playerid, coloredTarget, targetid, reason);
+    va_SendClientMessage(targetid, -1, "{MAIN}[LNG] {FFFFFF}You have been sent to the lounge by Admin %s. Reason: %s", coloredAdmin, reason);
 
     setAfk(targetid);
     updatePlayerHud(targetid);

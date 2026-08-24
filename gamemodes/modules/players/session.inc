@@ -92,61 +92,112 @@ setAfkReason(playerid, const reasonn[])
 
 	if(User[playerid][isAfk] == false)
 	{
+		new coloredNick[MAX_PLAYER_NAME + 18];
+		format(coloredNick, sizeof(coloredNick), "{%06x}%s{FFFFFF}", GetPlayerDisplayColour(playerid), getPlayerName(playerid));
+
 		switch(reasonid)
 		{
 			case 1:
 			{
-				SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.");
+				static const afk_self[][] = {
+					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Sent to the lounge due to inactivity: {MAIN}AFK / Paused{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}Player Inactive (AFK){FFFFFF}."
+				};
+				static const afk_all[][] = {
+					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge due to inactivity {MAIN}(AFK){FFFFFF}."
+				};
+				SendClientMessage(playerid, -1, afk_self[random(sizeof(afk_self))]);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}PAUSED / AFK{FFFFFF}.", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, afk_all[random(sizeof(afk_all))], coloredNick);
 				}
-
 			}
 			case 2:
 			{
-				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High FPS (%d/%d){FFFFFF}.", User[playerid][FPS], ServerMaxFPS);
+				static const fps_self[][] = {
+					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High FPS (%d/%d){FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}FPS exceeded server limit (%d/%d FPS){FFFFFF}."
+				};
+				static const fps_all[][] = {
+					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH FPS{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge. Reason: {MAIN}High Framerate{FFFFFF}."
+				};
+				va_SendClientMessage(playerid, -1, fps_self[random(sizeof(fps_self))], User[playerid][FPS], ServerMaxFPS);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH FPS{FFFFFF}.", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, fps_all[random(sizeof(fps_all))], coloredNick);
 				}
 			}
 			case 3:
 			{
-				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}Low FPS (%d/%d){FFFFFF}.", User[playerid][FPS], ServerMinFPS);
+				static const lowfps_self[][] = {
+					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}Low FPS (%d/%d){FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}FPS below minimum limit (%d/%d FPS){FFFFFF}."
+				};
+				static const lowfps_all[][] = {
+					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}LOW FPS{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge. Reason: {MAIN}Low Framerate{FFFFFF}."
+				};
+				va_SendClientMessage(playerid, -1, lowfps_self[random(sizeof(lowfps_self))], User[playerid][FPS], ServerMinFPS);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}LOW FPS{FFFFFF}.", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, lowfps_all[random(sizeof(lowfps_all))], coloredNick);
 				}
 			}
 			case 4:
 			{
-				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High Ping (%d/%d ms){FFFFFF}.", GetPlayerPing(playerid), ServerMaxPing);
+				static const ping_self[][] = {
+					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High Ping (%d/%d ms){FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}Ping exceeded maximum limit (%d/%d ms){FFFFFF}."
+				};
+				static const ping_all[][] = {
+					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH PING{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge. Reason: {MAIN}High Latency{FFFFFF}."
+				};
+				va_SendClientMessage(playerid, -1, ping_self[random(sizeof(ping_self))], GetPlayerPing(playerid), ServerMaxPing);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH PING{FFFFFF}.", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, ping_all[random(sizeof(ping_all))], coloredNick);
 				}
 			}
 			case 5:
 			{
-				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High Packet Loss (%.2f%%/%.2f%%){FFFFFF}.", NetStats_PacketLossPercent(playerid), ServerMaxPacketLoss);
+				static const pl_self[][] = {
+					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}High Packet Loss (%.2f%%/%.2f%%){FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}Network connection unstable (%.2f%% Packet Loss){FFFFFF}."
+				};
+				static const pl_all[][] = {
+					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH PL{FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge. Reason: {MAIN}Unstable Connection{FFFFFF}."
+				};
+				va_SendClientMessage(playerid, -1, pl_self[random(sizeof(pl_self))], NetStats_PacketLossPercent(playerid), ServerMaxPacketLoss);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}HIGH PL{FFFFFF}.", getPlayerName(playerid));
+						va_SendClientMessage(i, -1, pl_all[random(sizeof(pl_all))], coloredNick);
 				}
 			}
 			case 6:
 			{
-				va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}FPS exceeded arena limit of %d FPS (Yours: %d FPS){FFFFFF}.", ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
+				static const lock_self[][] = {
+					"{MAIN}[LNG] {FFFFFF}You have been teleported to the lounge. Reason: {MAIN}FPS exceeded arena limit of %d FPS (Yours: %d FPS){FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}Teleported to lounge: {MAIN}Current arena requires %d FPS lock (Yours: %d FPS){FFFFFF}."
+				};
+				static const lock_all[][] = {
+					"{MAIN}[LNG] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}Arena FPS Limit (%d FPS){FFFFFF}.",
+					"{MAIN}[LNG] {FFFFFF}%s was moved to the lounge: {MAIN}Exceeded Arena %d FPS Limit{FFFFFF}."
+				};
+				va_SendClientMessage(playerid, -1, lock_self[random(sizeof(lock_self))], ARENA_FPS_LOCK_VALUE, User[playerid][FPS]);
 				foreach(new i : Player)
 				{
 					if(i != playerid)
-						va_SendClientMessage(i, -1, "{MAIN}[LOUNGE] {FFFFFF}%s was teleported to the lounge. Reason: {MAIN}Arena FPS Limit (%d FPS){FFFFFF}.", getPlayerName(playerid), ARENA_FPS_LOCK_VALUE);
+						va_SendClientMessage(i, -1, lock_all[random(sizeof(lock_all))], coloredNick, ARENA_FPS_LOCK_VALUE);
 				}
 			}
 		}

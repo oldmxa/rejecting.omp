@@ -225,11 +225,13 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
         }
 
         SpawnPlayerEx(playerid);
-        SendClientMessage(playerid, -1, "%s", LEFT_LOUNGE_MSG);
+        SendClientMessage(playerid, -1, "%s", GetRandomLeaveLoungeMsg());
     }
     else
     {
-        format(String, sizeof(String), AFK_MSG_FIRST, getPlayerName(playerid));
+        new coloredNick[MAX_PLAYER_NAME + 18];
+        format(coloredNick, sizeof(coloredNick), "{%06x}%s{FFFFFF}", GetPlayerDisplayColour(playerid), getPlayerName(playerid));
+        format(String, sizeof(String), GetRandomEnterLoungeMsg(), coloredNick);
 
         SendClientMessageToAll(-1, "%s", String);
         SendClientMessage(playerid, -1, "%s", AFK_MSG_2);
@@ -356,8 +358,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
         }
         else
         {
-            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}You spawn at your clan safehouse, so a custom lounge would be ignored.");
-            return SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Disable {MAIN}Safehouse Spawn{FFFFFF} in {MAIN}/clan{FFFFFF} first.");
+            SendClientMessage(playerid, -1, "{MAIN}[LNG] {FFFFFF}You spawn at your clan safehouse, so a custom lounge would be ignored.");
+            return SendClientMessage(playerid, -1, "{MAIN}[LNG] {FFFFFF}Disable {MAIN}Safehouse Spawn{FFFFFF} in {MAIN}/clan{FFFFFF} first.");
         }
     }
 
