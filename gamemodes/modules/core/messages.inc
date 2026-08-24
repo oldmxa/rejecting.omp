@@ -102,8 +102,6 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 #define GetRandomEnterLoungeMsg()   (g_PlayerEnterLoungeMsgs[random(sizeof(g_PlayerEnterLoungeMsgs))])
 #define GetRandomLeaveLoungeMsg()   (g_PlayerLeaveLoungeMsgs[random(sizeof(g_PlayerLeaveLoungeMsgs))])
 
-#define AFK_MSG_FIRST               "{MAIN}[LNG] {FFFFFF}%s went to rest their fingers."
-#define LEFT_LOUNGE_MSG             "{MAIN}[LNG] {FFFFFF}You left the lounge."
 #define AFK_MSG_2                   "{MAIN}[LNG] {FFFFFF}You can teleport. Use {B4B5B7}ESC > maps{FFFFFF}."
 #define AFK_MSG_3                   "{MAIN}[LNG] {FFFFFF}Lounge commands (get gun, car etc): {B4B5B7}/lcmds{FFFFFF}."
 #define AFK_MSG_4                   "{MAIN}[LNG] {FFFFFF}Change your lounge spawn location: {B4B5B7}/changelounge{FFFFFF}."
@@ -332,10 +330,6 @@ stock const g_PlayerLastLoginMsgs[][] = {
 #define GetRandomClanWelcomeMsg()   (g_PlayerClanWelcomeMsgs[random(sizeof(g_PlayerClanWelcomeMsgs))])
 #define GetRandomLastLoginMsg()     (g_PlayerLastLoginMsgs[random(sizeof(g_PlayerLastLoginMsgs))])
 
-#define PLAYER_WELCOME_MSG1         "{MAIN}**{FFFFFF} Welcome back, %s{FFFFFF}!"
-#define PLAYER_WELCOME_MSG2         "{MAIN}**{FFFFFF} Your account is that of a %s."
-#define PLAYER_WELCOME_MSG3         "{MAIN}**{FFFFFF} You are a member of the %s{FFFFFF} clan."
-#define PLAYER_WELCOME_MSG4         "{MAIN}**{FFFFFF} Your last login was at: {MAIN}%s."
 #define PLAYER_WELCOME_MSG5         "{MAIN}**{FFFFFF} VIP Status: {MAIN}VIP {FFFFFF}%dd %dh left."
 #define PLAYER_WELCOME_MSG_VIP_PERM "{MAIN}**{FFFFFF} VIP Status: {MAIN}VIP Permanent."
 
