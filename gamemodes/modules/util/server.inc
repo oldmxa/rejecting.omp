@@ -639,7 +639,7 @@ initializeServer(const gamemodeName[])
 		ApplyDynamicActorAnimation(ActorLounge[i], "PED", "Idlestance_fat", 4.1, true, false, false, false, false);
 	}
 
-	SetTimer("SendGlobalMSG", 120000, true);
+	SetTimer("SendGlobalMSG", 360000, true);
 }
 
 forward SendGlobalMSG();
