@@ -1224,7 +1224,7 @@ public OnPlayerUpdate(playerid)
 				ACSuspect[playerid][ac_weaponFlags]++;
 				ACSuspect[playerid][ac_lastTime] = gettime();
 				format(ACSuspect[playerid][ac_lastWeapon], AC_WEAPON_LEN, "%s", weaponName);
-				new alertMsg[144];
+				new alertMsg[192];
 				format(alertMsg, sizeof(alertMsg), "{MAIN}[ANTI-CHEAT] {FFFFFF}Player %s [ID: %d] is using %s. Use {MAIN}/spec {FFFFFF}to check.", User[playerid][userName], playerid, weaponName);
 
 				foreach(new i : Player)

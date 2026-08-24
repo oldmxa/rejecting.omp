@@ -33,7 +33,7 @@ static const g_monthNameTD[13][7] = {
 
 stock getDateStrTDInfo(const primary_col[], const secondary_col[])
 {
-    new dString[96];
+    new dString[128];
     new year, month, day;
     getdate(year, month, day);
     format(dString, sizeof(dString), "%s%02d %s%s %s%04d", primary_col, day, secondary_col, g_monthNameTD[month], primary_col, year);

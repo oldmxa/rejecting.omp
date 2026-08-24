@@ -374,7 +374,7 @@ stock ShowSafehouseUpgrade(playerid)
     format(title, sizeof(title), "{MAIN}Safehouse Upgrade: {FFFFFF}%s", SafehouseData[index][sh_Name]);
     format_MainColor(playerid, title);
 
-    new body[512];
+    new body[768];
 
     if (!IsValidSafehouseLevel(next))
     {
@@ -571,7 +571,7 @@ stock ShowSafehouseBuyDialog(playerid, index)
     new title[64] = "{MAIN}Buy Safehouse";
     format_MainColor(playerid, title);
 
-    new body[512];
+    new body[640];
     format(body, sizeof(body),
         "{FFFFFF}Purchase {MAIN}%s{FFFFFF} for your clan?\n\n"\
         "{MAIN}\x95 {B4B5B7}Price: {23C552}%s {FFFFFF}+ {FFD700}%s Coins\n"\

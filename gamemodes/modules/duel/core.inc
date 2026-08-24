@@ -284,7 +284,7 @@ public DuelS_UpdateInfo(playerid, challengerid)
 	}
 
 	new Float:pHealth, Float:cHealth, Float:pArmour, Float:cArmour, pAmount, cAmount;
-	new strum[50], strdos[50];
+	new strum[80], strdos[80];
 
 	GetPlayerHealth(playerid, pHealth);
 	GetPlayerHealth(challengerid, cHealth);

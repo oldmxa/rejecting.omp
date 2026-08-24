@@ -88,7 +88,7 @@ stock updatePlayerHud(playerid)
 
 	if(User[playerid][locationId] != -1)
 	{
-		new fString[512], cString[300];
+		new fString[640], cString[300];
 		new gMins, gSecs;
 
 		new roundLeft = arenaInfo[User[playerid][locationId]][roundMints];

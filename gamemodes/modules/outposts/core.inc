@@ -546,7 +546,7 @@ UpdateOutpostBar(playerid, progress, Float:dist, membersCount = 1, bool:paused =
     PlayerTextDrawTextSize(playerid, OutpostBar[playerid][2], width, 6.0);
     PlayerTextDrawShow(playerid, OutpostBar[playerid][2]);
 
-    new str[128], subStr[128];
+    new str[192], subStr[192];
     new cOne[20], cTwo[20];
     format(cOne, sizeof(cOne), "%s", GetPlayerHudTag(playerid, false));
     format(cTwo, sizeof(cTwo), "%s", GetPlayerHudTag(playerid, true));

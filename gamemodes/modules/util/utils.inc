@@ -290,7 +290,7 @@ returnDate( timestamp, _form=0 )
 
 	new days_of_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 	new names_of_month[12][10] = {"January","February","March","April","May","June","July","August","September","October","November","December"};
-	new returnstring[32];
+	new returnstring[64];
 
 	if(timestamp < 0) timestamp = 0;
 
@@ -321,12 +321,12 @@ returnDate( timestamp, _form=0 )
 
 	switch( _form )
 	{
-		case 1: format(returnstring, 31, "%02d/%02d/%d %02d:%02d:%02d", day+1, month+1, year, hourt, mins, sec);
-		case 2: format(returnstring, 31, "%s %02d, %d, %02d:%02d:%02d", names_of_month[month],day+1,year, hourt, mins, sec);
-		case 3: format(returnstring, 31, "%d %c%c%c %d, %02d:%02d", day+1,names_of_month[month][0],names_of_month[month][1],names_of_month[month][2], year,hourt,mins);
-		case 4: format(returnstring, 31, "%s %02d, %d", names_of_month[month],day+1,year);
-		case 5: format(returnstring, 31, "%02d.%02d.%d %02d:%02d:%02d", day+1, month+1, year, hourt, mins, sec);
-		default: format(returnstring, 31, "%02d/%02d/%d %02d:%02d:%02d", day+1, month+1, year, hourt, mins, sec);
+		case 1: format(returnstring, sizeof(returnstring), "%02d/%02d/%d %02d:%02d:%02d", day+1, month+1, year, hourt, mins, sec);
+		case 2: format(returnstring, sizeof(returnstring), "%s %02d, %d, %02d:%02d:%02d", names_of_month[month],day+1,year, hourt, mins, sec);
+		case 3: format(returnstring, sizeof(returnstring), "%d %c%c%c %d, %02d:%02d", day+1,names_of_month[month][0],names_of_month[month][1],names_of_month[month][2], year,hourt,mins);
+		case 4: format(returnstring, sizeof(returnstring), "%s %02d, %d", names_of_month[month],day+1,year);
+		case 5: format(returnstring, sizeof(returnstring), "%02d.%02d.%d %02d:%02d:%02d", day+1, month+1, year, hourt, mins, sec);
+		default: format(returnstring, sizeof(returnstring), "%02d/%02d/%d %02d:%02d:%02d", day+1, month+1, year, hourt, mins, sec);
 	}
 
 	return returnstring;

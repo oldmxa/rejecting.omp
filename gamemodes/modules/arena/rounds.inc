@@ -15,7 +15,7 @@ showLocationSelectDialog(playerid)
 	{
         new i = LOCATION_DISPLAY_ORDER[slot];
 
-        new mapName[48], slots[48], pCount = getLocationPlayers(i), mCount = arenaInfo[i][maxPlayers];
+        new mapName[64], slots[80], pCount = getLocationPlayers(i), mCount = arenaInfo[i][maxPlayers];
         new zoneid = arenaInfo[i][arenaId];
 
         if(i == ARENA_AFK)

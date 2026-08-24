@@ -174,7 +174,7 @@ forward FlushAchievementSaves();
 
 stock SerializeAchievements(playerid, output[], maxlen)
 {
-    new len = 0, entry[48];
+    new len = 0, entry[80];
     output[0] = '\0';
 
     for(new i = 0; i < MAX_ACHIEVEMENTS; i++)

@@ -1253,7 +1253,7 @@ public DIALOG_CUSTOM_TAG_OPTIONS(playerid, dialogid, response, listitem, string:
         case 1: // Custom input
         {
             new title[64] = "{MAIN}Custom Tag - Enter Text";
-            new body[384];
+            new body[512];
             format(body, sizeof(body),
                 "{FFFFFF}Enter your desired {MAIN}Custom Tag{FFFFFF} text below:\n\n"\
                 "{MAIN}\x95 {B4B5B7}Length: {FFFFFF}%d to %d characters\n"\
