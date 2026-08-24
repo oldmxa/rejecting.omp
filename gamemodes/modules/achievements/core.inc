@@ -362,7 +362,11 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
-    FlushPlayerAchievements(playerid);
+    if (User[playerid][isLogged] && User[playerid][user_sqlid] > 0)
+    {
+        Ach_RefreshPlayerStats(playerid);
+        FlushPlayerAchievements(playerid);
+    }
     ResetPlayerAchievements(playerid);
 
     #if defined ACH_OnPlayerDisconnect
