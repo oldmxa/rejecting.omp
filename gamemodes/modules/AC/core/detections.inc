@@ -177,7 +177,7 @@ static AC_ShowKickScreen(playerid, code)
         "{FFFFFF}%s, you have reason for suspected of cheating.\n\n\
         "COL_GRAY"Date & Time: {FFFFFF}%02d.%02d.%d - %02d:%02d:%02d\n\
         "COL_GRAY"FPS: {FFFFFF}%d   "COL_GRAY"PING: {FFFFFF}%d   "COL_GRAY"PL: {FFFFFF}%.2f%%\n\
-        "COL_GRAY"Code: {FF0000}#%02d\n\n\
+        "COL_GRAY"Code: {F84F31}#%02d\n\n\
         "COL_GRAY"If you think this is an error, please contact us:\n{MAIN}%s",
         User[playerid][userName],
         day, month, year, hour, minute, second,

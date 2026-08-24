@@ -139,7 +139,7 @@ ShowACMenu(playerid)
 {
     new body[1600], title[64] = "{MAIN}RAC {B4B5B7}- {FFFFFF}Menu", rows[AC_MAX_ROWS], count = 0;
 
-    format(body, sizeof(body), "{FFFFFF}Category / Setting\t{FFFFFF}Status / Value\n");
+    format(body, sizeof(body), "{BEBEBE}Category / Setting\t{BEBEBE}Status / Value\n");
 
     strcat(body, "{MAIN}\xBB Detections\t \n", sizeof(body));
     rows[count++] = AC_ROW_SECTION;
@@ -155,9 +155,9 @@ ShowACMenu(playerid)
             continue;
         }
 
-        strcat(body, fmat_return("{418cb0}%s\t%s%d{B4B5B7}/%d\n",
+        strcat(body, fmat_return("{FFFFFF}%s\t%s%d{B4B5B7}/%d\n",
             AC_CATEGORY_NAME[c],
-            armed ? ("{00FF00}") : ("{FF0000}"), armed, total), sizeof(body));
+            armed ? ("{23C552}") : ("{F84F31}"), armed, total), sizeof(body));
 
         rows[count++] = AC_ROW_CATEGORY + c;
     }
@@ -165,31 +165,31 @@ ShowACMenu(playerid)
     strcat(body, "{MAIN}\xBB Enforcement\t \n", sizeof(body));
     rows[count++] = AC_ROW_SECTION;
 
-    strcat(body, fmat_return("{418cb0}Punishment\t%s\n",
-        ACPunishEnabled ? ("{00FF00}Enabled") : ("{FF0000}Report only")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Punishment\t%s\n",
+        ACPunishEnabled ? ("{23C552}Enabled") : ("{F84F31}Report only")), sizeof(body));
     rows[count++] = AC_ROW_PUNISH;
 
-    strcat(body, fmat_return("{418cb0}Fake Version Kick\t%s\n",
-        R2KickEnabled ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Fake Version Kick\t%s\n",
+        R2KickEnabled ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_R2;
 
-    strcat(body, fmat_return("{418cb0}open.mp Only Kick\t%s\n",
-        OMPKickEnabled ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}open.mp Only Kick\t%s\n",
+        OMPKickEnabled ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_OMP;
 
     strcat(body, "{MAIN}\xBB RAC - Extra\t \n", sizeof(body));
     rows[count++] = AC_ROW_SECTION;
 
-    strcat(body, fmat_return("{418cb0}No Fall Damage\t%s\n", ACNoFallDamage ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}No Fall Damage\t%s\n", ACNoFallDamage ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_FALLDMG;
 
-    strcat(body, fmat_return("{418cb0}No Fall Animation\t%s\n", ACNoFallAnimation ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}No Fall Animation\t%s\n", ACNoFallAnimation ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_FALLANIM;
 
-    strcat(body, fmat_return("{418cb0}UseCJWalk\t%s\n", GetConsoleVarAsBool("game.use_player_ped_anims") ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}UseCJWalk\t%s\n", GetConsoleVarAsBool("game.use_player_ped_anims") ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_CJWALK;
 
-    strcat(body, fmat_return("{418cb0}Fast Stuns\t%s\n", ACFastStuns ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Fast Stuns\t%s\n", ACFastStuns ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_STUNS;
 
     strcat(body, "{MAIN}\xBB Monitoring\t \n", sizeof(body));
@@ -197,19 +197,19 @@ ShowACMenu(playerid)
 
     new flagged = AC_CountFlagged();
 
-    strcat(body, fmat_return("{418cb0}Flagged Players\t%s\n",
-        flagged ? (fmat_return("{FF0000}%d this session", flagged)) : ("{00FF00}Nobody")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Flagged Players\t%s\n",
+        flagged ? (fmat_return("{F84F31}%d this session", flagged)) : ("{23C552}Nobody")), sizeof(body));
     rows[count++] = AC_ROW_FLAGGED;
 
-    strcat(body, fmat_return("{418cb0}Recent Detections\t{B4B5B7}Last %d on record\n", AC_RECENT_ROWS), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Recent Detections\t{B4B5B7}Last %d on record\n", AC_RECENT_ROWS), sizeof(body));
     rows[count++] = AC_ROW_RECENT;
 
-    strcat(body, fmat_return("{418cb0}Connection Limits\t{FFFFFF}%d ms {B4B5B7}/ {FFFFFF}%.2f%% {B4B5B7}/ {FFFFFF}%d-%d FPS\n",
+    strcat(body, fmat_return("{FFFFFF}Connection Limits\t{FFFFFF}%d ms {B4B5B7}/ {FFFFFF}%.2f%% {B4B5B7}/ {FFFFFF}%d-%d FPS\n",
         ServerMaxPing, ServerMaxPacketLoss, ServerMinFPS, ServerMaxFPS), sizeof(body));
     rows[count++] = AC_ROW_LIMITS;
 
-    strcat(body, fmat_return("{418cb0}Debug\t%s",
-        ACDebugOn[playerid] ? ("{00FF00}Enabled") : ("{FF0000}Disabled")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Debug\t%s",
+        ACDebugOn[playerid] ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
     rows[count++] = AC_ROW_VERBOSE;
 
     AC_StoreRows(playerid, rows, count);
@@ -230,7 +230,7 @@ ShowACCategory(playerid, catid)
     new body[1800], title[64], rows[AC_MAX_ROWS], count = 0;
     format(title, sizeof(title), "{MAIN}RAC {B4B5B7}- {FFFFFF}%s", AC_CATEGORY_NAME[catid]);
 
-    format(body, sizeof(body), "{FFFFFF}Category\t{FFFFFF}Code\t{FFFFFF}Status\n");
+    format(body, sizeof(body), "{BEBEBE}Category\t{BEBEBE}Code\t{BEBEBE}Status\n");
 
     for (new i; i < MAX_AC_DETECTIONS; i++)
     {
@@ -241,7 +241,7 @@ ShowACCategory(playerid, catid)
         new bool:armed = AC_DETECTION[i][acdActive];
         AC_GetDetectionName(i, name, sizeof(name));
 
-        strcat(body, fmat_return("{B4B5B7}%s\t{418cb0}#%02d\t%s%s\n",
+        strcat(body, fmat_return("{FFFFFF}%s\t{7F8C8D}#%02d\t%s%s\n",
             name, i + 1,
             armed ? (AC_ACTION_COLOR[action]) : ("{B4B5B7}"),
             armed ? (AC_ACTION_NAME[action]) : ("Pending")), sizeof(body));
@@ -257,7 +257,7 @@ ShowACCategory(playerid, catid)
     format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
-    Dialog_ShowCallback(playerid, using public DIALOG_AC_CATEGORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_AC_CATEGORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
     return 1;
 }
 
@@ -270,9 +270,9 @@ ShowACAction(playerid, detection)
     new name[32], body[900], title[96], rows[AC_MAX_ROWS], count = 0;
     AC_GetDetectionName(detection, name, sizeof(name));
 
-    format(title, sizeof(title), "{MAIN}RAC {B4B5B7}- {FFFFFF}%s {418cb0}#%02d", name, detection + 1);
+    format(title, sizeof(title), "{MAIN}RAC {B4B5B7}- {FFFFFF}%s {7F8C8D}#%02d", name, detection + 1);
 
-    format(body, sizeof(body), "{FFFFFF}Action\t{FFFFFF}What happens\n");
+    format(body, sizeof(body), "{BEBEBE}Action\t{BEBEBE}What happens\n");
 
     strcat(body, fmat_return("{MAIN}\xBB %s\t{B4B5B7}%d hits on record\n",
         AC_DETECTION[detection][acdHelp], ACHitCount[detection]), sizeof(body));
@@ -292,7 +292,7 @@ ShowACAction(playerid, detection)
     format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
-    Dialog_ShowCallback(playerid, using public DIALOG_AC_ACTION<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_AC_ACTION<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
     return 1;
 }
 
@@ -301,7 +301,7 @@ ShowACFlagged(playerid)
     new body[1600], title[64] = "{MAIN}RAC {B4B5B7}- {FFFFFF}Flagged Players";
     new rows[AC_MAX_ROWS], count = 0;
 
-    format(body, sizeof(body), "{FFFFFF}Player\t{FFFFFF}Hits\t{FFFFFF}Last Detection\t{FFFFFF}Client\n");
+    format(body, sizeof(body), "{BEBEBE}Player\t{BEBEBE}Hits\t{BEBEBE}Last Detection\t{BEBEBE}Client\n");
 
     foreach (new i : Player)
     {
@@ -312,7 +312,7 @@ ShowACFlagged(playerid)
         if (elapsed < 60) format(age, sizeof(age), "%ds", elapsed);
         else format(age, sizeof(age), "%dm", elapsed / 60);
 
-        strcat(body, fmat_return("{418cb0}%s [%d]\t{FF0000}%d\t{FFFFFF}%s {B4B5B7}(%s)\t{B4B5B7}%s\n",
+        strcat(body, fmat_return("{FFFFFF}%s [%d]\t{F84F31}%d\t{FFFFFF}%s {B4B5B7}(%s)\t{B4B5B7}%s\n",
             User[i][userName], i, ACSuspect[i][ac_cheatFlags], ACSuspect[i][ac_lastCheat], age,
             IsPlayerAndroid(i) ? ("mobile") : ("desktop")), sizeof(body));
 
@@ -327,7 +327,7 @@ ShowACFlagged(playerid)
     format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
-    Dialog_ShowCallback(playerid, using public DIALOG_AC_FLAGGED<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_AC_FLAGGED<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
     return 1;
 }
 
@@ -337,7 +337,7 @@ ShowACRecent(playerid)
     {
         new rows = cache_num_rows(), body[2200], title[64] = "{MAIN}RAC {B4B5B7}- {FFFFFF}Recent Detections";
 
-        format(body, sizeof(body), "{FFFFFF}Player\t{FFFFFF}Detection\t{FFFFFF}Action\t{FFFFFF}When\n");
+        format(body, sizeof(body), "{BEBEBE}Player\t{BEBEBE}Detection\t{BEBEBE}Action\t{BEBEBE}When\n");
 
         if (!rows)
             strcat(body, "{B4B5B7}Nothing on record\t{B4B5B7}-\t{B4B5B7}-\t{B4B5B7}-\n", sizeof(body));
@@ -355,7 +355,7 @@ ShowACRecent(playerid)
 
             if (action < 0 || action >= sizeof(AC_ACTION_NAME)) action = AC_ACTION_IGNORE;
 
-            strcat(body, fmat_return("{418cb0}%s\t{B4B5B7}#%02d %s\t%s%s\t{B4B5B7}%s\n",
+            strcat(body, fmat_return("{FFFFFF}%s\t{B4B5B7}#%02d %s\t%s%s\t{B4B5B7}%s\n",
                 name, code + 1, detection,
                 AC_ACTION_COLOR[action], AC_ACTION_NAME[action], returnDate(stamp)), sizeof(body));
         }
@@ -363,7 +363,7 @@ ShowACRecent(playerid)
         format_MainColor(playerid, title);
         format_MainColor(playerid, body, sizeof(body));
 
-        Dialog_ShowCallback(playerid, using public DIALOG_AC_RECENT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Close", "Back");
+        Dialog_ShowCallback(playerid, using public DIALOG_AC_RECENT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Close", "<");
     }
 
     MySQL_TQueryInline(dbHandle, using inline OnACRecent,
@@ -389,26 +389,26 @@ ShowACPlayer(playerid, targetid)
 
     format(title, sizeof(title), "{MAIN}RAC {B4B5B7}- {FFFFFF}%s [%d]", User[targetid][userName], targetid);
 
-    format(body, sizeof(body), "{FFFFFF}Item\t{FFFFFF}Value\n");
+    format(body, sizeof(body), "{BEBEBE}Item\t{BEBEBE}Value\n");
 
     strcat(body, "{MAIN}\xBB Client\t \n", sizeof(body));
 
-    strcat(body, fmat_return("{418cb0}Version\t{FFFFFF}%s\n", version), sizeof(body));
-    strcat(body, fmat_return("{418cb0}Platform\t{FFFFFF}%s\n", IsPlayerAndroid(targetid) ? ("mobile") : ("desktop")), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Version\t{FFFFFF}%s\n", version), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Platform\t{FFFFFF}%s\n", IsPlayerAndroid(targetid) ? ("mobile") : ("desktop")), sizeof(body));
 
-    strcat(body, fmat_return("{418cb0}CLEO\t%s\n",
-        (IsPlayerUsingCleo(targetid) == 1) ? ("{FF0000}Yes") :
-        ((IsPlayerUsingCleo(targetid) == 0) ? ("{00FF00}No") : ("{B4B5B7}No answer"))), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}CLEO\t%s\n",
+        (IsPlayerUsingCleo(targetid) == 1) ? ("{F84F31}Yes") :
+        ((IsPlayerUsingCleo(targetid) == 0) ? ("{23C552}No") : ("{B4B5B7}No answer"))), sizeof(body));
 
-    strcat(body, fmat_return("{418cb0}SAMPFUNCS\t%s\n",
-        (IsPlayerUsingSampfuncs(targetid) == 1) ? ("{FF0000}Yes") :
-        ((IsPlayerUsingSampfuncs(targetid) == 0) ? ("{00FF00}No") : ("{B4B5B7}No answer"))), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}SAMPFUNCS\t%s\n",
+        (IsPlayerUsingSampfuncs(targetid) == 1) ? ("{F84F31}Yes") :
+        ((IsPlayerUsingSampfuncs(targetid) == 0) ? ("{23C552}No") : ("{B4B5B7}No answer"))), sizeof(body));
 
     strcat(body, "{MAIN}\xBB Connection\t \n", sizeof(body));
 
-    strcat(body, fmat_return("{418cb0}Ping\t{FFFFFF}%d ms\n", GetPlayerPing(targetid)), sizeof(body));
-    strcat(body, fmat_return("{418cb0}Packet Loss\t{FFFFFF}%.2f%%\n", NetStats_PacketLossPercent(targetid)), sizeof(body));
-    strcat(body, fmat_return("{418cb0}FPS\t{FFFFFF}%d\n", User[targetid][FPS]), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Ping\t{FFFFFF}%d ms\n", GetPlayerPing(targetid)), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}Packet Loss\t{FFFFFF}%.2f%%\n", NetStats_PacketLossPercent(targetid)), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}FPS\t{FFFFFF}%d\n", User[targetid][FPS]), sizeof(body));
 
     strcat(body, "{MAIN}\xBB This Session\t \n", sizeof(body));
 
@@ -416,15 +416,15 @@ ShowACPlayer(playerid, targetid)
     {
         new elapsed = gettime() - ACSuspect[targetid][ac_lastCheatTime];
 
-        strcat(body, fmat_return("{418cb0}Detections\t{FF0000}%d\n", ACSuspect[targetid][ac_cheatFlags]), sizeof(body));
-        strcat(body, fmat_return("{418cb0}Last One\t{FF0000}%s {B4B5B7}(%ds ago)\n", ACSuspect[targetid][ac_lastCheat], elapsed), sizeof(body));
+        strcat(body, fmat_return("{FFFFFF}Detections\t{F84F31}%d\n", ACSuspect[targetid][ac_cheatFlags]), sizeof(body));
+        strcat(body, fmat_return("{FFFFFF}Last One\t{F84F31}%s {B4B5B7}(%ds ago)\n", ACSuspect[targetid][ac_lastCheat], elapsed), sizeof(body));
     }
-    else strcat(body, "{418cb0}Detections\t{00FF00}Clean\n", sizeof(body));
+    else strcat(body, "{FFFFFF}Detections\t{23C552}Clean\n", sizeof(body));
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
-    Dialog_ShowCallback(playerid, using public DIALOG_AC_PLAYER<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "History", "Close");
+    Dialog_ShowCallback(playerid, using public DIALOG_AC_PLAYER<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "History", "<");
     return 1;
 }
 
@@ -440,7 +440,7 @@ ShowACHistory(playerid, targetid)
         new rows = cache_num_rows(), body[1600], title[96];
 
         format(title, sizeof(title), "{MAIN}RAC {B4B5B7}- {FFFFFF}%s {B4B5B7}history", name);
-        format(body, sizeof(body), "{FFFFFF}Detection\t{FFFFFF}Hits\t{FFFFFF}Last Time\n");
+        format(body, sizeof(body), "{BEBEBE}Detection\t{BEBEBE}Hits\t{BEBEBE}Last Time\n");
 
         if (!rows)
             strcat(body, "{B4B5B7}Nothing on record\t{B4B5B7}0\t{B4B5B7}-\n", sizeof(body));
@@ -455,14 +455,14 @@ ShowACHistory(playerid, targetid)
 
             AC_GetDetectionName(code, detection, sizeof(detection));
 
-            strcat(body, fmat_return("{418cb0}#%02d %s\t{FF0000}%d\t{B4B5B7}%s\n",
+            strcat(body, fmat_return("{FFFFFF}#%02d %s\t{F84F31}%d\t{B4B5B7}%s\n",
                 code + 1, detection, hits, returnDate(last)), sizeof(body));
         }
 
         format_MainColor(playerid, title);
         format_MainColor(playerid, body, sizeof(body));
 
-        Dialog_ShowCallback(playerid, using public DIALOG_AC_HISTORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Back", "Close");
+        Dialog_ShowCallback(playerid, using public DIALOG_AC_HISTORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "<", "Close");
     }
 
     MySQL_TQueryInline(dbHandle, using inline OnACHistory,

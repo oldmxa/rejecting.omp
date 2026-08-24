@@ -87,7 +87,7 @@ new const AC_ACTION_COLOR[][] =
     "{DEAD10}",
     "{FFA500}",
     "{f1802d}",
-    "{FF0000}"
+    "{F84F31}"
 };
 
 #define E_REJECTING_AC_UNKNOWN         (-1)
