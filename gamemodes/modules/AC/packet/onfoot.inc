@@ -10,7 +10,8 @@ stock AC_CheckNoFallAnim(playerid, animationId)
 
     switch (animationId)
     {
-        case 1128, 1129, 1131, 1132, 1208, 1209, 1210:
+        // Ground landing and impact animations after a fall (FALL_land, FALL_collapse, FALL_tumble)
+        case 1128, 1131, 1137, 1138, 1139, 1140:
         {
             ClearAnimations(playerid, SYNC_ALL);
             return 1;

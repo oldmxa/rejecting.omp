@@ -763,7 +763,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 	if(GetPVarInt(playerid, "firstSpawn") == 1)
 		return false;
 
-	if(weapon == WEAPON_COLLISION || issuerid == INVALID_PLAYER_ID)
+	if(weapon == WEAPON_COLLISION)
 	{
 		if(ACNoFallAnimation) ClearAnimations(playerid, SYNC_ALL);
 		if(ACNoFallDamage) return false;
