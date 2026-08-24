@@ -40,8 +40,7 @@ public updateColor(playerid)
 hidePlayerTextdraw(playerid)
 {
 	PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
-	for(new i; i < 4; i++) PlayerTextDrawHide(playerid, InfoStats[playerid][i]);
-	for(new i; i < 3; i++) PlayerTextDrawHide(playerid, secondHud[playerid][i]);
+	for(new i; i < 3; i++) PlayerTextDrawHide(playerid, InfoStats[playerid][i]);
 	for(new i; i < 4; i++) PlayerTextDrawHide(playerid, ClanHUD[playerid][i]);
 	for(new i; i < 5; i++) PlayerTextDrawHide(playerid, OutpostBar[playerid][i]);
 	PlayerTextDrawHide(playerid, speedometer[playerid]);
@@ -62,23 +61,6 @@ showPlayerTextDraw(playerid)
     PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
 
 	User[playerid][isShowingHud] = true;
-	return 1;
-}
-
-stock updateSecondHud(playerid)
-{
-	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID) return 1;
-
-	for(new i; i < 4; i++)
-			PlayerTextDrawHide(playerid, ClanHUD[playerid][i]);
-
-	new fString[256];
-	format(fString, sizeof(fString), "FPS: %d Ping: %d PacketLoss: %.2f%%",
-	User[playerid][FPS],
-	GetPlayerPing(playerid),
-	NetStats_PacketLossPercent(playerid));
-	PlayerTextDrawSetString(playerid, secondHud[playerid][1], fString);
-	PlayerTextDrawSetString(playerid, secondHud[playerid][2], ServerHostname);
 	return 1;
 }
 
@@ -285,16 +267,9 @@ public UpdateFastHUD()
         if(!User[i][showPlayerHud]) continue;
         if(User[i][isSpectating] || playerSpecID[i] != INVALID_PLAYER_ID) continue;
 
-        if(User[i][locationId] != -1)
+        if(User[i][locationId] != -1 && User[i][isShowingHud])
         {
-            if(User[i][isShowingHud])
-            {
-                updatePlayerHud(i);
-            }
-            else
-            {
-                updateSecondHud(i);
-            }
+            updatePlayerHud(i);
         }
     }
     return 1;

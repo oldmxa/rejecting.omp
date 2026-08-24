@@ -663,10 +663,9 @@ stock UpdateServerName(const newname[])
 	{
 		if(User[i][isLogged])
 		{
-			PlayerTextDrawSetString(i, secondHud[i][2], ServerHostname);
-			if(LoginRC[i][6] != PlayerText:INVALID_TEXT_DRAW)
+			if(LoginRC[i][10] != PlayerText:INVALID_TEXT_DRAW)
 			{
-				PlayerTextDrawSetString(i, LoginRC[i][6], ServerHostname);
+				PlayerTextDrawSetString(i, LoginRC[i][10], ServerHostname);
 			}
 		}
 	}

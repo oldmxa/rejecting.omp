@@ -1004,7 +1004,7 @@ new const g_SoundList[][E_SOUND_LIST] =
 };
 
 new PlayerText:FPSPingPacket[MAX_PLAYERS];
-new PlayerText:InfoStats[MAX_PLAYERS][4];
+new PlayerText:InfoStats[MAX_PLAYERS][3];
 
 // Duel 2v2 Global State
 new g_PlayerDuel2v2ID[MAX_PLAYERS] = {-1, ...};

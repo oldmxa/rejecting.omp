@@ -9,7 +9,6 @@ new PlayerText:topLocationTable[MAX_PLAYERS][MAX_LOCATIONS * 20 + 26];
 
 
 new PlayerText:specTextDraw[MAX_PLAYERS][7];
-new PlayerText:secondHud[MAX_PLAYERS][3];
 new PlayerText:OutpostBar[MAX_PLAYERS][5];
 new Text:votekickTextdraws[3];
 new PlayerText:ClanHUD[MAX_PLAYERS][4];
@@ -326,41 +325,6 @@ playertextdraws(playerid)
 	PlayerTextDrawAlignment(playerid, DeathInfo[playerid][1], TEXT_DRAW_ALIGN_CENTRE);
 	PlayerTextDrawColor(playerid, DeathInfo[playerid][1], -1);
 	PlayerTextDrawBackgroundColor(playerid, DeathInfo[playerid][1], MAIN_BACKGROUND_COLOUR);
-
-	InfoStats[playerid][3] = CreatePlayerTextDraw(playerid, 569.0, 99.000000, "PROTECT ON");
-	PlayerTextDrawFont(playerid, InfoStats[playerid][3], TEXT_DRAW_FONT_1);
-	PlayerTextDrawLetterSize(playerid, InfoStats[playerid][3], 0.154167, 0.800000);
-	PlayerTextDrawTextSize(playerid, InfoStats[playerid][3], 1236.000000, 852.500000);
-	PlayerTextDrawSetShadow(playerid, InfoStats[playerid][3], 0);
-	PlayerTextDrawSetOutline(playerid, InfoStats[playerid][3], 0);
-	PlayerTextDrawAlignment(playerid, InfoStats[playerid][3], TEXT_DRAW_ALIGN_LEFT);
-	PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][3], MAIN_BACKGROUND_COLOUR);
-	PlayerTextDrawBoxColor(playerid, InfoStats[playerid][3], 50);
-	PlayerTextDrawSetProportional(playerid, InfoStats[playerid][3], true);
-
-	secondHud[playerid][0] = CreatePlayerTextDraw(playerid, 123.000000, 411.000000, "rejecting.files~g~DM");
-	PlayerTextDrawFont(playerid, secondHud[playerid][0], TEXT_DRAW_FONT_3);
-	PlayerTextDrawLetterSize(playerid, secondHud[playerid][0], 0.600000, 2.0);	PlayerTextDrawSetOutline(playerid, secondHud[playerid][0], 1);
-	PlayerTextDrawSetShadow(playerid, secondHud[playerid][0], 0);
-	PlayerTextDrawAlignment(playerid, secondHud[playerid][0], TEXT_DRAW_ALIGN_LEFT);
-	PlayerTextDrawColor(playerid, secondHud[playerid][0], -1);
-	PlayerTextDrawBackgroundColor(playerid, secondHud[playerid][0], 255);
-
-	secondHud[playerid][1] = CreatePlayerTextDraw(playerid, 557.000000, 1.000000, "_"); // FPS Textdraw
-	PlayerTextDrawFont(playerid, secondHud[playerid][1], TEXT_DRAW_FONT_1);
-	PlayerTextDrawLetterSize(playerid, secondHud[playerid][1], 0.189998, 0.930000);
-	PlayerTextDrawSetOutline(playerid, secondHud[playerid][1], 0);
-	PlayerTextDrawSetShadow(playerid, secondHud[playerid][1], 0);
-	PlayerTextDrawAlignment(playerid, secondHud[playerid][1], TEXT_DRAW_ALIGN_CENTRE);
-	PlayerTextDrawColor(playerid, secondHud[playerid][1], 255);
-
-	secondHud[playerid][2] = CreatePlayerTextDraw(playerid, 131.000000, 429.000000, ServerHostname);
-	PlayerTextDrawFont(playerid, secondHud[playerid][2], TEXT_DRAW_FONT_1);
-	PlayerTextDrawLetterSize(playerid, secondHud[playerid][2], 0.200000, 1.000000);
-	PlayerTextDrawSetOutline(playerid, secondHud[playerid][2], 0);
-	PlayerTextDrawSetShadow(playerid, secondHud[playerid][2], 0);
-	PlayerTextDrawAlignment(playerid, secondHud[playerid][2], TEXT_DRAW_ALIGN_LEFT);
-	PlayerTextDrawColor(playerid, secondHud[playerid][2], 255);
 
 	killsandexp[playerid] = CreatePlayerTextDraw(playerid, 320.399749, 92.933311, "Double kill!");
 	PlayerTextDrawLetterSize(playerid, killsandexp[playerid], 0.400000, 1.600000);
