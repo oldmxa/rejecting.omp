@@ -42,7 +42,9 @@ enum
     AC_CAT_AIM,
     AC_CAT_MOVEMENT,
     AC_CAT_EXPLOIT,
-    AC_CAT_CHEATS,
+    AC_CAT_MEMORY,
+    AC_CAT_FILE,
+    AC_CAT_MACRO,
     AC_CAT_NOPS,
     AC_CAT_CRASHER,
 
@@ -54,7 +56,9 @@ new const AC_CATEGORY_NAME[MAX_AC_CATEGORIES][] =
     "Aim list",
     "Movement list",
     "Exploit list",
-    "Cheats list",
+    "Memory list",
+    "File list",
+    "Macro list",
     "NOPs list",
     "Crasher list"
 };
@@ -86,46 +90,6 @@ new const AC_ACTION_COLOR[][] =
     "{FF0000}"
 };
 
-#define AC_DAMAGER            (15)
-#define AC_LOW_FOV_SILENT     (16)
-#define AC_HIGH_FOV_SILENT    (17)
-#define AC_AIMBOT             (18)
-#define AC_AUTO_CBUG          (19)
-#define AC_RAPID_FIRE         (20)
-#define AC_EXTRA_WS           (21)
-#define AC_AIRBREAK           (25)
-#define AC_MAP_RUN            (26)
-#define AC_CLICK_WARP         (27)
-#define AC_NO_FALL            (24)
-#define AC_INVALID_AIMZ       (31)
-#define AC_PIZDA_WALK         (22)
-#define AC_NULL_VELOCITY      (23)
-#define AC_ANTI_STUN          (28)
-#define AC_UPSIDE_DOWN        (32)
-#define AC_INVISIBLE_UG       (34)
-#define AC_ANTI_AIM           (29)
-#define AC_INVISIBLE_SURF     (33)
-#define AC_BULLET_PROOF       (30)
-#define AC_NOP_CONTROLLABLE   (35)
-#define AC_NOP_ANIMATION      (36)
-#define AC_NOP_ENGINE_STATE   (37)
-#define AC_DIALOG_CRASHER     (38)
-#define AC_SEAT_CRASHER       (39)
-#define AC_TUNING_CRASHER     (40)
-#define AC_WEAPON_CRASHER     (41)
-#define AC_CALLBACK_FLOOD     (42)
-#define AC_NOP_INTERIOR       (43)
-#define AC_NOP_WEAPON         (44)
-#define AC_NOP_POS            (45)
-#define AC_CAR_AIRBREAK       (46)
-#define AC_CAR_SPEED          (47)
-#define AC_DEATH_FLOOD        (48)
-#define AC_ARMOUR_PROOF       (49)
-#define AC_MEGA_JUMP          (50)
-#define AC_WEAPON_HACK        (51)
-#define AC_CAR_SLAPPER        (52)
-#define AC_INFINITE_AMMO      (53)
-
 #define E_REJECTING_AC_UNKNOWN         (-1)
 #define E_REJECTING_AC_S0BEIT          (0)
 #define E_REJECTING_AC_SAMPFUNCS       (1)
@@ -142,80 +106,127 @@ new const AC_ACTION_COLOR[][] =
 #define E_REJECTING_AC_VENOM           (12)
 #define E_REJECTING_AC_PARKOUR_MOD     (13)
 #define E_REJECTING_AC_FAKE_VERSION    (14)
+#define E_REJECTING_AC_MODLOADER       (15)
+#define E_REJECTING_AC_RUN_EVERYWHERE  (16)
+#define E_REJECTING_AC_CRASHERS_ASI    (17)
+#define E_REJECTING_AC_SAMP_GRASS      (18)
+
+#define AC_DAMAGER            (19)
+#define AC_LOW_FOV_SILENT     (20)
+#define AC_HIGH_FOV_SILENT    (21)
+#define AC_AIMBOT             (22)
+#define AC_AUTO_CBUG          (23)
+#define AC_RAPID_FIRE         (24)
+#define AC_EXTRA_WS           (25)
+#define AC_PIZDA_WALK         (26)
+#define AC_NULL_VELOCITY      (27)
+#define AC_NO_FALL            (28)
+#define AC_AIRBREAK           (29)
+#define AC_MAP_RUN            (30)
+#define AC_CLICK_WARP         (31)
+#define AC_ANTI_STUN          (32)
+#define AC_ANTI_AIM           (33)
+#define AC_BULLET_PROOF       (34)
+#define AC_INVALID_AIMZ       (35)
+#define AC_UPSIDE_DOWN        (36)
+#define AC_INVISIBLE_SURF     (37)
+#define AC_INVISIBLE_UG       (38)
+#define AC_NOP_CONTROLLABLE   (39)
+#define AC_NOP_ANIMATION      (40)
+#define AC_NOP_ENGINE_STATE   (41)
+#define AC_DIALOG_CRASHER     (42)
+#define AC_SEAT_CRASHER       (43)
+#define AC_TUNING_CRASHER     (44)
+#define AC_WEAPON_CRASHER     (45)
+#define AC_CALLBACK_FLOOD     (46)
+#define AC_NOP_INTERIOR       (47)
+#define AC_NOP_WEAPON         (48)
+#define AC_NOP_POS            (49)
+#define AC_CAR_AIRBREAK       (50)
+#define AC_CAR_SPEED          (51)
+#define AC_DEATH_FLOOD        (52)
+#define AC_ARMOUR_PROOF       (53)
+#define AC_MEGA_JUMP          (54)
+#define AC_WEAPON_HACK        (55)
+#define AC_CAR_SLAPPER        (56)
+#define AC_INFINITE_AMMO      (57)
 
 forward OnRejectingACDetection(playerid, code);
 
 enum e_AC_DETECTION
 {
-    acdName[26],
-    acdHelp[50],
+    acdName[32],
+    acdHelp[64],
     acdCategory,
     bool:acdActive
 }
 
 new const AC_DETECTION[][e_AC_DETECTION] =
 {
-    {"s0beit/ENB",      "s0beit cheat menu in memory",             AC_CAT_CHEATS,   true},
-    {"SAMPFUNCS",       "SAMPFUNCS loader (tool, not proof)",      AC_CAT_CHEATS,   true},
-    {"CLEO",            "CLEO library loaded (tool, not proof)",   AC_CAT_CHEATS,   true},
-    {"ImprovedDeagle",  "Deagle fire rate modification",           AC_CAT_AIM,      true},
-    {"SprintHook",      "Sprint key hook, unlimited sprint",       AC_CAT_MOVEMENT, true},
-    {"1337",            "1337 cheat client",                       AC_CAT_CHEATS,   true},
-    {"Arcane",          "Arcane cheat client",                     AC_CAT_CHEATS,   true},
-    {"Stealth",         "Stealth cheat client",                    AC_CAT_CHEATS,   true},
-    {"ExtremeCheats",   "ExtremeCheats client",                    AC_CAT_CHEATS,   true},
-    {"External Cheats", "Unrecognized injection at a known spot",  AC_CAT_CHEATS,   true},
-    {"Bypass",          "Attempt to fool the memory probe",        AC_CAT_EXPLOIT,  true},
-    {"Fake FPS",        "Forged FPS counter",                      AC_CAT_EXPLOIT,  true},
-    {"VP Cheat",        "VP cheat client",                         AC_CAT_CHEATS,   true},
-    {"Parkour Mod",     "Impossible body angle on foot",           AC_CAT_MOVEMENT, true},
+    {"d3d9.dll (s0beit/ENB Series)", "s0beit / ENB modification in memory",      AC_CAT_FILE,     true},
+    {"sampfuncs.asi",                "SAMPFUNCS loader in memory",              AC_CAT_FILE,     true},
+    {"cleo",                         "CLEO library in memory",                  AC_CAT_FILE,     true},
+    {"crouchhook.asi",               "Crouch hook modification in memory",      AC_CAT_FILE,     true},
+    {"Sprint macro",                 "Sprint key hook / unlimited sprint",      AC_CAT_MACRO,    true},
+    {"1337",                         "1337 cheat client in memory",             AC_CAT_MEMORY,   true},
+    {"Arcane",                       "Arcane cheat client in memory",           AC_CAT_MEMORY,   true},
+    {"Stealth",                      "Stealth cheat client in memory",          AC_CAT_MEMORY,   true},
+    {"ExtremeCheats",                "ExtremeCheats client in memory",          AC_CAT_MEMORY,   true},
+    {"External Cheats",              "External cheat injection in memory",      AC_CAT_MEMORY,   true},
+    {"Bypass",                       "Attempt to fool the memory probe",        AC_CAT_EXPLOIT,  true},
+    {"Fake FPS",                     "Forged FPS counter",                      AC_CAT_EXPLOIT,  true},
+    {"VP Cheat",                     "VP cheat client in memory",               AC_CAT_MEMORY,   true},
+    {"Parkour Mod",                  "Impossible body angle on foot",           AC_CAT_MOVEMENT, true},
+    {"Fake version",                 "Client reports a version it cannot back", AC_CAT_EXPLOIT,  true},
+    {"modloader",                    "Modloader library in memory",             AC_CAT_FILE,     true},
+    {"runeverywhere.asi",            "Run everywhere modification in memory",   AC_CAT_FILE,     true},
+    {"crashers.asi",                 "Crasher modification in memory",          AC_CAT_FILE,     true},
+    {"samp_grass.asi",               "Grass removal modification in memory",    AC_CAT_FILE,     true},
 
-    {"Fake version",    "Client reports a version it cannot back", AC_CAT_EXPLOIT,  true},
+    {"Damager",                      "Damage above what the weapon can deal",   AC_CAT_AIM,      true},
+    {"Low FOV silent",               "Hits off camera by a narrow angle",       AC_CAT_AIM,      true},
+    {"High FOV silent",              "Hits off camera by a wide angle",         AC_CAT_AIM,      true},
+    {"Aimbot",                       "Hit claimed where the target is not",     AC_CAT_AIM,      true},
+    {"Switch +C",                    "Reload cancel done by script / macro",    AC_CAT_MACRO,    true},
+    {"Rapid fire",                   "Shots faster than the weapon allows",     AC_CAT_MACRO,    true},
+    {"Extra WS",                     "More weapon shots than fired rounds",     AC_CAT_AIM,      true},
 
-    {"Damager",         "Damage above what the weapon can deal",   AC_CAT_AIM,      true},
-    {"Low FOV silent",  "Hits off camera by a narrow angle",       AC_CAT_AIM,      true},
-    {"High FOV silent", "Hits off camera by a wide angle",         AC_CAT_AIM,      true},
-    {"Aimbot",          "Hit claimed where the target is not",     AC_CAT_AIM,      true},
-    {"Auto C-bug",      "Reload cancel done by script",            AC_CAT_AIM,      true},
-    {"Rapid fire",      "Shots faster than the weapon allows",     AC_CAT_AIM,      true},
-    {"Extra WS",        "More weapon shots than fired rounds",     AC_CAT_AIM,      true},
+    {"Pizda walk",                   "Walk animation swapped to hide the aim",  AC_CAT_MOVEMENT, true},
+    {"Null velocity",                "Moves without reporting any speed",       AC_CAT_MOVEMENT, true},
+    {"No fall",                      "Long fall with no damage taken",          AC_CAT_MOVEMENT, true},
+    {"Airbreak",                     "Free movement with no ground contact",    AC_CAT_MOVEMENT, true},
+    {"Map run",                      "Ground speed above the animation limit",  AC_CAT_MOVEMENT, true},
+    {"Click warp",                   "Position jump with no server teleport",   AC_CAT_MOVEMENT, true},
 
-    {"Pizda walk",      "Walk animation swapped to hide the aim",  AC_CAT_MOVEMENT, true},
-    {"Null velocity",   "Moves without reporting any speed",       AC_CAT_MOVEMENT, true},
-    {"No fall",         "Long fall with no damage taken",          AC_CAT_MOVEMENT, true},
-    {"Airbreak",        "Free movement with no ground contact",    AC_CAT_MOVEMENT, true},
-    {"Map run",         "Ground speed above the animation limit",  AC_CAT_MOVEMENT, true},
-    {"Click warp",      "Position jump with no server teleport",   AC_CAT_MOVEMENT, true},
+    {"Anti stun",                    "Ignores the stagger from being hit",      AC_CAT_EXPLOIT,  true},
+    {"Anti aim",                     "Body angle forged against the aim",       AC_CAT_EXPLOIT,  true},
+    {"Bullet proof",                 "Client refuses the health the server set", AC_CAT_EXPLOIT, true},
+    {"Invalid aim Z",                "Forged or unnormalized aim vector",       AC_CAT_EXPLOIT,  true},
+    {"Upside down",                  "Inverted body orientation on foot",       AC_CAT_EXPLOIT,  true},
+    {"Invisible surf",               "Surfing an object that is not rendered",  AC_CAT_EXPLOIT,  true},
+    {"Invisible under",              "Standing below the world geometry",       AC_CAT_EXPLOIT,  true},
 
-    {"Anti stun",       "Ignores the stagger from being hit",      AC_CAT_EXPLOIT,  true},
-    {"Anti aim",        "Body angle forged against the aim",       AC_CAT_EXPLOIT,  true},
-    {"Bullet proof",    "Client refuses the health the server set", AC_CAT_EXPLOIT,  true},
-    {"Invalid aim Z",   "Forged or unnormalized aim vector",       AC_CAT_EXPLOIT,  true},
-    {"Upside down",     "Inverted body orientation on foot",       AC_CAT_EXPLOIT,  true},
-    {"Invisible surf",  "Surfing an object that is not rendered",  AC_CAT_EXPLOIT,  true},
-    {"Invisible under", "Standing below the world geometry",       AC_CAT_EXPLOIT,  true},
+    {"NOP Controllable",             "Keeps moving while the server froze him",  AC_CAT_NOPS,     true},
+    {"NOP Animation",                "Blocks SetPlayerAnimation",               AC_CAT_NOPS,     true},
+    {"NOP EngineState",              "Blocks SetVehicleEngineState",            AC_CAT_NOPS,     true},
 
-    {"NOP Controllable","Keeps moving while the server froze him",  AC_CAT_NOPS,     true},
-    {"NOP Animation",   "Blocks SetPlayerAnimation",               AC_CAT_NOPS,     true},
-    {"NOP EngineState", "Blocks SetVehicleEngineState",            AC_CAT_NOPS,     true},
+    {"Dialog crasher",               "Dialog answer with a forged field",       AC_CAT_CRASHER,  true},
+    {"Seat crasher",                 "Claims a seat the vehicle does not have", AC_CAT_CRASHER,  true},
+    {"Tuning crasher",               "Invalid component, paintjob or colour",   AC_CAT_CRASHER,  true},
+    {"Weapon crasher",               "Shot packet with an impossible field",    AC_CAT_CRASHER,  true},
+    {"Callback flood",               "Client side callback called too often",   AC_CAT_CRASHER,  true},
 
-    {"Dialog crasher",  "Dialog answer with a forged field",       AC_CAT_CRASHER,  true},
-    {"Seat crasher",    "Claims a seat the vehicle does not have", AC_CAT_CRASHER,  true},
-    {"Tuning crasher",  "Invalid component, paintjob or colour",   AC_CAT_CRASHER,  true},
-    {"Weapon crasher",  "Shot packet with an impossible field",    AC_CAT_CRASHER,  true},
-    {"Callback flood",  "Client side callback called too often",   AC_CAT_CRASHER,  true},
-
-    {"NOP Interior",    "Blocks SetPlayerInterior",                AC_CAT_NOPS,     true},
-    {"NOP GiveWeapon",  "Blocks GivePlayerWeapon",                 AC_CAT_NOPS,     true},
-    {"NOP SetPos",      "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true},
-    {"Car Airbreak",    "Airbreak or flying in a vehicle",         AC_CAT_MOVEMENT, true},
-    {"Car Speed",       "Vehicle speed above the model limit",      AC_CAT_MOVEMENT, true},
-    {"Death Flood",     "Sending deaths too fast (fake kill)",      AC_CAT_CRASHER,  true},
-    {"Armour proof",    "Client refuses the armour the server set", AC_CAT_EXPLOIT,  true},
-    {"Mega jump",       "Abnormal upward jump velocity",           AC_CAT_MOVEMENT, true},
-    {"Weapon hack",     "Spawning unauthorized weapons",           AC_CAT_CHEATS,   true},
-    {"Car slapper",     "Moving unoccupied vehicles remotely",     AC_CAT_CRASHER,  true},
-    {"Infinite ammo",   "Ammo not decreasing after firing",        AC_CAT_AIM,      true}
+    {"NOP Interior",                 "Blocks SetPlayerInterior",                AC_CAT_NOPS,     true},
+    {"NOP GiveWeapon",               "Blocks GivePlayerWeapon",                 AC_CAT_NOPS,     true},
+    {"NOP SetPos",                   "Blocks SetPlayerPos",                     AC_CAT_NOPS,     true},
+    {"Car Airbreak",                 "Airbreak or flying in a vehicle",         AC_CAT_MOVEMENT, true},
+    {"Car Speed",                    "Vehicle speed above the model limit",      AC_CAT_MOVEMENT, true},
+    {"Death Flood",                  "Sending deaths too fast (fake kill)",      AC_CAT_CRASHER,  true},
+    {"Armour proof",                 "Client refuses the armour the server set", AC_CAT_EXPLOIT,  true},
+    {"Mega jump",                    "Abnormal upward jump velocity",           AC_CAT_MOVEMENT, true},
+    {"Weapon hack",                  "Spawning unauthorized weapons",           AC_CAT_MEMORY,   true},
+    {"Car slapper",                  "Moving unoccupied vehicles remotely",     AC_CAT_CRASHER,  true},
+    {"Infinite ammo",                "Ammo not decreasing after firing",        AC_CAT_AIM,      true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))
