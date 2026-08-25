@@ -110,6 +110,7 @@ new const AC_ACTION_COLOR[][] =
 #define E_REJECTING_AC_RUN_EVERYWHERE  (16)
 #define E_REJECTING_AC_CRASHERS_ASI    (17)
 #define E_REJECTING_AC_SAMP_GRASS      (18)
+#define E_REJECTING_AC_BULLETPROOF     (34)
 
 #define AC_DAMAGER            (19)
 #define AC_LOW_FOV_SILENT     (20)
