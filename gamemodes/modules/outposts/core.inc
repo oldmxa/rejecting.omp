@@ -97,7 +97,7 @@ stock AnnounceOutpostCaptureLost(zoneid, outpost_idx, clanid, progress)
         if(arenaInfo[loc][arenaId] != zoneid) continue;
 
         va_SendClientMessage(i, -1, "{MAIN}[OUTPOST] {FFFFFF}Capture of Outpost #%d stopped: no clan member inside the area. {F84F31}%d%% {FFFFFF}lost.", outpost_idx + 1, pct);
-        PlayerPlaySound(i, 1085, 0.0, 0.0, 0.0);
+        PlayErrorSound(i);
     }
     return 1;
 }
@@ -381,7 +381,7 @@ public CheckOutpostCapture()
                         {
                             if(User[i][clanID] == capClan)
                             {
-                                PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+                                PlaySuccessSound(i);
                                 Ach_OnOutpostCaptured(i, capturingCount);
                             }
                             HideOutpostBar(i);
@@ -412,7 +412,7 @@ public CheckOutpostCapture()
 
     foreach(new i : Player)
     {
-        if(!User[i][isLogged] || User[i][isAfk] || User[i][isSpectating] || playerSpecID[i] != INVALID_PLAYER_ID) { HideOutpostBar(i); continue; }
+        if(!User[i][isLogged] || IsPlayerAFK(i) || IsPlayerSpectating(i)) { HideOutpostBar(i); continue; }
         new loc = User[i][locationId];
         if(loc < 0 || loc >= MAX_LOCATIONS || loc == ARENA_AFK) { HideOutpostBar(i); continue; }
         new z = arenaInfo[loc][arenaId];
@@ -487,7 +487,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                     {
                         OutpostInfo[arena][o][oCapturingClan] = clan;
                         OutpostInfo[arena][o][oCaptureProgress] = 1;
-                        PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+                        PlaySuccessSound(playerid);
 
                         AnnounceOutpostCaptureStart(arena, o, clan);
                     }

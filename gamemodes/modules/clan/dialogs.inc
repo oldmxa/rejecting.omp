@@ -628,7 +628,7 @@ public DIALOG_CLAN_RECRUIT(playerid, dialogid, response, listitem, string:inputt
     }
 
     va_SendClientMessage(playerid, -1, CLAN_PREFIX"Your recruitment request has been sent to the online members of clan {MAIN}%s{FFFFFF}!", ClanInfo[clanid][clanName]);
-    PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+    PlaySuccessSound(playerid);
     return 1;
 }
 

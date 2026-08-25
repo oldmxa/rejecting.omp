@@ -245,8 +245,8 @@ public DuelS_Countdown(playerid, challengerid, pos)
 		{
 			GameTextForPlayer(playerid, "~r~DUEL!!", 1000, 4);
 			GameTextForPlayer(challengerid, "~r~DUEL!!", 1000, 4);
-			PlayerPlaySound(playerid, 1057, 0, 0, 0);
-			PlayerPlaySound(challengerid, 1057, 0, 0, 0);
+			PlaySuccessSound(playerid);
+			PlaySuccessSound(challengerid);
 			TogglePlayerControllable(playerid, 1);
 			TogglePlayerControllable(challengerid, 1);
 			SetPlayerHealth(playerid, 100.0);

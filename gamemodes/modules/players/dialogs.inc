@@ -1007,11 +1007,11 @@ public DIALOG_REPORT_SUBMIT(playerid, dialogid, response, listitem, string:input
                     va_SendClientMessage(i, 0xEDA909AA, "{MAIN}[REPORT] {FFFFFF}Player %s[%d] reported: %s[%d] | Reason: %s", User[playerid][userName], playerid, User[targetid][userName], targetid, inputtext);
                     GameTextForPlayer(i, "~r~~h~NEW REPORT", 3000, 1);
                 }
-                PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+                PlaySuccessSound(i);
             }
         }
         va_SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Your report against {MAIN}%s {FFFFFF}has been sent successfully to the Administration!", User[targetid][userName]);
-        PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+        PlayErrorSound(playerid);
         
         LogTicket(User[playerid][user_sqlid], User[targetid][userName], inputtext);
 

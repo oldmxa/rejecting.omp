@@ -225,8 +225,11 @@ stock ShowSecurityMenu(playerid) return CallLocalFunction("Account_ShowSecurityM
 stock ShowCoinsMenu(playerid) return CallLocalFunction("Coinshop_ShowCoinsMenu", "d", playerid);
 
 forward bool:IsPlayerLogged(playerid);
+forward bool:IsPlayerAFK(playerid);
 forward bool:IsPlayerInLounge(playerid);
 forward bool:IsPlayerInMatch(playerid);
+forward bool:IsPlayerSpectating(playerid);
+forward bool:IsAdminCamouflaged(playerid);
 forward bool:IsAdmin(playerid, minLevel = 1);
 forward GivePlayerCash(playerid, amount);
 forward GetPlayerCash(playerid);

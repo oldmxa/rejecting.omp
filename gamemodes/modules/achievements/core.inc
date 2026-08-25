@@ -402,7 +402,7 @@ stock LoadPlayerAchievements(playerid, const achData[])
     if(g_AchQuietCount[playerid] > 0)
     {
         va_SendClientMessage(playerid, -1, ACHIEVEMENT_RETRO, g_AchQuietCount[playerid]);
-        PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+        PlaySuccessSound(playerid);
     }
     return 1;
 }

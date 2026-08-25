@@ -163,10 +163,7 @@ static stock HandleSafehouseAltKey(playerid)
         return 1;
     }
 
-    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid) ||
-        IsPlayerInTournamentMatch(playerid) ||
-        g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive] ||
-        User[playerid][isFrozen] || User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
+    if (IsPlayerInMatch(playerid) || IsPlayerFrozen(playerid) || IsPlayerSpectating(playerid))
         return 0;
 
     new index = GetSafehouseAtPosition(playerid);

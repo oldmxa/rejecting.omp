@@ -17,7 +17,7 @@ Respawn(playerid, timestamp)
     if(User[playerid][timerRespawn] > timestamp)
         return SendClientMessage(playerid, -1, "%s", ERROR_RESPAWN);
 
-    if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
+    if(IsPlayerSpectating(playerid))
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
     new Float:Armour;

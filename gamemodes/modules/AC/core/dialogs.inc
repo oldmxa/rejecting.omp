@@ -79,7 +79,7 @@ static AC_ToggleExtra(playerid, &bool:setting, const key[], const label[])
     va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s %s.",
         User[playerid][userName], setting ? ("enabled") : ("disabled"), label);
 
-    PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+    PlayErrorSound(playerid);
     return 1;
 }
 
@@ -98,7 +98,7 @@ static AC_ToggleCJWalk(playerid)
     if (applied < 1)
         SendClientMessage(playerid, -1, ADM_TAG_NORM"Nobody could be updated live, it takes effect for players who connect from now on.");
 
-    PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+    PlayErrorSound(playerid);
     ShowACMenu(playerid);
     return 1;
 }
@@ -497,7 +497,7 @@ public DIALOG_AC_MENU(playerid, dialogid, response, listitem, string:inputtext[]
             va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s set the anti cheat to %s.",
                 User[playerid][userName], ACPunishEnabled ? ("punish") : ("report only"));
 
-            PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            PlayErrorSound(playerid);
         }
         case AC_ROW_R2:
         {
@@ -507,7 +507,7 @@ public DIALOG_AC_MENU(playerid, dialogid, response, listitem, string:inputtext[]
             va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the Fake Version client check kick.",
                 User[playerid][userName], R2KickEnabled ? ("enabled") : ("disabled"));
 
-            PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            PlayErrorSound(playerid);
         }
         case AC_ROW_OMP:
         {
@@ -517,12 +517,12 @@ public DIALOG_AC_MENU(playerid, dialogid, response, listitem, string:inputtext[]
             va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the open.mp launcher check kick.",
                 User[playerid][userName], OMPKickEnabled ? ("enabled") : ("disabled"));
 
-            PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            PlayErrorSound(playerid);
         }
         case AC_ROW_VERBOSE:
         {
             AC_ToggleVerbose(playerid);
-            PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+            PlayErrorSound(playerid);
         }
         case AC_ROW_LIMITS:
         {
@@ -574,7 +574,7 @@ public DIALOG_AC_ACTION(playerid, dialogid, response, listitem, string:inputtext
     va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s set the anti cheat action for %s to %s.",
         User[playerid][userName], name, AC_ACTION_NAME[action]);
 
-    PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+    PlayErrorSound(playerid);
 
     return ShowACCategory(playerid, GetPVarInt(playerid, "ac_category"));
 }

@@ -468,7 +468,7 @@ ShowCommandCategory(playerid, catid)
     new count = 0;
     foreach(new i : Player)
     {
-        if(IsAdmin(i) && !User[i][adminCamu] && GetPVarInt(i, "HideTab") != 1)
+        if(IsAdmin(i) && !IsAdminCamouflaged(i))
         {
             new locStr[64];
             new location = User[i][locationId];

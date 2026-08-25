@@ -684,19 +684,19 @@ stock EnterTrainingArena(playerid, arenaid)
         return 0;
     }
 
-    if (User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
+    if (IsPlayerSpectating(playerid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena while spectating.");
         return 0;
     }
 
-    if (User[playerid][isFrozen])
+    if (IsPlayerFrozen(playerid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot enter a training arena right now.");
         return 0;
     }
 
-    if (!g_PlayerTraining[playerid][pTrain_Active] && (!User[playerid][isAfk] || User[playerid][locationId] != ARENA_AFK))
+    if (!g_PlayerTraining[playerid][pTrain_Active] && !IsPlayerInLounge(playerid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}The training mode can only be started from the lounge.");
         return 0;
@@ -776,7 +776,7 @@ public OnTrainingCountdownTimer(playerid, count)
         format(goStr, sizeof(goStr), "%sGO!", GetPlayerHudTag(playerid, false));
         ShowTrainingCountdownTD(playerid, goStr);
 
-        PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+        PlaySuccessSound(playerid);
         SetTimerEx("DestroyTrainingCountdownTimer", 1000, false, "i", playerid);
 
         MoveTrainingTarget(playerid, arenaid, true);
@@ -891,7 +891,7 @@ stock FinishTrainingChallenge(playerid)
 
     new record = SaveChallengeRecord(playerid, arenaid, score, hits, shots);
 
-    PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+    PlaySuccessSound(playerid);
 
     va_SendClientMessage(
         playerid, -1,
@@ -1160,7 +1160,7 @@ stock DestroyTrainingTarget(playerid, arenaid)
         );
     }
 
-    PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+    PlaySuccessSound(playerid);
 
     CreateTrainingTarget(playerid, arenaid);
     MoveTrainingTarget(playerid, arenaid, true);

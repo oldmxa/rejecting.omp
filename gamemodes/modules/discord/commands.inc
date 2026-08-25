@@ -1644,7 +1644,7 @@ DSLASH:d(user, params[])
 
     va_SendClientMessage(targetid, 0xA478E6FF, "{MAIN}[ASK] {FFFFFF}[Discord] Admin %s answered: %s", username, message);
     GameTextForPlayer(targetid, "~p~~h~Ask Answered", 1500, 1);
-    PlayerPlaySound(targetid, 1085, 0.0, 0.0, 10.0);
+    PlayErrorSound(targetid);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s answered ask for player %s (ID %d): %s", username, User[targetid][userName], targetid, message);
@@ -1675,7 +1675,7 @@ DSLASH:r(user, params[])
 
     va_SendClientMessage(targetid, 0x91BFCCFF, "{MAIN}[REPORT] {FFFFFF}[Discord] Admin %s replied: %s", username, message);
     GameTextForPlayer(targetid, "~b~~h~Report Answered", 1500, 1);
-    PlayerPlaySound(targetid, 1085, 0.0, 0.0, 10.0);
+    PlayErrorSound(targetid);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s replied to player %s (ID %d): %s", username, User[targetid][userName], targetid, message);
@@ -1753,7 +1753,7 @@ DSLASH:online(user, params[])
 		new where[48];
 		new loc = User[i][locationId];
 
-		if(User[i][isAfk] || loc == ARENA_AFK || loc == -1)
+		if(IsPlayerInLounge(i))
 		{
 			format(where, sizeof(where), "Lounge");
 		}

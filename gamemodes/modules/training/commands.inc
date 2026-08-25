@@ -29,13 +29,13 @@
     if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot enter training right now.");
 
-    if (User[playerid][isFrozen])
+    if (IsPlayerFrozen(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot do this while frozen.");
 
-    if (playerSpecID[playerid] != INVALID_PLAYER_ID || User[playerid][isSpectating])
+    if (IsPlayerSpectating(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Stop spectating first.");
 
-    if (!g_PlayerTraining[playerid][pTrain_Active] && (!User[playerid][isAfk] || User[playerid][locationId] != ARENA_AFK))
+    if (!g_PlayerTraining[playerid][pTrain_Active] && !IsPlayerInLounge(playerid))
     {
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The training mode can only be started from the lounge.");
     }

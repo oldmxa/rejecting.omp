@@ -226,7 +226,7 @@ stock LeaveClan(playerid)
         if (User[i][isLogged] && User[i][clanID] == clanid)
         {
             va_SendClientMessage(i, -1, CLAN_LEFT, GetPlayerColor(playerid) >>> 8, User[playerid][userName]);
-            PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+            PlaySuccessSound(i);
         }
     }
 
@@ -268,7 +268,7 @@ stock ChangePlayerRank(playerid, clanid, slot, rank)
             User[targetid][clanRole] = -1;
             User[targetid][spawnSafehouse] = false;
             SetClanColor(targetid);
-            PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
+            PlaySuccessSound(targetid);
             UpdatePlayerData(targetid);
         }
     }

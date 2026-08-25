@@ -328,12 +328,12 @@
     va_SendClientMessage(targetid, -1, ADM_TAG_NORM"The admin %s set their money to %s.", User[playerid][userName], FormatMoney(amount));
 
     new mLog[256];
-    format(mLog, sizeof(mLog), "**Admin:** %s\n**Player:** %s\n**New Balance:** $%s",
+    format(mLog, sizeof(mLog), "**Admin:** %s\n**Player:** %s\n**New Balance:** %s",
         User[playerid][userName], User[targetid][userName], FormatMoney(amount));
     SendDiscordEmbed(logs_money, "Admin Money Set", mLog, DISCORD_COLOR_ADMIN);
 
     new log_m_details[128];
-    format(log_m_details, sizeof(log_m_details), "Set money of %s to $%s", User[targetid][userName], FormatMoney(amount));
+    format(log_m_details, sizeof(log_m_details), "Set money of %s to %s", User[targetid][userName], FormatMoney(amount));
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "SetMoney", log_m_details);
 
     return true;

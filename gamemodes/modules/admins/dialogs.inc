@@ -79,7 +79,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     User[playerid][userName], (R2KickEnabled) ? ("enabled") : ("disabled"));
 
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 25: // open.mp Launcher server-wide
             {
@@ -92,7 +92,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                     User[playerid][userName], (OMPKickEnabled) ? ("enabled") : ("disabled"));
 
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 16: // Max Warnings
             {
@@ -128,7 +128,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the anti spam.", User[playerid][userName], (ServerAntiSpam) ? ("enabled") : ("disabled"));
 
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 20: // Anti Capslock
             {
@@ -140,7 +140,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the anti capslock.", User[playerid][userName], (ServerAntiCapslock) ? ("enabled") : ("disabled"));
 
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 21: // /admins command
             {
@@ -152,7 +152,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the /admins command.", User[playerid][userName], (ServerAdminsCmd) ? ("enabled") : ("disabled"));
 
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 6: // See PMs
             {
@@ -160,7 +160,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 UpdatePlayerData(playerid);
                 SendClientMessage(playerid, -1, "%s", INFO_ADMINCONFIG);
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 7: // See Clan Chat
             {
@@ -168,7 +168,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 UpdatePlayerData(playerid);
                 SendClientMessage(playerid, -1, "%s", INFO_ADMINCONFIG);
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 8: // See Commands
             {
@@ -176,7 +176,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 UpdatePlayerData(playerid);
                 SendClientMessage(playerid, -1, "%s", INFO_ADMINCONFIG);
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 9: // See Local Chat
             {
@@ -184,7 +184,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 UpdatePlayerData(playerid);
                 SendClientMessage(playerid, -1, "%s", INFO_ADMINCONFIG);
                 ShowAdminConfig(playerid);
-                PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+                PlayErrorSound(playerid);
             }
             case 10: // Hostname (Level 4+ & RCON)
             {

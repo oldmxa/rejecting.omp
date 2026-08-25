@@ -92,7 +92,7 @@
                 va_SendClientMessage(i, -1, "{MAIN}[ASK] Question from %s[%d]: %s", User[playerid][userName], playerid, params);
                 GameTextForPlayer(i, "~b~~h~NEW QUESTION", 2000, 1);
             }
-            PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+            PlaySuccessSound(i);
         }
     }
 
@@ -157,7 +157,7 @@
     GameTextForPlayer(playerid, "~b~~h~~h~Message Sent", 1500, 1);
 	GameTextForPlayer(idplayer, "~y~~h~~h~Message Received", 1500, 1);
 
-    PlayerPlaySound(idplayer, 1057, 0.0, 0.0, 0.0);
+    PlaySuccessSound(idplayer);
     PlayerPlaySound(playerid, 5201, 0.0, 0.0, 0.0);
 
     new chat_details[256];
@@ -268,7 +268,7 @@
     SendClientMessage(targetid, -1, "%s", givenMoneyString);
 
     new mLog[256];
-    format(mLog, sizeof(mLog), "**Sender:** %s (ID: %d)\n**Recipient:** %s (ID: %d)\n**Amount:** $%s",
+    format(mLog, sizeof(mLog), "**Sender:** %s (ID: %d)\n**Recipient:** %s (ID: %d)\n**Amount:** %s",
         getPlayerName(playerid), playerid, getPlayerName(targetid), targetid, FormatMoney(money));
     SendDiscordEmbed(logs_money, "Money Transfer", mLog, DISCORD_COLOR_INFO);
 

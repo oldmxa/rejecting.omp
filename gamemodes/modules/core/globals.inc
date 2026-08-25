@@ -1052,10 +1052,28 @@ stock bool:IsPlayerInLounge(playerid)
     return (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
 }
 
+stock bool:IsPlayerAFK(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return true;
+    return User[playerid][isAfk];
+}
+
+stock bool:IsPlayerSpectating(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID);
+}
+
 stock bool:IsAdmin(playerid, minLevel = 1)
 {
     if(!IsPlayerLogged(playerid)) return false;
     return (User[playerid][adminLevel] >= minLevel);
+}
+
+stock bool:IsAdminCamouflaged(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (User[playerid][adminCamu] || GetPVarInt(playerid, "HideTab") == 1);
 }
 
 stock GivePlayerCash(playerid, amount)

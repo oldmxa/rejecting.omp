@@ -82,7 +82,7 @@ public OnSiteTicketsFound()
 
             va_SendClientMessage(p, -1, "{MAIN}[TICKET] {FFFFFF}New %s ticket {MAIN}#%d {FFFFFF}from {MAIN}%s{FFFFFF} (%s): %s",
                 ttype, id, author, priority, subject);
-            PlayerPlaySound(p, 1057, 0.0, 0.0, 0.0);
+            PlaySuccessSound(p);
         }
 
         if(logs_tickets != DCC_INVALID_CHANNEL)

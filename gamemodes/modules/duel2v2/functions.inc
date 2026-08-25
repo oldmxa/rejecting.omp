@@ -405,7 +405,7 @@ public OnDuel2v2CountdownTick(matchid, count)
     for(new i = 0; i < 4; i++)
     {
         if(!IsValidDuel2v2Player(players[i])) continue;
-        PlayerPlaySound(players[i], 1057, 0.0, 0.0, 0.0);
+        PlaySuccessSound(players[i]);
         GameTextForPlayer(players[i], strText, 1500, 6);
         TogglePlayerControllable(players[i], true);
     }

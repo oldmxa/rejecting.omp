@@ -355,13 +355,13 @@ public OnTourneyCountdownTick(matchid, count)
             {
                 TogglePlayerControllableEx(g_TourneyParticipants[slotA][tp_Player1], true);
                 GameTextForPlayer(g_TourneyParticipants[slotA][tp_Player1], "~g~FIGHT!", 1500, 6);
-                PlayerPlaySound(g_TourneyParticipants[slotA][tp_Player1], 1057, 0.0, 0.0, 0.0);
+                PlaySuccessSound(g_TourneyParticipants[slotA][tp_Player1]);
             }
             if(g_TourneyParticipants[slotA][tp_Player2] != INVALID_PLAYER_ID && IsPlayerConnected(g_TourneyParticipants[slotA][tp_Player2]))
             {
                 TogglePlayerControllableEx(g_TourneyParticipants[slotA][tp_Player2], true);
                 GameTextForPlayer(g_TourneyParticipants[slotA][tp_Player2], "~g~FIGHT!", 1500, 6);
-                PlayerPlaySound(g_TourneyParticipants[slotA][tp_Player2], 1057, 0.0, 0.0, 0.0);
+                PlaySuccessSound(g_TourneyParticipants[slotA][tp_Player2]);
             }
         }
 
@@ -371,13 +371,13 @@ public OnTourneyCountdownTick(matchid, count)
             {
                 TogglePlayerControllableEx(g_TourneyParticipants[slotB][tp_Player1], true);
                 GameTextForPlayer(g_TourneyParticipants[slotB][tp_Player1], "~g~FIGHT!", 1500, 6);
-                PlayerPlaySound(g_TourneyParticipants[slotB][tp_Player1], 1057, 0.0, 0.0, 0.0);
+                PlaySuccessSound(g_TourneyParticipants[slotB][tp_Player1]);
             }
             if(g_TourneyParticipants[slotB][tp_Player2] != INVALID_PLAYER_ID && IsPlayerConnected(g_TourneyParticipants[slotB][tp_Player2]))
             {
                 TogglePlayerControllableEx(g_TourneyParticipants[slotB][tp_Player2], true);
                 GameTextForPlayer(g_TourneyParticipants[slotB][tp_Player2], "~g~FIGHT!", 1500, 6);
-                PlayerPlaySound(g_TourneyParticipants[slotB][tp_Player2], 1057, 0.0, 0.0, 0.0);
+                PlaySuccessSound(g_TourneyParticipants[slotB][tp_Player2]);
             }
         }
 

@@ -292,7 +292,7 @@ ShowAdminCmds(playerid)
 
     GameTextForPlayer(targetid, "~p~~h~Ask Answered", 1500, 1);
     GameTextForPlayer(playerid, "~g~~h~Ask Answered", 1500, 1);
-    PlayerPlaySound(targetid, 1085, 0.0, 0.0, 10.0);
+    PlayErrorSound(targetid);
 
     foreach(new i : Player)
     {
@@ -346,7 +346,7 @@ ShowAdminCmds(playerid)
 
     GameTextForPlayer(targetid, "~b~~h~Report Answered", 1500, 1);
     GameTextForPlayer(playerid, "~g~~h~Report Answered", 1500, 1);
-    PlayerPlaySound(targetid, 1085, 0.0, 0.0, 10.0);
+    PlayErrorSound(targetid);
 
     foreach(new i : Player)
     {

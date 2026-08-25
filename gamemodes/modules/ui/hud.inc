@@ -85,7 +85,7 @@ stock updatePlayerHud(playerid)
 
 		if (User[playerid][hudType] == HUD_UNDERLINE)
 		{
-			if (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK)
+			if (IsPlayerInLounge(playerid))
 			{
 				format(fString, sizeof(fString), "%s~n~%sFPS: %s%d %sPL: %s%.1f~n~%sArena Time: %slounge",
 					getDateStrTDInfo(playerColorOne, playerColorTwo),
@@ -136,7 +136,7 @@ stock updatePlayerHud(playerid)
 			{
 				PlayerTextDrawSetString(playerid, InfoStats[playerid][1], " ");
 			}
-			else if (User[playerid][isAfk])
+			else if (IsPlayerInLounge(playerid))
 			{
 				if (User[playerid][hudType] == HUD_UNDERLINE)
 				{
@@ -265,7 +265,7 @@ public UpdateFastHUD()
         if(IsPlayerNPC(i)) continue;
         if(!User[i][isLogged] || !User[i][isAlreadySpawned]) continue;
         if(!User[i][showPlayerHud]) continue;
-        if(User[i][isSpectating] || playerSpecID[i] != INVALID_PLAYER_ID) continue;
+        if(IsPlayerSpectating(i)) continue;
 
         if(User[i][locationId] != -1 && User[i][isShowingHud])
         {
