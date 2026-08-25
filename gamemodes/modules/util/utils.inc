@@ -514,31 +514,11 @@ SetAlpha(colour, alpha)
 	return colour & ~0xFF | clamp(alpha, 0, 255);
 }
 
-#define CAPS_MIN_LENGTH (6)
-#define CAPS_MAX_RATIO  (70)
-
 StripCapslock(text[])
 {
-	new length = strlen(text), upper = 0, letters = 0;
-
-	if(length < CAPS_MIN_LENGTH) return 0;
+	new length = strlen(text);
 
 	for(new i; i < length; i++)
-	{
-		if(!(('A' <= text[i] <= 'Z') || ('a' <= text[i] <= 'z'))) continue;
-
-		letters++;
-		if('A' <= text[i] <= 'Z') upper++;
-	}
-
-	if(letters < CAPS_MIN_LENGTH) return 0;
-	if((upper * 100) / letters < CAPS_MAX_RATIO) return 0;
-
-	new first = -1;
-	for(new i; i < length; i++)
-		if(('A' <= text[i] <= 'Z') || ('a' <= text[i] <= 'z')) { first = i; break; }
-
-	for(new i = first + 1; i < length; i++)
 		if('A' <= text[i] <= 'Z') text[i] += 32;
 
 	return 1;

@@ -1016,10 +1016,10 @@ public OnPlayerText(playerid, text[])
 	{
 		foreach(new i : Player)
 			if(User[i][adminLevel] > 0 && IsPlayerLogged(i))
-				va_SendClientMessage(i, -1, ADMIN_CHAT_MODEL, adminnames[User[playerid][adminLevel]][ingame], (GetPlayerColor(playerid) >>> 8), User[playerid][userName], playerid, strtodown(text[1]));
+				va_SendClientMessage(i, -1, ADMIN_CHAT_MODEL, adminnames[User[playerid][adminLevel]][ingame], (GetPlayerColor(playerid) >>> 8), User[playerid][userName], playerid, text[1]);
 
 
-		format(msgdiscord, sizeof(msgdiscord), "> [%s] %s[%d]: %s", adminnames[User[playerid][adminLevel]][discord], User[playerid][userName], playerid, strtodown(text[1]));
+		format(msgdiscord, sizeof(msgdiscord), "> [%s] %s[%d]: %s", adminnames[User[playerid][adminLevel]][discord], User[playerid][userName], playerid, text[1]);
         utf8encode(msgencoded, msgdiscord, sizeof(msgencoded));
         DCC_SendChannelMessage(adminchat , msgencoded);
         
@@ -1049,11 +1049,10 @@ public OnPlayerText(playerid, text[])
 
 	if(text[0] == ';')
 	{
-		// local buffer: strtodown also returns array, and it is not worth risking
 		new localName[MAX_PLAYER_NAME + 1];
 		GetPlayerName(playerid, localName, sizeof(localName));
 
-		va_SendClientMessage(playerid, -1, LOCAL_CHAT_MODEL, localName, playerid, strtodown(text[1]));
+		va_SendClientMessage(playerid, -1, LOCAL_CHAT_MODEL, localName, playerid, text[1]);
 		PlayerPlaySound(playerid, 1139, 0.0, 0.0, 0.0);
 
 		new Float:pp[3], closePlayers;
@@ -1063,7 +1062,7 @@ public OnPlayerText(playerid, text[])
 		{
 			if(IsPlayerInRangeOfPoint(i, 20, pp[0], pp[1], pp[2]) && i != playerid)
 			{
-				va_SendClientMessage(i, -1, LOCAL_CHAT_MODEL, localName, playerid, strtodown(text[1]));
+				va_SendClientMessage(i, -1, LOCAL_CHAT_MODEL, localName, playerid, text[1]);
 				PlayerPlaySound(i, 1139, 0.0, 0.0, 0.0);
 				closePlayers++;
 			}
@@ -1074,7 +1073,7 @@ public OnPlayerText(playerid, text[])
 		foreach(new i : Player)
 		{
 			if(User[i][adminLevel] > 2 && IsPlayerLogged(i) && User[i][acfg_local])
-				va_SendClientMessage(i, -1, ADMIN_SEE_LOCAL, User[playerid][userName], playerid, strtodown(text[1]));
+				va_SendClientMessage(i, -1, ADMIN_SEE_LOCAL, User[playerid][userName], playerid, text[1]);
 		}
 
         LogChatMessage(User[playerid][user_sqlid], User[playerid][userName], "local", text[1]);
@@ -1136,7 +1135,7 @@ public OnPlayerText(playerid, text[])
 			idHex,
 			playerid,
 			textHex,
-			strtodown(text)
+			text
 		);
 
 		return false;
@@ -1149,7 +1148,7 @@ public OnPlayerText(playerid, text[])
 		idHex,
 		playerid,
 		textHex,
-		strtodown(text)
+		text
 	);
 	//SetPlayerChatBubble(playerid, text, 0xFFFFFFFF, 70.0, 4000);
 	return false;
