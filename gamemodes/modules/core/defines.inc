@@ -229,6 +229,7 @@ forward bool:IsPlayerAFK(playerid);
 forward bool:IsPlayerInLounge(playerid);
 forward bool:IsPlayerInMatch(playerid);
 forward bool:IsPlayerSpectating(playerid);
+forward bool:IsPlayerSpawnProtected(playerid);
 forward bool:IsAdminCamouflaged(playerid);
 forward bool:IsAdmin(playerid, minLevel = 1);
 forward GivePlayerCash(playerid, amount);

@@ -221,7 +221,7 @@ public ReleaseReport(playerid)
 
 gunMenu(playerid)
 {
-	if(!User[playerid][isAfk] && User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
+	if(!IsPlayerInLounge(playerid))
 	{
 		if(!GetPVarInt(playerid, "gunmenu_world"))
 		{

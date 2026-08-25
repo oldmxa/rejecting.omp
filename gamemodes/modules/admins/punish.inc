@@ -203,7 +203,7 @@
 
     if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
-    if(User[targetid][muteTimestamp] != 0)
+    if(IsPlayerMuted(targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[Admin] {FFFFFF} The player is already muted!");
 
     foreach(new i : Player)
@@ -242,7 +242,7 @@
 
     if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
-    if(User[targetid][muteTimestamp] == 0)
+    if(!IsPlayerMuted(targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF} The player is not muted!");
 
     foreach(new i : Player)

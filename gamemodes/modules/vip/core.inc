@@ -579,7 +579,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
         return true;
     }
 
-    if(User[playerid][muteTimestamp] > gettime())
+    if(IsPlayerMuted(playerid))
     {
         va_SendClientMessage(playerid, -1, IS_MUTED);
         return true;

@@ -243,7 +243,7 @@ static AC_CheckFall(playerid, Float:drop, Float:x, Float:y, Float:z)
      || GetPlayerWeapon(playerid) == WEAPON_PARACHUTE
      || GetPlayerSurfingObjectID(playerid) != INVALID_OBJECT_ID 
      || GetPlayerSurfingVehicleID(playerid) != INVALID_VEHICLE_ID
-     || GetPVarInt(playerid, "spawn_protect") == 1
+     || IsPlayerSpawnProtected(playerid)
      || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)
     {
         ACFalling[playerid] = false;
@@ -407,9 +407,9 @@ stock AC_CheckHealthSync(playerid, clientHealth)
 
 stock AC_CheckArmourSync(playerid, clientArmour)
 {
-    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (!User[playerid][isLogged] || IsPlayerAFK(playerid)) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
-    if (GetPVarInt(playerid, "spawn_protect") == 1) return 0;
+    if (IsPlayerSpawnProtected(playerid)) return 0;
 
     new tick = GetTickCount();
 

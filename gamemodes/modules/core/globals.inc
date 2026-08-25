@@ -1064,6 +1064,12 @@ stock bool:IsPlayerSpectating(playerid)
     return (User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID);
 }
 
+stock bool:IsPlayerSpawnProtected(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return (GetPVarInt(playerid, "spawn_protect") == 1);
+}
+
 stock bool:IsAdmin(playerid, minLevel = 1)
 {
     if(!IsPlayerLogged(playerid)) return false;

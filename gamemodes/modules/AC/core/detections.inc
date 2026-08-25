@@ -223,7 +223,7 @@ public OnRejectingACDetection(playerid, code)
             }
         }
     }
-    if ((code == AC_BULLET_PROOF || code == AC_ARMOUR_PROOF) && GetPVarInt(playerid, "spawn_protect") == 1)
+    if ((code == AC_BULLET_PROOF || code == AC_ARMOUR_PROOF) && IsPlayerSpawnProtected(playerid))
     {
         return 1;
     }

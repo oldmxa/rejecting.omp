@@ -482,7 +482,7 @@ stock SetClanColor(playerid)
         new bubble_text[256];
         bubble_text[0] = '\0';
 
-        if (User[playerid][adminLevel] > 0 && !User[playerid][hideAdminTag] && !User[playerid][adminCamu])
+        if (IsAdmin(playerid) && !User[playerid][hideAdminTag] && !IsAdminCamouflaged(playerid))
             format(bubble_text, sizeof(bubble_text), "{FF4500}%s", adminnames[User[playerid][adminLevel]][ingame]);
 
         if (!User[playerid][hideCustomTag] && User[playerid][customTag][0] != '\0')
@@ -494,17 +494,12 @@ stock SetClanColor(playerid)
         }
         else
         {
-            if (IsPlayerVip(playerid) && !User[playerid][hideVipTag] && User[playerid][vipHeadTag] != 10)
+            new vipStr[32];
+            GetVipTagStringEx(playerid, vipStr, sizeof(vipStr));
+            if (vipStr[0] != '\0')
             {
-                new tagIdx = User[playerid][vipHeadTag];
-                new vipStr[32];
-
-                if (0 <= tagIdx < 10)
-                    format(vipStr, sizeof(vipStr), "{%s}[VIP]", vipColorListStr[tagIdx]);
-                else if (tagIdx >= 0x10000000)
-                    format(vipStr, sizeof(vipStr), "{%06x}[VIP]", tagIdx & 0xFFFFFF);
-                else
-                    format(vipStr, sizeof(vipStr), "{FFD700}[VIP]");
+                new vlen = strlen(vipStr);
+                if (vlen > 0 && vipStr[vlen - 1] == ' ') vipStr[vlen - 1] = '\0';
 
                 if (bubble_text[0] != '\0')
                     format(bubble_text, sizeof(bubble_text), "%s %s", bubble_text, vipStr);
@@ -512,9 +507,9 @@ stock SetClanColor(playerid)
                     format(bubble_text, sizeof(bubble_text), "%s", vipStr);
             }
 
-            if (User[playerid][clanID] != -1 && !User[playerid][hideClanTag])
+            if (IsPlayerInClan(playerid) && !User[playerid][hideClanTag])
             {
-                new clanid = User[playerid][clanID];
+                new clanid = GetPlayerClan(playerid);
 
                 if (bubble_text[0] != '\0')
                     format(bubble_text, sizeof(bubble_text), "%s {%06x}[%s]", bubble_text, (ClanInfo[clanid][clanColor] >>> 8), ClanInfo[clanid][clanName]);

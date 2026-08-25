@@ -462,7 +462,7 @@ public CHANGE(playerid, dialogid, response, listitem, string:inputtext[])
         	DeletePVar(playerid, "showGunmenuFirst");
         }
 
-        if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK && !User[playerid][isAfk])
+        if(!IsPlayerInLounge(playerid))
             givePlayerWeapons(playerid);
 
         if(GetPVarInt(playerid, "gunmenu_world"))
