@@ -93,17 +93,8 @@ stock CB_SendClientMessageToAll(color, const fmat[], va_args<>)
     va_format(buffer, sizeof(buffer), fmat, va_start<2>);
 
     foreach(new i : Player)
-    {
-        new player_buf[1024];
-        strcopy(player_buf, buffer);
-        
-        if (strfind(player_buf, "{MAIN}", true) != -1)
-        {
-            CB_ProcessMessage(i, player_buf, sizeof(player_buf));
-        }
-        
-        SendClientMessage(i, color, "%s", player_buf);
-    }
+        SendClientMessage(i, color, "%s", buffer);
+
     return 1;
 }
 

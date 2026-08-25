@@ -64,15 +64,15 @@ static const AC_PROBE[][E_AC_PROBE] =
     {0x5B8760,  4,  140,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
     {0x53BC70,  4,  128,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
     {0x609B10,  4,  200,      E_REJECTING_AC_RUN_EVERYWHERE,  E_REJECTING_AC_UNKNOWN}, // runeverywhere.asi ainda estou pegando as memorias corretas, falta calibrar!!
-    {0x6F65C0,  4,  196,      E_REJECTING_AC_CRASHERS_ASI,    E_REJECTING_AC_UNKNOWN}, // crashers.asi
-    {0x5DB1A0,  4,  132,      E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}, // samp_grass.asi (CPlantMgr)
-    {0x5DD272,  4,  0,        E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}, // samp_grass.asi (Grass DFF hook)
+    {0x6F65BF,  4,  0,        E_REJECTING_AC_CRASHERS_ASI,    E_REJECTING_AC_UNKNOWN}, // crashers.asi
+    {0x5DB1A0,  4,  132,      E_REJECTING_AC_SAMP_GRASS,      E_REJECTING_AC_UNKNOWN}, // samp_grass.asi (CPlantMgr)
+    {0x5DD272,  4,  0,        E_REJECTING_AC_SAMP_GRASS,      E_REJECTING_AC_UNKNOWN}, // samp_grass.asi (Grass DFF hook)
 
     // --- Hooks Modloader 
-    {0x5B8E1B,  4,  0,        E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x5BA865,  4,  0,        E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x5BF8B7,  4,  0,        E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN},
-    {0x40685E,  4,  0,        E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN} 
+    {0x5B8E1B,  4,  0,        E_REJECTING_AC_MODLOADER,       E_REJECTING_AC_UNKNOWN},
+    {0x5BA865,  4,  0,        E_REJECTING_AC_MODLOADER,       E_REJECTING_AC_UNKNOWN},
+    {0x5BF8B7,  4,  0,        E_REJECTING_AC_MODLOADER,       E_REJECTING_AC_UNKNOWN},
+    {0x40685F,  4,  0,        E_REJECTING_AC_MODLOADER,       E_REJECTING_AC_UNKNOWN} 
 };
 
 #define AC_PROBE_SPRINTHOOK       (4)
