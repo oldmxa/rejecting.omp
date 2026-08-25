@@ -123,18 +123,14 @@ stock DoBuyCoins(playerid, coins)
     if (price < 1)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}That amount is too small to charge for.");
 
-    if (User[playerid][playerMoney] < price)
+    if (!HasPlayerCash(playerid, price))
     {
         return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need {23C552}%s {FFFFFF}more to buy {FFFF00}%s{FFFFFF}.",
-            FormatMoney(price - User[playerid][playerMoney]), FormatCoins(coins));
+            FormatMoney(price - GetPlayerCash(playerid)), FormatCoins(coins));
     }
 
-    User[playerid][playerMoney] -= price;
-    GivePlayerMoney(playerid, -price);
-
-    User[playerid][playerCoins] += coins;
-
-    LogCoins(User[playerid][user_sqlid], User[playerid][userName], "Bought with cash", coins, User[playerid][playerCoins]);
+    GivePlayerCash(playerid, -price);
+    GivePlayerCoins(playerid, coins, "Bought with cash");
     UpdatePlayerData(playerid);
 
     va_SendClientMessage(playerid, -1, "{MAIN}[COINS] {FFFFFF}You exchanged {23C552}%s {FFFFFF}for {FFFF00}%s{FFFFFF}.",

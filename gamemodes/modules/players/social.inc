@@ -174,11 +174,11 @@
 
 @cmd() votekick(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(User[playerid][isAfk])
-        return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot start a votekick while in a match.");
 
     new targetid;
     if(sscanf(params, "u", targetid))
@@ -226,11 +226,11 @@
 
 @cmd() transfer(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(User[playerid][isAfk])
-        return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot transfer money while in a match.");
 
     new targetid, money;
     if(sscanf(params, "ud", targetid, money))
@@ -248,17 +248,14 @@
     if(money > 100000000)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Maximum transfer limit per transaction is $100,000,000.");
 
-    if(money > User[playerid][playerMoney])
+    if(!HasPlayerCash(playerid, money))
         return SendClientMessage(playerid, -1, "%s", TRANSFERMONEY_NOMONEY);
 
     if(User[targetid][playerMoney] + money > 2000000000)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Target player's bank/wallet would exceed the maximum limit.");
 
-    GivePlayerMoney(playerid, -money);
-    GivePlayerMoney(targetid, money);
-
-    User[playerid][playerMoney] -= money;
-    User[targetid][playerMoney] += money;
+    GivePlayerCash(playerid, -money);
+    GivePlayerCash(targetid, money);
 
     UpdatePlayerData(playerid);
     UpdatePlayerData(targetid);

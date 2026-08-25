@@ -247,7 +247,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0)
+        if(IsAdmin(i))
             va_SendClientMessage(i, -1, UNMUTED_PLAYER, User[playerid][userName], playerid, User[targetid][userName], targetid);
     }
     va_SendClientMessage(targetid, -1, UNMUTED_MSG, User[playerid][userName], playerid);

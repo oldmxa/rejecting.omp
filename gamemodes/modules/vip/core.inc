@@ -303,14 +303,12 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
 
     new paidWith[32], balanceStr[64];
 
-    if(User[playerid][playerCoins] < coins)
-        return va_SendClientMessage(playerid, -1, VIP_NO_COINS, FormatCoins(coins - User[playerid][playerCoins]));
-
-    User[playerid][playerCoins] -= coins;
+    if(!HasPlayerCoins(playerid, coins))
+        return va_SendClientMessage(playerid, -1, VIP_NO_COINS, FormatCoins(coins - GetPlayerCoins(playerid)));
 
     new vipReason[64];
     format(vipReason, sizeof(vipReason), "VIP %d days", days);
-    LogCoins(User[playerid][user_sqlid], User[playerid][userName], vipReason, -coins, User[playerid][playerCoins]);
+    GivePlayerCoins(playerid, -coins, vipReason);
 
     format(paidWith, sizeof(paidWith), "{FFFF00}%s", FormatCoins(coins));
     format(balanceStr, sizeof(balanceStr), "{FFFF00}%s", FormatCoins(User[playerid][playerCoins]));

@@ -54,7 +54,7 @@ static AC_Alert(playerid, code, const detection[], const action[])
 
     foreach (new i : Player)
     {
-        if (User[i][adminLevel] > 0)
+        if(IsAdmin(i))
             va_SendClientMessage(i, -1, AC_TAG_PUN": %s[%d] {B4B5B7}suspect of using {3CCFFA}%s %s{B4B5B7}code: {3CCFFA}#%02d{B4B5B7}.",
                 User[playerid][userName], playerid, detection, context, code + 1);
     }

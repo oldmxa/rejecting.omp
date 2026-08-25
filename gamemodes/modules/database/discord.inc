@@ -102,7 +102,7 @@ public UnBanPlayerDiscord(admin[])
 
     	foreach(new i : Player)
     	{
-    		if(User[i][adminLevel] > 0)
+    		if(IsAdmin(i))
     		{
     			va_SendClientMessage(i, -1, ADM_TAG_NORM"[Discord] Admin "COL_WHITE"%s "COL_ADM_CMD"unbanned player "COL_WHITE"%s"COL_ADM_CMD".", admin, username);
     		}
@@ -153,7 +153,7 @@ public SetAdminDiscord(admin[], username[], role[], level, actorLevel)
 				new string[256];
 				foreach(new i : Player)
 				{
-					if(User[i][adminLevel] > 0)
+					if(IsAdmin(i))
 					{
 						format(string, sizeof(string), "{MAIN}[Admin] {E63114} Administrator %s %s {FFFFFF}%s{E63114} to %s.",
 							admin, (level > User[targetid][adminLevel]) ? ("promoted") : ("demoted"), User[targetid][userName], adminnames[level][ingame]);

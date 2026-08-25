@@ -27,7 +27,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0)
+        if(IsAdmin(i))
             va_SendClientMessage(i, -1, ADM_TAG_NORM"%s brought %s to his position. ", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, ADM_TAG_NORM"%s brought him to his position!", User[playerid][userName]);
@@ -81,7 +81,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0)
+        if(IsAdmin(i))
             va_SendClientMessage(i, -1, ADM_TAG_NORM"%s went to %s's position. ", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, ADM_TAG_NORM"%s came to your position!", User[playerid][userName]);
@@ -115,7 +115,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0)
+        if(IsAdmin(i))
             va_SendClientMessage(i, -1, ADM_TAG_PUN"%s slapped %s", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, SLAP_MSG, User[playerid][userName]);
@@ -148,7 +148,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0)
+        if(IsAdmin(i))
             va_SendClientMessage(i, -1, ADM_TAG_PUN"%s froze %s", User[playerid][userName], User[targetid][userName]);
     }
 
@@ -181,7 +181,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0)
+        if(IsAdmin(i))
             va_SendClientMessage(i, -1, ADM_TAG_NORM"%s unfroze %s", User[playerid][userName], User[targetid][userName]);
     }
     va_SendClientMessage(targetid, -1, UNFREEZE_MSG_ADM, User[playerid][userName]);
@@ -566,7 +566,7 @@
     new gtStr[140];
     format(gtStr, sizeof(gtStr), "~r~ALERT:~n~~w~%s", message);
     GameTextForPlayer(targetid, gtStr, 5000, 3);
-    PlayerPlaySound(targetid, 1085, 0.0, 0.0, 0.0);
+    PlayErrorSound(targetid);
 
     va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Alert sent to %s (ID %d): %s", User[targetid][userName], targetid, message);
 

@@ -1101,3 +1101,27 @@ stock PlayErrorSound(playerid)
         PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
     return 1;
 }
+
+stock GivePlayerCoins(playerid, amount, const reason[] = "")
+{
+    if(!IsPlayerLogged(playerid)) return 0;
+    User[playerid][playerCoins] += amount;
+    if(User[playerid][playerCoins] < 0) User[playerid][playerCoins] = 0;
+    if(reason[0] != '\0')
+    {
+        LogCoins(User[playerid][user_sqlid], User[playerid][userName], reason, amount, User[playerid][playerCoins]);
+    }
+    return 1;
+}
+
+stock GetPlayerCoins(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return 0;
+    return User[playerid][playerCoins];
+}
+
+stock bool:HasPlayerCoins(playerid, amount)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (User[playerid][playerCoins] >= amount);
+}

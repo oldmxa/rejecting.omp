@@ -123,9 +123,7 @@ stock RenewSafehouse(playerid, index)
     if (GetSafehouseTimeLeft(index) + extra > SH_DURATION)
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The contract cannot go past %d days. Renew closer to the expiry.", SH_DURATION / 86400);
 
-    User[playerid][playerCoins] -= SH_RENEW_COINS;
-    LogCoins(User[playerid][user_sqlid], User[playerid][userName], "Safehouse renew", -SH_RENEW_COINS, User[playerid][playerCoins]);
-
+    GivePlayerCoins(playerid, -SH_RENEW_COINS, "Safehouse renew");
     UpdatePlayerData(playerid);
 
     SafehouseData[index][sh_ExpiresAt] += extra;
@@ -407,16 +405,14 @@ stock BuySafehouse(playerid, index)
     if (GetSafehouseByClan(clanid) != -1)
         return SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Your clan already owns a safehouse.");
 
-    if (User[playerid][playerMoney] < SH_BUY_PRICE)
+    if (!HasPlayerCash(playerid, SH_BUY_PRICE))
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s to buy this safehouse.", FormatMoney(SH_BUY_PRICE));
 
-    if (User[playerid][playerCoins] < SH_BUY_COINS)
+    if (!HasPlayerCoins(playerid, SH_BUY_COINS))
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s coins to buy this safehouse.", FormatCoins(SH_BUY_COINS));
 
-    GivePlayerMoney(playerid, -SH_BUY_PRICE);
-    User[playerid][playerMoney] -= SH_BUY_PRICE;
-    User[playerid][playerCoins] -= SH_BUY_COINS;
-    LogCoins(User[playerid][user_sqlid], User[playerid][userName], "Safehouse purchase", -SH_BUY_COINS, User[playerid][playerCoins]);
+    GivePlayerCash(playerid, -SH_BUY_PRICE);
+    GivePlayerCoins(playerid, -SH_BUY_COINS, "Safehouse purchase");
 
     UpdatePlayerData(playerid);
 
@@ -452,8 +448,7 @@ stock SellSafehouse(playerid, index)
     new refund = (SH_BUY_PRICE / 100) * SH_REFUND_PCT + ((SH_BUY_PRICE % 100) * SH_REFUND_PCT) / 100;
     refund += SafehouseData[index][sh_Vault];
 
-    GivePlayerMoney(playerid, refund);
-    User[playerid][playerMoney] += refund;
+    GivePlayerCash(playerid, refund);
     UpdatePlayerData(playerid);
 
     new detail[96];
@@ -676,16 +671,14 @@ stock UpgradeSafehouse(playerid, index)
     new price, coins;
     GetSafehouseUpgradePrice(next, price, coins);
 
-    if (User[playerid][playerMoney] < price)
+    if (!HasPlayerCash(playerid, price))
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s for this upgrade.", FormatMoney(price));
 
-    if (User[playerid][playerCoins] < coins)
+    if (!HasPlayerCoins(playerid, coins))
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s coins for this upgrade.", FormatCoins(coins));
 
-    GivePlayerMoney(playerid, -price);
-    User[playerid][playerMoney] -= price;
-    User[playerid][playerCoins] -= coins;
-    LogCoins(User[playerid][user_sqlid], User[playerid][userName], "Safehouse upgrade", -coins, User[playerid][playerCoins]);
+    GivePlayerCash(playerid, -price);
+    GivePlayerCoins(playerid, -coins, "Safehouse upgrade");
 
     UpdatePlayerData(playerid);
 

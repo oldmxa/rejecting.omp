@@ -273,10 +273,14 @@ stock ApplyDuel2v2RoundSpawn(playerid)
         y += 1.5;
     }
 
+    if(IsPlayerInAnyVehicle(playerid))
+    {
+        RemovePlayerFromVehicle(playerid);
+    }
+
     SetPlayerPos(playerid, x, y, z);
     SetPlayerFacingAngle(playerid, a);
-    SetPlayerHealth(playerid, 100.0);
-    SetPlayerArmour(playerid, 100.0);
+    ResetPlayerCombat(playerid, 100.0, 100.0);
     TogglePlayerControllable(playerid, false);
 
     new wset = g_Duel2v2Data[matchid][d2_WeaponSet];

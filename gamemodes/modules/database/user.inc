@@ -262,7 +262,7 @@ public OnRegisterHash(playerid, accountname[])
 	format(string, sizeof(string), "{92B5B8}*** {979E9E} %s has connected", User[playerid][userName]);
     SendClientMessageToAll(0xC4C4C4FF, "%s", string);
 
-	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+	PlaySuccessSound(playerid);
 
 	format(User[playerid][user_lastip], 18, "%s", pip);
 	User[playerid][isLogged] = true;
@@ -589,7 +589,7 @@ public OnPlayerJoin(playerid)
         {
             foreach(new i : Player)
             {
-                if(User[i][adminLevel] > 0)
+                if(IsAdmin(i))
                 {
                     va_SendClientMessage(i, -1, "{MAIN}[SECURITY] {FFFFFF}Player %s[%d] logged in with a different Serial (GPCI).", User[playerid][userName], playerid);
                 }

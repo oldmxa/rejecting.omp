@@ -284,7 +284,7 @@ public UnBanPlayer(playerid)
 
 		foreach(new i : Player)
 		{
-			if(User[i][adminLevel] > 0)
+			if(IsAdmin(i))
 			{
 				va_SendClientMessage(i, -1, UNBAN_MESSAGE, User[playerid][userName], username);
 			}

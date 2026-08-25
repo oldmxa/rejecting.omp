@@ -72,13 +72,11 @@ stock GiveTournamentChampionRewards(winnerSlot)
     {
         if(prizeCoins > 0)
         {
-            User[p1][playerCoins] += prizeCoins;
-            LogCoins(User[p1][user_sqlid], User[p1][userName], "Tournament Champion Prize", prizeCoins, User[p1][playerCoins]);
+            GivePlayerCoins(p1, prizeCoins, "Tournament Champion Prize");
         }
         if(prizeMoney > 0)
         {
-            GivePlayerMoney(p1, prizeMoney);
-            User[p1][playerMoney] += prizeMoney;
+            GivePlayerCash(p1, prizeMoney);
         }
 
         User[p1][customTagPerm] = true;
@@ -89,20 +87,18 @@ stock GiveTournamentChampionRewards(winnerSlot)
 
         va_SendClientMessage(p1, -1, "{MAIN}[REWARD] {FFFFFF}You received {FFD700}%d Coins{FFFFFF}, {23C552}%s{FFFFFF} and the {FF4500}%s{FFFFFF} Achievement & Tag!",
             prizeCoins, FormatMoney(prizeMoney), g_TourneyData[t_AchievementTag]);
-        PlayerPlaySound(p1, 1057, 0.0, 0.0, 0.0);
+        PlaySuccessSound(p1);
     }
 
     if(p2 != INVALID_PLAYER_ID && IsPlayerLogged(p2))
     {
         if(prizeCoins > 0)
         {
-            User[p2][playerCoins] += prizeCoins;
-            LogCoins(User[p2][user_sqlid], User[p2][userName], "Tournament Champion Prize", prizeCoins, User[p2][playerCoins]);
+            GivePlayerCoins(p2, prizeCoins, "Tournament Champion Prize");
         }
         if(prizeMoney > 0)
         {
-            GivePlayerMoney(p2, prizeMoney);
-            User[p2][playerMoney] += prizeMoney;
+            GivePlayerCash(p2, prizeMoney);
         }
 
         User[p2][customTagPerm] = true;
@@ -113,7 +109,7 @@ stock GiveTournamentChampionRewards(winnerSlot)
 
         va_SendClientMessage(p2, -1, "{MAIN}[REWARD] {FFFFFF}You received {FFD700}%d Coins{FFFFFF}, {23C552}%s{FFFFFF} and the {FF4500}%s{FFFFFF} Achievement & Tag!",
             prizeCoins, FormatMoney(prizeMoney), g_TourneyData[t_AchievementTag]);
-        PlayerPlaySound(p2, 1057, 0.0, 0.0, 0.0);
+        PlaySuccessSound(p2);
     }
 
     SaveTournamentResultToDB(winnerSlot);

@@ -141,7 +141,7 @@
         if (!IsPlayerLogged(i) || User[i][clanID] != clanid) continue;
 
         va_SendClientMessage(i, -1, CLAN_JOINED, GetPlayerColor(playerid) >>> 8, User[playerid][userName], GetPlayerColor(playerid) >>> 8, ClanInfo[clanid][clanName]);
-        PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+        PlaySuccessSound(i);
     }
 
     SetClanColor(playerid);

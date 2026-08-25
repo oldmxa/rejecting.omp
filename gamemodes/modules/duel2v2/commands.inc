@@ -9,9 +9,6 @@
 {
     if(!User[playerid][isLogged]) return 1;
 
-    if(User[playerid][isAfk] || User[playerid][locationId] == ARENA_AFK)
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot create a 2v2 duel while in the lounge/AFK.");
-
     if(User[playerid][isSpectating])
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use this while spectating.");
 
@@ -32,6 +29,11 @@
 
     if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot create a 2v2 duel while inside a safehouse.");
+
+    if(IsPlayerInAnyVehicle(playerid))
+    {
+        RemovePlayerFromVehicle(playerid);
+    }
 
     ShowDuel2v2ArenaDialog(playerid);
     return 1;
@@ -55,12 +57,17 @@
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You already accepted this duel. Waiting for the other players.");
     }
 
-    if(User[playerid][isSpectating] || User[playerid][isAfk] ||
+    if(User[playerid][isSpectating] ||
        GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE ||
        g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive] ||
        IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
     {
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You are busy and cannot accept a 2v2 duel right now.");
+    }
+
+    if(IsPlayerInAnyVehicle(playerid))
+    {
+        RemovePlayerFromVehicle(playerid);
     }
 
     ShowDuel2v2AcceptDialog(playerid);

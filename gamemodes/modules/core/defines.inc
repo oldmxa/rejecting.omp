@@ -234,3 +234,6 @@ forward bool:HasPlayerCash(playerid, amount);
 forward ResetPlayerCombat(playerid, Float:health = 100.0, Float:armour = 100.0);
 forward PlaySuccessSound(playerid);
 forward PlayErrorSound(playerid);
+forward GivePlayerCoins(playerid, amount, const reason[] = "");
+forward GetPlayerCoins(playerid);
+forward bool:HasPlayerCoins(playerid, amount);

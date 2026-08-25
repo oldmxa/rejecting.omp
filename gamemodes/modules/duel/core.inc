@@ -427,14 +427,16 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 
 stock DuelS_Host(playerid)
 {
-	if(IsPlayerInLounge(playerid))
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in the lounge.");
-
 	if(User[playerid][isSpectating])
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
 	if(IsPlayerInMatch(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a match, training, practice or safehouse.");
+
+	if(IsPlayerInAnyVehicle(playerid))
+	{
+		RemovePlayerFromVehicle(playerid);
+	}
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);
@@ -478,14 +480,16 @@ stock DuelS_Host(playerid)
 
 	if(isnull(params))
 	{
-		if(IsPlayerInLounge(playerid))
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in the lounge.");
-
 		if(User[playerid][isSpectating])
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
 		if(IsPlayerInMatch(playerid))
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a match, training, practice or safehouse.");
+
+		if(IsPlayerInAnyVehicle(playerid))
+		{
+			RemovePlayerFromVehicle(playerid);
+		}
 
 		new Float:Armour, Float:Health, Float:Result;
 		GetPlayerHealth(playerid, Health);
@@ -560,14 +564,16 @@ stock DuelS_Host(playerid)
 {
 	if(!IsPlayerLogged(playerid)) return 1;
 
-	if(IsPlayerInLounge(playerid))
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in the lounge.");
-
 	if(User[playerid][isSpectating])
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
 	if(IsPlayerInMatch(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in a match, training, practice or safehouse.");
+
+	if(IsPlayerInAnyVehicle(playerid))
+	{
+		RemovePlayerFromVehicle(playerid);
+	}
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);
