@@ -61,6 +61,7 @@ stock LoadServerConfig()
         else if(!strcmp(key, "AntiSpam", true)) ServerAntiSpam = (strval(val) != 0);
         else if(!strcmp(key, "AntiCapslock", true)) ServerAntiCapslock = (strval(val) != 0);
         else if(!strcmp(key, "AdminsCmd", true)) ServerAdminsCmd = (strval(val) != 0);
+        else if(!strcmp(key, "SprintMacro", true)) ACSprintMacro = (strval(val) != 0);
         else if(!strcmp(key, "DefaultHud", true))
         {
             ServerDefaultHud = strval(val);
@@ -133,6 +134,9 @@ stock SaveServerConfig()
 
     format(str, sizeof(str), "AntiSpam=%d\r\nAntiCapslock=%d\r\nAdminsCmd=%d\r\n",
         _:ServerAntiSpam, _:ServerAntiCapslock, _:ServerAdminsCmd);
+    fwrite(file, str);
+
+    format(str, sizeof(str), "SprintMacro=%d\r\n", _:ACSprintMacro);
     fwrite(file, str);
 
     fclose(file);

@@ -154,6 +154,18 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 ShowAdminConfig(playerid);
                 PlayErrorSound(playerid);
             }
+            case 27: // Anti Sprint Macro
+            {
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+                ACSprintMacro = !ACSprintMacro;
+                SaveServerConfig();
+
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the anti sprint macro.", User[playerid][userName], (ACSprintMacro) ? ("enabled") : ("disabled"));
+
+                ShowAdminConfig(playerid);
+                PlayErrorSound(playerid);
+            }
             case 6: // See PMs
             {
                 User[playerid][acfg_pm] = !User[playerid][acfg_pm];

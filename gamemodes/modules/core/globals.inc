@@ -753,6 +753,7 @@ new bool:ACPunishEnabled = true;
 new bool:ACNoFallDamage = true;
 new bool:ACNoFallAnimation = true;
 new bool:ACFastStuns = false;
+new bool:ACSprintMacro = true;
 
 new bool:ServerLocked = false;
 new ServerMaxPing = MAX_PING;

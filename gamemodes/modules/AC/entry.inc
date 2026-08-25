@@ -10,6 +10,7 @@
 #include "modules/AC/detect/stun.inc"
 #include "modules/AC/detect/upside.inc"
 #include "modules/AC/detect/memory.inc"
+#include "modules/AC/detect/macro.inc"
 
 #include "modules/AC/packet/onfoot.inc"
 #include "modules/AC/packet/weapon.inc"

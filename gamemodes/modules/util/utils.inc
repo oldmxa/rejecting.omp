@@ -534,7 +534,11 @@ StripCapslock(text[])
 	if(letters < CAPS_MIN_LENGTH) return 0;
 	if((upper * 100) / letters < CAPS_MAX_RATIO) return 0;
 
-	for(new i = 1; i < length; i++)
+	new first = -1;
+	for(new i; i < length; i++)
+		if(('A' <= text[i] <= 'Z') || ('a' <= text[i] <= 'z')) { first = i; break; }
+
+	for(new i = first + 1; i < length; i++)
 		if('A' <= text[i] <= 'Z') text[i] += 32;
 
 	return 1;
