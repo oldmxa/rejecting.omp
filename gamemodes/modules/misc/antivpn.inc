@@ -160,7 +160,7 @@ public OnAntiVpnWarn(playerid)
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0 && User[i][isLogged] && i != playerid)
+        if(User[i][adminLevel] > 0 && IsPlayerLogged(i) && i != playerid)
             va_SendClientMessage(i, -1, ADM_TAG_PUN"Anti-VPN: %s[%d] connected using Proxy/VPN (ISP: %s). Warning [%d/5].", User[playerid][userName], playerid, User[playerid][Isp], warns);
     }
 

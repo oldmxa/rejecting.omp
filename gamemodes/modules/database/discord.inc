@@ -148,7 +148,7 @@ public SetAdminDiscord(admin[], username[], role[], level, actorLevel)
 
 		if(IsPlayerConnected(targetid))
 		{
-			if(User[targetid][isLogged])
+			if(IsPlayerLogged(targetid))
 			{
 				new string[256];
 				foreach(new i : Player)

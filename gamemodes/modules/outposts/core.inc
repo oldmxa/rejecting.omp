@@ -72,7 +72,7 @@ stock AnnounceOutpostCaptureStart(zoneid, outpost_idx, clanid)
 
     foreach(new i : Player)
     {
-        if(User[i][locationId] == -1 || User[i][locationId] == ARENA_AFK) continue;
+        if(IsPlayerInLounge(i)) continue;
         if(arenaInfo[User[i][locationId]][arenaId] != zoneid) continue;
         if(User[i][hideGlobalMsg]) continue;
 
@@ -90,7 +90,7 @@ stock AnnounceOutpostCaptureLost(zoneid, outpost_idx, clanid, progress)
 
     foreach(new i : Player)
     {
-        if(!User[i][isLogged] || User[i][clanID] != clanid) continue;
+        if(!IsPlayerLogged(i) || User[i][clanID] != clanid) continue;
 
         new loc = User[i][locationId];
         if(loc < 0 || loc >= MAX_LOCATIONS || loc == ARENA_AFK) continue;
@@ -304,7 +304,7 @@ public CheckOutpostCapture()
 
             foreach(new i : Player)
             {
-                if(!User[i][isLogged] || User[i][isAfk]) continue;
+                if(!IsPlayerLogged(i) || IsPlayerAFK(i)) continue;
                 new loc = User[i][locationId];
                 if(loc < 0 || loc >= MAX_LOCATIONS || loc == ARENA_AFK) continue;
                 if(arenaInfo[loc][arenaId] != z) continue;
@@ -348,7 +348,7 @@ public CheckOutpostCapture()
             {
                 foreach(new i : Player)
                 {
-                    if(!User[i][isLogged] || User[i][isAfk]) continue;
+                    if(!IsPlayerLogged(i) || IsPlayerAFK(i)) continue;
                     new loc = User[i][locationId];
                     if(loc < 0 || loc >= MAX_LOCATIONS || arenaInfo[loc][arenaId] != z) continue;
 
@@ -393,7 +393,7 @@ public CheckOutpostCapture()
             {
                 foreach(new i : Player)
                 {
-                    if(!User[i][isLogged] || User[i][isAfk]) continue;
+                    if(!IsPlayerLogged(i) || IsPlayerAFK(i)) continue;
                     new loc = User[i][locationId];
                     if(loc < 0 || loc >= MAX_LOCATIONS || arenaInfo[loc][arenaId] != z) continue;
 
@@ -412,7 +412,7 @@ public CheckOutpostCapture()
 
     foreach(new i : Player)
     {
-        if(!User[i][isLogged] || IsPlayerAFK(i) || IsPlayerSpectating(i)) { HideOutpostBar(i); continue; }
+        if(!IsPlayerLogged(i) || IsPlayerAFK(i) || IsPlayerSpectating(i)) { HideOutpostBar(i); continue; }
         new loc = User[i][locationId];
         if(loc < 0 || loc >= MAX_LOCATIONS || loc == ARENA_AFK) { HideOutpostBar(i); continue; }
         new z = arenaInfo[loc][arenaId];
@@ -439,7 +439,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(newkeys & KEY_YES)
     {
-        if(!User[playerid][isLogged] || User[playerid][isAfk]) return 1;
+        if(!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 1;
         
         new location = User[playerid][locationId];
         if(location == ARENA_AFK || location < 0 || location >= MAX_LOCATIONS) return 1;
@@ -619,7 +619,7 @@ SetOutpostOwner(arenaid, outpost_idx, clanid, bool:save = true, bool:announce = 
     if(announce)
     {
         foreach(new i : Player) {
-            if(User[i][locationId] != -1 && User[i][locationId] != ARENA_AFK) {
+            if(!IsPlayerInLounge(i)) {
                  if(arenaInfo[User[i][locationId]][arenaId] == arenaid) {
                      if(!User[i][hideGlobalMsg]) {
                         va_SendClientMessage(i, -1, "{MAIN}[OUTPOST] {FFFFFF}Outpost #%d captured by %s!", outpost_idx+1, ownerClanName);

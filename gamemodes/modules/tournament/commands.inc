@@ -7,7 +7,7 @@
 
 @cmd(.alts = {"tourney", "tourneyadmin"}) tournament(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(IsAdmin(playerid, 4))
     {
@@ -105,7 +105,7 @@
 
 @cmd(.alts = {"accepttourney"}) accepttournament(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(IsPlayerBusy(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot join the tournament while busy in another activity.");
@@ -116,7 +116,7 @@
 
 @cmd(.alts = {"leavetourney"}) leavetournament(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     UnregisterParticipant(playerid);
     return 1;
@@ -124,7 +124,7 @@
 
 @cmd(.alts = {"tourneybracket"}) bracket(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     ShowTourneyBracketDialog(playerid);
     return 1;
@@ -132,7 +132,7 @@
 
 @cmd(.alts = {"tourneyspec", "spectourney"}) spectournament(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(g_TourneyData[t_State] != TOURNAMENT_STATE_IN_PROGRESS)
     {

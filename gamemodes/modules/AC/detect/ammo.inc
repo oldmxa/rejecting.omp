@@ -59,7 +59,7 @@ stock AC_CountShot(playerid, WEAPON:weaponid)
 
 stock AC_CheckSlotAmmo(playerid, slot, ammo)
 {
-    if (!AC_IsTrackedSlot(slot) || !User[playerid][isLogged]) return 0;
+    if (!AC_IsTrackedSlot(slot) || !IsPlayerLogged(playerid)) return 0;
 
     if (!ACAmmoKnown[playerid][slot])
     {

@@ -4,7 +4,7 @@ public LoginTimeout(playerid)
 {
     if (IsPlayerNPC(playerid)) return 1;
 
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You took too long to login and were kicked.");
         KickEx(playerid);
@@ -679,7 +679,7 @@ public OnPlayerJoin(playerid)
 
 UpdatePlayerData(playerid, disconnect = 0)
 {
-	if(!User[playerid][isLogged] || User[playerid][user_sqlid] <= 0) return 0;
+	if(!IsPlayerLogged(playerid) || User[playerid][user_sqlid] <= 0) return 0;
 	new weaponArrayStr[128];
 
 	for (new i; i < 4; i ++)
@@ -861,7 +861,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][loungeA],
 		User[playerid][loungeVW],
 		User[playerid][loungeINT],
-		(disconnect ? (0) : (_:User[playerid][isLogged])),
+		(disconnect ? (0) : (_:IsPlayerLogged(playerid))),
 		User[playerid][user_sqlid]
 	);
 

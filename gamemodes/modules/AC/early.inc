@@ -327,7 +327,7 @@ stock AC_CheckNullVelocity(playerid, Float:px, Float:py, Float:pz, Float:vx, Flo
 
     ACNullSpeed[playerid] = moved * 1000.0 / float(elapsed);
 
-    if (!User[playerid][isLogged] || User[playerid][isAfk]
+    if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)
      || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT
      || tick - ACTeleportTick[playerid] < AC_MOVE_GRACE
      || GetPlayerSurfingObjectID(playerid) != INVALID_OBJECT_ID
@@ -364,7 +364,7 @@ stock AC_CheckNullVelocity(playerid, Float:px, Float:py, Float:pz, Float:vx, Flo
 
 stock AC_CheckHealthSync(playerid, clientHealth)
 {
-    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
 
     new tick = GetTickCount();
@@ -407,7 +407,7 @@ stock AC_CheckHealthSync(playerid, clientHealth)
 
 stock AC_CheckArmourSync(playerid, clientArmour)
 {
-    if (!User[playerid][isLogged] || IsPlayerAFK(playerid)) return 0;
+    if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
     if (IsPlayerSpawnProtected(playerid)) return 0;
 
@@ -451,7 +451,7 @@ stock AC_CheckArmourSync(playerid, clientArmour)
 
 stock AC_CheckMegaJump(playerid, Float:vz)
 {
-    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
     if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK) return 0;
     if (GetPlayerSurfingObjectID(playerid) != INVALID_OBJECT_ID || GetPlayerSurfingVehicleID(playerid) != INVALID_VEHICLE_ID) return 0;
@@ -521,7 +521,7 @@ static AC_MovementTick(playerid)
 
     AC_CheckFall(playerid, drop, x, y, z);
 
-    if (GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !User[playerid][isSpectating] && !User[playerid][isAfk])
+    if (GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !IsPlayerSpectating(playerid) && !IsPlayerAFK(playerid))
     {
         new vehicleid = GetPlayerVehicleID(playerid);
         if (vehicleid != 0 && vehicleid != INVALID_VEHICLE_ID)
@@ -560,8 +560,8 @@ static AC_MovementTick(playerid)
     }
 
     if (tick - ACTeleportTick[playerid] < AC_MOVE_GRACE
-     || User[playerid][isAfk]
-     || User[playerid][isSpectating]
+     || IsPlayerAFK(playerid)
+     || IsPlayerSpectating(playerid)
      || GetPlayerState(playerid) == PLAYER_STATE_SPECTATING
      || IsPlayerInAnyVehicle(playerid)
      || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT
@@ -646,7 +646,7 @@ public AC_TickMovement()
 {
     foreach (new playerid : Player)
     {
-        if (IsPlayerNPC(playerid) || !User[playerid][isLogged]) continue;
+        if (IsPlayerNPC(playerid) || !IsPlayerLogged(playerid)) continue;
 
         AC_CheckSurf(playerid);
         AC_MovementTick(playerid);
@@ -720,7 +720,7 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
     if (oldstate != PLAYER_STATE_ONFOOT) return 1;
     if (newstate != PLAYER_STATE_DRIVER && newstate != PLAYER_STATE_PASSENGER) return 1;
 
-    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 1;
+    if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 1;
     if (GetTickCount() - ACTeleportTick[playerid] < AC_MOVE_GRACE) return 1;
 
     new Float:x, Float:y, Float:z;

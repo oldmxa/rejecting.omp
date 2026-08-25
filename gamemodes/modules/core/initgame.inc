@@ -38,10 +38,10 @@ public RestorePlayerEnv(playerid)
 stock bool:ResendInitGame(playerid, bool:pedAnims)
 {
     if (!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return false;
-    if (!User[playerid][isLogged]) return false;
+    if (!IsPlayerLogged(playerid)) return false;
     if (g_InitGame[playerid] == BitStream:0 || !g_InitGameOk[playerid]) return false;
 
-    if (User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID) return false;
+    if (IsPlayerSpectating(playerid)) return false;
 
     new BitStream:bs = BS_NewCopy(g_InitGame[playerid]);
     if (bs == BitStream:0) return false;

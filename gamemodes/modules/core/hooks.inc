@@ -421,7 +421,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
 hook OnPlayerExitVehicle(playerid, vehicleid)
 {
-    if(User[playerid][isAfk] && pVehicle[playerid] == vehicleid)
+    if(IsPlayerAFK(playerid) && pVehicle[playerid] == vehicleid)
     {
         DestroyVehicle(vehicleid);
         pVehicle[playerid] = 999;

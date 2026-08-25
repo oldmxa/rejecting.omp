@@ -650,7 +650,7 @@ stock EnterTrainingArena(playerid, arenaid)
     if (!IsValidTrainingArena(arenaid))
         return 0;
 
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return 0;
 
     if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
@@ -971,7 +971,7 @@ public OnTrainingChallengeTick(playerid)
     if (IsPlayerInAnyVehicle(playerid))
         return CancelTrainingChallenge(playerid, "you entered a vehicle");
 
-    if (User[playerid][isSpectating])
+    if (IsPlayerSpectating(playerid))
         return CancelTrainingChallenge(playerid, "you started spectating");
 
     new arenaid = g_PlayerTraining[playerid][pTrain_ArenaID];

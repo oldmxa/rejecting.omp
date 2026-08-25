@@ -48,7 +48,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		utf8decode(msgencoded, stringdiscord, sizeof(msgencoded));
 		foreach(new i : Player)
 		{
-			if(User[i][adminLevel] > 0 && User[i][isLogged])
+			if(User[i][adminLevel] > 0 && IsPlayerLogged(i))
 				va_SendClientMessage(i, -1, ""COL_DSAND".: ADMIN | %s {B2ACAC}%s [DISCORD]"COL_WHITE": %s", adminnames[adminlevel][ingame], nickname, msgencoded);
 		}
 	}

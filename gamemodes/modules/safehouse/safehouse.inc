@@ -126,7 +126,7 @@ public RestoreSafehouseSpawn(playerid)
 {
     if (!IsPlayerConnected(playerid)) return 1;
     if (!User[playerid][spawnSafehouse]) return 1;
-    if (!User[playerid][isLogged] || !User[playerid][isAfk]) return 1;
+    if (!IsPlayerLogged(playerid) || !IsPlayerAFK(playerid)) return 1;
     if (User[playerid][locationId] != ARENA_AFK) return 1;
     if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid)) return 1;
     if (g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive]) return 1;
@@ -146,7 +146,7 @@ public RestoreSafehouseSpawn(playerid)
 
 static stock HandleSafehouseAltKey(playerid)
 {
-    if (!User[playerid][isLogged] || IsPlayerInAnyVehicle(playerid)) return 0;
+    if (!IsPlayerLogged(playerid) || IsPlayerInAnyVehicle(playerid)) return 0;
 
     new PLAYER_STATE:pState = GetPlayerState(playerid);
     if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)

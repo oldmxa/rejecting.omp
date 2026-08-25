@@ -132,7 +132,7 @@ hook OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hiti
 
 hook OnPlayerDamageDone(playerid, Float:amount, issuerid, WEAPON:weapon, bodypart)
 {
-    if (issuerid == INVALID_PLAYER_ID || !User[issuerid][isLogged]) return 1;
+    if (issuerid == INVALID_PLAYER_ID || !IsPlayerLogged(issuerid)) return 1;
 
     AC_NoteStun(playerid);
 

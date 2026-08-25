@@ -14,13 +14,13 @@ stock SetupPlayerVehicle(vehicleid)
 forward Lounge_CanSpawnLoungeVehicle(playerid);
 public Lounge_CanSpawnLoungeVehicle(playerid)
 {
-    if (User[playerid][isLogged] == false)
+    if (!IsPlayerLogged(playerid))
     {
         SendClientMessage(playerid, -1, "%s", CANNOT_DO_THIS);
         return 0;
     }
 
-    if (User[playerid][isAfk] == false)
+    if (!IsPlayerAFK(playerid))
     {
         SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
         return 0;
@@ -32,13 +32,13 @@ public Lounge_CanSpawnLoungeVehicle(playerid)
         return 0;
     }
 
-    if (User[playerid][isFrozen])
+    if (IsPlayerFrozen(playerid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle right now.");
         return 0;
     }
 
-    if (playerSpecID[playerid] != INVALID_PLAYER_ID || User[playerid][isSpectating])
+    if (IsPlayerSpectating(playerid))
     {
         SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
         return 0;
@@ -125,7 +125,7 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
 
 @cmd() getgun(playerid, params[], help)
 {
-    if(User[playerid][isAfk] == false)
+    if(!IsPlayerAFK(playerid))
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
     if(IsPlayerInMatch(playerid))
@@ -166,13 +166,13 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
         return va_SendClientMessage(playerid, -1, HEALTH_ERROR_MSG, 200);
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
-    if(playerState == PLAYER_STATE_SPECTATING || playerSpecID[playerid] != INVALID_PLAYER_ID)
+    if(playerState == PLAYER_STATE_SPECTATING || IsPlayerSpectating(playerid))
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
     if (IsPlayerInMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /lounge while in a match, training, practice or safehouse.");
 
-    if (User[playerid][isAfk])
+    if (IsPlayerAFK(playerid))
     {
         if(User[playerid][locationId] == -1)
         {
@@ -279,7 +279,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() lcmds(playerid, params[], help)
 {
-    if(!User[playerid][isAfk])
+    if(!IsPlayerAFK(playerid))
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
     ShowLoungeCommands(playerid, 0);
@@ -288,7 +288,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() fix(playerid, params[], help)
 {
-    if(!User[playerid][isAfk])
+    if(!IsPlayerAFK(playerid))
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
     if(!IsPlayerInAnyVehicle(playerid))
@@ -307,7 +307,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd(.alts = {"msp"}) changelounge(playerid, params[], help)
 {
-    if(!User[playerid][isAfk])
+    if(!IsPlayerAFK(playerid))
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
     if(IsPlayerInMatch(playerid))
@@ -349,7 +349,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() jetpack(playerid, params[], help)
 {
-    if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
+    if(!IsPlayerAFK(playerid) && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
     if(IsPlayerInMatch(playerid))
@@ -369,7 +369,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() flip(playerid, params[], help)
 {
-    if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
+    if(!IsPlayerAFK(playerid) && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
     if(IsPlayerInMatch(playerid))
@@ -391,7 +391,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() tune(playerid, params[], help)
 {
-    if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
+    if(!IsPlayerAFK(playerid) && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
     if(IsPlayerInMatch(playerid))

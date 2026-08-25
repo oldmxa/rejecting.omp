@@ -126,7 +126,7 @@ public AC_CheckNopCalls()
 
     foreach (new playerid : Player)
     {
-        if (!User[playerid][isLogged]) continue;
+        if (!IsPlayerLogged(playerid)) continue;
 
         if (GetPlayerState(playerid) == PLAYER_STATE_WASTED
          || GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
@@ -174,7 +174,7 @@ public AC_CheckNopCalls()
             ACNopPosTick[playerid] = 0;
 
             if (IsPlayerInAnyVehicle(playerid)
-             || User[playerid][isAfk]
+             || IsPlayerAFK(playerid)
              || GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK
              || GetPlayerSurfingObjectID(playerid) != INVALID_OBJECT_ID
              || GetPlayerSurfingVehicleID(playerid) != INVALID_VEHICLE_ID) continue;
@@ -196,7 +196,7 @@ public AC_CheckNopCalls()
             ACNopAnimTick[playerid] = 0;
 
             if (GetPlayerState(playerid) == PLAYER_STATE_ONFOOT
-             && !User[playerid][isAfk]
+             && !IsPlayerAFK(playerid)
              && GetPlayerSurfingObjectID(playerid) == INVALID_OBJECT_ID
              && GetPlayerSurfingVehicleID(playerid) == INVALID_VEHICLE_ID)
             {

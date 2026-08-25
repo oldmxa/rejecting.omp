@@ -621,7 +621,7 @@ public DIALOG_CLAN_RECRUIT(playerid, dialogid, response, listitem, string:inputt
 
     foreach (new i : Player)
     {
-        if (!User[i][isLogged] || User[i][clanID] != clanid) continue;
+        if (!IsPlayerLogged(i) || User[i][clanID] != clanid) continue;
 
         SendClientMessage(i, -1, "%s", notifyMsg);
         PlayerPlaySound(i, 1054, 0.0, 0.0, 0.0);

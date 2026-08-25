@@ -62,7 +62,7 @@ stock bool:UsesCustomLifeStyle(playerid)
 
 stock bool:CanShowLifeLabel(targetid)
 {
-    if (!User[targetid][isLogged]) return false;
+    if (!IsPlayerLogged(targetid)) return false;
     if (GetPVarInt(targetid, "HideTab") == 1) return false;
 
     new PLAYER_STATE:playerState = GetPlayerState(targetid);
@@ -464,7 +464,7 @@ public UpdateLifeLabels()
 {
     foreach (new targetid : Player)
     {
-        if (!User[targetid][isLogged]) continue;
+        if (!IsPlayerLogged(targetid)) continue;
 
         new Float:health, Float:armour;
         GetPlayerHealth(targetid, health);

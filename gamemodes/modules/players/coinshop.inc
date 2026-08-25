@@ -59,7 +59,7 @@ public Coinshop_ShowCoinsMenu(playerid)
 
 public DIALOG_COINS_MENU(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response || !User[playerid][isLogged]) return 1;
+    if (!response || !IsPlayerLogged(playerid)) return 1;
 
     switch (listitem)
     {
@@ -142,7 +142,7 @@ stock DoBuyCoins(playerid, coins)
 
 public DIALOG_COINS_BUY(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response || !User[playerid][isLogged]) return ShowCoinsMenu(playerid);
+    if (!response || !IsPlayerLogged(playerid)) return ShowCoinsMenu(playerid);
 
     if (!IsNumeric(inputtext) || strlen(inputtext) > 6)
     {
@@ -156,7 +156,7 @@ public DIALOG_COINS_BUY(playerid, dialogid, response, listitem, string:inputtext
 
 @cmd(.alts = {"coins"}) buycoins(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new coins;

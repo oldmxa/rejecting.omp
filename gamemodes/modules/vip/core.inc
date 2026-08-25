@@ -35,7 +35,7 @@ forward DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputt
 stock IsPlayerVip(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     if(User[playerid][vipLevel] > 0)
     {
@@ -151,7 +151,7 @@ stock UpdateVipHeadTag(playerid)
 
 ShowVipMenu(playerid)
 {
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     new strVip[2560], status[128];
 
@@ -224,7 +224,7 @@ public DIALOG_VIP_MENU(playerid, dialogid, response, listitem, string:inputtext[
 forward DIALOG_BUY_VIP(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_BUY_VIP(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
     if(!response) return 1;
     if(listitem < 0 || listitem >= sizeof(VipPackages)) return 1;
 
@@ -250,7 +250,7 @@ public DIALOG_BUY_VIP(playerid, dialogid, response, listitem, string:inputtext[]
 
 public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     if(!response)
     {
@@ -320,7 +320,7 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
 
 @cmd(.alts = {"activatevip"}) buyvip(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     new string2[768], line[128];
     format(string2, sizeof(string2), "{MAIN}Package / Duration\t{MAIN}Price (Coins)\t{MAIN}Your balance\n");
@@ -349,7 +349,7 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
 forward DIALOG_VIP_TAG(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_VIP_TAG(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     if(response)
     {
@@ -433,7 +433,7 @@ ShowVipCustomHexDialog(playerid)
 forward DIALOG_VIP_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_VIP_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     if(!response)
     {
@@ -467,7 +467,7 @@ public DIALOG_VIP_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inpu
 
 ShowVipCommandsMenu(playerid)
 {
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     new strCmds[1024];
     format(strCmds, sizeof(strCmds), "{MAIN}Command\t{MAIN}Description\n");
@@ -496,21 +496,21 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
 @cmd() vip(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
     ShowVipMenu(playerid);
     return true;
 }
 
 @cmd(.alts = {"vipcommands"}) vipcmds(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
     ShowVipCommandsMenu(playerid);
     return true;
 }
 
 @cmd() vips(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     new string[128], vipsonline = 0;
     new gs_Buffer[4096] = EOS;
@@ -518,7 +518,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
     foreach(new i : Player)
     {
-        if(User[i][isLogged] && IsPlayerVip(i))
+        if(IsPlayerLogged(i) && IsPlayerVip(i))
         {
             new ontime = (User[i][totalOnTime] + (gettime() - User[i][loginTime]));
             if(ontime < 0) ontime = 0;
@@ -565,7 +565,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
 @cmd() v(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
     {
@@ -602,7 +602,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
     foreach(new i : Player)
     {
-        if(User[i][isLogged] && (IsPlayerVip(i) || IsAdmin(i)) && !User[i][hideVipChat])
+        if(IsPlayerLogged(i) && (IsPlayerVip(i) || IsAdmin(i)) && !User[i][hideVipChat])
         {
             SendClientMessage(i, 0x00B6F6AA, "%s", vipStr);
         }
@@ -614,7 +614,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
 @cmd() von(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
     {
@@ -635,7 +635,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
 @cmd() voff(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
     {
@@ -656,7 +656,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
 ShowVipTagDialog(playerid)
 {
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
     {
@@ -704,7 +704,7 @@ ShowVipTagDialog(playerid)
 
 @cmd() givevip(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     if (!IsAdmin(playerid, 4))
     {
@@ -778,7 +778,7 @@ ShowVipTagDialog(playerid)
 
 @cmd() removevip(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     if (!IsAdmin(playerid, 4))
     {
@@ -845,7 +845,7 @@ public VipPayoutTick()
 
     foreach (new i : Player)
     {
-        if (!User[i][isLogged] || !IsPlayerVip(i))
+        if (!IsPlayerLogged(i) || !IsPlayerVip(i))
         {
             VipPayTick[i] = 0;
             continue;

@@ -514,7 +514,7 @@ public CHANGE(playerid, dialogid, response, listitem, string:inputtext[])
             gunMenu(playerid);
     }
 
-    if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK && !User[playerid][isAfk])
+    if(!IsPlayerInLounge(playerid) && !IsPlayerAFK(playerid))
         givePlayerWeapons(playerid);
     return true;
 }
@@ -555,7 +555,7 @@ public CHANGE1(playerid, dialogid, response, listitem, string:inputtext[])
 		case 4:	User[playerid][playerWeapons][slotid] = 0;
 	}
 
-	if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK && !User[playerid][isAfk])
+	if(!IsPlayerInLounge(playerid) && !IsPlayerAFK(playerid))
 		givePlayerWeapons(playerid);
 
 	gunMenu(playerid);
@@ -1361,7 +1361,7 @@ public OnPlayerTournamentTagsLoaded(playerid)
 
 stock ShowPlayerTournamentTagsDialog(playerid)
 {
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     new query[192];
     mysql_format(dbHandle, query, sizeof(query), "SELECT `tag_name`, `tournament_name`, `won_at` FROM `player_tournament_tags` WHERE `user_id` = %d ORDER BY `won_at` DESC", User[playerid][user_sqlid]);
@@ -1406,7 +1406,7 @@ public DIALOG_PLAYER_TOURNEY_TAGS(playerid, dialogid, response, listitem, string
 
 stock ShowTagMenu(playerid)
 {
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     new tagList[1024];
     format(tagList, sizeof(tagList), "{MAIN}Tag\t{MAIN}Display\t{MAIN}Status\n");

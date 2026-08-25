@@ -14,10 +14,10 @@
 stock bool:IsArenaMatchParticipant(playerid, location)
 {
     if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return false;
-    if(!User[playerid][isLogged]) return false;
+    if(!IsPlayerLogged(playerid)) return false;
     if(User[playerid][user_sqlid] <= 0) return false;
     if(User[playerid][locationId] != location) return false;
-    if(User[playerid][isAfk]) return false;
+    if(IsPlayerAFK(playerid)) return false;
     if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE) return false;
 
     return true;

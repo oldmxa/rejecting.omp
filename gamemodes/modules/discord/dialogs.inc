@@ -24,7 +24,7 @@ stock ShowDiscordLinkDialog(playerid)
 forward DIALOG_LINK_DISCORD(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_LINK_DISCORD(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     if(response)
     {
@@ -128,7 +128,7 @@ public DIALOG_LINK_DISCORD(playerid, dialogid, response, listitem, string:inputt
 forward DIALOG_VALI_DISCORD(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_VALI_DISCORD(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     if(response)
     {
@@ -186,7 +186,7 @@ public DIALOG_VALI_DISCORD(playerid, dialogid, response, listitem, string:inputt
 forward DIALOG_UNLINK_DISCORD(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_UNLINK_DISCORD(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     if(response)
     {

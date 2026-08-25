@@ -61,8 +61,8 @@ public AC_CheckLimits()
     foreach (new playerid : Player)
     {
         if (IsPlayerNPC(playerid)) continue;
-        if (!User[playerid][isLogged] || User[playerid][isAfk]) continue;
-        if (User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK) continue;
+        if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) continue;
+        if (IsPlayerInLounge(playerid)) continue;
         if (GetPlayerState(playerid) == PLAYER_STATE_SPECTATING) continue;
 
         if (gettime() - User[playerid][timerRespawn] < AC_LIMIT_GRACE) continue;

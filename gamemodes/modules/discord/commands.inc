@@ -850,7 +850,7 @@ static stock GetLinkedPlayerId(DCC_User:user)
 
     foreach(new i : Player)
     {
-        if(!User[i][isLogged]) continue;
+        if(!IsPlayerLogged(i)) continue;
         if(strequal(User[i][dc_uid], "-1", true)) continue;
         if(strequal(User[i][dc_uid], userid, true)) return i;
     }
@@ -885,7 +885,7 @@ public OnResetPasswordHash(adminid, sqlid, const targetName[], const adminName[]
 
     foreach(new i : Player)
     {
-        if(User[i][user_sqlid] == sqlid && User[i][isLogged])
+        if(User[i][user_sqlid] == sqlid && IsPlayerLogged(i))
         {
             SendClientMessage(i, -1, "{MAIN}[SECURITY] {FFFFFF}Your account password was reset by staff. Please log in again.");
             KickEx(i, 1500);
@@ -975,7 +975,7 @@ DSLASH:players(user, params[])
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged])
+		if(IsPlayerLogged(i))
 		{
 			pcount++;
 			GetPlayerVersion(i, sampVERSION, sizeof(sampVERSION));
@@ -1452,7 +1452,7 @@ DSLASH:turnoff(user, params[])
 
 		foreach(new k: Player)
 		{
-			if(User[k][isLogged])
+			if(IsPlayerLogged(k))
 				UpdatePlayerData(k);
 		}
 
@@ -1748,7 +1748,7 @@ DSLASH:online(user, params[])
 
 	foreach(new i : Player)
 	{
-		if(!User[i][isLogged]) continue;
+		if(!IsPlayerLogged(i)) continue;
 
 		new where[48];
 		new loc = User[i][locationId];

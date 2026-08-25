@@ -108,7 +108,7 @@ static AC_CountFlagged()
     new count = 0;
 
     foreach (new i : Player)
-        if (User[i][isLogged] && ACSuspect[i][ac_cheatFlags] > 0) count++;
+        if (IsPlayerLogged(i) && ACSuspect[i][ac_cheatFlags] > 0) count++;
 
     return count;
 }
@@ -130,7 +130,7 @@ stock AC_ToggleVerbose(playerid)
     if (log) fclose(log);
 
     AC_Debug(playerid, 0, "session started: afk %d, location %d, interior %d, state %d",
-        _:User[playerid][isAfk], User[playerid][locationId], GetPlayerInterior(playerid), _:GetPlayerState(playerid));
+        _:IsPlayerAFK(playerid), User[playerid][locationId], GetPlayerInterior(playerid), _:GetPlayerState(playerid));
 
     return 1;
 }
@@ -309,7 +309,7 @@ ShowACFlagged(playerid)
 
     foreach (new i : Player)
     {
-        if (!User[i][isLogged] || ACSuspect[i][ac_cheatFlags] < 1) continue;
+        if (!IsPlayerLogged(i) || ACSuspect[i][ac_cheatFlags] < 1) continue;
         if (count >= AC_MAX_ROWS) break;
 
         new elapsed = gettime() - ACSuspect[i][ac_lastCheatTime], age[16];

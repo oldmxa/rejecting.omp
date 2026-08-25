@@ -280,7 +280,7 @@ public FlushAchievementSaves()
 {
     foreach(new i : Player)
     {
-        if(!User[i][isLogged]) continue;
+        if(!IsPlayerLogged(i)) continue;
 
         Ach_RefreshPlayerStats(i);
         FlushPlayerAchievements(i);
@@ -362,7 +362,7 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
-    if (User[playerid][isLogged] && User[playerid][user_sqlid] > 0)
+    if (IsPlayerLogged(playerid) && User[playerid][user_sqlid] > 0)
     {
         Ach_RefreshPlayerStats(playerid);
         FlushPlayerAchievements(playerid);
@@ -517,7 +517,7 @@ static stock Ach_BitCount(const bits[], size)
 
 static stock bool:Ach_IsPlayerActive(playerid)
 {
-    if(!User[playerid][isLogged] || User[playerid][isSpectating]) return false;
+    if(!IsPlayerLogged(playerid) || IsPlayerSpectating(playerid)) return false;
 
     switch(GetPlayerState(playerid))
     {
@@ -740,7 +740,7 @@ stock Ach_RefreshPlayerStats(playerid)
 
     new loc = User[playerid][locationId];
     new bool:active = Ach_IsPlayerActive(playerid);
-    new bool:inArena = (active && 0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && !User[playerid][isAfk]);
+    new bool:inArena = (active && 0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && !IsPlayerAFK(playerid));
 
     if(inArena)
     {
@@ -1081,7 +1081,7 @@ public DIALOG_ACHIEVEMENTS_DETAIL(playerid, dialogid, response, listitem, string
 
 @cmd() coins(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     return ShowCoinsMenu(playerid);
 }

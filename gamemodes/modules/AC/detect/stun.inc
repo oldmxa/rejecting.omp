@@ -28,7 +28,7 @@ static AC_ClearStun(playerid)
 
 stock AC_NoteStun(playerid)
 {
-    if (ACFastStuns || !User[playerid][isLogged]) return 0;
+    if (ACFastStuns || !IsPlayerLogged(playerid)) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
 
     ACStunTick[playerid] = GetTickCount();
@@ -39,9 +39,9 @@ stock AC_NoteStun(playerid)
 
 stock AC_CheckPizdaWalk(playerid, animationId, keys, Float:vx, Float:vy)
 {
-    if (!User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
-    if (User[playerid][isSpectating]) return 0;
+    if (IsPlayerSpectating(playerid)) return 0;
 
     new WEAPON:weaponid = GetPlayerWeapon(playerid);
     if (weaponid < WEAPON_COLT45 || weaponid > WEAPON_SNIPER)

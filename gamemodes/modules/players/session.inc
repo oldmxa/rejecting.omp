@@ -1,7 +1,7 @@
 
 SyncPlayer(playerid, bool:playercalled = true)
 {
-	if(User[playerid][isFrozen])
+	if(IsPlayerFrozen(playerid))
 		return SendClientMessage(playerid, -1, "%s", CANNOT_DO_THIS);
 
 	if(User[playerid][lastDamageTime] > gettime() + 5)
@@ -48,7 +48,7 @@ forward Unfreeze(playerid);
 public Unfreeze(playerid)
 {
 	if(!IsPlayerConnected(playerid)) return true;
-	if(User[playerid][isFrozen]) return true;
+	if(IsPlayerFrozen(playerid)) return true;
 
 	TogglePlayerControllable(playerid,true);
 	return true;
@@ -90,7 +90,7 @@ setAfkReason(playerid, const reasonn[])
 	if(!strcmp(reasonn, "highpl", true)) reasonid = 5;
 	if(!strcmp(reasonn, "fps102", true)) reasonid = 6;
 
-	if(User[playerid][isAfk] == false)
+	if(!IsPlayerAFK(playerid))
 	{
 		new coloredNick[MAX_PLAYER_NAME + 18];
 		format(coloredNick, sizeof(coloredNick), "{%06x}%s{FFFFFF}", GetPlayerDisplayColour(playerid), getPlayerName(playerid));

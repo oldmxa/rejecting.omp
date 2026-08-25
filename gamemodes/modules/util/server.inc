@@ -421,7 +421,7 @@ public OnScriptUpdate()
 		if(gettime() >= User[i][timerBox] && User[i][isShowingKSTD])
 			UpdateKillstreakBox(i);
 
-		if(User[i][muteTimestamp] != 0 && User[i][isLogged])
+		if(User[i][muteTimestamp] != 0 && IsPlayerLogged(i))
 		{
 			if(gettime() >= User[i][muteTimestamp])
 			{
@@ -430,7 +430,7 @@ public OnScriptUpdate()
 			}
 		}
 
-		if(playerSpecID[i] != INVALID_PLAYER_ID)
+		if(IsPlayerSpectating(i))
 			updateSpecInfo(i);
 
 		new drunk2 = GetPlayerDrunkLevel(i);
@@ -448,7 +448,7 @@ public OnScriptUpdate()
 			User[i][dLlast] = drunk2;
 		}
 
-		if(User[i][isLogged] && User[i][isAlreadySpawned] && User[i][isAfk] == false)
+		if(IsPlayerLogged(i) && User[i][isAlreadySpawned] && !IsPlayerAFK(i))
 		{
 			if(IsFpsFreeArena(User[i][locationId]))
 			{
@@ -519,7 +519,7 @@ public OnScriptUpdate()
 			else DeletePVar(i, "highPlTicks");
 		}
 
-		if((GetPlayerWeapon(i) == WEAPON_SAWEDOFF || GetPlayerWeapon(i) == WEAPON_ROCKETLAUNCHER || GetPlayerWeapon(i) == WEAPON_MINIGUN) && User[i][isAfk] == false)
+		if((GetPlayerWeapon(i) == WEAPON_SAWEDOFF || GetPlayerWeapon(i) == WEAPON_ROCKETLAUNCHER || GetPlayerWeapon(i) == WEAPON_MINIGUN) && !IsPlayerAFK(i))
 		{
 			KickEx(i, 300);
 		}
@@ -567,7 +567,7 @@ stock RestartServerSafe()
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged])
+		if(IsPlayerLogged(i))
 			UpdatePlayerData(i);
 	}
 
@@ -653,7 +653,7 @@ public SendGlobalMSG()
 {
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged]) SendMSG(i);
+		if(IsPlayerLogged(i)) SendMSG(i);
 	}
 	return 1;
 }
@@ -667,7 +667,7 @@ stock UpdateServerName(const newname[])
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged])
+		if(IsPlayerLogged(i))
 		{
 			if(LoginRC[i][10] != PlayerText:INVALID_TEXT_DRAW)
 			{

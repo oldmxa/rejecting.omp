@@ -218,7 +218,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
         return SendClientMessage(playerid, -1, "%s", NAMES_HELP);
     if(id == INVALID_PLAYER_ID)
         return SendClientMessage(playerid,-1, "%s", IS_NOT_CONNECTED);
-    if (User[id][isLogged] == false)
+    if (!IsPlayerLogged(id))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_LOGGED);
 
     ShowNameHistory(playerid, id);
@@ -379,7 +379,7 @@ static stock AppendACSuspects(dest[], size)
 
     foreach(new i : Player)
     {
-        if(!User[i][isLogged]) continue;
+        if(!IsPlayerLogged(i)) continue;
         if(ACSuspect[i][ac_rejectedHits] < 1 && ACSuspect[i][ac_weaponFlags] < 1 && ACSuspect[i][ac_cheatFlags] < 1) continue;
 
         new elapsed = gettime() - ((ACSuspect[i][ac_cheatFlags] > 0) ? ACSuspect[i][ac_lastCheatTime] : ACSuspect[i][ac_lastTime]);

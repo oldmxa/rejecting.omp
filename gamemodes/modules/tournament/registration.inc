@@ -5,7 +5,7 @@
 
 stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
 {
-    if(!User[playerid][isLogged]) return -1;
+    if(!IsPlayerLogged(playerid)) return -1;
     if(g_TourneyData[t_State] != TOURNAMENT_STATE_REGISTRATION)
     {
         SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Registrations are currently closed!");

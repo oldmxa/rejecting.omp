@@ -1,6 +1,6 @@
 Respawn(playerid, timestamp)
 {
-    if(User[playerid][isAfk])
+    if(IsPlayerAFK(playerid))
         return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
 
     new duelState = GetPVarInt(playerid, "DuelS_State");
@@ -233,7 +233,7 @@ public Stats_ShowStats(playerid, targetid)
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}FPS / Ping / Loss\t{FFFFFF}%d FPS {B4B5B7}| {FFFFFF}%d ms {B4B5B7}| {FFFFFF}%.2f%%\n", strstts, User[targetid][FPS], GetPlayerPing(targetid), NetStats_PacketLossPercent(targetid));
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Skin ID\t{FFFFFF}#%d\n", strstts, GetPlayerSkin(targetid));
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Fighting Style\t{FFFFFF}%s\n", strstts, fightStyleName);
-    format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Admin Rank\t{FFFFFF}%s\n", strstts, adminnames[(User[targetid][adminCamu] ? 0 : User[targetid][adminLevel])][ingame]);
+    format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Admin Rank\t{FFFFFF}%s\n", strstts, adminnames[(IsAdminCamouflaged(targetid) ? 0 : User[targetid][adminLevel])][ingame]);
     if(IsPlayerVip(targetid))
     {
         new tagColor[7] = "FFD700";
@@ -775,10 +775,10 @@ public Stats_showMapListDialog(playerid)
 
 ShowGunMenu(playerid)
 {
-	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
+	if(IsPlayerSpectating(playerid))
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
-    new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
+    new bool:isLoungeOrAfk = (IsPlayerAFK(playerid) || IsPlayerInLounge(playerid));
     if(!isLoungeOrAfk)
     {
         new Float:Armour;

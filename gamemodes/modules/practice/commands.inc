@@ -5,7 +5,7 @@
 
 @cmd(.alts = {"practice"}) prac(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (IsPlayerInDuel2v2(playerid))
@@ -43,10 +43,10 @@
             if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
                 return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use the practice mode during a duel.");
 
-            if (playerSpecID[playerid] != INVALID_PLAYER_ID)
+            if (IsPlayerSpectating(playerid))
                 return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Stop spectating first.");
 
-            if (User[playerid][isFrozen])
+            if (IsPlayerFrozen(playerid))
                 return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot do this while frozen.");
 
             EnterPractice(playerid);

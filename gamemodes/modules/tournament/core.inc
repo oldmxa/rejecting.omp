@@ -30,7 +30,7 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerSpawn(playerid)
 {
-    if(User[playerid][isLogged])
+    if(IsPlayerLogged(playerid))
     {
         if(g_PlayerTourneySlot[playerid] == -1 && (g_TourneyData[t_State] == TOURNAMENT_STATE_REGISTRATION || g_TourneyData[t_State] == TOURNAMENT_STATE_IN_PROGRESS))
         {

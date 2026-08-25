@@ -114,7 +114,7 @@ static stock ShowTourneyManageDialog(playerid)
 
 stock ShowTournamentAdminMenu(playerid)
 {
-    if(!User[playerid][isLogged] || User[playerid][adminLevel] < 4) return 0;
+    if(!IsPlayerLogged(playerid) || User[playerid][adminLevel] < 4) return 0;
 
     new title[64] = "{MAIN}Tournament Control Panel";
 
@@ -656,7 +656,7 @@ public DIALOG_TOURNEY_KICK_CONFIRM(playerid, dialogid, response, listitem, strin
 
 stock ShowTourneyBracketDialog(playerid)
 {
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     new title[64];
     format(title, sizeof(title), "{MAIN}%s {B4B5B7}- Bracket", g_TourneyData[t_Name]);

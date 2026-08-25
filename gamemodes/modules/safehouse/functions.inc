@@ -457,7 +457,7 @@ stock ReleaseSafehouse(index, const reason[])
         if (g_PlayerInSafehouse[i] == index)
             ExitSafehouse(i);
 
-        if (oldClanID != -1 && User[i][isLogged] && User[i][clanID] == oldClanID)
+        if (oldClanID != -1 && IsPlayerLogged(i) && User[i][clanID] == oldClanID)
         {
             if (User[i][spawnSafehouse])
             {
@@ -555,7 +555,7 @@ stock ExitSafehouse(playerid)
     }
 
     new world = 0;
-    if (User[playerid][isAfk] && User[playerid][locationId] == ARENA_AFK)
+    if (IsPlayerAFK(playerid) && User[playerid][locationId] == ARENA_AFK)
         world = User[playerid][loungeVW];
 
     SetPlayerInterior(playerid, 0);
@@ -577,7 +577,7 @@ stock SendSafehouseClanMessage(index, const message[], va_args<>)
 
     foreach (new i : Player)
     {
-        if (User[i][isLogged] && User[i][clanID] == clanid)
+        if (IsPlayerLogged(i) && User[i][clanID] == clanid)
             SendClientMessage(i, -1, "%s", formatted);
     }
     return 1;

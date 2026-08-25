@@ -133,7 +133,7 @@
 }
 @cmd() pm(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new idplayer, text[128], tString[128];
@@ -166,7 +166,7 @@
     LogDiscordPM(playerid, idplayer, text);
 
     foreach(new i : Player)
-		if(User[i][adminLevel] > 2 && User[i][isLogged] && User[i][acfg_pm])
+		if(User[i][adminLevel] > 2 && IsPlayerLogged(i) && User[i][acfg_pm])
 			va_SendClientMessage(i, -1, ADMIN_SEE_PMS, User[playerid][userName], playerid, User[idplayer][userName], idplayer, text);
 
     return true;
@@ -214,13 +214,13 @@
 
 @cmd() yes(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
     return RegisterVote(playerid, true);
 }
 
 @cmd() no(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
     return RegisterVote(playerid, false);
 }
 

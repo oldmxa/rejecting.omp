@@ -5,7 +5,7 @@
 
 stock AC_CheckNoFallAnim(playerid, animationId)
 {
-    if (!ACNoFallAnimation || !User[playerid][isLogged] || User[playerid][isAfk]) return 0;
+    if (!ACNoFallAnimation || !IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 0;
     if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 0;
 
     switch (animationId)

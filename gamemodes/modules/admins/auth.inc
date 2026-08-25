@@ -14,7 +14,7 @@ forward OnCreateAdminPasswordHash(playerid);
 
 stock bool:CheckPlayerAdminAuth(playerid)
 {
-    if(!User[playerid][isLogged] || User[playerid][adminLevel] < 1)
+    if(!IsPlayerLogged(playerid) || User[playerid][adminLevel] < 1)
         return false;
 
     if(!User[playerid][isAdminLogged])

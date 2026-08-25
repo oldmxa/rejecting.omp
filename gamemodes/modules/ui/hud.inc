@@ -54,7 +54,7 @@ hidePlayerTextdraw(playerid)
 
 showPlayerTextDraw(playerid)
 {
-	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID) return 0;
+	if(IsPlayerSpectating(playerid)) return 0;
 
     for(new i; i < 3; i++)
 			PlayerTextDrawShow(playerid, InfoStats[playerid][i]);
@@ -66,7 +66,7 @@ showPlayerTextDraw(playerid)
 
 stock updatePlayerHud(playerid)
 {
-	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID) return 1;
+	if(IsPlayerSpectating(playerid)) return 1;
 
 	if(User[playerid][locationId] != -1)
 	{
@@ -263,7 +263,7 @@ public UpdateFastHUD()
     foreach(new i : Player)
     {
         if(IsPlayerNPC(i)) continue;
-        if(!User[i][isLogged] || !User[i][isAlreadySpawned]) continue;
+        if(!IsPlayerLogged(i) || !User[i][isAlreadySpawned]) continue;
         if(!User[i][showPlayerHud]) continue;
         if(IsPlayerSpectating(i)) continue;
 

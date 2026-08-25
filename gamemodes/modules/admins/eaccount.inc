@@ -468,7 +468,7 @@ stock LoadEAccountOffline(playerid, const name[])
 
 @cmd() eaccount(playerid, params[], help)
 {
-    if (!User[playerid][isLogged]) return true;
+    if (!IsPlayerLogged(playerid)) return true;
 
     if (User[playerid][adminLevel] < MAX_ADMIN_LEVEL || !IsPlayerAdmin(playerid))
     {
@@ -499,7 +499,7 @@ stock LoadEAccountOffline(playerid, const name[])
     {
         foreach (new i : Player)
         {
-            if (User[i][isLogged] && !strcmp(User[i][userName], target, true))
+            if (IsPlayerLogged(i) && !strcmp(User[i][userName], target, true))
             {
                 targetid = i;
                 break;

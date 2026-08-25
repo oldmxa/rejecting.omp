@@ -259,7 +259,7 @@ public ChangeArena(location)
 
 			HideRoundStatsTD(i);
 
-			if(!User[i][isAfk])
+			if(!IsPlayerAFK(i))
 				SpawnPlayerEx(i);
 		}
 
@@ -303,7 +303,7 @@ getLocationPlayers(location)
 	new playerCounter = 0;
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged] == false || User[i][locationId] != location) continue;
+		if(!IsPlayerLogged(i) || User[i][locationId] != location) continue;
 		playerCounter++;
 	}
 	return playerCounter;
@@ -356,7 +356,7 @@ static stock Float:GetSpawnClearance(playerid, Float:x, Float:y, Float:z)
     foreach(new i : Player)
     {
         if(i == playerid) continue;
-        if(!IsPlayerLogged(i) || User[i][isAfk]) continue;
+        if(!IsPlayerLogged(i) || IsPlayerAFK(i)) continue;
         if(User[i][locationId] != User[playerid][locationId]) continue;
 
         new Float:d = GetPlayerDistanceFromPoint(i, x, y, z);
@@ -375,7 +375,7 @@ static stock Float:GetOptimalSpawnFacingAngle(playerid, zone, Float:spawnX, Floa
     foreach(new i : Player)
     {
         if(i == playerid) continue;
-        if(!IsPlayerLogged(i) || User[i][isAfk]) continue;
+        if(!IsPlayerLogged(i) || IsPlayerAFK(i)) continue;
         if(User[i][locationId] != location) continue;
 
         new Float:d = GetPlayerDistanceFromPoint(i, spawnX, spawnY, spawnZ);
@@ -743,7 +743,7 @@ public SpawnFloorGuard(playerid)
 
 	if(ticks <= 0
 	|| !IsPlayerLogged(playerid)
-	|| User[playerid][isAfk]
+	|| IsPlayerAFK(playerid)
 	|| User[playerid][locationId] != GetPVarInt(playerid, "spawn_guard_loc")
 	|| GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
 		return StopSpawnFloorGuard(playerid);
@@ -772,8 +772,8 @@ public RestoreSpawnWorld(playerid)
 
 	if(GetPVarInt(playerid, "gunmenu_world")) return 1;
 
-	if(User[playerid][isAfk]) return 1;
-	if(User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK) return 1;
+	if(IsPlayerAFK(playerid)) return 1;
+	if(IsPlayerInLounge(playerid)) return 1;
 
 	SetPlayerVirtualWorld(playerid, User[playerid][locationId] * 99);
 	return 1;
@@ -783,7 +783,7 @@ SendDeathMessageToRoom(killer, killed, weapon, roomid)
 {
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged] && User[i][locationId] == roomid)
+		if(IsPlayerLogged(i) && User[i][locationId] == roomid)
 			SendDeathMessageToPlayer(i, killer, killed, weapon);
 	}
 }
@@ -851,7 +851,7 @@ PrepareChangeArena(location, finishingArenaId)
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged] && User[i][locationId] == location && !User[i][isAfk] && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i))
+		if(IsPlayerLogged(i) && User[i][locationId] == location && !IsPlayerAFK(i) && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i))
 		{
 			if(GetPVarInt(i, "Spree") > User[i][maxStreak])
 			{
@@ -946,7 +946,7 @@ PrepareChangeArena(location, finishingArenaId)
 
 	foreach(new i : Player)
 	{
-		if(User[i][isAfk] || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i))
+		if(IsPlayerAFK(i) || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i))
 			continue;
 
 		if(User[i][locationId] == location)

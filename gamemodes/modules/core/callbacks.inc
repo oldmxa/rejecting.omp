@@ -246,7 +246,7 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 
 	Ach_OnPlayerDied(playerid);
 
-	if(killerid == INVALID_PLAYER_ID && User[playerid][isAfk] == false)
+	if(killerid == INVALID_PLAYER_ID && !IsPlayerAFK(playerid))
 	{
 		SendDeathMessageToRoom(INVALID_PLAYER_ID, playerid, reason, User[playerid][locationId]);
 		User[playerid][playerDeaths]++;
@@ -474,7 +474,7 @@ public OnPlayerRequestClass(playerid, classid)
 
 public OnPlayerRequestSpawn(playerid)
 {
-	if(User[playerid][isLogged])
+	if(IsPlayerLogged(playerid))
 	{
 		User[playerid][locationId] = -1;
 		SetSpawnInfo(playerid, 0, GetPlayerSkin(playerid), User[playerid][loungeX], User[playerid][loungeY], User[playerid][loungeZ], User[playerid][loungeA], WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
@@ -522,7 +522,7 @@ public OnPlayerSpawn(playerid)
 		SetPlayerInterior(playerid, 0);
 		givePlayerWeapons(playerid);
 
-		if(User[playerid][isAfk])
+		if(IsPlayerAFK(playerid))
 			setAfk(playerid);
 		else
 			spawnOnLocation(playerid);
@@ -569,7 +569,7 @@ public OnPlayerSpawn(playerid)
 	}
 
     User[playerid][timerRespawn] = gettime();
-    if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
+    if(!IsPlayerInLounge(playerid))
     {
         if(!HasPlayerConfiguredWeapons(playerid))
         {
@@ -589,8 +589,8 @@ public OnPlayerSpawn(playerid)
 
 public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
 {
-    if(!User[playerid][isLogged]) return false;
-    if(!User[clickedplayerid][isLogged]) return false;
+    if(!IsPlayerLogged(playerid)) return false;
+    if(!IsPlayerLogged(clickedplayerid)) return false;
 
     SetPVarInt(playerid, "profile_target", clickedplayerid);
     
@@ -699,7 +699,7 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
 
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
-	if (User[playerid][isAfk] == false)
+	if (!IsPlayerAFK(playerid))
 		return false;
 
 	SetPlayerInterior(playerid, 0);
@@ -745,7 +745,7 @@ public OnPlayerGiveDamageDynamicActor(playerid, STREAMER_TAG_ACTOR:actorid, Floa
 
 public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &bodypart)
 {
-	if (playerid == INVALID_PLAYER_ID || !User[playerid][isLogged])
+	if (playerid == INVALID_PLAYER_ID || !IsPlayerLogged(playerid))
 	{
 		return false;
 	}
@@ -760,7 +760,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 		return true;
 	}
 
-	if(!User[issuerid][isLogged])
+	if(!IsPlayerLogged(issuerid))
 	{
 		return false;
 	}
@@ -821,7 +821,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 	User[playerid][lastDamagerId] = issuerid;
 	User[playerid][lastDamageTime] = gettime()+10;
 
-	if(User[playerid][isAfk] || User[issuerid][isAfk])
+	if(IsPlayerAFK(playerid) || IsPlayerAFK(issuerid))
 		return false;
 
 	if(weapon == WEAPON_DEAGLE)
@@ -947,7 +947,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 
 public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-	if(User[playerid][isLogged] && !User[playerid][isAfk])
+	if(IsPlayerLogged(playerid) && !IsPlayerAFK(playerid))
 	{
 		new loc = User[playerid][locationId];
 		new bool:pInDuel = (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING);
@@ -973,7 +973,7 @@ public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hi
 
 public OnPlayerText(playerid, text[])
 {
-	if(User[playerid][isLogged] == false)
+	if(!IsPlayerLogged(playerid))
 	{
 		SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 		return false;
@@ -1008,7 +1008,7 @@ public OnPlayerText(playerid, text[])
 	if(text[0] == '@' && User[playerid][adminLevel] > 0)
 	{
 		foreach(new i : Player)
-			if(User[i][adminLevel] > 0 && User[i][isLogged])
+			if(User[i][adminLevel] > 0 && IsPlayerLogged(i))
 				va_SendClientMessage(i, -1, ADMIN_CHAT_MODEL, adminnames[User[playerid][adminLevel]][ingame], (GetPlayerColor(playerid) >>> 8), User[playerid][userName], playerid, strtodown(text[1]));
 
 
@@ -1031,7 +1031,7 @@ public OnPlayerText(playerid, text[])
         	SendMessageToClan(clanid, -1, string);
 
 			foreach(new i : Player)
-				if(User[i][adminLevel] > 2 && User[i][isLogged] && User[i][acfg_clanpm])
+				if(User[i][adminLevel] > 2 && IsPlayerLogged(i) && User[i][acfg_clanpm])
 					va_SendClientMessage(i, -1, ADMIN_SEE_CLANPM, ClanInfo[clanid][clanTag], User[playerid][userName], playerid, ClanRoles[clanid][roleid], text[1]);
 
             LogChatMessage(User[playerid][user_sqlid], User[playerid][userName], "clan", text[1]);
@@ -1066,7 +1066,7 @@ public OnPlayerText(playerid, text[])
 
 		foreach(new i : Player)
 		{
-			if(User[i][adminLevel] > 2 && User[i][isLogged] && User[i][acfg_local])
+			if(User[i][adminLevel] > 2 && IsPlayerLogged(i) && User[i][acfg_local])
 				va_SendClientMessage(i, -1, ADMIN_SEE_LOCAL, User[playerid][userName], playerid, strtodown(text[1]));
 		}
 
@@ -1081,7 +1081,7 @@ public OnPlayerText(playerid, text[])
 	DCC_SendChannelMessage(gamechat , msgencoded);
 
 	new fullTagStr[128] = "";
-	if(User[playerid][adminLevel] > 0 && !User[playerid][hideAdminTag] && !User[playerid][adminCamu])
+	if(IsAdmin(playerid) && !User[playerid][hideAdminTag] && !IsAdminCamouflaged(playerid))
 	{
 		format(fullTagStr, sizeof(fullTagStr), "{FFFFFF}[{FF4500}%s{FFFFFF}] ", adminnames[User[playerid][adminLevel]][ingame]);
 	}
@@ -1157,7 +1157,7 @@ public OnPlayerUpdate(playerid)
 	GetPlayerArmour(playerid, armour);
 	fullHealth = floatround(health+armour);
 
-	if(User[playerid][isAfk] && fullHealth != 200)
+	if(IsPlayerAFK(playerid) && fullHealth != 200)
 	{
 		SetPlayerHealth(playerid, 100.0);
 		SetPlayerArmour(playerid, 100.0);
@@ -1190,7 +1190,7 @@ public OnPlayerUpdate(playerid)
 		LoadPlayerMoney(playerid);
 
 	// WEAPON ANTI-CHEAT ALERT (OUTSIDE LOUNGE)
-	if(User[playerid][isAlreadySpawned] && User[playerid][locationId] != ARENA_AFK && User[playerid][locationId] != -1)
+	if(User[playerid][isAlreadySpawned] && !IsPlayerInLounge(playerid))
 	{
 		if(!MsgCheat[playerid])
 		{
@@ -1219,7 +1219,7 @@ public OnPlayerUpdate(playerid)
 
 				foreach(new i : Player)
 				{
-					if(User[i][adminLevel] >= 2 && User[i][isLogged])
+					if(User[i][adminLevel] >= 2 && IsPlayerLogged(i))
 					{
 						SendClientMessage(i, -1, "%s", alertMsg);
 					}
@@ -1234,7 +1234,7 @@ public OnPlayerUpdate(playerid)
 
 public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_ERRORS:success)
 {
-	if(User[playerid][isLogged] == false)
+	if(!IsPlayerLogged(playerid))
 	{
 		SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You must log in before executing commands.");
 		return COMMAND_DENIED;
@@ -1259,10 +1259,10 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 	RedactCommandText(spyText, cmdtext, sizeof(spyText));
 
 	foreach(new i : Player)
-			if(User[i][adminLevel] > 2 && User[i][isLogged] && User[i][acfg_cmds])
+			if(User[i][adminLevel] > 2 && IsPlayerLogged(i) && User[i][acfg_cmds])
 				va_SendClientMessage(i, -1, ADMIN_SEE_CMDS, User[playerid][userName], playerid, spyText);
 
-	if(!WC_IsPlayerSpawned(playerid) && User[playerid][isSpectating] == false)
+	if(!WC_IsPlayerSpawned(playerid) && !IsPlayerSpectating(playerid))
 	{
 		SendClientMessage(playerid, -1, "%s", NOT_SPAWNED_MSG);
 		return COMMAND_DENIED;
@@ -1297,7 +1297,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandPerformed(playerid, cmdtext[], e_COMMAND_
 
 public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
-	if(!User[playerid][isLogged]) return 1;
+	if(!IsPlayerLogged(playerid)) return 1;
 
 	if(PRESSED(KEY_SECONDARY_ATTACK) || PRESSED(KEY_JUMP) || PRESSED(KEY_SUBMISSION))
 	{
@@ -1446,7 +1446,7 @@ public OnRejectedHit(playerid, hit[E_REJECTED_HIT])
 	foreach(new i : Player)
 	{
 		if(i == playerid) continue;
-		if(!User[i][isLogged] || User[i][adminLevel] < 2) continue;
+		if(!IsPlayerLogged(i) || User[i][adminLevel] < 2) continue;
 
 		va_SendClientMessage(i, 0xcc0000ff, "{MAIN}[ANTI-CHEAT] {FFFFFF}%s [%d] rejected hit: %s%s",
 			User[playerid][userName], playerid, output, extra);

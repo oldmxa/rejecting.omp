@@ -78,7 +78,7 @@ public OnSiteTicketsFound()
 
         foreach(new p : Player)
         {
-            if(User[p][adminLevel] < 1 || !User[p][isLogged]) continue;
+            if(User[p][adminLevel] < 1 || !IsPlayerLogged(p)) continue;
 
             va_SendClientMessage(p, -1, "{MAIN}[TICKET] {FFFFFF}New %s ticket {MAIN}#%d {FFFFFF}from {MAIN}%s{FFFFFF} (%s): %s",
                 ttype, id, author, priority, subject);

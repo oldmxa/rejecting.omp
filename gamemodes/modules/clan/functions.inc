@@ -139,7 +139,7 @@ public GetPlayerIDBySQLID(sqlid)
 {
     foreach (new i : Player)
     {
-        if (User[i][user_sqlid] == sqlid && User[i][isLogged]) return i;
+        if (User[i][user_sqlid] == sqlid && IsPlayerLogged(i)) return i;
     }
     return INVALID_PLAYER_ID;
 }
@@ -223,7 +223,7 @@ stock LeaveClan(playerid)
 
     foreach (new i : Player)
     {
-        if (User[i][isLogged] && User[i][clanID] == clanid)
+        if (IsPlayerLogged(i) && User[i][clanID] == clanid)
         {
             va_SendClientMessage(i, -1, CLAN_LEFT, GetPlayerColor(playerid) >>> 8, User[playerid][userName]);
             PlaySuccessSound(i);
@@ -373,7 +373,7 @@ stock RefreshClanColor(clanid)
 {
     foreach (new i : Player)
     {
-        if (User[i][isLogged] && User[i][clanID] == clanid) SetClanColor(i);
+        if (IsPlayerLogged(i) && User[i][clanID] == clanid) SetClanColor(i);
     }
     return 1;
 }
@@ -408,7 +408,7 @@ stock DeleteClan(playerid, clanid)
 
     foreach (new i : Player)
     {
-        if (!User[i][isLogged] || User[i][clanID] != clanid) continue;
+        if (!IsPlayerLogged(i) || User[i][clanID] != clanid) continue;
 
         User[i][clanID] = -1;
         User[i][clanRole] = -1;

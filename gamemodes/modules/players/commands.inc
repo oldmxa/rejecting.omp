@@ -1,7 +1,7 @@
 
 @cmd() id(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new targetid;
@@ -28,7 +28,7 @@
 
 @cmd() showagain(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new location = User[playerid][locationId];
@@ -50,10 +50,10 @@
 
 StartChangeMode(playerid)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-	if(User[playerid][isSpectating] || playerSpecID[playerid] != INVALID_PLAYER_ID)
+	if(IsPlayerSpectating(playerid))
 		return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
 	if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING)
@@ -123,7 +123,7 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"fullstats"}) stats(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(IsNull(params))
@@ -145,7 +145,7 @@ ShowRankingsMenu(playerid)
 
 @cmd() menu(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     ShowMenu(playerid);
@@ -154,7 +154,7 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"w"}) weather(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(IsNull(params)) return SendClientMessage(playerid, -1, "%s", WEATHER_HELP);
@@ -167,7 +167,7 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"t"}) time(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(IsNull(params)) return SendClientMessage(playerid, -1, "%s", TIME_HELP);
@@ -212,7 +212,7 @@ ShowRankingsMenu(playerid)
 
     if(playerState != PLAYER_STATE_SPECTATING && !IsAdmin(playerid))
     {
-        if(User[playerid][isAfk] == false)
+        if(!IsPlayerAFK(playerid))
             return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
     }
 
@@ -223,7 +223,7 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(User[targetid][isAfk] && User[playerid][adminLevel] < 1)
+    if(IsPlayerAFK(targetid) && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", TARGET_AFK);
 
     if(targetid == playerid)
@@ -240,7 +240,7 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(User[playerid][isSpectating] == false)
+    if(!IsPlayerSpectating(playerid))
         return SendClientMessage(playerid, -1, "%s", NO_SPEC_MODE);
 
     StopSpectate(playerid);
@@ -262,7 +262,7 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"help", "commands"}) cmds(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     return ShowHelpMainMenu(playerid);
@@ -456,7 +456,7 @@ ShowCommandCategory(playerid, catid)
 
 @cmd(.alts = {"adminlist"}) admins(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(!ServerAdminsCmd && User[playerid][adminLevel] < 1)
@@ -472,7 +472,7 @@ ShowCommandCategory(playerid, catid)
         {
             new locStr[64];
             new location = User[i][locationId];
-            if(location >= 0 && location < MAX_LOCATIONS && location != ARENA_AFK && !User[i][isAfk])
+            if(location >= 0 && location < MAX_LOCATIONS && location != ARENA_AFK && !IsPlayerAFK(i))
             {
                 new arena_idx = arenaInfo[location][arenaId];
                 if(arena_idx >= 0 && arena_idx < MAX_ZONES)
@@ -513,7 +513,7 @@ ShowCommandCategory(playerid, catid)
 
 @cmd(.alts = {"rank"}) ranks(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     ShowRankingsMenu(playerid);
@@ -522,7 +522,7 @@ ShowCommandCategory(playerid, catid)
 
 @cmd() sync(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     SyncPlayer(playerid);
@@ -531,7 +531,7 @@ ShowCommandCategory(playerid, catid)
 
 @cmd() credits(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new creditsStr[2048];
@@ -576,7 +576,7 @@ ShowCommandCategory(playerid, catid)
 
 @cmd() tag(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
     ShowTagMenu(playerid);
     return true;
 }

@@ -7,7 +7,7 @@
 
 @cmd() training(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (IsPlayerInDuel2v2(playerid))
@@ -46,7 +46,7 @@
 
 @cmd() exittraining(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (!g_PlayerTraining[playerid][pTrain_Active])
@@ -68,7 +68,7 @@
 
 @cmd(.alts = {"rt", "reset"}) restarttraining(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (!g_PlayerTraining[playerid][pTrain_Active])

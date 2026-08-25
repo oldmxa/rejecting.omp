@@ -54,7 +54,7 @@ stock bool:IsDiscordUserVerified(DCC_User:user)
 stock DCC_User:GetPlayerDiscordUser(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return DCC_INVALID_USER;
-    if(!User[playerid][isLogged]) return DCC_INVALID_USER;
+    if(!IsPlayerLogged(playerid)) return DCC_INVALID_USER;
 
     if(!strequal(User[playerid][dc_uid], "-1", true) && User[playerid][dc_uid][0] != EOS)
         return DCC_FindUserById(User[playerid][dc_uid]);
@@ -287,7 +287,7 @@ public UpdateDiscordBotActivity()
     new count = 0;
     foreach(new i : Player)
     {
-        if(User[i][isLogged]) count++;
+        if(IsPlayerLogged(i)) count++;
     }
 
     new actStr[64];

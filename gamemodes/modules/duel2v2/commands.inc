@@ -7,9 +7,9 @@
 
 @cmd(.alts = {"create2v2", "2v2"}) duel2v2(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
-    if(User[playerid][isSpectating])
+    if(IsPlayerSpectating(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use this while spectating.");
 
     if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
@@ -41,7 +41,7 @@
 
 @cmd(.alts = {"go2v2"}) accept2v2(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     if(IsPlayerInTournamentMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot join a 2v2 duel while playing a tournament match.");
@@ -57,7 +57,7 @@
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You already accepted this duel. Waiting for the other players.");
     }
 
-    if(User[playerid][isSpectating] ||
+    if(IsPlayerSpectating(playerid) ||
        GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE ||
        g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive] ||
        IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
@@ -76,7 +76,7 @@
 
 @cmd() cancel2v2(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     new matchid = g_PlayerDuel2v2ID[playerid];
     if(matchid == -1 || !g_Duel2v2Data[matchid][d2_Active])

@@ -91,7 +91,7 @@
     if (targetid == playerid)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
 
-    if (User[targetid][isAfk])
+    if (IsPlayerAFK(targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}This player is already in the lounge.");
 
     new coloredAdmin[MAX_PLAYER_NAME + 18], coloredTarget[MAX_PLAYER_NAME + 18];
@@ -222,7 +222,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][isLogged])
+        if(IsPlayerLogged(i))
             UpdatePlayerData(i);
     }
     va_SendClientMessageToAll(-1, ADM_TAG_NORM"%s saved the account of all players online.", User[playerid][userName]);
@@ -323,7 +323,7 @@ public AdminCountdown(count)
 	{
 		if(i != playerid)
 		{
-			if(User[i][isLogged])
+			if(IsPlayerLogged(i))
 			{
 				UpdatePlayerData(i);
 			}
@@ -396,7 +396,7 @@ public AdminCountdown(count)
 
     foreach(new i : Player)
     {
-        if(!User[i][isLogged]) continue;
+        if(!IsPlayerLogged(i)) continue;
 
         new kd[8];
         FormatRatio(User[i][playerKills], User[i][playerDeaths], kd);

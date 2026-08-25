@@ -55,7 +55,7 @@ public DIALOG_COINS_HISTORY(playerid, dialogid, response, listitem, string:input
 
 @cmd(.alts = {"coinslog"}) logcoins(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     return ShowCoinsHistory(playerid);

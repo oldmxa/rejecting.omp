@@ -210,7 +210,7 @@ public OnRejectingACDetection(playerid, code)
 
     if (code < 0 || code >= MAX_AC_DETECTIONS) return 1;
     if (!AC_DETECTION[code][acdActive]) return 1;
-    if (User[playerid][isSpectating] || GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+    if (IsPlayerSpectating(playerid) || GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
     {
         switch (code)
         {

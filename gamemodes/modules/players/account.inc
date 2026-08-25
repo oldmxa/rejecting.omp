@@ -1,7 +1,7 @@
 
 @cmd() changenick(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
 
     if(IsPlayerFakingNick(playerid))
@@ -13,7 +13,7 @@
 
 @cmd() changepass(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
 
     new pass[61 + 1];
@@ -31,7 +31,7 @@
 
 @cmd(.alts = {"discord", "dc", "linkdc"}) linkdiscord(playerid, params[], help)
 {
-	if(playerid == INVALID_PLAYER_ID || !User[playerid][isLogged])
+	if(playerid == INVALID_PLAYER_ID || !IsPlayerLogged(playerid))
         return false;
         
     if(strcmp(User[playerid][dc_username], "-1", true))
@@ -45,7 +45,7 @@
 
 @cmd(.alts = {"unlinkdiscord"}) udiscord(playerid, params[], help)
 {
-	if(playerid == INVALID_PLAYER_ID || !User[playerid][isLogged]) return false;
+	if(playerid == INVALID_PLAYER_ID || !IsPlayerLogged(playerid)) return false;
 
     if(!strcmp(User[playerid][dc_username], "-1", true))
         return SendClientMessage(playerid, COLOR_TOMATO, "%s", DC_NOTLINKED);
@@ -76,7 +76,7 @@
 
 @cmd(.alts = {"verifycode", "dccode"}) dcode(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(strcmp(User[playerid][dc_username], "-1", true) != 0)
         return va_SendClientMessage(playerid, COLOR_TOMATO, DC_LINKED, User[playerid][dc_username], User[playerid][dc_discriminator]);
@@ -134,7 +134,7 @@
 
 @cmd(.alts = {"dcid"}) discordid(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
 
     return Account_ShowDiscordIDDialog(playerid);
@@ -279,7 +279,7 @@ public DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inp
         return ShowSettingsMenu(playerid);
     }
 
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", NOT_LOGGED_ERROR);
 
     if(isnull(inputtext))
@@ -303,7 +303,7 @@ public DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inp
 forward Account_ShowDiscordIDDialog(playerid);
 public Account_ShowDiscordIDDialog(playerid)
 {
-    if(playerid == INVALID_PLAYER_ID || !User[playerid][isLogged]) return 0;
+    if(playerid == INVALID_PLAYER_ID || !IsPlayerLogged(playerid)) return 0;
 
     new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
     new dcStr[512], title[64] = "{MAIN}Discord ID Info";

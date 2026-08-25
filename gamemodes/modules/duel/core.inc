@@ -373,7 +373,7 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged])
+		if(IsPlayerLogged(i))
 		{
 			new formattedMsg[256];
 			strcopy(formattedMsg, msgStr, sizeof(formattedMsg));
@@ -395,7 +395,7 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 	if(IsPlayerConnected(winner))
 	{
 		User[winner][isAfk] = false;
-		if(User[winner][locationId] != -1 && User[winner][locationId] != ARENA_AFK)
+		if(!IsPlayerInLounge(winner))
 		{
 			SpawnPlayerEx(winner);
 		}
@@ -408,7 +408,7 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 	if(!disconnected && IsPlayerConnected(loser))
 	{
 		User[loser][isAfk] = false;
-		if(User[loser][locationId] != -1 && User[loser][locationId] != ARENA_AFK)
+		if(!IsPlayerInLounge(loser))
 		{
 			new Float:lHP;
 			GetPlayerHealth(loser, lHP);
@@ -427,7 +427,7 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 
 stock DuelS_Host(playerid)
 {
-	if(User[playerid][isSpectating])
+	if(IsPlayerSpectating(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
 	if(IsPlayerInMatch(playerid))
@@ -464,7 +464,7 @@ stock DuelS_Host(playerid)
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged])
+		if(IsPlayerLogged(i))
 		{
 			new formattedMsg[256];
 			strcopy(formattedMsg, dString, sizeof(formattedMsg));
@@ -476,11 +476,11 @@ stock DuelS_Host(playerid)
 
 @cmd() duel(playerid, params[], help)
 {
-	if(!User[playerid][isLogged]) return 1;
+	if(!IsPlayerLogged(playerid)) return 1;
 
 	if(isnull(params))
 	{
-		if(User[playerid][isSpectating])
+		if(IsPlayerSpectating(playerid))
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
 		if(IsPlayerInMatch(playerid))
@@ -515,7 +515,7 @@ stock DuelS_Host(playerid)
 
 			foreach(new p : Player)
 			{
-				if(User[p][isLogged] && GetPVarInt(p, "DuelS_State") == DUELS_STATE_WAITING && DuelS_Data[p][duelArena] == i)
+				if(IsPlayerLogged(p) && GetPVarInt(p, "DuelS_State") == DUELS_STATE_WAITING && DuelS_Data[p][duelArena] == i)
 				{
 					waitingCount++;
 				}
@@ -564,7 +564,7 @@ stock DuelS_Host(playerid)
 {
 	if(!IsPlayerLogged(playerid)) return 1;
 
-	if(User[playerid][isSpectating])
+	if(IsPlayerSpectating(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
 	if(IsPlayerInMatch(playerid))
@@ -600,7 +600,7 @@ stock DuelS_Host(playerid)
 
 		foreach(new i : Player)
 		{
-			if(User[i][isLogged] && GetPVarInt(i, "DuelS_State") == DUELS_STATE_WAITING)
+			if(IsPlayerLogged(i) && GetPVarInt(i, "DuelS_State") == DUELS_STATE_WAITING)
 			{
 				if(i == playerid) continue;
 				pWaitingList[waitingCount++] = i;
@@ -681,7 +681,7 @@ stock DuelS_Host(playerid)
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged])
+		if(IsPlayerLogged(i))
 		{
 			new formattedMsg[256];
 			strcopy(formattedMsg, aString, sizeof(formattedMsg));
@@ -720,7 +720,7 @@ stock DuelS_Host(playerid)
 	{
 		SetPVarInt(playerid, "DuelS_State", DUELS_STATE_NONE);
 		PlayerTextDrawHide(playerid, TDTimerDuelS[playerid]);
-		if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
+		if(!IsPlayerInLounge(playerid))
 		{
 			User[playerid][isAfk] = false;
 			SpawnPlayerEx(playerid);
@@ -742,7 +742,7 @@ stock DuelS_Host(playerid)
 	{
 		SetPVarInt(playerid, "DuelS_State", DUELS_STATE_NONE);
 		PlayerTextDrawHide(playerid, TDTimerDuelS[playerid]);
-		if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
+		if(!IsPlayerInLounge(playerid))
 		{
 			User[playerid][isAfk] = false;
 			SpawnPlayerEx(playerid);

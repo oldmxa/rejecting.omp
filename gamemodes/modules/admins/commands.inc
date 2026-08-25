@@ -488,7 +488,7 @@ ShowAdminCmds(playerid)
 
 @cmd() givecustomtag(playerid, params[], help)
 {
-    if(!User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
 
     if (!IsAdmin(playerid, 5))
     {

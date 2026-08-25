@@ -63,7 +63,7 @@ static AC_CheckAntiAim(playerid)
 
     ACAntiAimTick[playerid] = tick;
 
-    if (!User[playerid][isLogged] || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)
+    if (!IsPlayerLogged(playerid) || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)
     {
         ACAntiAimStrike[playerid] = 0;
         return 1;
@@ -126,7 +126,7 @@ static bool:AC_IsDegenerateBullet(playerid, Float:ox, Float:oy, Float:oz, Float:
 static AC_CheckFakeHit(playerid, hitid, Float:hx, Float:hy, Float:hz)
 {
     if (hitid == INVALID_PLAYER_ID || !IsPlayerConnected(hitid) || hitid == playerid) return 1;
-    if (!User[hitid][isLogged]) return 1;
+    if (!IsPlayerLogged(hitid)) return 1;
 
     if (WC_IsPlayerPaused(hitid) || GetPlayerState(hitid) == PLAYER_STATE_WASTED)
     {
@@ -181,7 +181,7 @@ stock AC_DebugBullet(playerid, hitType)
 stock AC_CheckSilentAim(playerid, BULLET_HIT_TYPE:hitType, hitid, Float:ox, Float:oy, Float:oz, Float:hx, Float:hy, Float:hz)
 {
     if (hitType != BULLET_HIT_TYPE_PLAYER) return 1;
-    if (!User[playerid][isLogged]) return 1;
+    if (!IsPlayerLogged(playerid)) return 1;
 
     if (AC_IsDegenerateBullet(playerid, ox, oy, oz, hx, hy, hz))
         return AC_FakeHitStrike(playerid, "degenerate bullet packet");

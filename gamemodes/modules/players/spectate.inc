@@ -4,7 +4,7 @@ StopSpectate(playerid)
 	hideSpecTD(playerid);
 	playerSpecID[playerid] = INVALID_PLAYER_ID;
 	User[playerid][isSpectating] = false;
-	if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
+	if(!IsPlayerInLounge(playerid))
 	{
 		User[playerid][isAfk] = false;
 	}

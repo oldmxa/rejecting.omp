@@ -102,7 +102,7 @@ public LoadPlayerChallengeRecords(playerid)
     ClearPlayerChallengeRecords(playerid);
 
     if (dbHandle == MYSQL_INVALID_HANDLE) return 0;
-    if (!User[playerid][isLogged] || User[playerid][user_sqlid] <= 0) return 0;
+    if (!IsPlayerLogged(playerid) || User[playerid][user_sqlid] <= 0) return 0;
 
     new query[160];
     mysql_format(dbHandle, query, sizeof(query),
@@ -116,7 +116,7 @@ public LoadPlayerChallengeRecords(playerid)
 public OnTrainingPlayerRecordsLoad(playerid, sqlid)
 {
     if (!IsPlayerConnected(playerid)) return 1;
-    if (!User[playerid][isLogged] || User[playerid][user_sqlid] != sqlid) return 1;
+    if (!IsPlayerLogged(playerid) || User[playerid][user_sqlid] != sqlid) return 1;
 
     new rows = cache_num_rows();
     new trArenaName[TRAINING_NAME_LEN], score;
@@ -157,7 +157,7 @@ stock SaveChallengeRecord(playerid, arenaid, score, hits, shots)
     if (score <= 0) return result;
 
     if (dbHandle == MYSQL_INVALID_HANDLE) return result;
-    if (!User[playerid][isLogged] || User[playerid][user_sqlid] <= 0) return result;
+    if (!IsPlayerLogged(playerid) || User[playerid][user_sqlid] <= 0) return result;
 
     new query[768];
     new timestamp = gettime();

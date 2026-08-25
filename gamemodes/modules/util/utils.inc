@@ -443,7 +443,7 @@ GetOnlinePlayerIDByName(const name[])
 
 	foreach(new i : Player)
 	{
-		if(User[i][isLogged] && strequal(User[i][userName], name, true))
+		if(IsPlayerLogged(i) && strequal(User[i][userName], name, true))
 			return i;
 	}
 	return INVALID_PLAYER_ID;
@@ -500,7 +500,7 @@ IsAccountOnline(accountid)
 	{
 		if(User[i][user_sqlid] == accountid)
 		{
-			if(User[i][isLogged])
+			if(IsPlayerLogged(i))
 			{
 				return true;
 			}
