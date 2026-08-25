@@ -1,7 +1,7 @@
 
 @cmd() interiors(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -21,7 +21,7 @@
 
 @cmd() exitint(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -41,7 +41,7 @@
 
 @cmd() saveint(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -76,7 +76,7 @@
 
 @cmd() setlounge(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -117,7 +117,7 @@
 
 @cmd() changearena(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -156,7 +156,7 @@
 
 @cmd() clist(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -169,7 +169,7 @@
 
 @cmd() maplist(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -181,14 +181,14 @@
     DeletePVar(playerid, "pageItems");
     showMapListDialog(playerid);
 
-    if(User[playerid][adminLevel] < 4)
+    if (!IsAdmin(playerid, 4))
         va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Maplist was shown.");
     return true;
 }
 
 @cmd() randomchangearena(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -215,7 +215,7 @@
 
 @cmd() saveaccounts(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 4)
+    if (!IsAdmin(playerid, 4))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -242,7 +242,7 @@
 
 @cmd() count(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     
@@ -269,7 +269,7 @@ public AdminCountdown(count)
 
 @cmd() avtn(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new text[128], str[144];
@@ -281,7 +281,7 @@ public AdminCountdown(count)
 
 @cmd() cnn(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new text[128], str[144];
@@ -293,7 +293,7 @@ public AdminCountdown(count)
 
 @cmd() hostname(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     if(isnull(params)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/hostname [new name]");
@@ -386,7 +386,7 @@ public AdminCountdown(count)
 
 @cmd() players(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -421,7 +421,7 @@ public AdminCountdown(count)
 
 @cmd() lifez(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 5)
+    if (!IsAdmin(playerid, 5))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);

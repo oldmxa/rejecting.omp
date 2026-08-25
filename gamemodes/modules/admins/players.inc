@@ -1,7 +1,7 @@
 
 @cmd() get(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 3)
+    if (!IsAdmin(playerid, 3))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -41,7 +41,7 @@
 
 @cmd() go(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 3)
+    if (!IsAdmin(playerid, 3))
     {
         new cmdBuf[128];
         format(cmdBuf, sizeof(cmdBuf), "/acceptduel %s", params);
@@ -95,7 +95,7 @@
 
 @cmd() slap(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -129,7 +129,7 @@
 
 @cmd() freeze(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -163,7 +163,7 @@
 
 @cmd() unfreeze(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -195,7 +195,7 @@
 
 @cmd() spawn(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -223,7 +223,7 @@
 
 @cmd(.alts = {"namecolor", "colorname"}) nickcolor(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new color;
@@ -239,7 +239,7 @@
 
 @cmd() setcoins(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
 
@@ -305,7 +305,7 @@
 
 @cmd() setmoney(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new targetid, amount;
@@ -341,7 +341,7 @@
 
 @cmd(.alts = {"camu", "hidetab", "tabhide"}) camouflage(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     User[playerid][adminCamu] = !User[playerid][adminCamu];
@@ -363,7 +363,7 @@
 
 @cmd() forcetext(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new targetid, text[128];
@@ -382,7 +382,7 @@
 
 @cmd() setvw(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new targetid, vw;
@@ -408,7 +408,7 @@
 
 @cmd() setinterior(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new targetid, interior;
@@ -434,7 +434,7 @@
 
 @cmd() fake(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     
@@ -466,7 +466,7 @@
 
 @cmd() fakecmd(playerid, params[], help)
 {
-	if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+	if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
 	CheckAdminAuth(playerid);
 
@@ -502,7 +502,7 @@
 
 @cmd(.alts = {"giveweapon"}) givegun(playerid, params[], help)
 {
-	if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+	if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
 	CheckAdminAuth(playerid);
 
@@ -546,7 +546,7 @@
 
 @cmd(.alts = {"alert"}) al(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);

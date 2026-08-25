@@ -437,7 +437,7 @@ stock GivePlayerAchievement(playerid, achievement_id, bool:manual = false)
 
     if(coins > 0)
     {
-        User[playerid][playerCoins] += coins;
+        GivePlayerCoins(playerid, coins, "Achievement Reward");
 
         new achReason[64];
         format(achReason, sizeof(achReason), "Achievement: %s", g_AchievementsData[achievement_id][ach_name]);
@@ -699,7 +699,7 @@ stock CheckPlayerLevelUp(playerid)
     if(lvl > ACH_LEVEL_BONUS_MIN)
     {
         GivePlayerCash(playerid, ACH_LEVEL_BONUS_MONEY);
-        User[playerid][playerCoins] += ACH_LEVEL_BONUS_COINS;
+        GivePlayerCoins(playerid, ACH_LEVEL_BONUS_COINS, "Level Up Bonus");
 
         new lvlReason[64];
         format(lvlReason, sizeof(lvlReason), "Level %d bonus", lvl);
@@ -732,7 +732,7 @@ stock Ach_RefreshPlayerStats(playerid)
     if(User[playerid][duelWins] > 0 || User[playerid][wonArenas] > 0)
         GivePlayerAchievement(playerid, ACH_FIRST_VICTORY);
 
-    if(User[playerid][clanID] != -1)
+    if(IsPlayerInClan(playerid))
         GivePlayerAchievement(playerid, ACH_CALL_A_FRIEND);
 
     if(strcmp(User[playerid][dc_username], "-1", true) != 0)

@@ -100,7 +100,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
 
 @cmd() alogin(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     if(User[playerid][isAdminLogged])
@@ -249,7 +249,7 @@ ShowAdminCmds(playerid)
 
 @cmd(.alts = {"aa"}) acmds(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -261,7 +261,7 @@ ShowAdminCmds(playerid)
 
 @cmd(.alts = {"ans", "askreply"}) d(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -315,7 +315,7 @@ ShowAdminCmds(playerid)
 
 @cmd(.alts = {"rep", "reply"}) r(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -369,7 +369,7 @@ ShowAdminCmds(playerid)
 
 @cmd() setadmin(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 4)
+    if (!IsAdmin(playerid, 4))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -453,7 +453,7 @@ ShowAdminCmds(playerid)
 
 @cmd(.alts = {"adminconfig"}) aconfig(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 3)
+    if (!IsAdmin(playerid, 3))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -464,7 +464,7 @@ ShowAdminCmds(playerid)
 
 @cmd() a(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new text[128];
@@ -475,7 +475,7 @@ ShowAdminCmds(playerid)
 
 @cmd() lc(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
 
@@ -490,7 +490,7 @@ ShowAdminCmds(playerid)
 {
     if(!User[playerid][isLogged]) return true;
 
-    if(User[playerid][adminLevel] < 5)
+    if (!IsAdmin(playerid, 5))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need Admin Level 5 to use this command.");
         return true;
@@ -537,7 +537,7 @@ ShowAdminCmds(playerid)
 
 @cmd(.alts = {"sendweekresults", "weeklyresults"}) weekresults(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ADMIN] {FFFFFF}You do not have permission to use this command.");
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ADMIN] {FFFFFF}You do not have permission to use this command.");
     CheckAdminAuth(playerid);
 
     SendWeeklyResultsDiscord(false);

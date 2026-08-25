@@ -259,7 +259,7 @@ AntiSpam(playerid, const var_name[], const flood_var[])
 {
 	if(!ServerAntiSpam) return true;
 
-	if(User[playerid][adminLevel] < 1)
+	if (!IsAdmin(playerid, 1))
 	{
 		if(gettime() <= GetPVarInt(playerid, var_name))
 		{

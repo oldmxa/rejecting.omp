@@ -472,7 +472,7 @@ stock SetClanColor(playerid)
         VipLabel[playerid] = Text3D:INVALID_3DTEXT_ID;
     }
 
-    if (User[playerid][clanID] != -1)
+    if (IsPlayerInClan(playerid))
         SetPlayerColor(playerid, (ClanInfo[User[playerid][clanID]][clanColor] & 0xFFFFFF00) | 0x65);
     else
         SetPlayerColor(playerid, 0xB2ACAC65);
@@ -592,7 +592,7 @@ public RewardClanTerritories()
 
     foreach (new i : Player)
     {
-        if (!User[i][isLogged] || User[i][clanID] == -1) continue;
+        if (!IsPlayerInClan(i)) continue;
 
         new reward = clanReward[User[i][clanID]];
         if (reward <= 0) continue;

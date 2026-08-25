@@ -53,7 +53,7 @@ stock bool:CanAdminTargetPlayer(playerid, targetid, bool:allowSelf = false)
 
 stock GenerateAdminAuthCode(playerid)
 {
-    if(User[playerid][adminLevel] < 1) return 0;
+    if (!IsAdmin(playerid, 1)) return 0;
 
     if(User[playerid][adminAuthTimer] > gettime())
     {
@@ -217,7 +217,7 @@ static stock Admin_KillLoginTimer(playerid)
 
 stock StartAdminPasswordAuth(playerid)
 {
-    if(User[playerid][adminLevel] < 1) return 0;
+    if (!IsAdmin(playerid, 1)) return 0;
     if(User[playerid][isAdminLogged]) return 0;
 
     User[playerid][adminAuthAttempts] = 0;

@@ -164,7 +164,7 @@
 
 @cmd() starttourney(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
     CheckAdminAuth(playerid);
 
     if(g_TourneyData[t_State] != TOURNAMENT_STATE_REGISTRATION)
@@ -186,7 +186,7 @@
 
 @cmd() canceltourney(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
     CheckAdminAuth(playerid);
 
     CancelTournament(playerid, "Cancelled via command");

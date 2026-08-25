@@ -84,7 +84,7 @@ stock ApplyArenaChange(playerid, location, zone)
             va_SendClientMessage(i, -1, CHANGED_ARENA_MSG, User[playerid][userName], arenaData[zone][arenaName], zone);
     }
 
-    if(User[playerid][adminLevel] < 4)
+    if (!IsAdmin(playerid, 4))
         changeArenaDelay = gettime()+(3*60);
 
     return 1;

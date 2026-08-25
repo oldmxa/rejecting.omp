@@ -167,7 +167,7 @@ public Account_ShowSecurityMenu(playerid)
 
     format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Account Password\t{FFFFFF}Change Password\n", secStr);
 
-    if(User[playerid][adminLevel] > 0)
+    if (IsAdmin(playerid))
     {
         format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Admin Auth Method\t%s\n", secStr, (User[playerid][adminAuthType] == 1) ? ("{23C552}Password (Login)") : ("{7289DA}Code (Discord)"));
     }
@@ -478,7 +478,7 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
         }
         case 1:
         {
-            if(User[playerid][adminLevel] < 1)
+            if (!IsAdmin(playerid, 1))
             {
                 ShowSecurityMenu(playerid);
                 return 1;

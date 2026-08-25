@@ -54,7 +54,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 5: // Server Lock
             {
-                if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to lock/unlock.");
+                if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to lock/unlock.");
                 
                 if(ServerLocked)
                 {
@@ -70,7 +70,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 13: // Fake Version server-wide
             {
-                if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to change this.");
+                if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to change this.");
 
                 R2KickEnabled = !R2KickEnabled;
                 SaveServerConfig();
@@ -83,7 +83,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 25: // open.mp Launcher server-wide
             {
-                if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to change this.");
+                if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to change this.");
 
                 OMPKickEnabled = !OMPKickEnabled;
                 SaveServerConfig();
@@ -96,22 +96,22 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 16: // Max Warnings
             {
-                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXWARN<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Warnings", "{BEBEBE}Warnings before an automatic ban:", "*", "<");
             }
             case 17: // Max Login Attempts
             {
-                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXLOGIN<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Login Attempts", "{BEBEBE}Wrong passwords before the account is locked:", "*", "<");
             }
             case 18: // Max Accounts per IP/GPCI
             {
-                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXACC<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Accounts", "{BEBEBE}Accounts allowed per IP or serial (0 = no limit):", "*", "<");
             }
             case 22: // AC detection cooldown
             {
-                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
                 new acStr[160];
                 format(acStr, sizeof(acStr), "{FFFFFF}Current: {23C552}%d seconds\n\n{BEBEBE}Seconds before the same detection counts again (1-60):", ServerACCooldown);
@@ -120,7 +120,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 19: // Anti Spam
             {
-                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
                 ServerAntiSpam = !ServerAntiSpam;
                 SaveServerConfig();
@@ -132,7 +132,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 20: // Anti Capslock
             {
-                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
                 ServerAntiCapslock = !ServerAntiCapslock;
                 SaveServerConfig();
@@ -144,7 +144,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 21: // /admins command
             {
-                if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
                 ServerAdminsCmd = !ServerAdminsCmd;
                 SaveServerConfig();
@@ -204,7 +204,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 14: // Default Server HUD
             {
-                if(User[playerid][adminLevel] < 5)
+                if (!IsAdmin(playerid, 5))
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HUD style.");
 
                 new string[512];
@@ -219,7 +219,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 15: // Default HUD Color
             {
-                if(User[playerid][adminLevel] < 5)
+                if (!IsAdmin(playerid, 5))
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HUD color.");
 
                 new body[2048];
@@ -229,7 +229,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 23: // Default HUD Primary
             {
-                if(User[playerid][adminLevel] < 5)
+                if (!IsAdmin(playerid, 5))
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change the default HUD primary color.");
 
                 new presetColor = (0 <= ServerDefaultHudColor < sizeof(hudPersonalization)) ? ServerDefaultHudColor : 0;
@@ -251,7 +251,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 24: // Default HUD Secondary
             {
-                if(User[playerid][adminLevel] < 5)
+                if (!IsAdmin(playerid, 5))
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change the default HUD secondary color.");
 
                 new presetColor = (0 <= ServerDefaultHudColor < sizeof(hudPersonalization)) ? ServerDefaultHudColor : 0;
@@ -273,7 +273,7 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 26: // Default Chat Color
             {
-                if(User[playerid][adminLevel] < 5)
+                if (!IsAdmin(playerid, 5))
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default chat color.");
 
                 new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
@@ -566,7 +566,7 @@ public DIALOG_ADM_DEFAULTHUD(playerid, dialogid, response, listitem, string:inpu
 {
     if(response && 0 <= listitem < sizeof(HUD_TYPES))
     {
-        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+        if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
 
         ServerDefaultHud = listitem;
         SaveServerConfig();
@@ -582,7 +582,7 @@ public DIALOG_ADM_DEFAULTHUDCOLOR(playerid, dialogid, response, listitem, string
 {
     if(response && 0 <= listitem < sizeof(hudPersonalization))
     {
-        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+        if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
 
         ServerDefaultHudColor = listitem;
         SaveServerConfig();
@@ -598,7 +598,7 @@ public DIALOG_ADM_DEFAULTSHADE1(playerid, dialogid, response, listitem, string:i
 {
     if(response)
     {
-        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+        if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
 
         new value = (listitem == 0) ? -1 : (listitem - 1);
         if(value < -1 || value >= sizeof(hudShades))
@@ -625,7 +625,7 @@ public DIALOG_ADM_DEFAULTSHADE2(playerid, dialogid, response, listitem, string:i
 {
     if(response)
     {
-        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+        if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
 
         new value = (listitem == 0) ? -1 : (listitem - 1);
         if(value < -1 || value >= sizeof(hudShades))
@@ -652,7 +652,7 @@ public DIALOG_ADM_DEFAULTCHATCOLOR(playerid, dialogid, response, listitem, strin
 {
     if(response)
     {
-        if(User[playerid][adminLevel] < 5) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+        if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
 
         new value = listitem;
         if(value < 0 || value > sizeof(hudShades))

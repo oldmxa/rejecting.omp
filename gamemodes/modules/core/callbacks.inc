@@ -254,7 +254,7 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		#if LOST_MONEY_ONSUICIDE != 0
 		{
 			new lost = (oldMoney > LOST_MONEY_ONSUICIDE) ? LOST_MONEY_ONSUICIDE : oldMoney;
-			User[playerid][playerMoney] -= lost;
+			GivePlayerCash(playerid, -lost);
 			ShowMoneyTextDraw(playerid, sprintf("~r~~h~-%s!", FormatMoney(lost)), 615.0, 56.0);
 		}
 		#endif
@@ -264,10 +264,10 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		#if LOST_MONEY_ONDEATH != 0
 			if(oldMoney > LOST_MONEY_ONDEATH)
 			{
-				User[playerid][playerMoney] -= LOST_MONEY_ONDEATH;
+				GivePlayerCash(playerid, -LOST_MONEY_ONDEATH);
 				ShowMoneyTextDraw(playerid, sprintf("~r~~h~-%s!", FormatMoney(LOST_MONEY_ONDEATH)), 615.0, 56.0);
 			}
-			else User[playerid][playerMoney] -= oldMoney;
+			else GivePlayerCash(playerid, -oldMoney);
 		#endif
 
 		new givemoney;
@@ -288,13 +288,13 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		{
 			givemoney *= 2;
 			format(iString, sizeof(iString), "~y~~h~+%s! ~r~~h~2x!", FormatMoney(givemoney));
-			User[killerid][playerMoney] += givemoney;
+			GivePlayerCash(killerid, givemoney);
 			ShowMoneyTextDraw(killerid, iString, 604.0, 56.0);
 		}
 		else
 		{
 			format(iString, sizeof(iString), "~y~~h~+%s!", FormatMoney(givemoney));
-			User[killerid][playerMoney] += givemoney;
+			GivePlayerCash(killerid, givemoney);
 			ShowMoneyTextDraw(killerid, iString, 615.0, 56.0);
 		}
 
@@ -310,8 +310,8 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 			default: giveexp = 5+random(5);
 		}
 
-		if(User[killerid][clanID] != -1) {
-			giveexp = floatround(float(giveexp) * GetOutpostRespectMultiplier(User[killerid][clanID]));
+		if(IsPlayerInClan(killerid)) {
+			giveexp = floatround(float(giveexp) * GetOutpostRespectMultiplier(GetPlayerClan(killerid)));
 		}
 
 		User[killerid][playerExp] += giveexp;
@@ -324,7 +324,7 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		new bool:killerLocOk = (0 <= killerLoc < MAX_LOCATIONS);
 		new bool:victimLocOk = (0 <= victimLoc < MAX_LOCATIONS);
 
-		if(User[killerid][clanID] != -1 && User[killerid][clanID] != User[playerid][clanID])
+		if(IsPlayerInClan(killerid) && GetPlayerClan(killerid) != GetPlayerClan(playerid))
 		{
 			ClanInfo[User[killerid][clanID]][clanKills]++;
 
@@ -608,7 +608,7 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
         format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Ask Question\t{BEBEBE}Send a question to the administration.\n", menu_str);
         actions[count++] = 15; // Ask Question
 
-        if(User[clickedplayerid][clanID] != -1)
+        if(IsPlayerInClan(clickedplayerid))
         {
             format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Clan Information\t{BEBEBE}View details about your clan.\n", menu_str);
             actions[count++] = 3; // Clan Info
@@ -625,18 +625,18 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
         format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Reports\t{BEBEBE}Report this player for misconduct.\n", menu_str);
         actions[count++] = 2; // Report
 
-        if(User[clickedplayerid][clanID] != -1)
+        if(IsPlayerInClan(clickedplayerid))
         {
             format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Clan Information\t{BEBEBE}View details about this player's clan.\n", menu_str);
             actions[count++] = 3; // Clan Info
         }
         
-        if(User[playerid][adminLevel] >= 1)
+        if (IsAdmin(playerid, 1))
         {
             format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Name History\t{BEBEBE}View player nickname history.\n", menu_str);
             actions[count++] = 4; // Names
 
-            if(User[playerid][adminLevel] >= 3)
+            if (IsAdmin(playerid, 3))
             {
                 format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Go\t{BEBEBE}Teleport to this player's position.\n", menu_str);
                 actions[count++] = 6;
@@ -657,7 +657,7 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
             format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Kick\t{BEBEBE}Remove this player from the server.\n", menu_str);
             actions[count++] = 11;
 
-            if(User[playerid][adminLevel] >= 2)
+            if (IsAdmin(playerid, 2))
             {
                 format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Ban\t{BEBEBE}Permanently block this player from the server.\n", menu_str);
                 actions[count++] = 12;
@@ -666,14 +666,14 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
             format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Spec\t{BEBEBE}Spectate this player's movements.\n", menu_str);
             actions[count++] = 13;
 
-            if(User[playerid][adminLevel] >= 4)
+            if (IsAdmin(playerid, 4))
             {
                 format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Gtemp\t{BEBEBE}Force a temporary record requirement.\n", menu_str);
                 actions[count++] = 14;
             }
         }
         
-        if(User[playerid][adminLevel] >= 4)
+        if (IsAdmin(playerid, 4))
         {
             format(menu_str, sizeof(menu_str), "%s{MAIN}> {FFFFFF}Penalty History\t{BEBEBE}View administrative penalty logs.", menu_str);
             actions[count++] = 5; // Penalties
@@ -1022,7 +1022,7 @@ public OnPlayerText(playerid, text[])
 
 	if(text[0] == '!')
     {
-		if(User[playerid][clanID] != -1)
+		if(IsPlayerInClan(playerid))
 		{
 			new clanid = User[playerid][clanID];
 			new roleid = User[playerid][clanRole];
@@ -1105,7 +1105,7 @@ public OnPlayerText(playerid, text[])
 	GetPlayerChatIDColorHex(playerid, idHex);
 	GetPlayerChatTextColorHex(playerid, textHex);
 
-	if(User[playerid][clanID] != -1 && !User[playerid][hideClanTag])
+	if(IsPlayerInClan(playerid) && !User[playerid][hideClanTag])
 	{
 		new topString[50];
 		topString[0] = EOS;
@@ -1278,7 +1278,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 public e_COMMAND_ERRORS:OnPlayerCommandPerformed(playerid, cmdtext[], e_COMMAND_ERRORS:success)
 {
-	if(User[playerid][adminLevel] < 1)
+	if (!IsAdmin(playerid, 1))
 		playerCmdCooldown[playerid] = GetTickCount() + 500;
 	else if(success == COMMAND_OK && logs_admin_cmds != DCC_INVALID_CHANNEL)
 	{

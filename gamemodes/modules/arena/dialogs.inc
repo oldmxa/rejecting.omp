@@ -122,7 +122,7 @@ public DIALOG_CUSTOM_MAPLIST(playerid, dialogid, response, listitem, string:inpu
 {
     if(!response) return true;
 
-    if(User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     if(User[playerid][locationId] != ARENA_CUSTOM)

@@ -611,7 +611,7 @@ public DIALOG_CLAN_RECRUIT(playerid, dialogid, response, listitem, string:inputt
 
     if (strfind(inputtext, "Request Recruitment") == -1) return ShowClanRecruitDialog(playerid, clanid);
 
-    if (User[playerid][clanID] != -1) return SendClientMessage(playerid, -1, CLAN_PREFIX"You are already in a clan!");
+    if (IsPlayerInClan(playerid)) return SendClientMessage(playerid, -1, CLAN_PREFIX"You are already in a clan!");
 
     if (GetClanOnlineMembers(clanid) == 0)
         return va_SendClientMessage(playerid, -1, CLAN_PREFIX"There are no online members in clan {MAIN}%s {FFFFFF}at the moment. Try again later.", ClanInfo[clanid][clanName]);

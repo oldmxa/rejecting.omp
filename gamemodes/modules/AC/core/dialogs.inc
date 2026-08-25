@@ -616,7 +616,7 @@ public DIALOG_AC_HISTORY(playerid, dialogid, response, listitem, string:inputtex
 
 @cmd(.alts = {"accheck"}) acinfo(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);

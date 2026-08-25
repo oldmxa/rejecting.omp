@@ -938,7 +938,7 @@ DSLASH:resetpassword(user, params[])
     if(adminid == INVALID_PLAYER_ID)
         return SendDiscordResponse(comandos, sprintf(":x: **%s**, you must be linked and **online in-game** to use this command (the new password is delivered in-game).", adminName));
 
-    if(User[adminid][adminLevel] < 5)
+    if (!IsAdmin(adminid, 5))
         return SendDiscordResponse(comandos, sprintf(":no_entry: **%s**, your in-game account is not admin level 5.", adminName));
 
     new sqlid, reason[128];

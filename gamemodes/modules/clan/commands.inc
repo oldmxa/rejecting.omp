@@ -72,7 +72,7 @@
 @cmd(.alts = {"inviteclan"}) invite(playerid, params[], help)
 {
     if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-    if (User[playerid][clanID] == -1) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
+    if (!IsPlayerInClan(playerid)) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
     if (!HasClanRank(playerid, RANK_RECRUTER)) return SendClientMessage(playerid, -1, "%s", CLAN_NOPERMISSION);
 
     new targetid;
@@ -80,7 +80,7 @@
     if (!IsPlayerLogged(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (targetid == playerid) return SendClientMessage(playerid, -1, "%s", CLAN_INYOURCLAN);
     if (User[targetid][clanID] == User[playerid][clanID]) return SendClientMessage(playerid, -1, "%s", CLAN_INYOURCLAN);
-    if (User[targetid][clanID] != -1) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN1);
+    if (IsPlayerInClan(targetid)) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN1);
 
     new clanid = User[playerid][clanID];
 
@@ -100,7 +100,7 @@
 @cmd() accept(playerid, params[], help)
 {
     if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-    if (User[playerid][clanID] != -1) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
+    if (IsPlayerInClan(playerid)) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
     if (User[playerid][clanIDInvite] == -1) return SendClientMessage(playerid, -1, "%s", CLAN_NOINVITE);
 
     new clanid = User[playerid][clanIDInvite];

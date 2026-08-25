@@ -803,7 +803,7 @@ public DIALOG_MAPLIST(playerid, dialogid, response, listitem, string:inputtext[]
                 va_SendClientMessage(i, -1, CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[listitemm][arenaName], listitemm);
         }
 
-        if(User[playerid][adminLevel] < 4)
+        if (!IsAdmin(playerid, 4))
             changeArenaDelay = gettime()+(3*60);
     }
     return true;
@@ -866,7 +866,7 @@ public DIALOG_PROFILE_MENU(playerid, dialogid, response, listitem, string:inputt
             }
             case 5: // Penality historico
             {
-                if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+                if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
                 ShowPenaltyHistory(playerid, User[targetid][userName]);
             }
             case 6: // Go
@@ -947,7 +947,7 @@ public DIALOG_ASK_SUBMIT(playerid, dialogid, response, listitem, string:inputtex
 {
     if(response)
     {
-        if(User[playerid][adminLevel] > 0)
+        if (IsAdmin(playerid))
             return SendClientMessage(playerid, -1, "{MAIN}[ASK] {FFFFFF}Administrators cannot submit questions via /ask.");
 
         if(GetPVarInt(playerid, "ask_cooldown"))
@@ -972,7 +972,7 @@ public DIALOG_REPORT_SUBMIT(playerid, dialogid, response, listitem, string:input
 {
     if(response)
     {
-        if(User[playerid][adminLevel] > 0)
+        if (IsAdmin(playerid))
             return SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Administrators cannot use player reports.");
 
         if(GetPVarInt(playerid, "report_cooldown"))

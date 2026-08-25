@@ -111,7 +111,7 @@ public OnLoginVerify(playerid, bool:success)
 
 			va_SendClientMessage(playerid, -1, GetRandomWelcomeGreeting(), coloredNick);
 
-			if(User[playerid][adminLevel] >= 1)
+			if (IsAdmin(playerid, 1))
 			{
 				va_SendClientMessage(playerid, -1, GetRandomAdminAccountMsg(), adminnames[User[playerid][adminLevel]][ingame]);
 			}
@@ -132,7 +132,7 @@ public OnLoginVerify(playerid, bool:success)
 					SendClientMessage(playerid, -1, fmat_return("{MAIN}**{FFFFFF} Discord: {7289da}%s#%s", User[playerid][dc_username], User[playerid][dc_discriminator]));
 			}
 
-			if(User[playerid][clanID] != -1)
+			if(IsPlayerInClan(playerid))
 			{
 				new cid = User[playerid][clanID];
 				new clanColorHex[7], coloredClanName[64];
@@ -892,7 +892,7 @@ public OnPlayerTryChangeNick(playerid, newnick[], oldnick[])
 
 					va_SendClientMessage(playerid, -1, "{MAIN}**{FFFFFF} You changed your nickname to %s!", newnick);
 					va_SendClientMessageToAll(COLOR_GYELLOW, "%s changed his nickname to: %s!", oldnick, newnick);
-					User[playerid][playerMoney] -= 300000;
+					GivePlayerCash(playerid, -300000);
 					LoadPlayerMoney(playerid);
 					GetPlayerName(playerid, User[playerid][userName], MAX_PLAYER_NAME + 1);
 					UpdatePlayerData(playerid);

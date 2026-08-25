@@ -1,7 +1,7 @@
 
 @cmd() kick(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -35,7 +35,7 @@
 
 @cmd() ban(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -66,7 +66,7 @@
 
 @cmd() fakeban(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 3)
+    if (!IsAdmin(playerid, 3))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -116,7 +116,7 @@
 
 @cmd(.alts = {"banopenmp", "banr2"}) banomp(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -145,7 +145,7 @@
 
 @cmd(.alts = {"unbanopenmp", "unbanr2"}) unbanomp(playerid, params[], help)
 {
-	if (User[playerid][adminLevel] < 2)
+	if (!IsAdmin(playerid, 2))
 	    return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
 	CheckAdminAuth(playerid);
@@ -164,7 +164,7 @@
 
 @cmd() offban(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -186,7 +186,7 @@
 
 @cmd() mute(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -229,7 +229,7 @@
 
 @cmd() unmute(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -268,7 +268,7 @@
 
 @cmd() unban(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -287,7 +287,7 @@
 
 @cmd(.alts = {"gtemp"}) temprec(playerid, params[],  help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -374,7 +374,7 @@
 
 @cmd() baninfo(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new target[64];
@@ -400,7 +400,7 @@
 
 @cmd() warn(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new targetid, reason[64];
@@ -438,7 +438,7 @@
 
 @cmd() banserial(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     if(!IsPlayerAdmin(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be logged into RCON to use this command..");
@@ -466,7 +466,7 @@
 
 @cmd() changebanreason(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new target[MAX_PLAYER_NAME + 1], reason[120];
@@ -486,7 +486,7 @@
 
 @cmd() changebantime(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new target[MAX_PLAYER_NAME + 1], amount, unit[2];
@@ -568,7 +568,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 
 @cmd() penalties(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new target[MAX_PLAYER_NAME + 1];
@@ -580,7 +580,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 
 @cmd() bannick(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new target[MAX_PLAYER_NAME + 1], reason[64];
@@ -596,7 +596,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 
 @cmd() unbannick(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new target[MAX_PLAYER_NAME + 1];
@@ -609,7 +609,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 
 @cmd() unbangpci(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new serial_gpci[41];
@@ -629,7 +629,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 
 @cmd() slimban(playerid, params[], help)
 {
-	if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+	if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
 	CheckAdminAuth(playerid);
 
@@ -671,7 +671,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 
 @cmd() banisp(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
 
@@ -707,7 +707,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 
 @cmd() unbanisp(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
 

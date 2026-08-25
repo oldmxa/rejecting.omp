@@ -31,7 +31,7 @@ public DIALOG_HISTORY_NAV(playerid, dialogid, response, listitem, string:inputte
 
 @cmd() aka(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -127,7 +127,7 @@ static stock ShowOnlineLookup(playerid, targetid)
 
 @cmd() lookup(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -209,7 +209,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
 
 @cmd(.alts = {"nicks"}) names(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -227,7 +227,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
 
 @cmd() inject(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new targetid;
@@ -245,7 +245,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
 
 @cmd() eject(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new targetid;
@@ -262,7 +262,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
 
 @cmd(.alts = {"gpci"}) gpciaka(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
 
@@ -299,7 +299,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
 
 @cmd() recentips(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -330,7 +330,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
 
 @cmd() logins(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 2)
+    if (!IsAdmin(playerid, 2))
         return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);
@@ -422,7 +422,7 @@ static stock AppendACSuspects(dest[], size)
 
 @cmd() suspects(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -524,7 +524,7 @@ static stock ReportSanitize(text[], maxlen = 0)
 
 @cmd(.alts = {"reportlist"}) reports(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] < 1)
+    if (!IsAdmin(playerid, 1))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);

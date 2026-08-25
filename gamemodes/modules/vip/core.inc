@@ -706,7 +706,7 @@ ShowVipTagDialog(playerid)
 {
     if(!User[playerid][isLogged]) return true;
 
-    if(User[playerid][adminLevel] < 4)
+    if (!IsAdmin(playerid, 4))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You do not have permission to use this command (Admin Level 4 Required).");
         return true;
@@ -780,7 +780,7 @@ ShowVipTagDialog(playerid)
 {
     if(!User[playerid][isLogged]) return true;
 
-    if(User[playerid][adminLevel] < 4)
+    if (!IsAdmin(playerid, 4))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You do not have permission to use this command (Admin Level 4 Required).");
         return true;
