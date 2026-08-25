@@ -255,6 +255,18 @@ FormatRatio(value1, value2, destination[], len = sizeof(destination))
     return 1;
 }
 
+#define RATIO_UNBEATEN "./,),(-&,(.(("
+
+RatioText(kills, deaths)
+{
+	new str[32];
+
+	if(kills > 0 && deaths <= 0) format(str, sizeof(str), "%s", RATIO_UNBEATEN);
+	else format(str, sizeof(str), "%0.2f", ratio(kills, deaths));
+
+	return str;
+}
+
 GetVehicleModelIDFromName(const vname[])
 {
 	if(isnull(vname)) return -1;

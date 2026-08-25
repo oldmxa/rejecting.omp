@@ -419,9 +419,6 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		{
 			SendClientMessage(killerid, -1, "%s", NEXT_LEVEL_MSG);
 			User[killerid][playerLevel]++;
-			new strLevel[64];
-			format(strLevel, sizeof (strLevel), "~y~~h~congratulations!~n~~w~you achieved ~y~~h~level %d", User[killerid][playerLevel]);
-			GameTextForPlayer(killerid, strLevel, 2000, 4);
 			CheckPlayerLevelUp(killerid);
 		}
 
