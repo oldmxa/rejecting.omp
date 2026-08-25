@@ -210,7 +210,7 @@ ShowRankingsMenu(playerid)
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
 
-    if(playerState != PLAYER_STATE_SPECTATING && User[playerid][adminLevel] < 1)
+    if(playerState != PLAYER_STATE_SPECTATING && !IsAdmin(playerid))
     {
         if(User[playerid][isAfk] == false)
             return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
@@ -468,7 +468,7 @@ ShowCommandCategory(playerid, catid)
     new count = 0;
     foreach(new i : Player)
     {
-        if(User[i][isLogged] && User[i][adminLevel] > 0 && !User[i][adminCamu] && GetPVarInt(i, "HideTab") != 1)
+        if(IsAdmin(i) && !User[i][adminCamu] && GetPVarInt(i, "HideTab") != 1)
         {
             new locStr[64];
             new location = User[i][locationId];

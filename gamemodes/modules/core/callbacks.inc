@@ -989,7 +989,7 @@ public OnPlayerText(playerid, text[])
 		return false;
 	}
 
-	if(User[playerid][muteTimestamp] > gettime() )
+	if(IsPlayerMuted(playerid))
 	{
 		va_SendClientMessage(playerid, -1, IS_MUTED);
 		return false;

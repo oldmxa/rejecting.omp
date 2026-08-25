@@ -247,7 +247,7 @@ static EAcc_ClanID(playerid)
     new targetid = EAcc_OnlineTarget(playerid);
     if (targetid == INVALID_PLAYER_ID) return -1;
 
-    return (User[targetid][clanRole] == RANK_FOUNDER) ? User[targetid][clanID] : -1;
+    return (GetPlayerClanRank(targetid) == RANK_FOUNDER) ? GetPlayerClan(targetid) : -1;
 }
 
 static bool:EAcc_OwnsClan(playerid)

@@ -1062,6 +1062,7 @@ stock GivePlayerCash(playerid, amount)
 {
     if(!IsPlayerLogged(playerid)) return 0;
     User[playerid][playerMoney] += amount;
+    if(User[playerid][playerMoney] < 0) User[playerid][playerMoney] = 0;
     ResetPlayerMoney(playerid);
     GivePlayerMoney(playerid, User[playerid][playerMoney]);
     return 1;
@@ -1124,4 +1125,66 @@ stock bool:HasPlayerCoins(playerid, amount)
 {
     if(!IsPlayerLogged(playerid)) return false;
     return (User[playerid][playerCoins] >= amount);
+}
+
+stock bool:IsPlayerInClan(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (User[playerid][clanID] != -1);
+}
+
+stock GetPlayerClan(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return -1;
+    return User[playerid][clanID];
+}
+
+stock bool:IsPlayerMuted(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (User[playerid][muteTimestamp] > gettime());
+}
+
+stock GetPlayerMuteRemaining(playerid)
+{
+    if(!IsPlayerMuted(playerid)) return 0;
+    return (User[playerid][muteTimestamp] - gettime());
+}
+
+stock bool:IsPlayerFrozen(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return User[playerid][isFrozen];
+}
+
+stock FreezePlayer(playerid, bool:freeze)
+{
+    if(!IsPlayerLogged(playerid)) return 0;
+    User[playerid][isFrozen] = freeze;
+    TogglePlayerControllable(playerid, !freeze);
+    return 1;
+}
+
+stock Float:GetPlayerKDR(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return 0.0;
+    return ratio(User[playerid][playerKills], User[playerid][playerDeaths]);
+}
+
+stock GetPlayerLevel(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return 1;
+    return User[playerid][playerLevel];
+}
+
+stock GetPlayerSQLID(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return 0;
+    return User[playerid][user_sqlid];
+}
+
+stock GetPlayerClanRank(playerid)
+{
+    if(!IsPlayerInClan(playerid)) return -1;
+    return User[playerid][clanRole];
 }

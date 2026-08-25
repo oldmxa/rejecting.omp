@@ -70,8 +70,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
 
             if(g_TourneyData[t_EntryFee] > 0)
             {
-                GivePlayerMoney(playerid, -g_TourneyData[t_EntryFee]);
-                User[playerid][playerMoney] -= g_TourneyData[t_EntryFee];
+                GivePlayerCash(playerid, -g_TourneyData[t_EntryFee]);
             }
 
             g_TourneyData[t_RegisteredCount]++;
@@ -106,7 +105,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
                 return -1;
             }
 
-            if(g_TourneyData[t_EntryFee] > 0 && User[teammateid][playerMoney] < g_TourneyData[t_EntryFee])
+            if(g_TourneyData[t_EntryFee] > 0 && !HasPlayerCash(teammateid, g_TourneyData[t_EntryFee]))
             {
                 va_SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Your teammate does not have enough money for the registration fee (%s).", FormatMoney(g_TourneyData[t_EntryFee]));
                 return -1;
@@ -130,11 +129,8 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
 
             if(g_TourneyData[t_EntryFee] > 0)
             {
-                GivePlayerMoney(playerid, -g_TourneyData[t_EntryFee]);
-                User[playerid][playerMoney] -= g_TourneyData[t_EntryFee];
-
-                GivePlayerMoney(teammateid, -g_TourneyData[t_EntryFee]);
-                User[teammateid][playerMoney] -= g_TourneyData[t_EntryFee];
+                GivePlayerCash(playerid, -g_TourneyData[t_EntryFee]);
+                GivePlayerCash(teammateid, -g_TourneyData[t_EntryFee]);
             }
 
             g_TourneyData[t_RegisteredCount]++;
@@ -200,8 +196,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
 
             if(g_TourneyData[t_EntryFee] > 0)
             {
-                GivePlayerMoney(playerid, -g_TourneyData[t_EntryFee]);
-                User[playerid][playerMoney] -= g_TourneyData[t_EntryFee];
+                GivePlayerCash(playerid, -g_TourneyData[t_EntryFee]);
             }
 
             g_TourneyData[t_RegisteredCount]++;
@@ -295,13 +290,11 @@ stock UnregisterParticipant(playerid)
     {
         if(p1Valid && IsPlayerConnected(p1))
         {
-            GivePlayerMoney(p1, g_TourneyData[t_EntryFee]);
-            User[p1][playerMoney] += g_TourneyData[t_EntryFee];
+            GivePlayerCash(p1, g_TourneyData[t_EntryFee]);
         }
         if(p2Valid && IsPlayerConnected(p2))
         {
-            GivePlayerMoney(p2, g_TourneyData[t_EntryFee]);
-            User[p2][playerMoney] += g_TourneyData[t_EntryFee];
+            GivePlayerCash(p2, g_TourneyData[t_EntryFee]);
         }
     }
 
@@ -339,14 +332,12 @@ stock KickTourneyParticipant(slot, adminid = INVALID_PLAYER_ID)
     {
         if(p1 != INVALID_PLAYER_ID && IsPlayerLogged(p1))
         {
-            GivePlayerMoney(p1, g_TourneyData[t_EntryFee]);
-            User[p1][playerMoney] += g_TourneyData[t_EntryFee];
+            GivePlayerCash(p1, g_TourneyData[t_EntryFee]);
             SendClientMessage(p1, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You were removed from the tournament by staff and refunded.");
         }
         if(p2 != INVALID_PLAYER_ID && IsPlayerLogged(p2))
         {
-            GivePlayerMoney(p2, g_TourneyData[t_EntryFee]);
-            User[p2][playerMoney] += g_TourneyData[t_EntryFee];
+            GivePlayerCash(p2, g_TourneyData[t_EntryFee]);
             SendClientMessage(p2, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You were removed from the tournament by staff and refunded.");
         }
     }
@@ -605,8 +596,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         g_PlayerTourneySlot[onlinePlayerId] = slot;
         if(g_TourneyData[t_EntryFee] > 0)
         {
-            GivePlayerMoney(onlinePlayerId, -g_TourneyData[t_EntryFee]);
-            User[onlinePlayerId][playerMoney] -= g_TourneyData[t_EntryFee];
+            GivePlayerCash(onlinePlayerId, -g_TourneyData[t_EntryFee]);
         }
 
         g_TourneyData[t_RegisteredCount]++;

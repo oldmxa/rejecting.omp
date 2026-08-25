@@ -72,57 +72,22 @@ stock IsPlayerVip(playerid)
 
 stock CheckPlayerVipOnLogin(playerid)
 {
-    if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
-    if(!User[playerid][isLogged]) return 0;
+    if(!IsPlayerVip(playerid)) return 0;
 
-    if(User[playerid][vipLevel] > 0 && User[playerid][vipExpire] > 0 && gettime() >= User[playerid][vipExpire])
+    if(User[playerid][hideWelcomeMsg]) return 1;
+
+    if(User[playerid][vipExpire] == 0)
     {
-        User[playerid][vipLevel] = 0;
-        User[playerid][vipExpire] = 0;
-        User[playerid][vipHeadTag] = 0;
-
-        if(VipLabel[playerid] != Text3D:INVALID_3DTEXT_ID)
-        {
-            DestroyDynamic3DTextLabel(VipLabel[playerid]);
-            VipLabel[playerid] = Text3D:INVALID_3DTEXT_ID;
-        }
-
-        new query[128];
-        mysql_format(dbHandle, query, sizeof(query), "UPDATE accounts SET vip_level = 0, vip_expire = 0, vip_head_tag = 0 WHERE id = %d", User[playerid][user_sqlid]);
-        mysql_tquery(dbHandle, query);
-
-        new expVipStr[256];
-        format(expVipStr, sizeof(expVipStr),
-            "**Player:** %s [ID: %d | SQL ID: %d]\n**Status:** VIP Subscription Expired",
-            User[playerid][userName], playerid, User[playerid][user_sqlid]
-        );
-        LogDiscordVipAction("VIP Expired", expVipStr, DISCORD_COLOR_WARNING);
-
-        SyncPlayerDiscordRoles(playerid);
-
-        va_SendClientMessage(playerid, -1, "{MAIN}[VIP] {FFFFFF}Your VIP subscription has expired. To activate another package use {MAIN}'/buyvip'{FFFFFF}.");
-        return 0;
+        va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG_VIP_PERM);
     }
-
-    if(IsPlayerVip(playerid))
+    else
     {
-        if(User[playerid][hideWelcomeMsg]) return 1;
-
-        if(User[playerid][vipExpire] == 0)
-        {
-            va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG_VIP_PERM);
-        }
-        else
-        {
-            new remaining = User[playerid][vipExpire] - gettime();
-            new days = remaining / 86400;
-            new hours = (remaining % 86400) / 3600;
-            va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG5, days, hours);
-        }
-        return 1;
+        new remaining = User[playerid][vipExpire] - gettime();
+        new days = remaining / 86400;
+        new hours = (remaining % 86400) / 3600;
+        va_SendClientMessage(playerid, -1, PLAYER_WELCOME_MSG5, days, hours);
     }
-
-    return 0;
+    return 1;
 }
 
 stock GetVipTagColorHex(playerid, dest[], len = sizeof(dest))
@@ -652,7 +617,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
     foreach(new i : Player)
     {
-        if(User[i][isLogged] && (IsPlayerVip(i) || User[i][adminLevel] > 0) && !User[i][hideVipChat])
+        if(User[i][isLogged] && (IsPlayerVip(i) || IsAdmin(i)) && !User[i][hideVipChat])
         {
             SendClientMessage(i, 0x00B6F6AA, "%s", vipStr);
         }
@@ -911,8 +876,7 @@ public VipPayoutTick()
 
         VipPayTick[i] = now;
 
-        User[i][playerMoney] += VIP_PAY_AMOUNT;
-        GivePlayerMoney(i, VIP_PAY_AMOUNT);
+        GivePlayerCash(i, VIP_PAY_AMOUNT);
 
         va_SendClientMessage(i, -1, "{MAIN}[VIP] {FFFFFF}You earned {23C552}%s {FFFFFF}for staying %d minutes on the server.",
             FormatMoney(VIP_PAY_AMOUNT), VIP_PAY_INTERVAL / 60);

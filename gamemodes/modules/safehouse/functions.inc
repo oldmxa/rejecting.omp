@@ -608,15 +608,13 @@ stock SafehouseVaultDeposit(playerid, index, amount)
     if (amount > 100000000)
         return SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"Maximum deposit limit per transaction is $100,000,000.");
 
-    if (User[playerid][playerMoney] < amount)
+    if (!HasPlayerCash(playerid, amount))
         return SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You do not have that much money.");
 
     if (SafehouseData[index][sh_Vault] + amount > 2000000000)
         return SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"The vault cannot hold any more money (capacity reached).");
 
-    GivePlayerMoney(playerid, -amount);
-    User[playerid][playerMoney] -= amount;
-    UpdatePlayerData(playerid);
+    GivePlayerCash(playerid, -amount);
 
     SafehouseData[index][sh_Vault] += amount;
     SaveSafehouse(index);
@@ -646,9 +644,7 @@ stock SafehouseVaultWithdraw(playerid, index, amount)
     SafehouseData[index][sh_Vault] -= amount;
     SaveSafehouse(index);
 
-    GivePlayerMoney(playerid, amount);
-    User[playerid][playerMoney] += amount;
-    UpdatePlayerData(playerid);
+    GivePlayerCash(playerid, amount);
 
     new detail[64];
     format(detail, sizeof(detail), "amount %d, vault now %d", amount, SafehouseData[index][sh_Vault]);

@@ -692,8 +692,7 @@ public RewardOutpostOwners()
 
             foreach(new i : Player) {
                 if(User[i][clanID] == c) {
-                    GivePlayerMoney(i, moneyReward);
-                    User[i][playerMoney] += moneyReward;
+                    GivePlayerCash(i, moneyReward);
                     if(!User[i][hideGlobalMsg]) {
                         va_SendClientMessage(i, -1, "{MAIN}[OUTPOST] {FFFFFF}Your clan received "COL_BEIGE"%d{FFFFFF} points and you got "COL_BEIGE"%s {FFFFFF}for holding outposts!", points[c], FormatMoney(moneyReward));
                     }

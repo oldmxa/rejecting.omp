@@ -1,7 +1,7 @@
 
 @cmd() report(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] > 0)
+    if(IsAdmin(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Administrators cannot use player reports.");
 
     if(GetPVarInt(playerid, "report_cooldown"))
@@ -14,7 +14,7 @@
 		return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 	if(targetid == playerid)
 		return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_SELF);
-	if(User[targetid][adminLevel] > 0)
+	if(IsAdmin(targetid))
 		return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_ADMIN);
 
     SetPVarInt(playerid, "report_cooldown", 1);
@@ -64,7 +64,7 @@
 
 @cmd() ask(playerid, params[], help)
 {
-    if(User[playerid][adminLevel] > 0)
+    if(IsAdmin(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ASK] {FFFFFF}Administrators cannot submit questions via /ask.");
 
     if(GetPVarInt(playerid, "ask_cooldown"))
@@ -78,7 +78,7 @@
 
     foreach(new i : Player)
     {
-        if(User[i][adminLevel] > 0)
+        if(IsAdmin(i))
         {
             if(IsPlayerVip(playerid))
             {
@@ -190,7 +190,7 @@
     if(targetid == playerid)
         return SendClientMessage(playerid, COLOR_RED, "{MAIN}[ERROR] {FFFFFF}You can't votekick yourself, just quit.");
 
-    if(User[targetid][adminLevel] > 0)
+    if(IsAdmin(targetid))
         return SendClientMessage(playerid, COLOR_RED, "{MAIN}[ERROR] {FFFFFF}You cannot votekick a member of the staff.");
 
     if(votingInfo[isRunningVote])

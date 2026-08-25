@@ -26,7 +26,7 @@ enum
 
 stock IsSafehouseAdmin(playerid)
 {
-    return (User[playerid][adminLevel] >= MAX_ADMIN_LEVEL && IsPlayerAdmin(playerid)) ? 1 : 0;
+    return (IsAdmin(playerid, MAX_ADMIN_LEVEL) && IsPlayerAdmin(playerid)) ? 1 : 0;
 }
 
 stock ShowSafehouseAdminMenu(playerid)

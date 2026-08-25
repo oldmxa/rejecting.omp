@@ -526,12 +526,14 @@ DSLASH:warn(user, params[])
     if(targetid != INVALID_PLAYER_ID)
     {
         User[targetid][warnings]++;
-        va_SendClientMessageToAll(COLOR_ADM_PUNISH, "{MAIN}[ADMIN] [Discord] Admin %s gave a warning to %s [%d/5]. Reason: %s", username, User[targetid][userName], User[targetid][warnings], reason);
-        if(User[targetid][warnings] >= 5)
+        va_SendClientMessageToAll(COLOR_ADM_PUNISH, "{MAIN}[ADMIN] [Discord] Admin %s gave a warning to %s [%d/%d]. Reason: %s", username, User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
+        if(User[targetid][warnings] >= ServerMaxWarnings)
         {
             new hours = 9999;
+            new banReason[64];
+            format(banReason, sizeof(banReason), "Exceeded warning limit (%d/%d)", ServerMaxWarnings, ServerMaxWarnings);
             mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT * FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[targetid][userName]);
-            mysql_tquery(dbHandle, queryGlobal, "BanPlayerDiscord", "sssdd", username, User[targetid][userName], "Exceeded warning limit (5/5)", gettime()+hours*3600, _:user);
+            mysql_tquery(dbHandle, queryGlobal, "BanPlayerDiscord", "sssdd", username, User[targetid][userName], banReason, gettime()+hours*3600, _:user);
         }
         else UpdatePlayerData(targetid);
     }
@@ -546,8 +548,8 @@ DSLASH:warn(user, params[])
     LogServerAction(0, username, "warns", "Warn (Discord)", log_details);
 
     new dMsg[256];
-    format(dMsg, sizeof(dMsg), "**Admin:** %s (Discord)\n**Player:** %s\n**Warning:** %d/5\n**Reason:** %s",
-        username, target_nick, (targetid != INVALID_PLAYER_ID) ? User[targetid][warnings] : 1, reason);
+    format(dMsg, sizeof(dMsg), "**Admin:** %s (Discord)\n**Player:** %s\n**Warning:** %d/%d\n**Reason:** %s",
+        username, target_nick, (targetid != INVALID_PLAYER_ID) ? User[targetid][warnings] : 1, ServerMaxWarnings, reason);
     SendDiscordEmbed(logs_punish, "New Warning", dMsg, DISCORD_COLOR_WARNING);
 
     SendDiscordResponse(comandos, sprintf("Warning applied to player **%s**!", target_nick));

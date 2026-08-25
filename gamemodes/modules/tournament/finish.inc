@@ -156,14 +156,12 @@ stock CancelTournament(adminid = INVALID_PLAYER_ID, const reason[] = "Cancelled 
 
                 if(IsPlayerLogged(p1))
                 {
-                    GivePlayerMoney(p1, g_TourneyData[t_EntryFee]);
-                    User[p1][playerMoney] += g_TourneyData[t_EntryFee];
+                    GivePlayerCash(p1, g_TourneyData[t_EntryFee]);
                     SendClientMessage(p1, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Your registration fee was refunded.");
                 }
                 if(p2 != INVALID_PLAYER_ID && IsPlayerLogged(p2))
                 {
-                    GivePlayerMoney(p2, g_TourneyData[t_EntryFee]);
-                    User[p2][playerMoney] += g_TourneyData[t_EntryFee];
+                    GivePlayerCash(p2, g_TourneyData[t_EntryFee]);
                     SendClientMessage(p2, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Your registration fee was refunded.");
                 }
             }

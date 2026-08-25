@@ -622,8 +622,7 @@ public RewardClanTerritories()
         new count = clanTerritories[User[i][clanID]];
         if (IsPlayerVip(i)) reward *= 2;
 
-        GivePlayerMoney(i, reward);
-        User[i][playerMoney] += reward;
+        GivePlayerCash(i, reward);
 
         if (!User[i][hideGlobalMsg])
         {

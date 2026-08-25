@@ -6,8 +6,8 @@
 @cmd() createclan(playerid, params[], help)
 {
     if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-    if (User[playerid][clanID] != -1) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
-    if (User[playerid][playerMoney] < CLAN_PRICE) return SendClientMessage(playerid, -1, "%s", CLAN_NOMONEY);
+    if (IsPlayerInClan(playerid)) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
+    if (!HasPlayerCash(playerid, CLAN_PRICE)) return SendClientMessage(playerid, -1, "%s", CLAN_NOMONEY);
 
     new rawTag[100], rawName[100];
     if (sscanf(params, "s[100]s[100]", rawTag, rawName))
@@ -21,9 +21,9 @@
     {
         if (taken == CLAN_TEXT_FREE)
         {
-            if (User[playerid][clanID] != -1)
+            if (IsPlayerInClan(playerid))
                 SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
-            else if (User[playerid][playerMoney] < CLAN_PRICE)
+            else if (!HasPlayerCash(playerid, CLAN_PRICE))
                 SendClientMessage(playerid, -1, "%s", CLAN_NOMONEY);
             else
             {
@@ -44,14 +44,14 @@
 @cmd() clan(playerid, params[], help)
 {
     if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-    if (User[playerid][clanID] == -1) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
+    if (!IsPlayerInClan(playerid)) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
 
     new option[10], value[10];
     if (!sscanf(params, "s[10]S()[10]", option, value) && !strcmp(option, "color", true))
     {
         if (!HasClanRank(playerid, RANK_COFOUNDER)) return SendClientMessage(playerid, -1, "%s", CLAN_LOWRANK);
 
-        if (User[playerid][playerMoney] < CLAN_COLOR_PRICE)
+        if (!HasPlayerCash(playerid, CLAN_COLOR_PRICE))
             return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need %s to change the clan color.", FormatMoney(CLAN_COLOR_PRICE));
 
         if (isnull(value)) return SendClientMessage(playerid, -1, CLAN_PREFIX"Usage: /clan color [HEX] (e.g., FF0000)");

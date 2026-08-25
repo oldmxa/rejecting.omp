@@ -128,11 +128,8 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
     if(User[playerid][isAfk] == false)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun during a duel.");
-
-    if(g_PlayerTraining[playerid][pTrain_Active] || IsPracticeActive(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun in training or practice.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun while in a match, training, practice or safehouse.");
 
     new PLAYER_STATE:pState = GetPlayerState(playerid);
     if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)

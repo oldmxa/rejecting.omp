@@ -202,13 +202,13 @@ stock updatePlayerHud(playerid)
 		%sLevel: %s%d (%d)",
 		playerColorOne, playerColorTwo, User[playerid][playerKills],
 		playerColorOne, playerColorTwo, User[playerid][playerDeaths],
-		playerColorOne, playerColorTwo, ratio(User[playerid][playerKills], User[playerid][playerDeaths]),
+		playerColorOne, playerColorTwo, GetPlayerKDR(playerid),
 		playerColorOne, playerColorTwo, User[playerid][duelWins], playerColorOne, playerColorTwo, User[playerid][duelLosses],
 		playerColorOne, playerColorTwo, User[playerid][duel2v2Wins], playerColorOne, playerColorTwo, User[playerid][duel2v2Losses],
 		playerColorOne, playerColorTwo, User[playerid][playerLevel], levelGoal(User[playerid][playerLevel]));
 		PlayerTextDrawSetString(playerid, InfoStats[playerid][0],fString);
 
-		if(User[playerid][clanID] != -1 && User[playerid][showPlayerHud] && User[playerid][showClanHud])
+		if(IsPlayerInClan(playerid) && User[playerid][showPlayerHud] && User[playerid][showClanHud])
 		{
 			for(new i; i < 4; i++)
 				PlayerTextDrawShow(playerid, ClanHUD[playerid][i]);

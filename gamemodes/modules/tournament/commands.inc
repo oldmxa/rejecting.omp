@@ -9,7 +9,7 @@
 {
     if(!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(User[playerid][adminLevel] >= 4)
+    if(IsAdmin(playerid, 4))
     {
         CheckAdminAuth(playerid);
         return ShowTournamentAdminMenu(playerid);

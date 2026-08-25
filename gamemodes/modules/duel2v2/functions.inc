@@ -522,8 +522,7 @@ stock AwardDuel2v2Result(matchid, winning_team)
             User[pid][duel2v2Wins]++;
             if(IsPlayerConnected(pid))
             {
-                GivePlayerMoney(pid, DUEL2V2_WIN_REWARD);
-                User[pid][playerMoney] += DUEL2V2_WIN_REWARD;
+                GivePlayerCash(pid, DUEL2V2_WIN_REWARD);
             }
         }
         else

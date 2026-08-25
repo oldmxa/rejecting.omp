@@ -875,7 +875,7 @@ public DIALOG_PROFILE_MENU(playerid, dialogid, response, listitem, string:inputt
             case 2: // Reports
             {
                 if(targetid == playerid) return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_SELF);
-                if(User[targetid][adminLevel] > 0) return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_ADMIN);
+                if(IsAdmin(targetid)) return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_ADMIN);
 
                 new header[64];
                 format(header, sizeof(header), "{MAIN}Submit Report: {FFFFFF}%s", User[targetid][userName]);
@@ -884,12 +884,12 @@ public DIALOG_PROFILE_MENU(playerid, dialogid, response, listitem, string:inputt
             }
             case 3: // Clan Information
             {
-                if(User[targetid][clanID] == -1) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}This player is no longer in a clan.");
+                if(!IsPlayerInClan(targetid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}This player is no longer in a clan.");
                 ShowPlayerClanInfo(playerid, targetid);
             }
             case 4: // Names changes
             {
-                if(User[playerid][adminLevel] < 1) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+                if(!IsAdmin(playerid)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
                 ShowNameHistory(playerid, targetid);
             }
             case 5: // Penality historico
@@ -1009,7 +1009,7 @@ public DIALOG_REPORT_SUBMIT(playerid, dialogid, response, listitem, string:input
         new targetid = GetPVarInt(playerid, "profile_target");
         if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
         if(targetid == playerid) return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_SELF);
-        if(User[targetid][adminLevel] > 0) return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_ADMIN);
+        if(IsAdmin(targetid)) return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_ADMIN);
         if(isnull(inputtext)) 
         {
             new header[64];
@@ -1023,7 +1023,7 @@ public DIALOG_REPORT_SUBMIT(playerid, dialogid, response, listitem, string:input
 
         foreach(new i : Player)
         {
-            if(User[i][adminLevel] > 0)
+            if(IsAdmin(i))
             {
                 if(IsPlayerVip(playerid))
                 {
@@ -1457,7 +1457,7 @@ stock ShowTagMenu(playerid)
     }
 
     // 2. Clan Tag
-    if(User[playerid][clanID] != -1)
+    if(IsPlayerInClan(playerid))
     {
         g_PlayerTagMenu[playerid][count++] = TAG_TYPE_CLAN;
         new clanid = User[playerid][clanID];
@@ -1469,7 +1469,7 @@ stock ShowTagMenu(playerid)
     }
 
     // 3. Admin Tag
-    if(User[playerid][adminLevel] > 0)
+    if(IsAdmin(playerid))
     {
         g_PlayerTagMenu[playerid][count++] = TAG_TYPE_ADMIN;
         format(tagList, sizeof(tagList), "%s{FFFFFF}Admin Tag\t{FFFFFF}[{FF4500}%s{FFFFFF}]\t%s\n",
@@ -1557,7 +1557,7 @@ public DIALOG_TAG_MANAGER(playerid, dialogid, response, listitem, string:inputte
         }
         case TAG_TYPE_CLAN:
         {
-            if(User[playerid][clanID] == -1) return ShowTagMenu(playerid);
+            if(!IsPlayerInClan(playerid)) return ShowTagMenu(playerid);
 
             User[playerid][hideClanTag] = !User[playerid][hideClanTag];
             SetClanColor(playerid);

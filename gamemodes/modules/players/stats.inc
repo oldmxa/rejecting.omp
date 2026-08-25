@@ -7,7 +7,7 @@ Respawn(playerid, timestamp)
     if(duelState != DUELS_STATE_NONE)
         return SendClientMessage(playerid, -1, "%s", ERROR_RESPAWN_DUEL);
 
-    if(User[playerid][adminLevel] >= 4)
+    if(IsAdmin(playerid, 4))
     {
         SetPlayerPos(playerid, 0, 0, 0);
         SpawnPlayerEx(playerid);
@@ -44,7 +44,7 @@ public Stats_ShowAdminConfig(playerid)
 
     format(strb, sizeof(strb), "{BEBEBE}Setting\t{BEBEBE}Status\t{BEBEBE}Info\n");
 
-    if(User[playerid][adminLevel] >= 4)
+    if(IsAdmin(playerid, 4))
     {
         strcat(strb, "{MAIN}\xA4 Performance\t \t \n");
         actions[count++] = 0;
@@ -61,7 +61,7 @@ public Stats_ShowAdminConfig(playerid)
         format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Max FPS\t{BEBEBE}%d FPS\t{BEBEBE}Kicks anyone above this framerate\n", strb, ServerMaxFPS);
         actions[count++] = 12; // Max FPS
 
-        if(User[playerid][adminLevel] >= 5)
+        if(IsAdmin(playerid, 5))
         {
             strcat(strb, "{MAIN}\xA4 Gameplay & Interface\t \t \n");
             actions[count++] = 0;
@@ -270,9 +270,9 @@ public Stats_ShowStats(playerid, targetid)
     else
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Warnings\t{FFFFFF}0 / %d\n", strstts, ServerMaxWarnings);
 
-    if(User[targetid][muteTimestamp] > gettime())
+    if(IsPlayerMuted(targetid))
     {
-        new remMute = User[targetid][muteTimestamp] - gettime();
+        new remMute = GetPlayerMuteRemaining(targetid);
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Mute Status\t{F84F31}Muted (%02dm %02ds left)\n", strstts, remMute / 60, remMute % 60);
     }
     else
@@ -284,7 +284,7 @@ public Stats_ShowStats(playerid, targetid)
     strcat(strstts, "{MAIN}> Combat Records\t \n");
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Level\t{FFFFFF}%d\n", strstts, User[targetid][playerLevel]);
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Total Kills / Deaths\t{23C552}%d {FFFFFF}/ {F84F31}%d\n", strstts, User[targetid][playerKills], User[targetid][playerDeaths]);
-    format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}K/D Ratio\t{23C552}%.2f\n", strstts, ratio(User[targetid][playerKills], User[targetid][playerDeaths]));
+    format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}K/D Ratio\t{23C552}%.2f\n", strstts, GetPlayerKDR(targetid));
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Weekly Kills / DMG\t{23C552}%d kills {B4B5B7}| {23C552}%d DMG\n", strstts, User[targetid][kills_semanais], User[targetid][dmgSemanal]);
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Best Killstreak\t{23C552}%d kills\n", strstts, User[targetid][maxStreak]);
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Best Arena Damage\t{23C552}%d DMG\n", strstts, User[targetid][maxDamage]);
@@ -295,7 +295,7 @@ public Stats_ShowStats(playerid, targetid)
 
     // Section 3: Clan
     strcat(strstts, "{MAIN}> Clan Information\t \n");
-    if(User[targetid][clanID] != -1)
+    if(IsPlayerInClan(targetid))
     {
         new cid = User[targetid][clanID];
         new clanColorHex[7];
