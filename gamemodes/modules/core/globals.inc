@@ -91,20 +91,6 @@ new adminnames[6][admNames] =
 };
 
 // VIP Tag Color Presets
-stock const vipColorListHex[] = {
-    0x0022FFFF, // 0: {0022FF}
-    0x008CFFFF, // 1: {008CFF}
-    0x09FF00FF, // 2: {09FF00}
-    0xFF7700FF, // 3: {FF7700}
-    0xFF0000FF, // 4: {FF0000}
-    0xFFFB00FF, // 5: {FFFB00}
-    0xFF00FBFF, // 6: {FF00FB}
-    0x4D3F4CFF, // 7: {4D3F4C}
-    0x00FFA2FF, // 8: {00FFA2}
-    0x7300FFFF, // 9: {7300FF}
-    0x00000000  // 10: Hidden
-};
-
 stock const vipColorListStr[][] = {
     "0022FF",
     "008CFF",

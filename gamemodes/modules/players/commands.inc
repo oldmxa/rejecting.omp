@@ -121,32 +121,7 @@ ShowRankingsMenu(playerid)
     return StartChangeMode(playerid);
 }
 
-forward ShowStats(playerid, targetid);
-forward LookupOfflineStats(playerid, const targetName[]);
-
-@cmd() fullstats(playerid, params[], help)
-{
-    if(!User[playerid][isLogged])
-        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-
-    if(IsNull(params))
-    {
-        ShowStats(playerid, playerid);
-        return true;
-    }
-
-    new targetid;
-    if(!sscanf(params, "u", targetid) && IsPlayerConnected(targetid) && User[targetid][isLogged])
-    {
-        ShowStats(playerid, targetid);
-        return true;
-    }
-
-    LookupOfflineStats(playerid, params);
-    return true;
-}
-
-@cmd() stats(playerid, params[], help)
+@cmd(.alts = {"fullstats"}) stats(playerid, params[], help)
 {
     if(!User[playerid][isLogged])
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);

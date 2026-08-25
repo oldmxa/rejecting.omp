@@ -26,9 +26,6 @@
 	#define DIALOG_DUEL_ACCEPT_ID 9851
 #endif
 
-#define DUELS_STATE_NONE    998
-#define DUELS_STATE_WAITING 999
-
 enum e_DUELS_DATA
 {
 	duelArena,
