@@ -162,13 +162,13 @@ stock updatePlayerHud(playerid)
 					%sKills:_%s%d~n~\
 					%sDeaths:_%s%d~n~\
 					%sDamage:_%s%d~n~\
-					%sRatio:_%s%s~n~\
+					%sRatio:_%s%0.2f~n~\
 					%sAccuracy:_%s%d%%~n~",
 					playerColorOne, playerColorTwo, spree,
 					playerColorOne, playerColorTwo, kills,
 					playerColorOne, playerColorTwo, deaths,
 					playerColorOne, playerColorTwo, intDmg,
-					playerColorOne, playerColorTwo, RatioText(kills, deaths),
+					playerColorOne, playerColorTwo, ratio(kills, deaths),
 					playerColorOne, playerColorTwo, floatround(GetPlayerAccuracy(playerid, User[playerid][locationId]), floatround_round)
 					);
 				}
@@ -185,7 +185,7 @@ stock updatePlayerHud(playerid)
 					playerColorOne, playerColorTwo, kills,
 					playerColorOne, playerColorTwo, deaths,
 					playerColorOne, playerColorTwo, intDmg,
-					playerColorOne, playerColorTwo, RatioText(kills, deaths),
+					playerColorOne, playerColorTwo, RatioText(kills, deaths, User[playerid][hudType]),
 					playerColorOne, playerColorTwo, spree
 					);
 				}
@@ -196,13 +196,13 @@ stock updatePlayerHud(playerid)
 		format(fString, sizeof(fString),
 		"%sK: %s%d~n~\
 		%sD: %s%d~n~\
-		%sRatio: %s%s~n~\
+		%sRatio: %s%0.2f~n~\
 		%sDuel W:%s%d %sL:%s%d~n~\
 		%sDuel 2v2 W:%s%d %sL:%s%d~n~\
 		%sLevel: %s%d (%d)",
 		playerColorOne, playerColorTwo, User[playerid][playerKills],
 		playerColorOne, playerColorTwo, User[playerid][playerDeaths],
-		playerColorOne, playerColorTwo, RatioText(User[playerid][playerKills], User[playerid][playerDeaths]),
+		playerColorOne, playerColorTwo, GetPlayerKDR(playerid),
 		playerColorOne, playerColorTwo, User[playerid][duelWins], playerColorOne, playerColorTwo, User[playerid][duelLosses],
 		playerColorOne, playerColorTwo, User[playerid][duel2v2Wins], playerColorOne, playerColorTwo, User[playerid][duel2v2Losses],
 		playerColorOne, playerColorTwo, User[playerid][playerLevel], levelGoal(User[playerid][playerLevel]));

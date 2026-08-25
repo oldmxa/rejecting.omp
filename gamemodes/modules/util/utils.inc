@@ -257,11 +257,11 @@ FormatRatio(value1, value2, destination[], len = sizeof(destination))
 
 #define RATIO_UNBEATEN "./,),(-&,(.(("
 
-RatioText(kills, deaths)
+RatioText(kills, deaths, hudStyle)
 {
 	new str[32];
 
-	if(kills > 0 && deaths <= 0) format(str, sizeof(str), "%s", RATIO_UNBEATEN);
+	if(hudStyle == HUD_REJECTING_01 && kills > 0 && deaths <= 0) format(str, sizeof(str), "%s", RATIO_UNBEATEN);
 	else format(str, sizeof(str), "%0.2f", ratio(kills, deaths));
 
 	return str;
