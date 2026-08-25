@@ -76,8 +76,8 @@ static stock ShowOnlineLookup(playerid, targetid)
     new strlookup[2048], title[64];
 
     format(title, sizeof(title), "{MAIN}Lookup: {FFFFFF}%s", getPlayerName(targetid));
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     if (isnull(User[targetid][Isp]))
     {
         new why[400];
@@ -157,7 +157,7 @@ static stock ShowOnlineLookup(playerid, targetid)
 forward Invest_ShowNameHistory(playerid, targetid, page);
 public Invest_ShowNameHistory(playerid, targetid, page)
 {
-    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if (!IsPlayerLogged(targetid))
         return false;
 
     SetPVarInt(playerid, "hist_target", targetid);
@@ -232,7 +232,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
     CheckAdminAuth(playerid);
     new targetid;
     if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/inject [id/name]");
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
     if(!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be in a vehicle.");
     
@@ -250,7 +250,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
     CheckAdminAuth(playerid);
     new targetid;
     if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/eject [id] ou /ejetar [id]");
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
     if(!IsPlayerInAnyVehicle(targetid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The player is not in a vehicle.");
     
@@ -568,9 +568,10 @@ static stock ReportSanitize(text[], maxlen = 0)
 
         new title[64];
         format(title, sizeof(title), "{MAIN}Reports {FFFFFF}(%d)", g_ReportListCount[playerid]);
-        format_MainColor(playerid, title);
         format_MainColor(playerid, g_reportsDialogBuf, sizeof(g_reportsDialogBuf));
 
+        format_MainColor(playerid, title);
+        format_MainColor(playerid, g_reportsDialogBuf, sizeof(g_reportsDialogBuf));
         Dialog_ShowCallback(playerid, using public DIALOG_REPORTS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, g_reportsDialogBuf, "View", "Close");
         return 1;
     }

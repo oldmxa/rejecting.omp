@@ -256,7 +256,7 @@ stock DeserializeAchievements(playerid, const data[])
 
 stock SavePlayerAchievements(playerid)
 {
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged] || User[playerid][user_sqlid] <= 0) return 0;
+    if(!IsPlayerLogged(playerid) || User[playerid][user_sqlid] <= 0) return 0;
 
     g_achSerialBuf[0] = '\0';
     SerializeAchievements(playerid, g_achSerialBuf, ACH_SERIAL_BUF_SIZE);
@@ -794,7 +794,7 @@ stock Ach_GetViewTarget(playerid)
 {
     new targetid = GetPVarInt(playerid, "ach_target");
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
     {
         targetid = playerid;
         SetPVarInt(playerid, "ach_target", playerid);
@@ -817,12 +817,12 @@ stock Ach_CountUnlocked(targetid, ach_cat, &total)
 
 stock ShowAchievementsMainMenu(playerid, targetid = INVALID_PLAYER_ID)
 {
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", ACHIEVEMENT_NOT_LOGGED);
 
     if(targetid == INVALID_PLAYER_ID) targetid = playerid;
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     SetPVarInt(playerid, "ach_target", targetid);
@@ -836,8 +836,8 @@ stock ShowAchievementsMainMenu(playerid, targetid = INVALID_PLAYER_ID)
     else
         format(title, sizeof(title), "{MAIN}Achievements: {FFFFFF}%s", User[targetid][userName]);
 
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     strcopy(menuStr, "{MAIN}Category\t{MAIN}Unlocked\n", sizeof(menuStr));
 
     format(line, sizeof(line), "{MAIN}\xBB {FFFFFF}General Achievements\t{FFFFFF}%d{BEBEBE}/%d\n", genDone, genTotal);
@@ -846,8 +846,8 @@ stock ShowAchievementsMainMenu(playerid, targetid = INVALID_PLAYER_ID)
     format(line, sizeof(line), "{MAIN}\xBB {FFFFFF}Exclusive Achievements\t{FFFFFF}%d{BEBEBE}/%d", vipDone, vipTotal);
     strcat(menuStr, line);
 
-    format_MainColor(playerid, menuStr);
 
+    format_MainColor(playerid, menuStr);
     Dialog_ShowCallback(playerid, using public DIALOG_ACHIEVEMENTS_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, menuStr, "Select", "Close");
     return 1;
 }
@@ -877,7 +877,7 @@ stock bool:Ach_IsRowVisible(playerid, targetid, ach_index, ach_cat)
 
 stock ShowAchievementsCategoryList(playerid, ach_cat)
 {
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     SetPVarInt(playerid, "ach_current_cat", ach_cat);
 
@@ -896,8 +896,8 @@ stock ShowAchievementsCategoryList(playerid, ach_cat)
             (ach_cat == ACH_CAT_GENERAL) ? ("General") : ("Exclusive"), User[targetid][userName]);
     }
 
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     g_achDialogBuf[0] = '\0';
     strcat(g_achDialogBuf, "{MAIN}Achievement\t{MAIN}Status\n", sizeof(g_achDialogBuf));
 
@@ -934,6 +934,7 @@ stock ShowAchievementsCategoryList(playerid, ach_cat)
 
     format_MainColor(playerid, g_achDialogBuf, sizeof(g_achDialogBuf));
 
+    format_MainColor(playerid, g_achDialogBuf, sizeof(g_achDialogBuf));
     Dialog_ShowCallback(playerid, using public DIALOG_ACHIEVEMENTS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, g_achDialogBuf, "Select", "Back");
     return 1;
 }
@@ -973,8 +974,8 @@ stock ShowAchievementDetail(playerid, ach_index)
 
     new title[96], body[512], statusStr[128];
     format(title, sizeof(title), "{MAIN}Achievement: {FFFFFF}%s", g_AchievementsData[ach_index][ach_name]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new bool:unlocked = HasPlayerAchievement(targetid, ach_index);
 
     if(unlocked)
@@ -1004,8 +1005,8 @@ stock ShowAchievementDetail(playerid, ach_index)
         FormatMoney(g_AchievementsData[ach_index][ach_reward_money]),
         FormatCoins(g_AchievementsData[ach_index][ach_reward_coins])
     );
-    format_MainColor(playerid, body);
 
+    format_MainColor(playerid, body);
     Dialog_ShowCallback(playerid, using public DIALOG_ACHIEVEMENTS_DETAIL<iiiis>, DIALOG_STYLE_MSGBOX, title, body, "Back", "Close");
     return 1;
 }
@@ -1045,14 +1046,15 @@ public DIALOG_ACHIEVEMENTS_DETAIL(playerid, dialogid, response, listitem, string
         }
 
         new title[64] = "{MAIN}Exclusive Achievements";
-        format_MainColor(playerid, title);
         format_MainColor(playerid, g_achDialogBuf, sizeof(g_achDialogBuf));
 
+        format_MainColor(playerid, title);
+        format_MainColor(playerid, g_achDialogBuf, sizeof(g_achDialogBuf));
         Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, g_achDialogBuf, "Close", "");
         return true;
     }
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(achid < 0 || achid >= ACH_COUNT)

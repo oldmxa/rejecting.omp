@@ -67,7 +67,7 @@ new g_Duel2v2Data[MAX_DUELS_2V2][e_DUEL2V2_MATCH_DATA];
 stock bool:IsPlayerBusy(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return true;
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return true;
+    if(!IsPlayerLogged(playerid)) return true;
     if(User[playerid][isSpectating] || User[playerid][isAfk]) return true;
     if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE) return true;
     if(g_PlayerDuel2v2ID[playerid] != -1) return true;
@@ -77,6 +77,18 @@ stock bool:IsPlayerBusy(playerid)
     if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid])) return true;
     new PLAYER_STATE:pState = GetPlayerState(playerid);
     if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING) return true;
+    return false;
+}
+
+stock bool:IsPlayerInMatch(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING) return true;
+    if(g_PlayerDuel2v2ID[playerid] != -1) return true;
+    if(g_PlayerTourneyMatch[playerid] != -1 || g_PlayerTourneySlot[playerid] != -1) return true;
+    if(g_PlayerTraining[playerid][pTrain_Active]) return true;
+    if(g_Practice[playerid][pracActive]) return true;
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid])) return true;
     return false;
 }
 

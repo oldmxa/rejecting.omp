@@ -116,7 +116,7 @@ stock StartTournamentRound(round)
 
 stock SpawnTourneyParticipant(playerid, side, arenaCat, arenaid, vw)
 {
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     User[playerid][isAfk] = false;
 
@@ -229,10 +229,10 @@ stock StartTourneyMatch(matchid)
         KillTimer(g_TourneyMatches[matchid][tm_TimerCountdown]);
         g_TourneyMatches[matchid][tm_TimerCountdown] = 0;
     }
-    new bool:teamA_Present = (IsPlayerConnected(p1A) && User[p1A][isLogged])
-        || (p2A != INVALID_PLAYER_ID && IsPlayerConnected(p2A) && User[p2A][isLogged]);
-    new bool:teamB_Present = (IsPlayerConnected(p1B) && User[p1B][isLogged])
-        || (p2B != INVALID_PLAYER_ID && IsPlayerConnected(p2B) && User[p2B][isLogged]);
+    new bool:teamA_Present = (IsPlayerLogged(p1A))
+        || (p2A != INVALID_PLAYER_ID && IsPlayerLogged(p2A));
+    new bool:teamB_Present = (IsPlayerLogged(p1B))
+        || (p2B != INVALID_PLAYER_ID && IsPlayerLogged(p2B));
 
     if(!teamA_Present && teamB_Present)
     {
@@ -576,7 +576,7 @@ stock FinishTourneyMatch(matchid, winnerSlot, bool:isWO = false)
     for(new i = 0; i < 4; i++)
     {
         new pid = pList[i];
-        if(pid != INVALID_PLAYER_ID && IsPlayerConnected(pid) && User[pid][isLogged])
+        if(pid != INVALID_PLAYER_ID && IsPlayerLogged(pid))
         {
             g_PlayerTourneyMatch[pid] = -1;
             ResetPlayerWeapons(pid);
@@ -588,7 +588,7 @@ stock FinishTourneyMatch(matchid, winnerSlot, bool:isWO = false)
 
     for(new i = 0; i < MAX_PLAYERS; i++)
     {
-        if(IsPlayerConnected(i) && User[i][isLogged] && g_PlayerTourneySpectating[i] == matchid)
+        if(IsPlayerLogged(i) && g_PlayerTourneySpectating[i] == matchid)
         {
             g_PlayerTourneySpectating[i] = -1;
             StopSpectate(i);

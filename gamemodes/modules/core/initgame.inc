@@ -27,7 +27,7 @@ ORPC:RPC_INIT_GAME(playerid, BitStream:bs)
 forward RestorePlayerEnv(playerid);
 public RestorePlayerEnv(playerid)
 {
-    if (IsPlayerConnected(playerid) && User[playerid][isLogged])
+    if (IsPlayerLogged(playerid))
     {
         SetPlayerTime(playerid, User[playerid][time], 0);
         SetPlayerWeather(playerid, User[playerid][weather]);

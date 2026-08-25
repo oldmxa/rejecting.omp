@@ -81,7 +81,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
         }
         case TOURNAMENT_MODE_2V2:
         {
-            if(teammateid == INVALID_PLAYER_ID || !IsPlayerConnected(teammateid) || !User[teammateid][isLogged] || teammateid == playerid)
+            if(teammateid == INVALID_PLAYER_ID || !IsPlayerLogged(teammateid) || teammateid == playerid)
             {
                 SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Usage: /jointournament [teammate id/name]");
                 return -1;
@@ -177,8 +177,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
             g_TourneyParticipants[slot][tp_Player1_SQL] = User[playerid][user_sqlid];
             strcopy(g_TourneyParticipants[slot][tp_Player1_Name], User[playerid][userName], MAX_PLAYER_NAME + 1);
 
-            if(teammateid != INVALID_PLAYER_ID && teammateid != playerid && IsPlayerConnected(teammateid)
-                && User[teammateid][isLogged] && User[teammateid][clanID] == clanid && g_PlayerTourneySlot[teammateid] == -1)
+            if(teammateid != INVALID_PLAYER_ID && teammateid != playerid && IsPlayerLogged(teammateid) && User[teammateid][clanID] == clanid && g_PlayerTourneySlot[teammateid] == -1)
             {
                 g_TourneyParticipants[slot][tp_Player2] = teammateid;
                 g_TourneyParticipants[slot][tp_Player2_SQL] = User[teammateid][user_sqlid];
@@ -225,7 +224,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
 
 stock SendTourneyInvite(playerid, teammateid)
 {
-    if(teammateid == INVALID_PLAYER_ID || !IsPlayerConnected(teammateid) || !User[teammateid][isLogged] || teammateid == playerid)
+    if(teammateid == INVALID_PLAYER_ID || !IsPlayerLogged(teammateid) || teammateid == playerid)
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Usage: /jointournament [teammate id/name]");
 
     if(g_PlayerTourneySlot[playerid] != -1)
@@ -248,7 +247,7 @@ stock AcceptTourneyInvite(playerid)
 {
     new inviter = g_PlayerTourneyInvite[playerid];
 
-    if(inviter == -1 || !IsPlayerConnected(inviter) || !User[inviter][isLogged])
+    if(inviter == -1 || !IsPlayerLogged(inviter))
     {
         g_PlayerTourneyInvite[playerid] = -1;
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You have no pending tournament invite.");
@@ -338,13 +337,13 @@ stock KickTourneyParticipant(slot, adminid = INVALID_PLAYER_ID)
 
     if(g_TourneyData[t_EntryFee] > 0)
     {
-        if(p1 != INVALID_PLAYER_ID && IsPlayerConnected(p1) && User[p1][isLogged])
+        if(p1 != INVALID_PLAYER_ID && IsPlayerLogged(p1))
         {
             GivePlayerMoney(p1, g_TourneyData[t_EntryFee]);
             User[p1][playerMoney] += g_TourneyData[t_EntryFee];
             SendClientMessage(p1, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You were removed from the tournament by staff and refunded.");
         }
-        if(p2 != INVALID_PLAYER_ID && IsPlayerConnected(p2) && User[p2][isLogged])
+        if(p2 != INVALID_PLAYER_ID && IsPlayerLogged(p2))
         {
             GivePlayerMoney(p2, g_TourneyData[t_EntryFee]);
             User[p2][playerMoney] += g_TourneyData[t_EntryFee];
@@ -569,7 +568,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
     new onlinePlayerId = INVALID_PLAYER_ID;
     for(new i = 0; i < MAX_PLAYERS; i++)
     {
-        if(IsPlayerConnected(i) && User[i][isLogged])
+        if(IsPlayerLogged(i))
         {
             if(!strcmp(User[i][userName], nick, true))
             {

@@ -179,6 +179,7 @@ public Stats_ShowAdminConfig(playerid)
     SetPVarInt(playerid, "acfg_count", count);
 
     new title[64] = "{MAIN}Admin Configuration";
+    format_MainColor(playerid, strb, sizeof(strb));
     format_MainColor(playerid, title);
     format_MainColor(playerid, strb, sizeof(strb));
     Dialog_ShowCallback(playerid, using public DIALOG_AMENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, strb, "*", "Exit");
@@ -329,7 +330,6 @@ public Stats_ShowStats(playerid, targetid)
     format(title, sizeof(title), "{MAIN}Profile Stats: {FFFFFF}%s", getPlayerName(targetid));
     format_MainColor(playerid, title);
     format_MainColor(playerid, strstts, sizeof(strstts));
-
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, strstts, "Close", "");
     return 1;
 }
@@ -372,7 +372,7 @@ stock CountUnlockedAchFromStr(const data[])
 forward LookupOfflineStats(playerid, const targetName[]);
 public LookupOfflineStats(playerid, const targetName[])
 {
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     new query[512];
     mysql_format(dbHandle, query, sizeof(query),
@@ -383,7 +383,7 @@ public LookupOfflineStats(playerid, const targetName[])
 
     inline OnOfflineStatsQuery()
     {
-        if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 1;
+        if(!IsPlayerLogged(playerid)) return 1;
 
         if(!cache_num_rows())
         {
@@ -563,7 +563,6 @@ public LookupOfflineStats(playerid, const targetName[])
 
         new title[64];
         format(title, sizeof(title), "{MAIN}Profile Stats: {FFFFFF}%s {BEBEBE}(Offline)", off_user);
-        format_MainColor(playerid, title);
         format_MainColor(playerid, strstts, sizeof(strstts));
 
         Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, strstts, "Close", "");
@@ -601,9 +600,10 @@ public Stats_ShowPlayerClanInfo(playerid, targetid)
 
     new title[64];
     format(title, sizeof(title), "{MAIN}Clan Info: {FFFFFF}%s", ClanInfo[clanid][clanName]);
-    format_MainColor(playerid, title);
     format_MainColor(playerid, infoStr, sizeof(infoStr));
 
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, infoStr, sizeof(infoStr));
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, infoStr, "Close", "");
     return 1;
 }
@@ -712,9 +712,9 @@ ChangeFight(playerid)
     }
 
     new title[64] = "{MAIN}\xA4 {FFFFFF}Select Fighting Style";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, fightstr);
-
     Dialog_ShowCallback(playerid, using public FIGHT<iiiis>, DIALOG_STYLE_LIST, title, fightstr, "Select", "Back");
 }
 

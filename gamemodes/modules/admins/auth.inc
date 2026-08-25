@@ -36,6 +36,21 @@ stock bool:CheckPlayerAdminAuth(playerid)
 #define CheckAdminAuth(%0) \
     if(!CheckPlayerAdminAuth(%0)) return 1
 
+stock bool:CanAdminTargetPlayer(playerid, targetid, bool:allowSelf = false)
+{
+    if(!allowSelf && targetid == playerid)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
+        return false;
+    }
+    if(User[targetid][adminLevel] >= User[playerid][adminLevel])
+    {
+        SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+        return false;
+    }
+    return true;
+}
+
 stock GenerateAdminAuthCode(playerid)
 {
     if(User[playerid][adminLevel] < 1) return 0;
@@ -101,14 +116,14 @@ public OnAdminPrivateChannelCreated(playerid, const code[])
 stock ShowAdminAuthMethodDialog(playerid)
 {
     new title[64] = "{MAIN}Admin Auth Method";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[320];
     strcat(body, "{MAIN}Method\t{MAIN}Description\n");
     strcat(body, "{FFFFFF}\x95 {B4B5B7}Code (Discord DM)\t{FFFFFF}Receive a 6-digit code via Discord DM (/alogin)\n");
     strcat(body, "{FFFFFF}\x95 {B4B5B7}Password (Login)\t{FFFFFF}Authenticate using an Admin Password on join");
-    format_MainColor(playerid, body);
 
+    format_MainColor(playerid, body);
     Dialog_ShowCallback(playerid, using public DIALOG_ADMIN_AUTH_SELECT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
 }
@@ -143,8 +158,8 @@ public DIALOG_ADMIN_AUTH_SELECT(playerid, dialogid, response, listitem, string:i
 stock ShowCreateAdminPasswordDialog(playerid)
 {
     new title[64] = "{MAIN}Create Admin Password";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[280];
     format(body, sizeof(body), "{FFFFFF}Enter a secure password for your Administrator account below:\n\n{FFFFFF}\x95 {B4B5B7}Note: This password will be required every time you join the server.");
 
@@ -216,7 +231,6 @@ stock StartAdminPasswordAuth(playerid)
 stock ShowAdminPasswordDialog(playerid)
 {
     new title[64] = "{MAIN}Admin Authentication";
-    format_MainColor(playerid, title);
 
     new body[280];
     format(body, sizeof(body), "{FFFFFF}Welcome back, Admin %s.\n\nPlease enter your Admin Password below to log in as Administrator:\n\n{FFFFFF}\x95 {FF0000}Note: You have 30 seconds to enter your password or you will be kicked.", User[playerid][userName]);

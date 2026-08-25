@@ -13,12 +13,6 @@ new PlayerText:OutpostBar[MAX_PLAYERS][5];
 new Text:votekickTextdraws[3];
 new PlayerText:ClanHUD[MAX_PLAYERS][4];
 
-
-#define COLOR_DETAIL1	0x5f9d92FF
-#define COLOR_DETAIL2	0x133d47FF
-#define COLOR_BOX		0x0f151fFF
-#define COLOR_DETAILSHADE	0x83aff04d
-
 InitRoundStatsTD(playerid)
 {
 	// Static Textdraws (0-25 reserved)

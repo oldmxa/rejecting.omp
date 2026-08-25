@@ -1039,3 +1039,15 @@ stock bool:IsPracticeActive(playerid)
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
     return g_IsPlayerInPractice[playerid];
 }
+
+stock bool:IsPlayerLogged(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return (IsPlayerConnected(playerid) && User[playerid][isLogged]);
+}
+
+stock bool:IsPlayerInLounge(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
+}

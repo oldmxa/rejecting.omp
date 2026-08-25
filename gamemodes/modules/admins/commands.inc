@@ -270,7 +270,7 @@ ShowAdminCmds(playerid)
     if(sscanf(params, "us[128]", targetid, message))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/d [id] [message]");
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Player not connected or not logged in!");
 
     if(targetid == playerid)
@@ -324,7 +324,7 @@ ShowAdminCmds(playerid)
     if(sscanf(params, "us[128]", targetid, message))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/r [id] [message]");
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Player not connected or not logged in!");
 
     if(targetid == playerid)
@@ -378,7 +378,7 @@ ShowAdminCmds(playerid)
 
     if (sscanf(params, "ud", idplayer, level))
         return SendClientMessage(playerid, -1, "%s", CREATE_ADMIN_HELP);
-    if (!IsPlayerConnected(idplayer) || !User[idplayer][isLogged])
+    if (!IsPlayerLogged(idplayer))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(idplayer == playerid)
@@ -505,7 +505,7 @@ ShowAdminCmds(playerid)
         return true;
     }
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Target player is not connected or logged in.");
         return true;

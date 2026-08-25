@@ -35,9 +35,10 @@ showLocationSelectDialog(playerid)
 	}
 
     new dialogTitle[64] = "{MAIN}Changemode - Arena Selection";
-    format_MainColor(playerid, dialogTitle);
     format_MainColor(playerid, dialogBody, sizeof(dialogBody));
 
+    format_MainColor(playerid, dialogTitle);
+    format_MainColor(playerid, dialogBody, sizeof(dialogBody));
 	Dialog_ShowCallback(playerid, using public Location<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, dialogTitle, dialogBody, "Select", "Close");
 }
 
@@ -355,7 +356,7 @@ static stock Float:GetSpawnClearance(playerid, Float:x, Float:y, Float:z)
     foreach(new i : Player)
     {
         if(i == playerid) continue;
-        if(!IsPlayerConnected(i) || !User[i][isLogged] || User[i][isAfk]) continue;
+        if(!IsPlayerLogged(i) || User[i][isAfk]) continue;
         if(User[i][locationId] != User[playerid][locationId]) continue;
 
         new Float:d = GetPlayerDistanceFromPoint(i, x, y, z);
@@ -374,7 +375,7 @@ static stock Float:GetOptimalSpawnFacingAngle(playerid, zone, Float:spawnX, Floa
     foreach(new i : Player)
     {
         if(i == playerid) continue;
-        if(!IsPlayerConnected(i) || !User[i][isLogged] || User[i][isAfk]) continue;
+        if(!IsPlayerLogged(i) || User[i][isAfk]) continue;
         if(User[i][locationId] != location) continue;
 
         new Float:d = GetPlayerDistanceFromPoint(i, spawnX, spawnY, spawnZ);
@@ -741,8 +742,7 @@ public SpawnFloorGuard(playerid)
 	new ticks = GetPVarInt(playerid, "spawn_guard_ticks") - 1;
 
 	if(ticks <= 0
-	|| !IsPlayerConnected(playerid)
-	|| !User[playerid][isLogged]
+	|| !IsPlayerLogged(playerid)
 	|| User[playerid][isAfk]
 	|| User[playerid][locationId] != GetPVarInt(playerid, "spawn_guard_loc")
 	|| GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
@@ -768,7 +768,7 @@ public RestoreSpawnWorld(playerid)
 {
 	DeletePVar(playerid, "spawn_protect");
 
-	if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 1;
+	if(!IsPlayerLogged(playerid)) return 1;
 
 	if(GetPVarInt(playerid, "gunmenu_world")) return 1;
 

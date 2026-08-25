@@ -26,33 +26,9 @@ public Lounge_CanSpawnLoungeVehicle(playerid)
         return 0;
     }
 
-    if (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
+    if (IsPlayerInMatch(playerid))
     {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle during a duel.");
-        return 0;
-    }
-
-    if (IsPlayerInDuel2v2(playerid))
-    {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle during a 2v2 duel.");
-        return 0;
-    }
-
-    if (IsPlayerInTournamentMatch(playerid))
-    {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle during a tournament match.");
-        return 0;
-    }
-
-    if (g_PlayerTraining[playerid][pTrain_Active])
-    {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle in training.");
-        return 0;
-    }
-
-    if (IsPracticeActive(playerid))
-    {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle in practice.");
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle while in a match, training, practice or safehouse.");
         return 0;
     }
 
@@ -195,22 +171,9 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
     if(playerState == PLAYER_STATE_SPECTATING || playerSpecID[playerid] != INVALID_PLAYER_ID)
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot use /lounge while in a duel.");
-    if (IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /lounge while in a 2v2 duel. Use /cancel2v2 first.");
 
-    if (IsPlayerInTournamentMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /lounge while playing a tournament match.");
-
-    if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
-        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot use this while inside a safehouse. Use /exitsafehouse first.");
-
-    if (g_PlayerTraining[playerid][pTrain_Active])
-        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot use this while in training mode. Use /exittraining first.");
-
-    if (g_Practice[playerid][pracActive])
-        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot use this while in practice mode. Use /prac exit first.");
+    if (IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /lounge while in a match, training, practice or safehouse.");
 
     if (User[playerid][isAfk])
     {
@@ -272,8 +235,8 @@ ShowLoungeCommands(playerid, page)
     new cmdsstr[1024], title[64];
 
     format(title, sizeof(title), "{MAIN}Lounge Commands - Page %d", page + 1);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     format(cmdsstr, sizeof(cmdsstr), "{MAIN}Command\t{MAIN}Description\n");
 
     new start = page * 10;
@@ -293,6 +256,7 @@ ShowLoungeCommands(playerid, page)
 
     format_MainColor(playerid, cmdsstr, sizeof(cmdsstr));
 
+    format_MainColor(playerid, cmdsstr, sizeof(cmdsstr));
     SetPVarInt(playerid, "LcmdsPage", page);
     Dialog_ShowCallback(playerid, using public DIALOG_LCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, "Select", (page > 0) ? ("<") : ("Close"));
     return 1;
@@ -349,14 +313,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(!User[playerid][isAfk])
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge during a duel.");
-
-    if(g_PlayerTraining[playerid][pTrain_Active] || IsPracticeActive(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge inside training or practice.");
-
-    if(g_PlayerInSafehouse[playerid] != -1)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge inside a safehouse.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge while in a match, training, practice or safehouse.");
 
     if(User[playerid][spawnSafehouse])
     {
@@ -397,11 +355,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack during a duel.");
-
-    if(g_PlayerTraining[playerid][pTrain_Active] || IsPracticeActive(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack in training or practice.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack while in a match, training, practice or safehouse.");
 
     if(IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack while in a vehicle.");
@@ -420,8 +375,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot flip a vehicle during a duel.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot flip a vehicle while in a match, training, practice or safehouse.");
 
     if(!IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not in a vehicle.");
@@ -442,8 +397,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(!User[playerid][isAfk] && User[playerid][adminLevel] < 1)
         return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
 
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot tune a vehicle during a duel.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot tune a vehicle while in a match, training, practice or safehouse.");
 
     if(!IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not in a vehicle.");

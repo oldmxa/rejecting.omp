@@ -214,9 +214,10 @@ ShowACMenu(playerid)
 
     AC_StoreRows(playerid, rows, count);
 
-    format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body, sizeof(body));
     Dialog_ShowCallback(playerid, using public DIALOG_AC_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "Exit");
     return 1;
 }
@@ -254,9 +255,10 @@ ShowACCategory(playerid, catid)
 
     AC_StoreRows(playerid, rows, count);
 
-    format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body, sizeof(body));
     Dialog_ShowCallback(playerid, using public DIALOG_AC_CATEGORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
     return 1;
 }
@@ -290,9 +292,10 @@ ShowACAction(playerid, detection)
 
     AC_StoreRows(playerid, rows, count);
 
-    format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body, sizeof(body));
     Dialog_ShowCallback(playerid, using public DIALOG_AC_ACTION<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
     return 1;
 }
@@ -325,9 +328,10 @@ ShowACFlagged(playerid)
 
     AC_StoreRows(playerid, rows, count);
 
-    format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body, sizeof(body));
     Dialog_ShowCallback(playerid, using public DIALOG_AC_FLAGGED<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
     return 1;
 }
@@ -361,9 +365,10 @@ ShowACRecent(playerid)
                 AC_ACTION_COLOR[action], AC_ACTION_NAME[action], returnDate(stamp)), sizeof(body));
         }
 
-        format_MainColor(playerid, title);
         format_MainColor(playerid, body, sizeof(body));
 
+        format_MainColor(playerid, title);
+        format_MainColor(playerid, body, sizeof(body));
         Dialog_ShowCallback(playerid, using public DIALOG_AC_RECENT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Close", "<");
     }
 
@@ -422,9 +427,10 @@ ShowACPlayer(playerid, targetid)
     }
     else strcat(body, "{B4B5B7}\x95 {FFFFFF}Detections\t{23C552}Clean\n", sizeof(body));
 
-    format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body, sizeof(body));
     Dialog_ShowCallback(playerid, using public DIALOG_AC_PLAYER<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
     return 1;
 }
@@ -460,9 +466,10 @@ ShowACHistory(playerid, targetid)
                 code + 1, detection, hits, returnDate(last)), sizeof(body));
         }
 
-        format_MainColor(playerid, title);
         format_MainColor(playerid, body, sizeof(body));
 
+        format_MainColor(playerid, title);
+        format_MainColor(playerid, body, sizeof(body));
         Dialog_ShowCallback(playerid, using public DIALOG_AC_HISTORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "<", "Close");
     }
 
@@ -618,7 +625,7 @@ public DIALOG_AC_HISTORY(playerid, dialogid, response, listitem, string:inputtex
     if (sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/acinfo [id/nick]");
 
-    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if (!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     return ShowACPlayer(playerid, targetid);

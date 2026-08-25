@@ -129,9 +129,9 @@ public ShowPracticeDialog(playerid)
     strcat(body, "{F84F31}\x95 Exit Practice\t{BEBEBE}Leave the private world\n");
 
     new title[64] = "{MAIN}Practice - Settings";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Close");
 }
 
@@ -148,9 +148,9 @@ stock ShowPracticeModelDialog(playerid)
     }
 
     new title[64] = "{MAIN}Practice - Target Model";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_MODEL<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
 }
 

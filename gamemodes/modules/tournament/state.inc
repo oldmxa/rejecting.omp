@@ -6,7 +6,7 @@
 stock bool:IsPlayerInTournament(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return false;
+    if(!IsPlayerLogged(playerid)) return false;
     return (g_PlayerTourneySlot[playerid] != -1);
 }
 
@@ -21,7 +21,7 @@ stock bool:IsPlayerInActiveTourneyMatch(playerid)
 stock bool:IsPlayerRegisteredOnDiscord(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return false;
+    if(!IsPlayerLogged(playerid)) return false;
 
     new pName[MAX_PLAYER_NAME + 1];
     strcopy(pName, User[playerid][userName], sizeof(pName));
@@ -94,7 +94,7 @@ stock ResetTournament()
 
     for(new i = 0; i < MAX_PLAYERS; i++)
     {
-        if(IsPlayerConnected(i) && User[i][isLogged])
+        if(IsPlayerLogged(i))
         {
             if(g_PlayerTourneySpectating[i] != -1)
             {

@@ -1188,7 +1188,7 @@ static stock DiscordTempRecCommand(DCC_User:user, const cmdName[], const params[
 	if(sscanf(params, "r", targetid))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, .%s [id].", username, cmdName));
 
-	if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+	if(!IsPlayerLogged(targetid))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, the player is not online!", username));
 
 	if(User[targetid][adminLevel] > 1)
@@ -1222,7 +1222,7 @@ DSLASH:banomp(user, params[])
 	if(sscanf(params, "r", targetid))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, /banomp [id].", username));
 
-	if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+	if(!IsPlayerLogged(targetid))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, the player is not online!", username));
 
 	if(User[targetid][adminLevel] > 1)
@@ -1537,7 +1537,7 @@ DSLASH:d(user, params[])
     if(sscanf(params, "ds[128]", targetid, message))
         return SendDiscordResponse(comandos, "/d [id] [message]");
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendDiscordResponse(comandos, ":x: Player is not online!");
 
     new username[33];
@@ -1568,7 +1568,7 @@ DSLASH:r(user, params[])
     if(sscanf(params, "ds[128]", targetid, message))
         return SendDiscordResponse(comandos, "/r [id] [message]");
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendDiscordResponse(comandos, ":x: Player is not online!");
 
     new username[33];

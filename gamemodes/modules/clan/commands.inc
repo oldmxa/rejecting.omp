@@ -5,7 +5,7 @@
 
 @cmd() createclan(playerid, params[], help)
 {
-    if (!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (User[playerid][clanID] != -1) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
     if (User[playerid][playerMoney] < CLAN_PRICE) return SendClientMessage(playerid, -1, "%s", CLAN_NOMONEY);
 
@@ -43,7 +43,7 @@
 
 @cmd() clan(playerid, params[], help)
 {
-    if (!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (User[playerid][clanID] == -1) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
 
     new option[10], value[10];
@@ -72,12 +72,13 @@
 
 @cmd(.alts = {"inviteclan"}) invite(playerid, params[], help)
 {
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (User[playerid][clanID] == -1) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
     if (!HasClanRank(playerid, RANK_RECRUTER)) return SendClientMessage(playerid, -1, "%s", CLAN_NOPERMISSION);
 
     new targetid;
     if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "%s", CLAN_INVITE);
-    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerLogged(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (targetid == playerid) return SendClientMessage(playerid, -1, "%s", CLAN_INYOURCLAN);
     if (User[targetid][clanID] == User[playerid][clanID]) return SendClientMessage(playerid, -1, "%s", CLAN_INYOURCLAN);
     if (User[targetid][clanID] != -1) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN1);
@@ -99,6 +100,7 @@
 
 @cmd() accept(playerid, params[], help)
 {
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (User[playerid][clanID] != -1) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
     if (User[playerid][clanIDInvite] == -1) return SendClientMessage(playerid, -1, "%s", CLAN_NOINVITE);
 
@@ -137,7 +139,7 @@
 
     foreach (new i : Player)
     {
-        if (!User[i][isLogged] || User[i][clanID] != clanid) continue;
+        if (!IsPlayerLogged(i) || User[i][clanID] != clanid) continue;
 
         va_SendClientMessage(i, -1, CLAN_JOINED, GetPlayerColor(playerid) >>> 8, User[playerid][userName], GetPlayerColor(playerid) >>> 8, ClanInfo[clanid][clanName]);
         PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
@@ -150,13 +152,14 @@
 
 @cmd() leaveclan(playerid, params[], help)
 {
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     LeaveClan(playerid);
     return 1;
 }
 
 @cmd(.alts = {"clanslist"}) clans(playerid, params[], help)
 {
-    if (!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     ShowClansListDialog(playerid);
     return 1;
@@ -164,7 +167,7 @@
 
 @cmd() territories(playerid, params[], help)
 {
-    if (!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     SetPVarInt(playerid, "terr_page", 0);
     ShowTerritories(playerid);
@@ -173,11 +176,11 @@
 
 @cmd() clancmds(playerid, params[], help)
 {
-    if (!User[playerid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new title[64] = "{MAIN}Clan Commands";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[768];
     strcat(body, "{A29582}Command\t{A29582}Description\n");
 

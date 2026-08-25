@@ -28,8 +28,8 @@ forward DIALOG_TOURNEY_KICK_CONFIRM(playerid, dialogid, response, listitem, stri
 static stock ShowTourneyDuelArenasDialog(playerid)
 {
     new title[64] = "{MAIN}Select Duel Arena";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[2048];
     format(body, sizeof(body), "{MAIN}ID\t{MAIN}Arena Name\t{MAIN}Interior\n");
     strcat(body, "{23C552}#00\t{23C552}[Random] Duel Arena\t{B4B5B7}Any Duel Map\n");
@@ -46,8 +46,8 @@ static stock ShowTourneyDuelArenasDialog(playerid)
 static stock ShowTourneyServerArenasDialog(playerid)
 {
     new title[64] = "{MAIN}Select Server Arena";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[4096];
     format(body, sizeof(body), "{MAIN}ID\t{MAIN}Zone Name\t{MAIN}Size\n");
     strcat(body, "{23C552}#00\t{23C552}[Random] Server Arena\t{B4B5B7}Any Zone\n");
@@ -72,8 +72,8 @@ static stock ShowTourneyServerArenasDialog(playerid)
 static stock ShowTourneyCustomArenasDialog(playerid)
 {
     new title[64] = "{MAIN}Select Custom Map";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[1024];
     format(body, sizeof(body), "{MAIN}ID\t{MAIN}Custom Map Name\t{MAIN}Environment\n");
     strcat(body, "{23C552}#00\t{23C552}[Random] Custom Map\t{B4B5B7}Any Custom Map\n");
@@ -90,7 +90,6 @@ static stock ShowTourneyCustomArenasDialog(playerid)
 static stock ShowTourneyManageDialog(playerid)
 {
     new title[64] = "{MAIN}Manage Tournament Participants";
-    format_MainColor(playerid, title);
 
     new body[2048];
     format(body, sizeof(body), "{MAIN}Slot\t{MAIN}Participant\t{MAIN}Status\n");
@@ -118,7 +117,6 @@ stock ShowTournamentAdminMenu(playerid)
     if(!User[playerid][isLogged] || User[playerid][adminLevel] < 4) return 0;
 
     new title[64] = "{MAIN}Tournament Control Panel";
-    format_MainColor(playerid, title);
 
     new body[2048];
     format(body, sizeof(body), "{MAIN}Setting\t{MAIN}Current Value\n");
@@ -305,7 +303,6 @@ public DIALOG_TOURNEY_ADMIN(playerid, dialogid, response, listitem, string:input
         case 10: // Arena Selection (Category Dialog)
         {
             new title[64] = "{MAIN}Select Arena Category";
-            format_MainColor(playerid, title);
 
             new body[1024];
             format(body, sizeof(body), "{MAIN}Category\t{MAIN}Description\n");
@@ -637,8 +634,8 @@ public DIALOG_TOURNEY_MANAGE(playerid, dialogid, response, listitem, string:inpu
     GetParticipantDisplayName(listitem, dName, sizeof(dName));
 
     new title[64] = "{MAIN}Kick Participant";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[256];
     format(body, sizeof(body), "{FFFFFF}Are you sure you want to kick {FF6347}%s {FFFFFF}from the tournament?\n{BEBEBE}Their registration fee will be refunded.", dName);
 
@@ -663,8 +660,8 @@ stock ShowTourneyBracketDialog(playerid)
 
     new title[64];
     format(title, sizeof(title), "{MAIN}%s {B4B5B7}- Bracket", g_TourneyData[t_Name]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     if(g_TourneyData[t_State] == TOURNAMENT_STATE_NONE)
     {
         new noTourneyMsg[256] = "{FFFFFF}There is no active tournament right now.\nStaff members can open one with {MAIN}/tournament{FFFFFF}.";

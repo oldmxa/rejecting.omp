@@ -10,14 +10,10 @@
     if(sscanf(params, "us[64]", targetid, reason))
         return SendClientMessage(playerid,-1, "%s", KICK_HELP);
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid,-1, "%s", IS_NOT_CONNECTED);
 
-    if(targetid == playerid)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
-
-    if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-        return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+    if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
     va_SendClientMessageToAll(-1, KICK_REASON, User[playerid][userName], User[targetid][userName], targetid, reason);
     
@@ -49,14 +45,10 @@
     if(sscanf(params, "dds[120]", targetid, hours, reason))
         return SendClientMessage(playerid,-1, "%s", BAN_HELP);
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(targetid == playerid)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
-
-    if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-        return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+    if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
     if(User[targetid][OnTempREC] && User[playerid][adminLevel] < 3)
         return SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}This player is in a temprec right now.");
@@ -100,11 +92,7 @@
 
     if(targetid != INVALID_PLAYER_ID)
     {
-        if(targetid == playerid)
-            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
-
-        if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-            return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+        if(!CanAdminTargetPlayer(playerid, targetid)) return true;
     }
 
     new banMsg[256];
@@ -137,7 +125,7 @@
     if(sscanf(params, "r", targetid))
         return SendClientMessage(playerid,-1, "%s", FORCE_OMP_HELP);
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)
@@ -211,13 +199,9 @@
     if(minutes < 1 || minutes > 500)
         return SendClientMessage(playerid,-1, "%s", MUTE_HELP2);
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid,-1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(targetid)) return SendClientMessage(playerid,-1, "%s", IS_NOT_CONNECTED);
 
-    if(targetid == playerid)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
-
-    if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-        return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+    if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
     if(User[targetid][muteTimestamp] != 0)
         return SendClientMessage(playerid, -1, "{MAIN}[Admin] {FFFFFF} The player is already muted!");
@@ -254,13 +238,9 @@
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid,-1, "%s", UNMUTE_HELP);
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid,-1, "%s", IS_NOT_CONNECTED);
+    if(!IsPlayerLogged(targetid)) return SendClientMessage(playerid,-1, "%s", IS_NOT_CONNECTED);
 
-    if(targetid == playerid)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
-
-    if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-        return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+    if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
     if(User[targetid][muteTimestamp] == 0)
         return SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF} The player is not muted!");
@@ -316,14 +296,10 @@
     if(sscanf(params, "r", targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/temprec [id]");
 
-    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if (!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(targetid == playerid)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself.");
-
-    if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-        return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+    if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
     new stringa[250];
     format(stringa, sizeof(stringa),
@@ -429,11 +405,8 @@
     CheckAdminAuth(playerid);
     new targetid, reason[64];
     if(sscanf(params, "us[64]", targetid, reason)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/warn [id] [reason]");
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged]) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-    if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself..");
-    
-    if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-        return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+    if(!IsPlayerLogged(targetid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
     User[targetid][warnings]++;
     
@@ -476,10 +449,7 @@
     new targetid = strval(target);
     if(IsNumeric(target) && IsPlayerConnected(targetid))
     {
-        if(targetid == playerid) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this command on yourself..");
-
-        if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-            return SendClientMessage(playerid, -1, "%s", SUPERIOR_RIGHTS);
+        if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
         mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT * FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[targetid][userName]);
         mysql_tquery(dbHandle, queryGlobal, "BanPlayer", "ddsdd", playerid, targetid, reason, hours, gettime()+hours*3600);
@@ -585,8 +555,8 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
             else
             {
                 new empty[64] = "{MAIN}This player has no penalty history recorded.";
-                format_MainColor(playerid, empty);
 
+                format_MainColor(playerid, empty);
                 Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Information", empty, "Close", "");
             }
         }
@@ -672,11 +642,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
 		if(!IsPlayerConnected(targetid))
 			return SendClientMessage(playerid, COLOR_TOMATO, "%s", IS_NOT_CONNECTED);
 
-		if(targetid == playerid)
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot ban yourself.");
-
-		if(User[targetid][adminLevel] >= User[playerid][adminLevel])
-			return SendClientMessage(playerid, COLOR_TOMATO, "%s", SUPERIOR_RIGHTS);
+		if(!CanAdminTargetPlayer(playerid, targetid)) return true;
 
 		if(hours < 1 || hours > 9999)
 			return SendClientMessage(playerid, -1, "%s", BAN_HELP2);

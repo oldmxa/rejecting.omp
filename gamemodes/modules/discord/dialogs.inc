@@ -2,8 +2,8 @@
 stock ShowDiscordLinkDialog(playerid)
 {
     new strC[1024], title[64] = "{MAIN}Link Discord Account";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     format(strC, sizeof(strC),
 "{MAIN}\xA4 Community & Benefits{FFFFFF}\n\
 {FFFFFF}\x95 {B4B5B7}Official Discord: {MAIN}%s{FFFFFF}\n\
@@ -16,8 +16,8 @@ stock ShowDiscordLinkDialog(playerid)
 {FFFFFF}\x95 {B4B5B7}Legacy Tag: {MAIN}username#0000\n\
 {FFFFFF}\x95 {B4B5B7}Discord ID: {MAIN}123456789012345678\n\n\
 {FFFFFF}Enter your Discord username or ID below:", ServerHostname);
-    format_MainColor(playerid, strC);
 
+    format_MainColor(playerid, strC);
     return Dialog_ShowCallback(playerid, using public DIALOG_LINK_DISCORD<iiiis>, DIALOG_STYLE_INPUT, title, strC, "Confirm", "Cancel");
 }
 
@@ -84,8 +84,8 @@ public DIALOG_LINK_DISCORD(playerid, dialogid, response, listitem, string:inputt
                 User[playerid][dc_codetimer] = gettime()+(2*60);
 
                 new strC[1024], title[64] = "{MAIN}Discord Verification";
-                format_MainColor(playerid, title);
 
+                format_MainColor(playerid, title);
                 new userTag[128];
                 if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
                     format(userTag, sizeof(userTag), "%s", User[playerid][dc_username]);
@@ -100,8 +100,8 @@ public DIALOG_LINK_DISCORD(playerid, dialogid, response, listitem, string:inputt
 {FFFFFF}\x95 {B4B5B7}A 5-digit verification code was sent to your Discord Direct Message (PM).\n\
 {FFFFFF}\x95 {B4B5B7}Make sure your Discord DMs are open on our server.\n\n\
 {FFFFFF}Enter the 5-digit code below to finish linking:", userTag);
-                format_MainColor(playerid, strC);
 
+                format_MainColor(playerid, strC);
                 Dialog_ShowCallback(playerid, using public DIALOG_VALI_DISCORD<iiiis>, DIALOG_STYLE_INPUT, title, strC, "Confirm", "Cancel");
             }
             CheckDiscordUser(playerid, output[0], userid, using inline OnDiscordAvailable);

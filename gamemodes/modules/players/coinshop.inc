@@ -50,9 +50,9 @@ public Coinshop_ShowCoinsMenu(playerid)
 
     strcat(body, "{FFFFFF}History\t{BEBEBE}Recent transactions\n");
 
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_COINS_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS,
         title, body, "Select", "Close");
 }

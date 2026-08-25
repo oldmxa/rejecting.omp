@@ -34,8 +34,8 @@ stock ShowSafehouseAdminMenu(playerid)
     if (!IsSafehouseAdmin(playerid)) return 0;
 
     new title[64] = "{MAIN}Safehouse System";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new placed = 0, owned = 0, eligible = 0, created = 0;
     for (new i = 0; i < MAX_SAFEHOUSES; i++)
     {
@@ -72,8 +72,8 @@ stock ShowSafehouseAdminMenu(playerid)
 {BEBEBE}Free zones\t{BEBEBE}%d of %d still without a safehouse\n",
         hereLabel, created, placed, owned, eligible - created, eligible);
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_ADMIN<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Select", "Close");
 }
@@ -142,8 +142,8 @@ stock CreateSafehouseHere(playerid)
 stock ShowSafehouseFreeZones(playerid)
 {
     new title[64] = "{MAIN}Zones Without Safehouse";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[128 + (48 * MAX_SAFEHOUSES)];
     format(buf, sizeof(buf), "{MAIN}Zone\t{MAIN}Size\n");
 
@@ -162,8 +162,8 @@ stock ShowSafehouseFreeZones(playerid)
 
     if (!found) strcat(buf, "{23C552}Every eligible zone already has a safehouse\t \n");
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_FREEZONES<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Back", "Close");
 }
@@ -177,8 +177,8 @@ public DIALOG_SAFE_FREEZONES(playerid, dialogid, response, listitem, string:inpu
 stock ShowSafehouseConfigMenu(playerid)
 {
     new title[64] = "{MAIN}Safehouse Settings";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[128 + (96 * SHCFG_MAX)];
     format(buf, sizeof(buf), "{MAIN}Setting\t{MAIN}Value\t{MAIN}Range\n");
 
@@ -191,8 +191,8 @@ stock ShowSafehouseConfigMenu(playerid)
         strcat(buf, line);
     }
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_CONFIG<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Change", "Back");
 }
@@ -209,8 +209,8 @@ public DIALOG_SAFE_CONFIG(playerid, dialogid, response, listitem, string:inputte
 
     new title[80];
     format(title, sizeof(title), "{MAIN}%s", g_SafehouseConfigLabel[listitem]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[256];
     format(body, sizeof(body),
         "{FFFFFF}Current value: {23C552}%d\n{FFFFFF}Allowed range: {BEBEBE}%d to %d\n\n\
@@ -247,8 +247,8 @@ public DIALOG_SAFE_CONFIG_SET(playerid, dialogid, response, listitem, string:inp
 stock ShowSafehouseEditList(playerid)
 {
     new title[64] = "{MAIN}Safehouses";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[128 + (64 * MAX_SAFEHOUSES)];
     format(buf, sizeof(buf), "{MAIN}Zone\t{MAIN}Owner\t{MAIN}Placed\n");
 
@@ -279,8 +279,8 @@ stock ShowSafehouseEditList(playerid)
         g_SafehouseEditList[playerid][g_SafehouseEditCount[playerid]++] = i;
     }
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_EDIT_LIST<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Edit", "Back");
 }
@@ -299,14 +299,11 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
 
 @cmd(.alts = {"safe", "basemenu"}) safemenu(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if (IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot access safehouse while in a 2v2 duel.");
-
-    if (IsPlayerInTournamentMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot access safehouse while playing a tournament match.");
+    if (IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot access safehouse while in a match, duel, training or practice.");
 
     new index = GetPlayerSafehouse(playerid);
     if (!IsValidSafehouseIndex(index))
@@ -320,7 +317,7 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
 
 @cmd(.alts = {"leavesafe"}) exitsafehouse(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (!IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
@@ -332,7 +329,7 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
 
 @cmd() editsafehouse(playerid, params[], help)
 {
-    if (!User[playerid][isLogged])
+    if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (!IsSafehouseAdmin(playerid))
@@ -371,8 +368,8 @@ stock ShowSafehouseEditMenu(playerid)
 
     new title[80];
     format(title, sizeof(title), "{MAIN}Edit Safehouse - %s", SafehouseData[index][sh_Name]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[1024], line[192];
     format(buf, sizeof(buf), "{MAIN}Field\t{MAIN}Current\n");
 
@@ -402,8 +399,8 @@ stock ShowSafehouseEditMenu(playerid)
     else
         strcat(buf, "{F3230E}Delete safehouse\t{BEBEBE}Remove the row and free the zone\n");
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_EDIT<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Select", "Back");
 }
@@ -461,8 +458,8 @@ public DIALOG_SAFE_EDIT(playerid, dialogid, response, listitem, string:inputtext
             format(title, sizeof(title), "{MAIN}%s", (listitem == SAFE_EDIT_INTERIOR) ? ("Interior id") : ("Virtual world"));
             format(body, sizeof(body), "{FFFFFF}Enter the new %s:",
                 (listitem == SAFE_EDIT_INTERIOR) ? ("interior id") : ("virtual world"));
-            format_MainColor(playerid, title);
 
+            format_MainColor(playerid, title);
             return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_EDIT_VALUE<iiiis>,
                 DIALOG_STYLE_INPUT, title, body, "Save", "Back");
         }
@@ -505,9 +502,9 @@ public DIALOG_SAFE_EDIT(playerid, dialogid, response, listitem, string:inputtext
 {BEBEBE}The zone becomes free again and can be recreated anywhere inside it.",
                 arenaData[index][arenaName]);
 
+
             format_MainColor(playerid, title2);
             format_MainColor(playerid, body);
-
             return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_DELETE<iiiis>,
                 DIALOG_STYLE_MSGBOX, title2, body, "Delete", "Back");
         }

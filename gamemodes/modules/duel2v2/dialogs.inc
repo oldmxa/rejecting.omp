@@ -21,8 +21,8 @@ stock ShowDuel2v2ArenaDialog(playerid)
     }
 
     new title[64] = "{MAIN}Duel 2v2 - Select Arena";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[1024];
     format(buf, sizeof(buf), "{MAIN}#\t{MAIN}Arena Name\n");
 
@@ -34,8 +34,8 @@ stock ShowDuel2v2ArenaDialog(playerid)
         strcat(buf, line);
     }
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     Dialog_ShowCallback(
         playerid,
         using public DIALOG_DUEL2V2_ARENA<iiiis>,
@@ -64,8 +64,8 @@ public DIALOG_DUEL2V2_ARENA(playerid, dialogid, response, listitem, string:input
 stock ShowDuel2v2WeaponsDialog(playerid)
 {
     new title[64] = "{MAIN}Duel 2v2 - Select Weapons";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[512];
     format(buf, sizeof(buf), "{MAIN}#\t{MAIN}Weapon Loadout\n");
 
@@ -77,7 +77,6 @@ stock ShowDuel2v2WeaponsDialog(playerid)
         strcat(buf, line);
     }
 
-    format_MainColor(playerid, buf);
 
     Dialog_ShowCallback(
         playerid,
@@ -111,7 +110,6 @@ public DIALOG_DUEL2V2_WEAPONS(playerid, dialogid, response, listitem, string:inp
 stock ShowDuel2v2RoundsDialog(playerid)
 {
     new title[64] = "{MAIN}Duel 2v2 - Select Rounds";
-    format_MainColor(playerid, title);
 
     new buf[512];
     format(buf, sizeof(buf), "{MAIN}Format\t{MAIN}Rounds\n");
@@ -120,7 +118,6 @@ stock ShowDuel2v2RoundsDialog(playerid)
     strcat(buf, "Best of 5\t{FFFFFF}First to 3 Wins\n");
     strcat(buf, "Best of 7\t{FFFFFF}First to 4 Wins");
 
-    format_MainColor(playerid, buf);
 
     Dialog_ShowCallback(
         playerid,
@@ -158,7 +155,6 @@ public DIALOG_DUEL2V2_ROUNDS(playerid, dialogid, response, listitem, string:inpu
 stock ShowDuel2v2PlayersDialog(playerid)
 {
     new title[64] = "{MAIN}Duel 2v2 - Enter Player IDs";
-    format_MainColor(playerid, title);
 
     new buf[512];
     format(buf, sizeof(buf),
@@ -166,7 +162,6 @@ stock ShowDuel2v2PlayersDialog(playerid)
         "{MAIN}Format: {FFFFFF}[Teammate ID] [Opponent 1 ID] [Opponent 2 ID]\n" \
         "{BEBEBE}Example: 5 12 18");
 
-    format_MainColor(playerid, buf);
 
     Dialog_ShowCallback(
         playerid,
@@ -265,8 +260,8 @@ stock ShowDuel2v2AcceptDialog(playerid)
     new rounds = g_Duel2v2Data[matchid][d2_MaxRounds];
 
     new title[64] = "{MAIN}Duel 2v2 Invitation";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[640];
     format(buf, sizeof(buf),
         "{FFFFFF}You have been invited to a 2v2 duel challenge!\n\n" \
@@ -281,7 +276,6 @@ stock ShowDuel2v2AcceptDialog(playerid)
         getPlayerName(opp1), getPlayerName(opp2),
         DuelS_ArenaNames[arenaid], g_Duel2v2WeaponSets[wset][d2w_Name], rounds);
 
-    format_MainColor(playerid, buf);
 
     Dialog_ShowCallback(
         playerid,

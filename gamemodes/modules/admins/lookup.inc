@@ -68,8 +68,8 @@ stock PerformIPLookup(playerid, const targetname[], const ip[], const gpci[] = "
 
         new title[128];
         format(title, sizeof(title), "{MAIN}AKA: {FFFFFF}%s {BEBEBE}(%s | %s)", targetname, ip, lookup_gpci);
-        format_MainColor(playerid, title);
 
+        format_MainColor(playerid, title);
         Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, aka_list, "Close", "");
     }
 

@@ -202,7 +202,7 @@ stock GetPlayerChatMainColorHex(playerid, dest[], len = sizeof(dest))
 stock bool:IsServerOwner(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return false;
+    if(!IsPlayerLogged(playerid)) return false;
 
     return (strcmp(User[playerid][userName], SERVER_OWNER, true) == 0);
 }
@@ -456,7 +456,7 @@ ResolvePlayerTarget(const target[])
 	if(IsNumeric(target))
 	{
 		new id = strval(target);
-		if(0 <= id < MAX_PLAYERS && IsPlayerConnected(id) && User[id][isLogged])
+		if(0 <= id < MAX_PLAYERS && IsPlayerLogged(id))
 			return id;
 
 		return INVALID_PLAYER_ID;

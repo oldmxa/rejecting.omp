@@ -223,3 +223,7 @@ stock SendDiscordEmbedReply(const title[], const description[], color = DISCORD_
 stock ShowBanDialog(playerid, const adminname[], const reason[], const banDate[], const unbanDate[]) return CallLocalFunction("Stats_ShowBanDialog", "dssss", playerid, adminname, reason, banDate, unbanDate);
 stock ShowSecurityMenu(playerid) return CallLocalFunction("Account_ShowSecurityMenu", "d", playerid);
 stock ShowCoinsMenu(playerid) return CallLocalFunction("Coinshop_ShowCoinsMenu", "d", playerid);
+
+forward bool:IsPlayerLogged(playerid);
+forward bool:IsPlayerInLounge(playerid);
+forward bool:IsPlayerInMatch(playerid);

@@ -45,9 +45,9 @@ stock ShowClanMenu(playerid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Dashboard: {FFFFFF}%s [%s]", ClanInfo[clanid][clanName], ClanInfo[clanid][clanTag]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLANMENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Cancel");
     return 1;
 }
@@ -94,9 +94,9 @@ stock ShowClanInfoDialog(playerid, clanid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Info: {FFFFFF}%s [%s]", ClanInfo[clanid][clanName], ClanInfo[clanid][clanTag]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, infoStr);
-
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, infoStr, "Close", "");
     return 1;
 }
@@ -130,9 +130,9 @@ stock ShowClanSettingsDialog(playerid, clanid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Settings: {FFFFFF}%s", ClanInfo[clanid][clanName]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLAN_SETTINGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
 }
@@ -149,8 +149,8 @@ stock ShowClanLogsDialog(playerid, clanid)
         if (!rows)
         {
             new empty[64] = "{MAIN}No match logs recorded for your clan.";
-            format_MainColor(playerid, empty);
 
+            format_MainColor(playerid, empty);
             Dialog_ShowCallback(playerid, using public DIALOG_CLAN_LOGS_BACK<iiiis>, DIALOG_STYLE_MSGBOX, "Clan Logs", empty, "Back", "");
             return 1;
         }
@@ -171,9 +171,9 @@ stock ShowClanLogsDialog(playerid, clanid)
 
         new title[128];
         format(title, sizeof(title), "{MAIN}Clan Match Logs: {FFFFFF}%s", ClanInfo[clanid][clanName]);
+
         format_MainColor(playerid, title);
         format_MainColor(playerid, body);
-
         Dialog_ShowCallback(playerid, using public DIALOG_CLAN_LOGS_BACK<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Back", "");
         return 1;
     }
@@ -272,9 +272,9 @@ stock ShowClanRolesDialog(playerid, clanid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Roles: {FFFFFF}%s", ClanInfo[clanid][clanName]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLAN_ROLES<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
     return 1;
 }
@@ -339,9 +339,9 @@ public DIALOG_CLAN_COLOR_TYPE(playerid, dialogid, response, listitem, string:inp
 
         new title[128];
         format(title, sizeof(title), "{MAIN}Default Clan Colors: {FFFFFF}%s", ClanInfo[clanid][clanName]);
+
         format_MainColor(playerid, title);
         format_MainColor(playerid, body);
-
         Dialog_ShowCallback(playerid, using public DIALOG_CLAN_DEFAULT_COLORS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
         return 1;
     }
@@ -352,9 +352,9 @@ public DIALOG_CLAN_COLOR_TYPE(playerid, dialogid, response, listitem, string:inp
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Custom Clan Color: {FFFFFF}%s", ClanInfo[clanid][clanName]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_COLOR<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Cancel");
     return 1;
 }
@@ -438,9 +438,9 @@ stock ShowClanMembersDialog(playerid, page)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Members: {FFFFFF}%s (Page %d)", ClanInfo[clanid][clanName], page + 1);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLANMEMBERS_PAGED<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
 }
@@ -495,9 +495,9 @@ public DIALOG_CLANMEMBERS_PAGED(playerid, dialogid, response, listitem, string:i
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Manage Member: {FFFFFF}%s", ClanMembers[clanid][slot][member_name]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDITMEMBER<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
     return 1;
 }
@@ -550,9 +550,9 @@ stock ShowClansListDialog(playerid)
     if (count == 0) return SendClientMessage(playerid, -1, CLAN_PREFIX"No clans found on the server.");
 
     new title[64] = "{MAIN}Server Clans";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLANS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Close");
     return 1;
 }
@@ -596,9 +596,9 @@ stock ShowClanRecruitDialog(playerid, clanid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Info: {FFFFFF}%s [%s]", ClanInfo[clanid][clanName], ClanInfo[clanid][clanTag]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, infoStr);
-
     Dialog_ShowCallback(playerid, using public DIALOG_CLAN_RECRUIT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, infoStr, "Select", "Back");
     return 1;
 }

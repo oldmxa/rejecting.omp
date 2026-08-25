@@ -700,9 +700,9 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
 
     new title[64];
     format(title, sizeof(title), "{MAIN}Profile: {FFFFFF}%s", getPlayerName(clickedplayerid));
+
     format_MainColor(playerid, menu_str);
     format_MainColor(playerid, title);
-
     Dialog_ShowCallback(playerid, using public DIALOG_PROFILE_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, menu_str, "Select", "Close");
 	return true;
 }

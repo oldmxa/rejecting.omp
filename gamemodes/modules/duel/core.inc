@@ -429,17 +429,14 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 
 stock DuelS_Host(playerid)
 {
-	if(User[playerid][isAfk] || User[playerid][locationId] == ARENA_AFK)
+	if(IsPlayerInLounge(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in the lounge.");
 
 	if(User[playerid][isSpectating])
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
-	if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You are already in a duel! Use {MAIN}/backduel{FFFFFF} to leave.");
-
-	if(IsPlayerInDuel2v2(playerid))
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a 2v2 duel.");
+	if(IsPlayerInMatch(playerid))
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a match, training, practice or safehouse.");
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);
@@ -471,7 +468,6 @@ stock DuelS_Host(playerid)
 		{
 			new formattedMsg[256];
 			strcopy(formattedMsg, dString, sizeof(formattedMsg));
-			format_MainColor(i, formattedMsg);
 			SendClientMessage(i, COLOR_LRED, "%s", formattedMsg);
 		}
 	}
@@ -484,29 +480,14 @@ stock DuelS_Host(playerid)
 
 	if(isnull(params))
 	{
-		if(User[playerid][isAfk] || User[playerid][locationId] == ARENA_AFK)
+		if(IsPlayerInLounge(playerid))
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in the lounge.");
 
 		if(User[playerid][isSpectating])
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
-		if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You are already in a duel! Use {MAIN}/backduel{FFFFFF} to leave.");
-
-		if(IsPlayerInDuel2v2(playerid))
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a 2v2 duel.");
-
-		if(IsPlayerInTournamentMatch(playerid))
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot create a duel while playing a tournament match.");
-
-		if(g_PlayerTraining[playerid][pTrain_Active])
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in training mode.");
-
-		if(g_Practice[playerid][pracActive])
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in practice mode.");
-
-		if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
-			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while inside a safehouse.");
+		if(IsPlayerInMatch(playerid))
+			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot create a duel while in a match, training, practice or safehouse.");
 
 		new Float:Armour, Float:Health, Float:Result;
 		GetPlayerHealth(playerid, Health);
@@ -579,31 +560,16 @@ stock DuelS_Host(playerid)
 
 @cmd(.alts = {"duelaccept", "goduel"}) acceptduel(playerid, params[], help)
 {
-	if(!User[playerid][isLogged]) return 1;
+	if(!IsPlayerLogged(playerid)) return 1;
 
-	if(User[playerid][isAfk] || User[playerid][locationId] == ARENA_AFK)
+	if(IsPlayerInLounge(playerid))
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in the lounge.");
 
 	if(User[playerid][isSpectating])
 		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot use this while spectating.");
 
-	if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE)
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You are already in a duel! Use {MAIN}/backduel{FFFFFF} to leave.");
-
-	if(IsPlayerInDuel2v2(playerid))
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in a 2v2 duel.");
-
-	if(IsPlayerInTournamentMatch(playerid))
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot enter a duel while playing a tournament match.");
-
-	if(g_PlayerTraining[playerid][pTrain_Active])
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in training mode.");
-
-	if(g_Practice[playerid][pracActive])
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in practice mode.");
-
-	if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
-		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while inside a safehouse.");
+	if(IsPlayerInMatch(playerid))
+		return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You cannot enter a duel while in a match, training, practice or safehouse.");
 
 	new Float:Armour, Float:Health, Float:Result;
 	GetPlayerHealth(playerid, Health);
@@ -668,6 +634,7 @@ stock DuelS_Host(playerid)
 			SetPVarInt(playerid, "DuelS_AccCount", waitingCount);
 
 			new title[64] = "{MAIN}Open Duels - Challenge Queue";
+			format_MainColor(playerid, dialogBody, sizeof(dialogBody));
 			format_MainColor(playerid, title);
 			format_MainColor(playerid, dialogBody, sizeof(dialogBody));
 			ShowPlayerDialog(playerid, DIALOG_DUEL_ACCEPT_ID, DIALOG_STYLE_TABLIST_HEADERS, title, dialogBody, "Accept", "Cancel");
@@ -714,7 +681,6 @@ stock DuelS_Host(playerid)
 		{
 			new formattedMsg[256];
 			strcopy(formattedMsg, aString, sizeof(formattedMsg));
-			format_MainColor(i, formattedMsg);
 			SendClientMessage(i, COLOR_LRED, "%s", formattedMsg);
 		}
 	}

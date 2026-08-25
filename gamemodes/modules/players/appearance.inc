@@ -141,8 +141,7 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
         case 10: ShowSkinDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case 11: { strcopy(cmd, "/fight"); Command_ReProcess(playerid, cmd, 0); }
         case 12: {
-            new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
-            if(!isLoungeOrAfk)
+            if(!IsPlayerInLounge(playerid))
             {
                 SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}You can only configure weapon loadout via menu while in the Lounge.");
                 ShowPersonalizationMenu(playerid);
@@ -198,8 +197,8 @@ stock ShowHitSoundDialog(playerid, source = APPEARANCE_SRC_PERSONAL)
     SetAppearanceSource(playerid, source);
 
     new title[64] = "{MAIN}Personalization - Hit Sound";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new str[3500] = "{MAIN}ID\t{MAIN}Sound Name\t{MAIN}Preview / Status\n";
     for(new i = 0; i < sizeof(g_SoundList); i++)
     {
@@ -212,8 +211,8 @@ stock ShowHitSoundDialog(playerid, source = APPEARANCE_SRC_PERSONAL)
             isSelected ? ("{23C552}Active (Playing)") : ("{BEBEBE}[Click to Test]")
         );
     }
-    format_MainColor(playerid, str);
 
+    format_MainColor(playerid, str);
     Dialog_ShowCallback(playerid, using public DIALOG_HIT_SOUND_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, str, "Test / Select", "Close");
     return 1;
 }
@@ -241,7 +240,6 @@ stock ShowKillSoundDialog(playerid, source = APPEARANCE_SRC_PERSONAL)
     SetAppearanceSource(playerid, source);
 
     new title[64] = "{MAIN}Personalization - Kill Sound";
-    format_MainColor(playerid, title);
 
     new str[3500] = "{MAIN}ID\t{MAIN}Sound Name\t{MAIN}Preview / Status\n";
     for(new i = 0; i < sizeof(g_SoundList); i++)
@@ -255,8 +253,8 @@ stock ShowKillSoundDialog(playerid, source = APPEARANCE_SRC_PERSONAL)
             isSelected ? ("{23C552}Active (Playing)") : ("{BEBEBE}[Click to Test]")
         );
     }
-    format_MainColor(playerid, str);
 
+    format_MainColor(playerid, str);
     Dialog_ShowCallback(playerid, using public DIALOG_KILL_SOUND_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, str, "Test / Select", "Close");
     return 1;
 }

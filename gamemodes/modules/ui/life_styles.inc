@@ -253,8 +253,8 @@ stock ShowPlayerLifeTypesList(playerid)
     if (!IsPlayerConnected(playerid)) return 0;
 
     new title[64] = "{MAIN}\xA4 {FFFFFF}Life Bar Styles";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[512];
     body[0] = '\0';
 
@@ -268,6 +268,7 @@ stock ShowPlayerLifeTypesList(playerid)
 
     format_MainColor(playerid, body, sizeof(body));
 
+    format_MainColor(playerid, body, sizeof(body));
     return ShowPlayerDialog(playerid, DIALOG_LIFE_TYPE, DIALOG_STYLE_LIST, title, body, "Select", "Back");
 }
 

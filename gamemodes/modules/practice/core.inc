@@ -273,10 +273,6 @@ public OnPracticeRespawn(playerid)
     return 1;
 }
 
-stock bool:IsPlayerInLounge(playerid)
-{
-    return (User[playerid][isAfk] && User[playerid][locationId] == ARENA_AFK);
-}
 
 stock EnterPractice(playerid)
 {

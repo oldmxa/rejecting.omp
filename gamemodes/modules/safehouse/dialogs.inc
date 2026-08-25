@@ -61,8 +61,8 @@ stock ShowSafehouseMenu(playerid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Safehouse: {FFFFFF}%s", SafehouseData[index][sh_Name]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[1024];
     format(buf, sizeof(buf), "{MAIN}Option\t{MAIN}Details\t{MAIN}Action\n");
 
@@ -89,8 +89,8 @@ stock ShowSafehouseMenu(playerid)
     new refund = (SH_BUY_PRICE / 100) * SH_REFUND_PCT + ((SH_BUY_PRICE % 100) * SH_REFUND_PCT) / 100;
     strcat(buf, fmat_return("{FF0000}Sell Safehouse\t{BEBEBE}%d%% Refund (%s)\t{FF4500}[Sell]\n", SH_REFUND_PCT, FormatMoney(refund)));
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_MAIN<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Select", "Close");
 }
@@ -113,8 +113,8 @@ public DIALOG_SAFE_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 return ShowSafehouseDenied(playerid, "Only the clan leader can change the name.");
 
             title = "{MAIN}Safehouse - Rename Base";
-            format_MainColor(playerid, title);
 
+            format_MainColor(playerid, title);
             new body[384];
             format(body, sizeof(body),
                 "{FFFFFF}Enter a new name for your {MAIN}Safehouse{FFFFFF} below:\n\n"\
@@ -122,8 +122,8 @@ public DIALOG_SAFE_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 "{MAIN}\x95 {B4B5B7}Rules: {FFFFFF}Letters, numbers and basic symbols only\n\n"\
                 "{BEBEBE}The new name will be displayed at the entrance pickup and on menus.");
 
-            format_MainColor(playerid, body);
 
+            format_MainColor(playerid, body);
             return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_NAME<iiiis>, DIALOG_STYLE_INPUT,
                 title, body, "Save", "Back");
         }
@@ -133,7 +133,6 @@ public DIALOG_SAFE_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 return ShowSafehouseDenied(playerid, "Only the clan leader can change the password.");
 
             title = "{MAIN}Safehouse - Password";
-            format_MainColor(playerid, title);
 
             new body[384];
             format(body, sizeof(body),
@@ -143,8 +142,8 @@ public DIALOG_SAFE_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 "{BEBEBE}Leave this field empty to make the safehouse public.",
                 SAFEHOUSE_PASS_MIN, SAFEHOUSE_PASS_MAX);
 
-            format_MainColor(playerid, body);
 
+            format_MainColor(playerid, body);
             return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_PASS<iiiis>, DIALOG_STYLE_INPUT,
                 title, body, "Save", "Back");
         }
@@ -176,9 +175,9 @@ public DIALOG_SAFE_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 totalStr);
 
             title = "{MAIN}Sell Safehouse - Confirmation";
+
             format_MainColor(playerid, title);
             format_MainColor(playerid, body);
-
             return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_SELL<iiiis>,
                 DIALOG_STYLE_MSGBOX, title, body, "Sell", "Back");
         }
@@ -255,8 +254,8 @@ stock ShowSafehouseVault(playerid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Vault: {FFFFFF}%s", SafehouseData[index][sh_Name]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[512];
     format(buf, sizeof(buf), "{MAIN}Option\t{MAIN}Description\t{MAIN}Balance\n");
     strcat(buf, fmat_return("{MAIN}Balance\t{BEBEBE}Total funds stored in vault\t{23C552}%s\n", FormatMoney(SafehouseData[index][sh_Vault])));
@@ -264,8 +263,8 @@ stock ShowSafehouseVault(playerid)
     strcat(buf, "{MAIN}Withdraw\t{BEBEBE}Take cash from the vault\t{90C3D4}[Withdraw]\n");
     strcat(buf, "{MAIN}History\t{BEBEBE}View last vault transactions\t{90C3D4}[View]\n");
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_VAULT<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Select", "Back");
 }
@@ -287,7 +286,6 @@ public DIALOG_SAFE_VAULT(playerid, dialogid, response, listitem, string:inputtex
         case SAFE_VAULT_DEPOSIT:
         {
             title = "{MAIN}Vault - Deposit Money";
-            format_MainColor(playerid, title);
 
             new body[384];
             format(body, sizeof(body),
@@ -297,15 +295,14 @@ public DIALOG_SAFE_VAULT(playerid, dialogid, response, listitem, string:inputtex
                 FormatMoney(User[playerid][playerMoney]),
                 FormatMoney(SafehouseData[index][sh_Vault]));
 
-            format_MainColor(playerid, body);
 
+            format_MainColor(playerid, body);
             return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_DEPOSIT<iiiis>, DIALOG_STYLE_INPUT,
                 title, body, "Deposit", "Back");
         }
         case SAFE_VAULT_WITHDRAW:
         {
             title = "{MAIN}Vault - Withdraw Money";
-            format_MainColor(playerid, title);
 
             new body[384];
             format(body, sizeof(body),
@@ -315,8 +312,8 @@ public DIALOG_SAFE_VAULT(playerid, dialogid, response, listitem, string:inputtex
                 FormatMoney(SafehouseData[index][sh_Vault]),
                 FormatMoney(User[playerid][playerMoney]));
 
-            format_MainColor(playerid, body);
 
+            format_MainColor(playerid, body);
             return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_WITHDRAW<iiiis>, DIALOG_STYLE_INPUT,
                 title, body, "Withdraw", "Back");
         }
@@ -372,8 +369,8 @@ stock ShowSafehouseUpgrade(playerid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Safehouse Upgrade: {FFFFFF}%s", SafehouseData[index][sh_Name]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[768];
 
     if (!IsValidSafehouseLevel(next))
@@ -408,7 +405,6 @@ stock ShowSafehouseUpgrade(playerid)
         CLAN_BASE_SLOTS + GetSafehouseLevelSlots(next),
         g_SafehouseLevels[next - 1][lvl_Interior]);
 
-    format_MainColor(playerid, body);
 
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_UPGRADE<iiiis>,
         DIALOG_STYLE_MSGBOX, title, body, "Upgrade", "Back");
@@ -435,8 +431,8 @@ stock ShowSafehouseMembers(playerid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Safehouse Members: {FFFFFF}%s", ClanInfo[clanid][clanName]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[128 + (128 * MAX_MEMBERS)];
     format(buf, sizeof(buf), "{MAIN}Member\t{MAIN}Role\t{MAIN}Status\n");
 
@@ -456,8 +452,8 @@ stock ShowSafehouseMembers(playerid)
     strcat(buf, fmat_return("{MAIN}Total Slots\t{BEBEBE}%d / %d Used\t \n",
         ClanMembersCount[clanid], GetClanMemberSlots(clanid)));
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_MEMBERS<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Back", "Close");
 }
@@ -475,8 +471,8 @@ stock ShowSafehouseExpiry(playerid)
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Safehouse Contract: {FFFFFF}%s", SafehouseData[index][sh_Name]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new leftStr[24], nextStr[24];
     FormatSafehouseTime(GetSafehouseTimeLeft(index), leftStr);
     FormatSafehouseTime(GetSafehouseNextChargeIn(index), nextStr);
@@ -495,8 +491,8 @@ stock ShowSafehouseExpiry(playerid)
     strcat(buf, fmat_return("{MAIN}Extend Contract\t{BEBEBE}Add +%d days contract\t{FFD700}+%d Days {BEBEBE}(%s Coins)\n", SH_RENEW_DAYS, SH_RENEW_DAYS, coinStr));
     strcat(buf, "{MAIN}History\t{BEBEBE}View maintenance records\t{90C3D4}[Logs]\n");
 
-    format_MainColor(playerid, buf);
 
+    format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_EXPIRY<iiiis>,
         DIALOG_STYLE_TABLIST_HEADERS, title, buf, "Select", "Back");
 }
@@ -519,7 +515,6 @@ public DIALOG_SAFE_EXPIRY(playerid, dialogid, response, listitem, string:inputte
     format(coinStr, sizeof(coinStr), "%s", FormatCoins(SH_RENEW_COINS));
 
     new title[64] = "{MAIN}Contract - Extend Safehouse";
-    format_MainColor(playerid, title);
 
     new body[512];
     format(body, sizeof(body),
@@ -536,8 +531,8 @@ public DIALOG_SAFE_EXPIRY(playerid, dialogid, response, listitem, string:inputte
         FormatCoins(User[playerid][playerCoins]),
         SH_DURATION / 86400);
 
-    format_MainColor(playerid, body);
 
+    format_MainColor(playerid, body);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_RENEW<iiiis>,
         DIALOG_STYLE_MSGBOX, title, body, "Extend", "Back");
 }
@@ -569,8 +564,8 @@ stock ShowSafehouseBuyDialog(playerid, index)
     if (!IsValidSafehouseIndex(index)) return 1;
 
     new title[64] = "{MAIN}Buy Safehouse";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[640];
     format(body, sizeof(body),
         "{FFFFFF}Purchase {MAIN}%s{FFFFFF} for your clan?\n\n"\
@@ -585,8 +580,8 @@ stock ShowSafehouseBuyDialog(playerid, index)
         FormatMoney(SH_CHARGE_VALUE), SH_CHARGE_EVERY / 86400,
         CLAN_BASE_SLOTS + GetSafehouseLevelSlots(1));
 
-    format_MainColor(playerid, body);
 
+    format_MainColor(playerid, body);
     g_PlayerSafehousePrompt[playerid] = index;
 
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_BUY<iiiis>,
@@ -610,8 +605,8 @@ stock ShowSafehousePasswordPrompt(playerid, index)
     g_PlayerSafehousePrompt[playerid] = index;
 
     new title[64] = "{MAIN}Safehouse - Enter Password";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_ENTERPASS<iiiis>,
         DIALOG_STYLE_PASSWORD, title, "{FFFFFF}This safehouse is locked. Enter the password below:", "Enter", "Cancel");
 }
@@ -649,8 +644,8 @@ stock ShowSafehouseHistory(playerid, index, const filter[])
 
     new title[64];
     format(title, sizeof(title), "{MAIN}Safehouse - Audit History");
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     inline OnSafehouseHistory()
     {
         new rows = cache_num_rows();

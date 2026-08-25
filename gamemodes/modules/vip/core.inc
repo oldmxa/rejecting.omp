@@ -243,9 +243,9 @@ ShowVipMenu(playerid)
 
     new title[64];
     format(title, sizeof(title), "{MAIN}VIP: {FFFFFF}%s", User[playerid][userName]);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, strVip);
-
     Dialog_ShowCallback(playerid, using public DIALOG_VIP_MENU<iiiis>, DIALOG_STYLE_MSGBOX, title, strVip, "Close", "");
     return 1;
 }
@@ -276,9 +276,9 @@ public DIALOG_BUY_VIP(playerid, dialogid, response, listitem, string:inputtext[]
     strcat(body, title);
 
     format(title, sizeof(title), "{MAIN}VIP %d Days - Payment", days);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     Dialog_ShowCallback(playerid, using public DIALOG_VIP_PAYMENT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Pay", "Back");
     return 1;
 }
@@ -376,9 +376,9 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
 
     new title[64];
     format(title, sizeof(title), "{MAIN}VIP Package Activation");
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, string2);
-
     Dialog_ShowCallback(playerid, using public DIALOG_BUY_VIP<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, string2, "Activate", "Cancel");
     return true;
 }
@@ -461,9 +461,9 @@ ShowVipCustomHexDialog(playerid)
         curHex, curHex);
 
     new title[64] = "{MAIN}Custom VIP Tag Color (HEX)";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_VIP_CUSTOM_HEX<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
 }
 
@@ -533,9 +533,9 @@ ShowVipCommandsMenu(playerid)
 
     new title[64];
     format(title, sizeof(title), "{MAIN}VIP Commands");
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, strCmds);
-
     Dialog_ShowCallback(playerid, using public DIALOG_VIP_CMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, strCmds, "Close", "");
     return 1;
 }
@@ -608,9 +608,9 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
 
     new title[64];
     format(title, sizeof(title), "{MAIN}VIP Members [ {FFFFFF}%d {MAIN}]", vipsonline);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, gs_Buffer);
-
     Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, gs_Buffer, "Close", "");
     return true;
 }
@@ -742,9 +742,9 @@ ShowVipTagDialog(playerid)
     }
 
     new title[64] = "{MAIN}VIP Tag Color";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, tagList);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_VIP_TAG<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, tagList, "Select", "Close");
 }
 
@@ -773,7 +773,7 @@ ShowVipTagDialog(playerid)
         return true;
     }
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Target player is not connected or logged in.");
         return true;
@@ -847,7 +847,7 @@ ShowVipTagDialog(playerid)
         return true;
     }
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Target player is not connected or logged in.");
         return true;

@@ -93,7 +93,7 @@ static EAcc_OnlineTarget(playerid)
 {
     new targetid = GetPVarInt(playerid, "EAccTarget") - 1;
 
-    if (!(0 <= targetid < MAX_PLAYERS) || !IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if (!(0 <= targetid < MAX_PLAYERS) || !IsPlayerLogged(targetid))
         return INVALID_PLAYER_ID;
 
     return targetid;
@@ -492,7 +492,7 @@ stock LoadEAccountOffline(playerid, const name[])
     if (IsNumeric(target) && strlen(target) <= 4)
     {
         new id = strval(target);
-        if (0 <= id < MAX_PLAYERS && IsPlayerConnected(id) && User[id][isLogged]) targetid = id;
+        if (0 <= id < MAX_PLAYERS && IsPlayerLogged(id)) targetid = id;
     }
 
     if (targetid == INVALID_PLAYER_ID)

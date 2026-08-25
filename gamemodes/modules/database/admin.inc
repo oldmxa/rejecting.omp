@@ -348,8 +348,8 @@ public OffDox(playerid)
 		new strlookup[2048], title[64];
 
 		format(title, sizeof(title), "{MAIN}Lookup (offline): {FFFFFF}%s", username);
-		format_MainColor(playerid, title);
 
+		format_MainColor(playerid, title);
 		new accGpci[42];
 		cache_get_value(0, "gpci", accGpci);
 		if(isnull(accGpci)) format(accGpci, sizeof(accGpci), "N/A");

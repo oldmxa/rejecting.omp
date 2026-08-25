@@ -47,7 +47,7 @@
             return 1;
         }
 
-        if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+        if(!IsPlayerLogged(targetid))
         {
             SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
             return 1;

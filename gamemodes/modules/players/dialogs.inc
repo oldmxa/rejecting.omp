@@ -46,9 +46,9 @@ ShowHudColorDialog(playerid, source)
     }
 
     new title[64] = "{MAIN}Personalization - HUD Color";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public HUD_COLORS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
 }
 
@@ -76,9 +76,9 @@ ShowHudShadeDialog(playerid, source, bool:secondary)
 
     new title[64];
     format(title, sizeof(title), "{MAIN}Personalization - %s Color", secondary ? ("Secondary") : ("Primary"));
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     if(secondary)
         return Dialog_ShowCallback(playerid, using public HUD_SHADE_TWO<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
 
@@ -103,8 +103,8 @@ ShowChatColorDialog(playerid, source)
         mainHex, idHex, playerid, textHex);
 
     new title[64] = "{MAIN}Personalization - Chat Color";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     return Dialog_ShowCallback(playerid, using public CHAT_COLOR_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
@@ -196,9 +196,9 @@ ShowChatColorSelectionDialog(playerid, color_type, source)
     new title[64];
     if(color_type == 2) format(title, sizeof(title), "{MAIN}Chat Color - Main Accent ({MAIN})");
     else format(title, sizeof(title), "{MAIN}Chat Color - %s", (color_type == 0) ? ("Color ID") : ("Text Color"));
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public CHAT_COLORS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
@@ -225,9 +225,9 @@ ShowChatColorCustomHexDialog(playerid, color_type, source)
 
     new title[64];
     format(title, sizeof(title), "{MAIN}Custom HEX Color - %s", typeName);
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public CHAT_COLOR_CUSTOM_HEX<iiiis>, DIALOG_STYLE_INPUT, title, body, "*", "<");
 }
 
@@ -251,9 +251,9 @@ ShowDamageStyleDialog(playerid, source)
     }
 
     new title[64] = "{MAIN}Personalization - Damage Style";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
@@ -270,8 +270,8 @@ This is the order >> {CC0000}Red, {00CC00}Green {0000CC}Blue "COL_WHITE"and Alph
         User[playerid][hitmarkColor] >>> 8, User[playerid][hitmarkColor]);
 
     new title[64] = "{MAIN}Change hitmark color";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     return Dialog_ShowCallback(playerid, using public DIALOG_HITMARK<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Cancel");
 }
 
@@ -721,9 +721,9 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                     }
                 }
                 
+
                 format_MainColor(playerid, header);
                 format_MainColor(playerid, liststr);
-
                 Dialog_ShowCallback(playerid, using public DIALOG_RANK1<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, header, liststr, "<", "Exit");
             }
             else
@@ -757,9 +757,9 @@ public DIALOG_RANK1(playerid, dialogid, response, listitem, string:inputtext[])
         strcat(rankstr, "{MAIN}\xBB {B4B5B7}Training Challenges\t{FFFFFF}Personal & server challenge records");
 
         new header[64] = "{MAIN}Server Statistics & Rankings";
+
         format_MainColor(playerid, header);
         format_MainColor(playerid, rankstr);
-
         Dialog_ShowCallback(playerid, using public DIALOG_RANK<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, header, rankstr, "View Rank", "Close");
     }
     return true;
@@ -1193,9 +1193,9 @@ stock ShowCustomTagOptionsMenu(playerid)
     strcat(body, "{MAIN}Remove Tag\t{BEBEBE}Unequip current custom tag\t{FF6347}[Remove]\n");
 
     new title[64] = "{MAIN}Custom Tag - Options";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_CUSTOM_TAG_OPTIONS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
 }
 
@@ -1233,9 +1233,9 @@ stock ShowPredefinedTagsDialog(playerid)
     }
 
     new title[64] = "{MAIN}Predefined Tags";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, listStr);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_PREDEFINED_TAGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, listStr, "Select", "Back");
 }
 
@@ -1268,9 +1268,9 @@ public DIALOG_CUSTOM_TAG_OPTIONS(playerid, dialogid, response, listitem, string:
                 "{BEBEBE}Type {FF6347}none{BEBEBE} to unequip your current tag.",
                 CUSTOM_TAG_MIN_LEN, CUSTOM_TAG_MAX_LEN);
 
+
             format_MainColor(playerid, title);
             format_MainColor(playerid, body);
-
             return Dialog_ShowCallback(playerid, using public DIALOG_EDIT_CUSTOM_TAG<iiiis>, DIALOG_STYLE_INPUT, title, body, "Save", "Back");
         }
         case 2: // Remove
@@ -1346,7 +1346,7 @@ stock SaveWonTournamentTag(userid, const tag[], const tourneyName[])
 forward OnPlayerTournamentTagsLoaded(playerid);
 public OnPlayerTournamentTagsLoaded(playerid)
 {
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 1;
+    if(!IsPlayerLogged(playerid)) return 1;
 
     new rows = cache_num_rows();
     if(rows == 0)
@@ -1381,9 +1381,9 @@ public OnPlayerTournamentTagsLoaded(playerid)
     }
 
     new title[64] = "{MAIN}My Tournament Tags";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, listStr);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_PLAYER_TOURNEY_TAGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, listStr, "Select", "Back");
 }
 
@@ -1513,9 +1513,9 @@ stock ShowTagMenu(playerid)
     g_PlayerTagMenuCount[playerid] = count;
 
     new title[64] = "{MAIN}Tag Manager";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, tagList);
-
     return Dialog_ShowCallback(playerid, using public DIALOG_TAG_MANAGER<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, tagList, "Select", "Close");
 }
 

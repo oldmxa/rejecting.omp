@@ -68,7 +68,7 @@ stock GiveTournamentChampionRewards(winnerSlot)
     new prizeMoney = g_TourneyData[t_PrizeMoney];
 
     // Award Player 1
-    if(IsPlayerConnected(p1) && User[p1][isLogged])
+    if(IsPlayerLogged(p1))
     {
         if(prizeCoins > 0)
         {
@@ -92,7 +92,7 @@ stock GiveTournamentChampionRewards(winnerSlot)
         PlayerPlaySound(p1, 1057, 0.0, 0.0, 0.0);
     }
 
-    if(p2 != INVALID_PLAYER_ID && IsPlayerConnected(p2) && User[p2][isLogged])
+    if(p2 != INVALID_PLAYER_ID && IsPlayerLogged(p2))
     {
         if(prizeCoins > 0)
         {
@@ -158,13 +158,13 @@ stock CancelTournament(adminid = INVALID_PLAYER_ID, const reason[] = "Cancelled 
                 new p1 = g_TourneyParticipants[i][tp_Player1];
                 new p2 = g_TourneyParticipants[i][tp_Player2];
 
-                if(IsPlayerConnected(p1) && User[p1][isLogged])
+                if(IsPlayerLogged(p1))
                 {
                     GivePlayerMoney(p1, g_TourneyData[t_EntryFee]);
                     User[p1][playerMoney] += g_TourneyData[t_EntryFee];
                     SendClientMessage(p1, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Your registration fee was refunded.");
                 }
-                if(p2 != INVALID_PLAYER_ID && IsPlayerConnected(p2) && User[p2][isLogged])
+                if(p2 != INVALID_PLAYER_ID && IsPlayerLogged(p2))
                 {
                     GivePlayerMoney(p2, g_TourneyData[t_EntryFee]);
                     User[p2][playerMoney] += g_TourneyData[t_EntryFee];
@@ -203,7 +203,7 @@ stock CancelTournament(adminid = INVALID_PLAYER_ID, const reason[] = "Cancelled 
 
 stock SpectateTourneyMatch(playerid, matchid)
 {
-    if(!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 0;
+    if(!IsPlayerLogged(playerid)) return 0;
 
     if(IsPlayerInActiveTourneyMatch(playerid))
     {
@@ -222,22 +222,22 @@ stock SpectateTourneyMatch(playerid, matchid)
     if(slotA != -1 && g_TourneyParticipants[slotA][tp_Registered])
     {
         targetid = g_TourneyParticipants[slotA][tp_Player1];
-        if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+        if(!IsPlayerLogged(targetid))
             targetid = g_TourneyParticipants[slotA][tp_Player2];
     }
 
-    if(targetid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(targetid == INVALID_PLAYER_ID || !IsPlayerLogged(targetid))
     {
         new slotB = g_TourneyMatches[matchid][tm_SlotB];
         if(slotB != -1 && g_TourneyParticipants[slotB][tp_Registered])
         {
             targetid = g_TourneyParticipants[slotB][tp_Player1];
-            if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+            if(!IsPlayerLogged(targetid))
                 targetid = g_TourneyParticipants[slotB][tp_Player2];
         }
     }
 
-    if(targetid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(targetid == INVALID_PLAYER_ID || !IsPlayerLogged(targetid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}No connected players in this match to spectate.");
         return 0;

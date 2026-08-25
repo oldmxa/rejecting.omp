@@ -10,7 +10,7 @@
     new targetid, reason[100];
 	if(sscanf(params, "us[100]", targetid, reason))
 		return SendClientMessage(playerid, -1, "%s", REPORT_HELP);
-	if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+	if(!IsPlayerLogged(targetid))
 		return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 	if(targetid == playerid)
 		return SendClientMessage(playerid, -1, "%s", CANNOT_REPORT_SELF);
@@ -139,7 +139,7 @@
     new idplayer, text[128], tString[128];
     if (sscanf(params, "us[128]", idplayer, text))
         return SendClientMessage(playerid, -1, "%s", PM_HELP);
-    if (!IsPlayerConnected(idplayer) || !User[idplayer][isLogged])
+    if (!IsPlayerLogged(idplayer))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (idplayer == playerid)
         return SendClientMessage(playerid, -1, "%s", RETARD);
@@ -184,7 +184,7 @@
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, COLOR_RED, "{MAIN}[ERROR] {FFFFFF}/votekick [id]");
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, COLOR_RED, "{MAIN}[ERROR] {FFFFFF}Player isn't logged.");
 
     if(targetid == playerid)
@@ -236,7 +236,7 @@
     if(sscanf(params, "ud", targetid, money))
         return SendClientMessage(playerid, -1, "%s", ERROR_TRANSFERMONEY);
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(targetid == playerid)

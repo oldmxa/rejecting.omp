@@ -186,9 +186,10 @@ static AC_ShowKickScreen(playerid, code)
         SERVER_WEBSITE);
 
     new title[32] = "{MAIN}Anti Cheat";
-    format_MainColor(playerid, title);
     format_MainColor(playerid, body, sizeof(body));
 
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body, sizeof(body));
     ShowPlayerDialog(playerid, AC_DIALOG_KICKED, DIALOG_STYLE_MSGBOX, title, body, "Close", "");
     return 1;
 }
@@ -205,7 +206,7 @@ static AC_KickPlayer(playerid, code, const detection[])
 public OnRejectingACDetection(playerid, code)
 {
     if (IsPlayerNPC(playerid)) return 1;
-    if (!IsPlayerConnected(playerid) || !User[playerid][isLogged]) return 1;
+    if (!IsPlayerLogged(playerid)) return 1;
 
     if (code < 0 || code >= MAX_AC_DETECTIONS) return 1;
     if (!AC_DETECTION[code][acdActive]) return 1;

@@ -85,7 +85,7 @@
     if (sscanf(params, "us[128]", targetid, reason))
         return SendClientMessage(playerid, -1, ADM_TAG_NORM"/setlounge [id] [reason]");
 
-    if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if (!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if (targetid == playerid)
@@ -145,29 +145,12 @@
     if(arenaid == lastArenaId[location])
         return va_SendClientMessage(playerid, -1, ARENA_JUST_PLAYED, arenaData[arenaid][arenaName]);
 
-    foreach(new i : Player)
-    {
-        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i)) continue;
-        GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
-    }
-
-    GetRoundRank(location);
-    new oldArenaId = arenaInfo[location][arenaId];
-    arenaInfo[location][arenaId] = arenaid;
-    PrepareChangeArena(location, oldArenaId);
-
-    foreach(new i : Player)
-    {
-        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
-            va_SendClientMessage(i, -1, CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[arenaid][arenaName], arenaid);
-    }
+    ApplyArenaChange(playerid, location, arenaid);
 
     new log_ca[256];
     format(log_ca, sizeof(log_ca), "Changed arena to %s (ID %d) in location %d", arenaData[arenaid][arenaName], arenaid, location);
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "arenas", "ChangeArena", log_ca);
 
-    if(User[playerid][adminLevel] < 4)
-        changeArenaDelay = gettime()+(3*60);
     return true;
 }
 
@@ -220,30 +203,12 @@
     if(location == ARENA_CUSTOM)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}The Custom Room has its own map list. Use {MAIN}/clist{FFFFFF}.");
 
-    foreach(new i : Player)
-    {
-        if(User[i][locationId] != location || GetPVarInt(i, "DuelS_State") != DUELS_STATE_NONE || IsPlayerInDuel2v2(i)) continue;
-        GangZoneStopPulseForPlayer(i, e_ZONE_PULSE_ZONE, arenaInfo[location][arenaId]);
-    }
-
-    GetRoundRank(location);
-    new oldArenaId = arenaInfo[location][arenaId];
     new newArenaId = determineArenaID(location);
-    arenaInfo[location][arenaId] = newArenaId;
-    PrepareChangeArena(location, oldArenaId);
-
-    foreach(new i : Player)
-    {
-        if((User[i][locationId] == location && GetPVarInt(i, "DuelS_State") == DUELS_STATE_NONE && !IsPlayerInDuel2v2(i)) || User[i][adminLevel] > 0)
-            va_SendClientMessage(i, -1, RANDOM_CHANGED_ARENA_MSG , User[playerid][userName] , arenaData[newArenaId][arenaName], newArenaId);
-    }
+    ApplyArenaChange(playerid, location, newArenaId);
 
     new log_rca[256];
     format(log_rca, sizeof(log_rca), "Random changed arena to %s (ID %d) in location %d", arenaData[newArenaId][arenaName], newArenaId, location);
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "arenas", "RandomChangeArena", log_rca);
-
-    if(User[playerid][adminLevel] < 4)
-        changeArenaDelay = gettime()+(3*60);
 
     return true;
 }

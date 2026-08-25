@@ -39,8 +39,8 @@ forward ShowTrainingChallengeDialog(playerid);
 public ShowTrainingChallengeDialog(playerid)
 {
     new title[64] = "{MAIN}Training Challenges: {FFFFFF}Records";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     if (g_TotalTrainingArenas == 0)
     {
         Dialog_ShowCallback(
@@ -113,8 +113,8 @@ stock ShowTrainingDialog(playerid)
 
     new line[256], title[64];
     format(title, sizeof(title), "{MAIN}Training System - Arenas");
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     format(g_TrainingDialogBuf, sizeof(g_TrainingDialogBuf), "{MAIN}Arena Name\t{MAIN}Category\t{MAIN}Your Record\t{MAIN}Server Record\t{MAIN}Status\n");
 
     for (new i = 0; i < g_TotalTrainingArenas; i++)
@@ -177,8 +177,8 @@ public DIALOG_TRAINING_HELP(playerid, dialogid, response, listitem, string:input
 stock ShowTrainingHelpDialog(playerid)
 {
     new title[64] = "{MAIN}Training System";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new buf[1024];
     format(buf, sizeof(buf), "{MAIN}Command / Feature\t{MAIN}Description\n");
     strcat(buf, "{FFFFFF}\x95 {B4B5B7}/training\t{FFFFFF}Open Training menu & select an arena\n");

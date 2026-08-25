@@ -6,7 +6,7 @@
 
     new targetid;
     if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}/id [id player/ nickname player]");
-	if (!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+	if (!IsPlayerLogged(targetid))
 		return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     new pip[18], sampVERSION[24];
     GetPlayerIp(targetid, pip, sizeof(pip));
@@ -133,7 +133,7 @@ ShowRankingsMenu(playerid)
     }
 
     new targetid;
-    if(!sscanf(params, "u", targetid) && IsPlayerConnected(targetid) && User[targetid][isLogged])
+    if(!sscanf(params, "u", targetid) && IsPlayerLogged(targetid))
     {
         ShowStats(playerid, targetid);
         return true;
@@ -181,26 +181,13 @@ ShowRankingsMenu(playerid)
 
 @cmd() gunmenu(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /gunmenu in a 2v2 duel.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /gunmenu while in a match, training, practice or safehouse.");
 
-    if(IsPlayerInTournamentMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /gunmenu during a tournament match.");
-
-    if(g_PlayerTraining[playerid][pTrain_Active])
-        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot use /gunmenu in training mode.");
-
-    if(g_Practice[playerid][pracActive])
-        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot use /gunmenu in practice mode.");
-
-    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
-        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot use /gunmenu while inside a safehouse.");
-
-    new bool:isLoungeOrAfk = (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
-    if(!isLoungeOrAfk)
+    if(!IsPlayerInLounge(playerid))
     {
         if(gettime() - User[playerid][timerRespawn] > 15)
         {
@@ -215,26 +202,11 @@ ShowRankingsMenu(playerid)
 
 @cmd() spec(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING)
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot spectate while in a duel.");
-
-    if(IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot spectate while in a 2v2 duel.");
-
-    if(IsPlayerInTournamentMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot spectate while playing a tournament match.");
-
-    if(g_PlayerTraining[playerid][pTrain_Active])
-        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot spectate while in training mode.");
-
-    if(g_Practice[playerid][pracActive])
-        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot spectate while in practice mode.");
-
-    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
-        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot spectate while inside a safehouse. Use /exitsafehouse first.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spectate while in a duel, match, training, practice or safehouse.");
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
 
@@ -248,7 +220,7 @@ ShowRankingsMenu(playerid)
     if(sscanf(params, "u", targetid))
         return SendClientMessage(playerid, -1, "%s", SPEC_HELP);
 
-    if(!IsPlayerConnected(targetid) || !User[targetid][isLogged])
+    if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(User[targetid][isAfk] && User[playerid][adminLevel] < 1)
@@ -265,7 +237,7 @@ ShowRankingsMenu(playerid)
 
 @cmd() specoff(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(User[playerid][isSpectating] == false)
@@ -277,26 +249,11 @@ ShowRankingsMenu(playerid)
 
 @cmd(.alts = {"re"}) respawn(playerid, params[], help)
 {
-    if(!User[playerid][isLogged])
+    if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING)
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL] {FFFFFF}You cannot use /respawn while in a duel.");
-
-    if(IsPlayerInDuel2v2(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You cannot use /respawn while in a 2v2 duel.");
-
-    if(IsPlayerInTournamentMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use /respawn while playing a tournament match.");
-
-    if(g_PlayerTraining[playerid][pTrain_Active])
-        return SendClientMessage(playerid, -1, "{MAIN}[TRAINING] {FFFFFF}You cannot use /respawn while in training mode.");
-
-    if(g_Practice[playerid][pracActive])
-        return SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}You cannot use /respawn while in practice mode.");
-
-    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
-        return SendClientMessage(playerid, -1, "{MAIN}[SAFEHOUSE] {FFFFFF}You cannot use /respawn while inside a safehouse. Use /exitsafehouse first.");
+    if(IsPlayerInMatch(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /respawn while in a duel, match, training, practice or safehouse.");
 
     new timestampRespawn = gettime();
     Respawn(playerid, timestampRespawn);
@@ -315,8 +272,8 @@ ShowHelpMainMenu(playerid)
 {
     new helpStr[1024], title[64];
     format(title, sizeof(title), "{MAIN}Server Guide & Help");
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     format(helpStr, sizeof(helpStr), "{MAIN}Category / Option\t{MAIN}Description\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}My Account\t{FFFFFF}View account info, statistics & settings\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Security\t{FFFFFF}Account security, password & Discord link\n");
@@ -326,8 +283,8 @@ ShowHelpMainMenu(playerid)
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Rankings\t{FFFFFF}View top 10 player & clan leaderboards\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Rules\t{FFFFFF}Read official server rules & guidelines\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Commands\t{FFFFFF}View full list of all server commands");
-    format_MainColor(playerid, helpStr);
 
+    format_MainColor(playerid, helpStr);
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, helpStr, "Select", "Close");
     return true;
 }
@@ -348,15 +305,15 @@ ShowPlayerCommands(playerid)
 {
     new body[512], title[64];
     format(title, sizeof(title), "{MAIN}Server Commands");
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     strcat(body, "{MAIN}Category\t{MAIN}Open\n", sizeof(body));
 
     for(new i = 0; i < CMD_CATEGORIES; i++)
         strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}%s\t{FFFFFF}\xBB\n", g_CmdCategories[i]), sizeof(body));
 
-    format_MainColor(playerid, body);
 
+    format_MainColor(playerid, body);
     Dialog_ShowCallback(playerid, using public DIALOG_PLAYERCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
 }
@@ -383,8 +340,8 @@ ShowCommandCategory(playerid, catid)
 
     new cmdsstr[2560], title[80];
     format(title, sizeof(title), "{MAIN}%s", g_CmdCategories[catid]);
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     strcat(cmdsstr, "{MAIN}Command\t{MAIN}Description\n");
 
     switch(catid)
@@ -491,8 +448,8 @@ ShowCommandCategory(playerid, catid)
         }
     }
 
-    format_MainColor(playerid, cmdsstr);
 
+    format_MainColor(playerid, cmdsstr);
     Dialog_ShowCallback(playerid, using public DIALOG_CMDCATEGORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, "Back", "Close");
     return 1;
 }

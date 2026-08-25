@@ -51,8 +51,8 @@
         return SendClientMessage(playerid, COLOR_TOMATO, "%s", DC_NOTLINKED);
 
     new title[64] = "{MAIN}Unlink Discord Account";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     new body[512], userTag[128];
     if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
         format(userTag, sizeof(userTag), "%s", User[playerid][dc_username]);
@@ -68,8 +68,8 @@
 {FFFFFF}\x95 {B4B5B7}Discord roles and bot sync will be revoked.\n\n\
 {FFFFFF}Are you sure you want to unlink your Discord account?",
         userTag, User[playerid][dc_uid]);
-    format_MainColor(playerid, body);
 
+    format_MainColor(playerid, body);
     Dialog_ShowCallback(playerid, using public DIALOG_UNLINK_DISCORD<iiiis>, DIALOG_STYLE_MSGBOX, title, body, "Unlink", "Cancel");
     return true;
 }
@@ -144,15 +144,15 @@ ShowMyAccountMenu(playerid)
 {
     new accStr[512], title[64];
     format(title, sizeof(title), "{MAIN}My Account");
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     format(accStr, sizeof(accStr), "{MAIN}Option\t{MAIN}Description\n");
     strcat(accStr, "{MAIN}\xBB {B4B5B7}Settings\t{FFFFFF}Configure preferences, sound & HUD toggles\n");
     strcat(accStr, "{MAIN}\xBB {B4B5B7}Personalization\t{FFFFFF}Customize skin, hitmark, colors & sounds\n");
     strcat(accStr, "{MAIN}\xBB {B4B5B7}My Stats\t{FFFFFF}View your detailed account statistics\n");
     strcat(accStr, "{MAIN}\xBB {B4B5B7}Discord ID\t{FFFFFF}View your linked Discord ID & status");
-    format_MainColor(playerid, accStr);
 
+    format_MainColor(playerid, accStr);
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_MYACCOUNT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, accStr, "Select", "Back");
     return 1;
 }
@@ -190,9 +190,9 @@ public Account_ShowSecurityMenu(playerid)
         format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{F84F31}Basic Unverified\n", secStr);
 
     new title[64] = "{MAIN}Security Settings";
+
     format_MainColor(playerid, title);
     format_MainColor(playerid, secStr);
-
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_SECURITY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, secStr, "Select", "Back");
     return 1;
 }
@@ -202,16 +202,16 @@ public Account_ShowSettingsMenu(playerid)
 {
     new setStr[1024], title[64];
     format(title, sizeof(title), "{MAIN}Account & Gameplay Settings");
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     format(setStr, sizeof(setStr), "{MAIN}Option\t{MAIN}Status / Value\n");
     strcat(setStr, "{MAIN}\xBB {B4B5B7}Change Nickname\t \n");
     strcat(setStr, "{MAIN}\xBB {B4B5B7}Change Password\t \n");
     strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Private Messages\t%s\n", (User[playerid][blockPM]) ? ("{F84F31}Blocked") : ("{23C552}Allowed")));
     strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Connect Messages\t%s\n", (User[playerid][showConnectMsg]) ? ("{23C552}Visible") : ("{F84F31}Hidden")));
     strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Global Broadcasts\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible")));
-    format_MainColor(playerid, setStr);
 
+    format_MainColor(playerid, setStr);
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_SETTINGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, setStr, "Select", "Back");
     return 1;
 }
@@ -307,8 +307,8 @@ public Account_ShowDiscordIDDialog(playerid)
 
     new bool:isLinked = (strcmp(User[playerid][dc_username], "-1", true) != 0);
     new dcStr[512], title[64] = "{MAIN}Discord ID Info";
-    format_MainColor(playerid, title);
 
+    format_MainColor(playerid, title);
     format(dcStr, sizeof(dcStr), "{MAIN}Field\t{MAIN}Information\n");
 
     if(isLinked)
@@ -408,9 +408,9 @@ public Account_ShowPersonalizationMenu(playerid)
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Life Style\t{FFFFFF}%s", pStr, lifeName);
 
     new pTitle[64] = "{MAIN}Personalization Menu";
+
     format_MainColor(playerid, pTitle);
     format_MainColor(playerid, pStr);
-
     Dialog_ShowCallback(playerid, using public DIALOG_HELP_PERSONALIZATION<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, pTitle, pStr, "Select", "Back");
     return 1;
 }

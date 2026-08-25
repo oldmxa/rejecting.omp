@@ -385,7 +385,7 @@ stock ResetPlayerTrainingData(playerid)
     g_PlayerTraining[playerid][pTrain_OutOfBoundsTime] = 0;
     g_PlayerTraining[playerid][pTrain_OutOfBoundsLastSec] = 0;
 
-    if (IsPlayerConnected(playerid) && User[playerid][isLogged])
+    if (IsPlayerLogged(playerid))
     {
         updatePlayerHud(playerid);
     }

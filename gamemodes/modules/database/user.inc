@@ -25,9 +25,9 @@ This account is registered in our database.\n\
 Please enter your password below to access your account.",
             ServerHostname, User[playerid][userName]);
         
+
         format_MainColor(playerid, dialogTitle);
         format_MainColor(playerid, dialogStr);
-
         Dialog_ShowCallback(playerid, using public LOGIN<iiiis>, DIALOG_STYLE_PASSWORD, dialogTitle, dialogStr, "Login", "Cancel");
     }
     else // Register
@@ -40,9 +40,9 @@ Enter a password below to create your account.\n\n\
 {B4B5B7}Letters and numbers only, %d-%d characters.",
             ServerHostname, User[playerid][userName], MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
 
+
         format_MainColor(playerid, dialogTitle);
         format_MainColor(playerid, dialogStr);
-
         Dialog_ShowCallback(playerid, using public REGISTER<iiiis>, DIALOG_STYLE_PASSWORD, dialogTitle, dialogStr, "Register", "Cancel");
     }
     return 1;

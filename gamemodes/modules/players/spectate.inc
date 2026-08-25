@@ -67,7 +67,7 @@ stock updateSpecInfo(playerid)
 
 	if(specBy == INVALID_PLAYER_ID) return 1;
 
-	if(!IsPlayerConnected(specBy) || !User[specBy][isLogged])
+	if(!IsPlayerLogged(specBy))
 	{
 		StopSpectate(playerid);
 		return 1;
