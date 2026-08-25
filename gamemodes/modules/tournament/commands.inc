@@ -70,13 +70,13 @@
     }
     else if(g_TourneyData[t_Mode] == TOURNAMENT_MODE_CLAN)
     {
-        new clanid = User[playerid][clanID];
-        if(clanid == -1)
+        if(!IsPlayerInClan(playerid))
         {
             SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You must be in a clan to register in Clan War tournament!");
             return 1;
         }
 
+        new clanid = GetPlayerClan(playerid);
         if(!HasClanRank(playerid, RANK_COFOUNDER))
         {
             SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}Only Clan Leader or Co-Founder can register the clan!");

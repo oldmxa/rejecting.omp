@@ -274,3 +274,24 @@ public UpdateFastHUD()
     }
     return 1;
 }
+
+stock BuildHudColorDialogList(dest[], size, selectedIndex)
+{
+    format(dest, size, "{BEBEBE}Name\t{BEBEBE}Color 1\t{BEBEBE}Color 2\n");
+    for(new i; i < sizeof(hudPersonalization); i++)
+    {
+        new name[24], hex1[7], hex2[7];
+        format(name, sizeof(name), "%s", hudPersonalization[i][lineInfo]);
+        if(name[0] >= 'a' && name[0] <= 'z') name[0] -= 32;
+        new space = strfind(name, " ");
+        if(space != -1 && name[space+1] >= 'a' && name[space+1] <= 'z') name[space+1] -= 32;
+
+        hex1 = GetColorHexTag(hudPersonalization[i][colorOne]);
+        hex2 = GetColorHexTag(hudPersonalization[i][colorTwo]);
+
+        new bool:isSelected = (selectedIndex == i);
+        strcat(dest, fmat_return("%s{%s}%s\t{%s}Preview\t{%s}Preview\n",
+            isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), CoresDoBglh[i], name, hex1, hex2), size);
+    }
+    return 1;
+}

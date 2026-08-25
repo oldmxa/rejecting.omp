@@ -1230,3 +1230,14 @@ stock bool:IsValidHexColor(const input[], &outColor = 0)
     outColor = val;
     return true;
 }
+
+stock bool:HasPlayerConfiguredWeapons(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    for(new i = 0; i < 4; i++)
+    {
+        if(User[playerid][playerWeapons][i] != 0)
+            return true;
+    }
+    return false;
+}

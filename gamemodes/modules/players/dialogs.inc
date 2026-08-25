@@ -29,21 +29,8 @@ ShowHudColorDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
 
-    new body[3500] = "Name\tColor 1\tColor 2\n";
-    for(new i; i < sizeof(hudPersonalization); i++)
-    {
-        new name[24], hex1[7], hex2[7];
-        format(name, sizeof(name), "%s", hudPersonalization[i][lineInfo]);
-        if(name[0] >= 'a' && name[0] <= 'z') name[0] -= 32;
-        new space = strfind(name, " ");
-        if(space != -1 && name[space+1] >= 'a' && name[space+1] <= 'z') name[space+1] -= 32;
-
-        hex1 = GetColorHexTag(hudPersonalization[i][colorOne]);
-        hex2 = GetColorHexTag(hudPersonalization[i][colorTwo]);
-
-        strcat(body, fmat_return("%s{%s}%s\t{%s}Preview\t{%s}Preview\n",
-            STYLE_MARK(User[playerid][hudColor] == i), CoresDoBglh[i], name, hex1, hex2), sizeof(body));
-    }
+    new body[3500];
+    BuildHudColorDialogList(body, sizeof(body), User[playerid][hudColor]);
 
     new title[64] = "{MAIN}Personalization - HUD Color";
 
@@ -460,7 +447,7 @@ public CHANGE(playerid, dialogid, response, listitem, string:inputtext[])
         new bool:fromPersonal = bool:GetPVarInt(playerid, "gunmenu_from_personalization");
         DeletePVar(playerid, "gunmenu_from_personalization");
 
-        if(User[playerid][playerWeapons][0] == 0 && User[playerid][playerWeapons][1] == 0 && User[playerid][playerWeapons][2] == 0 && User[playerid][playerWeapons][3] == 0 && User[playerid][isAlreadySpawned])
+        if(!HasPlayerConfiguredWeapons(playerid) && User[playerid][isAlreadySpawned])
         {
             SendClientMessage(playerid, -1, "%s", CHOOSE_WEAPON_MSG);
             if(fromPersonal) SetPVarInt(playerid, "gunmenu_from_personalization", 1);

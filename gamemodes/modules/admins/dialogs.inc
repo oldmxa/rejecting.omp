@@ -31,11 +31,10 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
             }
             case 1: // GMX
             {
-                if(User[playerid][adminLevel] < 4) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to restart.");
+                if(!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 4+ required to restart.");
                 
                 SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s is restarting the server.", User[playerid][userName]);
-                foreach(new i : Player) { if(User[i][isLogged]) UpdatePlayerData(i); }
-                SendRconCommand("gmx");
+                RestartServerSafe();
             }
             case 2: // Ping
             {
@@ -223,22 +222,8 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 if(User[playerid][adminLevel] < 5)
                     return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HUD color.");
 
-                new body[2048] = "{BEBEBE}Name\t{BEBEBE}Color 1\t{BEBEBE}Color 2\n";
-                for(new i; i < sizeof(hudPersonalization); i++)
-                {
-                    new name[24], hex1[7], hex2[7];
-                    format(name, sizeof(name), "%s", hudPersonalization[i][lineInfo]);
-                    if(name[0] >= 'a' && name[0] <= 'z') name[0] -= 32;
-                    new space = strfind(name, " ");
-                    if(space != -1 && name[space+1] >= 'a' && name[space+1] <= 'z') name[space+1] -= 32;
-
-                    hex1 = GetColorHexTag(hudPersonalization[i][colorOne]);
-                    hex2 = GetColorHexTag(hudPersonalization[i][colorTwo]);
-
-                    new bool:isSelected = (ServerDefaultHudColor == i);
-                    strcat(body, fmat_return("%s{%s}%s\t{%s}Preview\t{%s}Preview\n",
-                        isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), CoresDoBglh[i], name, hex1, hex2), sizeof(body));
-                }
+                new body[2048];
+                BuildHudColorDialogList(body, sizeof(body), ServerDefaultHudColor);
                 format_MainColor(playerid, body);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHUDCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default HUD Color", body, "*", "<");
             }

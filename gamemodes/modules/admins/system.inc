@@ -232,20 +232,11 @@
 
 @cmd() gmx(playerid, params[], help)
 {
-    if (User[playerid][adminLevel] < 4)
+    if (!IsAdmin(playerid, 4))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
-    for(new i; i < 20; i++)
-        SendClientMessageToAll(randomcolor[random(sizeof(randomcolor))], "Server restarting, back in a few seconds.");
-
-    foreach(new i : Player)
-    {
-        if(User[i][isLogged])
-            UpdatePlayerData(i);
-    }
-
-    SendRconCommand("gmx");
+    RestartServerSafe();
     return true;
 }
 

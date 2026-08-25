@@ -56,17 +56,7 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
 
     if (listitem != ARENA_AFK)
     {
-        new bool:hasWeapons = false;
-        for(new i = 0; i < 4; i++)
-        {
-            if(User[playerid][playerWeapons][i] != 0)
-            {
-                hasWeapons = true;
-                break;
-            }
-        }
-
-        if(!hasWeapons)
+        if(!HasPlayerConfiguredWeapons(playerid))
         {
             SetPVarInt(playerid, "showGunmenuFirst", 1);
         }

@@ -571,17 +571,7 @@ public OnPlayerSpawn(playerid)
     User[playerid][timerRespawn] = gettime();
     if(User[playerid][locationId] != -1 && User[playerid][locationId] != ARENA_AFK)
     {
-        new bool:hasWeapons = false;
-        for(new i = 0; i < 4; i++)
-        {
-            if(User[playerid][playerWeapons][i] != 0)
-            {
-                hasWeapons = true;
-                break;
-            }
-        }
-
-        if(!hasWeapons)
+        if(!HasPlayerConfiguredWeapons(playerid))
         {
             SetPVarInt(playerid, "showGunmenuFirst", 1);
             ShowGunMenu(playerid);

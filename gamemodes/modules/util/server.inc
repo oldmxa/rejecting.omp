@@ -560,6 +560,21 @@ public CheckDay()
 	return 1;
 }
 
+stock RestartServerSafe()
+{
+	for(new i; i < 20; i++)
+		SendClientMessageToAll(randomcolor[random(sizeof(randomcolor))], "Server restarting, back in a few seconds.");
+
+	foreach(new i : Player)
+	{
+		if(User[i][isLogged])
+			UpdatePlayerData(i);
+	}
+
+	SendRconCommand("gmx");
+	return 1;
+}
+
 forward AutomaticGMX();
 public AutomaticGMX()
 {
@@ -568,16 +583,7 @@ public AutomaticGMX()
 		LastGmxCheck = gettime();
 		if(ClockTime[Hour] == 3 && ClockTime[Minute] == 00)
 		{
-			for(new i; i < 20; i++)
-			SendClientMessageToAll(randomcolor[random(sizeof(randomcolor))], "Server restarting, back in a few seconds.");
-
-			foreach(new i : Player)
-			{
-					if(User[i][isLogged])
-							UpdatePlayerData(i);
-			}
-
-			SendRconCommand("gmx");
+			RestartServerSafe();
 		}
 	}
 }

@@ -1197,20 +1197,8 @@ DSLASH:gmx(user, params[])
 	{
 		if(!DSC_RequireLevel(user, 4)) return 1;
 
-		for(new j; j < 20; j++)
-		{
-			SendClientMessageToAll(randomcolor[random(sizeof(randomcolor))], "Server restarting, back in a few seconds.");
-		}
-
-		foreach(new k: Player)
-		{
-			if(User[k][isLogged])
-				UpdatePlayerData(k);
-		}
-
-		SendRconCommand("gmx");
+		RestartServerSafe();
 		SendDiscordResponse(comandos, sprintf(":white_check_mark: **%s**, server will be restarted.", username));
-
 		return true;
 	}
 
