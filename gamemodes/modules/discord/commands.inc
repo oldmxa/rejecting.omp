@@ -268,6 +268,8 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"ban",             "Ban a player",                  2},
 	{"unban",           "Unban a player or IP",          2},
 	{"kick",            "Kick an online player",         1},
+	{"mute",            "Mute an online player",         1},
+	{"unmute",          "Unmute a player",               1},
 	{"a",               "Global admin message",          1},
 	{"lc",              "Clear the in-game chat",        1},
 	{"warn",            "Warn a player",                 4},
@@ -309,6 +311,8 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"howtolink",       "Guide on how to link account",  0},
 	{"rules",           "Server rules",                  0},
 	{"stats",           "Show account statistics",       0},
+	{"clan",            "Show clan info and stats",      0},
+	{"topclans",        "Top 10 clans by points",        0},
 	{"online",          "Who is playing right now",      0},
 	{"vip",             "VIP packages and perks",        0},
 	{"top",             "Top 10 players by kills",       0},
@@ -554,6 +558,111 @@ DSLASH:warn(user, params[])
 
     SendDiscordResponse(comandos, sprintf("Warning applied to player **%s**!", target_nick));
     return true;
+}
+
+DSLASH:mute(user, params[])
+{
+    new userid[DCC_ID_SIZE];
+    DCC_GetUserId(user, userid, sizeof(userid));
+    if(!DSC_RequireLevel(user, 1)) return 1;
+
+    new target_nick[24], minutes, reason[64];
+    if(sscanf(params, "s[24]ds[64]", target_nick, minutes, reason))
+        return SendDiscordResponse(comandos, "/mute [nick/id] [minutes] [reason]");
+
+    if(minutes < 1 || minutes > 1440)
+        return SendDiscordResponse(comandos, ":x: Invalid duration! (1 - 1440 minutes)");
+
+    new targetid = GetOnlinePlayerIDByName(target_nick);
+    if(targetid == INVALID_PLAYER_ID)
+    {
+        if(IsNumeric(target_nick))
+        {
+            new id = strval(target_nick);
+            if(IsPlayerLogged(id)) targetid = id;
+        }
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendDiscordResponse(comandos, ":x: Player is not online!");
+
+    if(IsPlayerMuted(targetid))
+        return SendDiscordResponse(comandos, ":x: Player is already muted!");
+
+    new username[33];
+    DCC_GetUserName(user, username, sizeof(username));
+
+    foreach(new i : Player)
+    {
+        if(i != targetid)
+            va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s muted %s[%d] for %d minutes. Reason: %s", username, User[targetid][userName], targetid, minutes, reason);
+    }
+    va_SendClientMessage(targetid, -1, "{MAIN}[MUTE] {FFFFFF}You have been muted by [Discord] Admin %s for %d minutes. Reason: %s", username, minutes, reason);
+
+    new log_details[256];
+    format(log_details, sizeof(log_details), "Discord Admin %s muted player %s (ID %d) for %d minutes. Reason: %s", username, User[targetid][userName], targetid, minutes, reason);
+    LogServerAction(0, username, "mutes", "Mute (Discord)", log_details);
+
+    new dMsg[256];
+    format(dMsg, sizeof(dMsg), "**Admin:** %s (Discord)\n**Player:** %s\n**Duration:** %d minutes\n**Reason:** %s",
+        username, User[targetid][userName], minutes, reason);
+    SendDiscordEmbed(logs_punish, "New Mute", dMsg, DISCORD_COLOR_WARNING);
+
+    User[targetid][muteTimestamp] = gettime() + minutes * 60;
+    UpdatePlayerData(targetid);
+
+    return SendDiscordResponse(comandos, sprintf(":white_check_mark: Player **%s** (ID %d) has been muted for **%d minutes**!", User[targetid][userName], targetid, minutes));
+}
+
+DSLASH:unmute(user, params[])
+{
+    new userid[DCC_ID_SIZE];
+    DCC_GetUserId(user, userid, sizeof(userid));
+    if(!DSC_RequireLevel(user, 1)) return 1;
+
+    new target_nick[24];
+    if(sscanf(params, "s[24]", target_nick))
+        return SendDiscordResponse(comandos, "/unmute [nick/id]");
+
+    new targetid = GetOnlinePlayerIDByName(target_nick);
+    if(targetid == INVALID_PLAYER_ID)
+    {
+        if(IsNumeric(target_nick))
+        {
+            new id = strval(target_nick);
+            if(IsPlayerLogged(id)) targetid = id;
+        }
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendDiscordResponse(comandos, ":x: Player is not online!");
+
+    if(!IsPlayerMuted(targetid))
+        return SendDiscordResponse(comandos, ":x: Player is not muted!");
+
+    new username[33];
+    DCC_GetUserName(user, username, sizeof(username));
+
+    foreach(new i : Player)
+    {
+        if(IsAdmin(i))
+            va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s unmuted player %s[%d].", username, User[targetid][userName], targetid);
+    }
+    va_SendClientMessage(targetid, -1, "{MAIN}[MUTE] {FFFFFF}You have been unmuted by [Discord] Admin %s.", username);
+
+    new log_details[256];
+    format(log_details, sizeof(log_details), "Discord Admin %s unmuted player %s (ID %d)", username, User[targetid][userName], targetid);
+    LogServerAction(0, username, "mutes", "Unmute (Discord)", log_details);
+
+    new dMsg[256];
+    format(dMsg, sizeof(dMsg), "**Admin:** %s (Discord)\n**Player:** %s",
+        username, User[targetid][userName]);
+    SendDiscordEmbed(logs_punish, "New Unmute", dMsg, DISCORD_COLOR_SUCCESS);
+
+    User[targetid][muteTimestamp] = 0;
+    UpdatePlayerData(targetid);
+
+    return SendDiscordResponse(comandos, sprintf(":white_check_mark: Player **%s** (ID %d) has been unmuted!", User[targetid][userName], targetid));
 }
 
 DSLASH:banserial(user, params[])
@@ -1752,6 +1861,88 @@ DSLASH:top(user, params[])
 	return true;
 }
 
+DSLASH:topclans(user, params[])
+{
+	#pragma unused params
+	if(!DSC_RequirePlayer(user)) return 1;
+
+	inline const OnDiscordTopClans()
+	{
+		new rows = cache_num_rows();
+		if(!rows)
+			return SendDiscordResponse(comandos, "No clan ranking data available yet.");
+
+		new body[1400];
+		format(body, sizeof(body), "**🏆 Top 10 Clans**\n\n");
+
+		for(new i = 0; i < rows; i++)
+		{
+			new tag[CLAN_TAG_LEN], name[CLAN_NAME_LEN], founder[MAX_PLAYER_NAME + 1], points, members;
+			cache_get_value_name(i, "clan_tag", tag, sizeof(tag));
+			cache_get_value_name(i, "clan_name", name, sizeof(name));
+			cache_get_value_name(i, "clan_owner", founder, sizeof(founder));
+			cache_get_value_name_int(i, "clan_points", points);
+			cache_get_value_name_int(i, "member_count", members);
+
+			strcat(body, fmat_return("**%d.** `[%s]` **%s** \n> Leader: `%s` | Members: **%d** | Points: **%d**\n\n",
+				i + 1, tag, name, founder, members, points), sizeof(body));
+		}
+		return SendDiscordResponse(comandos, body);
+	}
+
+	MySQL_TQueryInline(dbHandle, using inline OnDiscordTopClans,
+		"SELECT c.clan_tag, c.clan_name, c.clan_owner, c.clan_points, COUNT(a.id) AS member_count \
+		FROM `clans` c LEFT JOIN `accounts` a ON a.clanid = c.clan_id \
+		GROUP BY c.clan_id ORDER BY c.clan_points DESC, member_count DESC LIMIT 10");
+	return true;
+}
+
+DSLASH:clan(user, params[])
+{
+	if(!DSC_RequirePlayer(user)) return 1;
+
+	new queryText[64];
+	if(sscanf(params, "s[64]", queryText))
+		return SendDiscordResponse(comandos, "/clan [tag/name]");
+
+	inline const OnDiscordClanInfo()
+	{
+		new rows = cache_num_rows();
+		if(!rows)
+			return SendDiscordResponse(comandos, ":x: Clan not found with that tag or name!");
+
+		new cid, tag[CLAN_TAG_LEN], name[CLAN_NAME_LEN], founder[MAX_PLAYER_NAME + 1], color, points, members;
+		cache_get_value_name_int(0, "clan_id", cid);
+		cache_get_value_name(0, "clan_tag", tag, sizeof(tag));
+		cache_get_value_name(0, "clan_name", name, sizeof(name));
+		cache_get_value_name(0, "clan_owner", founder, sizeof(founder));
+		cache_get_value_name_int(0, "clan_color", color);
+		cache_get_value_name_int(0, "clan_points", points);
+		cache_get_value_name_int(0, "member_count", members);
+
+		new desc[1024], descEncoded[1024];
+		format(desc, sizeof(desc),
+			"**Clan:** [%s] %s\n" \
+			"**Leader / Founder:** %s\n" \
+			"**Clan ID:** %d\n" \
+			"**Total Members:** %d\n" \
+			"**Outpost Points:** %d\n" \
+			"**Color (Hex):** #%06x\n\n" \
+			"**[View Clan on Web UCP](https://rejecting.site/?tab=view_clan&id=%d)**",
+			tag, name, founder, cid, members, points, (color >>> 8), cid);
+
+		utf8encode(descEncoded, desc, sizeof(descEncoded));
+		SendDiscordEmbedReply("Clan Information", descEncoded, DISCORD_COLOR_INFO);
+	}
+
+	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
+		"SELECT c.clan_id, c.clan_tag, c.clan_name, c.clan_owner, c.clan_color, c.clan_points, COUNT(a.id) AS member_count \
+		FROM `clans` c LEFT JOIN `accounts` a ON a.clanid = c.clan_id \
+		WHERE c.`clan_tag` = '%e' OR c.`clan_name` LIKE '%e' GROUP BY c.clan_id LIMIT 1", queryText, queryText);
+	MySQL_TQueryInline(dbHandle, using inline OnDiscordClanInfo, queryGlobal);
+	return true;
+}
+
 DSLASH:tournament(user, params[])
 {
 	if(g_CurrentInteractionChannel != DCC_INVALID_CHANNEL)
@@ -1814,6 +2005,139 @@ DSLASH:weekresults(user, params[])
 	SendWeeklyResultsDiscord(false);
 	SendDiscordResponse(comandos, "**Weekly results** have been broadcasted to <#" CH_WEEK_RESULTS ">!");
 	return true;
+}
+
+stock ProcessDiscordTextCommand(DCC_User:author, DCC_Channel:channel, const message[])
+{
+	if(message[0] != '.' && message[0] != '!' && message[0] != '/') return 0;
+
+	new cmd[32], rest[256];
+	sscanf(message[1], "s[32]S()[256]", cmd, rest);
+
+	if(!strcmp(cmd, "verify", true) || !strcmp(cmd, "link", true))
+	{
+		if(ch_comandos_players == DCC_INVALID_CHANNEL) ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
+		if(channel != ch_comandos_players)
+		{
+			new uid[DCC_ID_SIZE];
+			DCC_GetUserId(author, uid, sizeof(uid));
+			new denyMsg[256];
+			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Verification commands can only be used in <#" CH_COMANDOS_PLAYERS ">!", uid);
+			DCC_SendChannelMessage(channel, denyMsg);
+			return 1;
+		}
+		ProcessDiscordVerifyCmd(author, DCC_INVALID_CHANNEL);
+		return 1;
+	}
+
+	if(!strcmp(cmd, "tournament", true))
+	{
+		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);
+		if(comandos == DCC_INVALID_CHANNEL) comandos = DCC_FindChannelById(CH_COMANDOS);
+		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
+
+		if(channel != ch_tourney_register && channel != comandos && channel != logs_linked)
+		{
+			new uid[DCC_ID_SIZE];
+			DCC_GetUserId(author, uid, sizeof(uid));
+			new denyMsg[256];
+			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Tournament registration can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_COMANDOS ">!", uid);
+			DCC_SendChannelMessage(channel, denyMsg);
+			return 1;
+		}
+		ProcessDiscordTourneyApp(author, channel, message);
+		return 1;
+	}
+
+	if(!strcmp(cmd, "online", true) || !strcmp(cmd, "players", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_online(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "stats", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_stats(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "clan", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_clan(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "topclans", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_topclans(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "top", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_top(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "r", true) || !strcmp(cmd, "reply", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_r(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "d", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_d(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "mute", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_mute(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "unmute", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_unmute(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "kick", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_kick(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	if(!strcmp(cmd, "warn", true))
+	{
+		g_CurrentInvoker = author;
+		DSCI_warn(author, rest);
+		g_CurrentInvoker = DCC_INVALID_USER;
+		return 1;
+	}
+
+	return 0;
 }
 
 

@@ -248,3 +248,10 @@ forward GetPlayerLevel(playerid);
 forward GetPlayerSQLID(playerid);
 forward GetPlayerClanRank(playerid);
 forward Float:ratio(value1, value2);
+forward bool:SanitizeString(const input[], dest[], size = sizeof(dest), minLen = 2);
+forward bool:IsValidHexColor(const input[], &outColor = 0);
+
+#define LOUNGE_SPAWN_X (1209.1161)
+#define LOUNGE_SPAWN_Y (-2036.4353)
+#define LOUNGE_SPAWN_Z (69.0078)
+#define LOUNGE_SPAWN_A (91.1024)

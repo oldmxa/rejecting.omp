@@ -281,10 +281,10 @@ public OnRegisterHash(playerid, accountname[])
     SetPlayerTime(playerid, 7, 0);
     RecreatePlayerFpsPingTd(playerid);
     UpdateRoundStatsColors(playerid);
-    User[playerid][loungeX] = 1209.1161;
-    User[playerid][loungeY] = -2036.4353;
-    User[playerid][loungeZ] = 69.0078;
-    User[playerid][loungeA] = 91.1024;
+    User[playerid][loungeX] = LOUNGE_SPAWN_X;
+    User[playerid][loungeY] = LOUNGE_SPAWN_Y;
+    User[playerid][loungeZ] = LOUNGE_SPAWN_Z;
+    User[playerid][loungeA] = LOUNGE_SPAWN_A;
     User[playerid][loungeVW] = LOUNGEVW;
     User[playerid][loungeINT] = 0;
     User[playerid][showClanHud] = true;
@@ -541,10 +541,10 @@ public OnPlayerJoin(playerid)
 
 		if((User[playerid][loungeX] == 0.0 && User[playerid][loungeY] == 0.0) || User[playerid][loungeX] == -1504.1549 || User[playerid][loungeVW] == 0)
 		{
-			User[playerid][loungeX] = 1209.1161;
-			User[playerid][loungeY] = -2036.4353;
-			User[playerid][loungeZ] = 69.0078;
-			User[playerid][loungeA] = 91.1024;
+			User[playerid][loungeX] = LOUNGE_SPAWN_X;
+			User[playerid][loungeY] = LOUNGE_SPAWN_Y;
+			User[playerid][loungeZ] = LOUNGE_SPAWN_Z;
+			User[playerid][loungeA] = LOUNGE_SPAWN_A;
 			User[playerid][loungeVW] = LOUNGEVW;
 			User[playerid][loungeINT] = 0;
 		}

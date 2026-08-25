@@ -446,25 +446,10 @@ public DIALOG_VIP_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inpu
         return 1;
     }
 
-    new hexInput[16];
-    format(hexInput, sizeof(hexInput), "%s", inputtext);
-
-    if(hexInput[0] == '#')
-    {
-        strdel(hexInput, 0, 1);
-    }
-
-    new len = strlen(hexInput);
-    if(len != 6)
+    new colorVal;
+    if(!IsValidHexColor(inputtext, colorVal))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid HEX format! Please enter 6 characters (e.g. FF0000).");
-        return ShowVipCustomHexDialog(playerid);
-    }
-
-    new colorVal;
-    if(sscanf(hexInput, "x", colorVal))
-    {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid HEX color code.");
         return ShowVipCustomHexDialog(playerid);
     }
 

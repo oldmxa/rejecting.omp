@@ -53,40 +53,9 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		}
 	}
 
-	if(!strcmp(str, "/verify", true, 7) || !strcmp(str, ".verify", true, 7) || !strcmp(str, "!verify", true, 7) || !strcmp(str, "/link", true, 5) || !strcmp(str, ".link", true, 5))
+	if(str[0] == '.' || str[0] == '!' || str[0] == '/')
 	{
-		if(ch_comandos_players == DCC_INVALID_CHANNEL) ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
-		if(channel != ch_comandos_players)
-		{
-			new uid[DCC_ID_SIZE];
-			DCC_GetUserId(author, uid, sizeof(uid));
-			new denyMsg[256];
-			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Verification commands can only be used in <#" CH_COMANDOS_PLAYERS ">!", uid);
-			DCC_SendChannelMessage(channel, denyMsg);
-			return true;
-		}
-
-		ProcessDiscordVerifyCmd(author, DCC_INVALID_CHANNEL);
-		return true;
-	}
-
-	if(!strcmp(str, "/tournament", true, 11) || !strcmp(str, ".tournament", true, 11) || !strcmp(str, "!tournament", true, 11))
-	{
-		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);
-		if(comandos == DCC_INVALID_CHANNEL) comandos = DCC_FindChannelById(CH_COMANDOS);
-		if(logs_linked == DCC_INVALID_CHANNEL) logs_linked = DCC_FindChannelById(CH_LOGS_LINKED);
-
-		if(channel != ch_tourney_register && channel != comandos && channel != logs_linked)
-		{
-			new uid[DCC_ID_SIZE];
-			DCC_GetUserId(author, uid, sizeof(uid));
-			new denyMsg[256];
-			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Tournament registration can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_COMANDOS ">!", uid);
-			DCC_SendChannelMessage(channel, denyMsg);
-			return true;
-		}
-
-		ProcessDiscordTourneyApp(author, channel, str);
+		ProcessDiscordTextCommand(author, channel, str);
 		return true;
 	}
 

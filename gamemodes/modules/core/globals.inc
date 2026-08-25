@@ -1188,3 +1188,45 @@ stock GetPlayerClanRank(playerid)
     if(!IsPlayerInClan(playerid)) return -1;
     return User[playerid][clanRole];
 }
+
+stock bool:SanitizeString(const input[], dest[], size = sizeof(dest), minLen = 2)
+{
+    dest[0] = '\0';
+    new end = strlen(input) - 1, start = 0;
+    while (start <= end && input[start] <= ' ') start++;
+    while (end >= start && input[end] <= ' ') end--;
+
+    new outLen = end - start + 1;
+    if (outLen < minLen || outLen >= size) return false;
+
+    for (new i = start; i <= end; i++)
+    {
+        new c = input[i];
+        if (c < ' ' || c > '~') return false;
+        if (c == '{' || c == '}' || c == '~' || c == '%') return false;
+    }
+
+    strmid(dest, input, start, end + 1, size);
+    return true;
+}
+
+stock bool:IsValidHexColor(const input[], &outColor = 0)
+{
+    new clean[16];
+    format(clean, sizeof(clean), "%s", input);
+    if(clean[0] == '#') strdel(clean, 0, 1);
+    new len = strlen(clean);
+    if(len != 6) return false;
+
+    for(new i = 0; i < 6; i++)
+    {
+        new c = clean[i];
+        if(!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+            return false;
+    }
+
+    new val = 0;
+    sscanf(clean, "x", val);
+    outColor = val;
+    return true;
+}

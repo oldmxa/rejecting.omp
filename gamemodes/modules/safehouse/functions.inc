@@ -50,25 +50,7 @@ stock IsSafehouseZone(zoneid)
 
 stock bool:SanitizeSafehouseText(const input[], dest[], size = sizeof(dest), minLen = 2)
 {
-    dest[0] = '\0';
-
-    new end = strlen(input) - 1, start = 0;
-    while (start <= end && input[start] == ' ') start++;
-    while (end >= start && input[end] == ' ') end--;
-
-    new outLen = end - start + 1;
-    if (outLen < minLen || outLen >= size) return false;
-
-    for (new i = start; i <= end; i++)
-    {
-        new c = input[i];
-        if (c < ' ' || c > '~') return false;
-        if (c == '{' || c == '}') return false;
-        if (c == '~') return false;
-    }
-
-    strmid(dest, input, start, end + 1, size);
-    return true;
+    return SanitizeString(input, dest, size, minLen);
 }
 
 stock FormatSafehouseTime(seconds, dest[], size = sizeof(dest))
