@@ -360,6 +360,52 @@ public OnVehicleDeath(vehicleid, killerid)
 	return 1;
 }
 
+stock UpdatePlayerFPS(playerid)
+{
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;
+	if(!IsPlayerLogged(playerid) || !User[playerid][isAlreadySpawned]) return 0;
+
+	new drunk = GetPlayerDrunkLevel(playerid);
+	if(drunk < 100)
+	{
+		SetPlayerDrunkLevel(playerid, 2000);
+		User[playerid][dLlast] = 2000;
+		User[playerid][lastFpsTick] = GetTickCount();
+		return 0;
+	}
+
+	new curTick = GetTickCount();
+	new delta = curTick - User[playerid][lastFpsTick];
+	if(delta >= 250)
+	{
+		if(User[playerid][dLlast] > drunk)
+		{
+			new diff = User[playerid][dLlast] - drunk;
+			new fps = (diff * 1000) / delta;
+			if(fps >= 5 && fps <= 1000)
+			{
+				new currentFps = User[playerid][FPS];
+				if(currentFps <= 0 || (currentFps - fps) >= 15 || (fps - currentFps) >= 15)
+				{
+					User[playerid][FPS] = fps;
+				}
+				else
+				{
+					User[playerid][FPS] = (fps * 4 + currentFps) / 5;
+				}
+			}
+			User[playerid][dLlast] = drunk;
+			User[playerid][lastFpsTick] = curTick;
+		}
+		else if(delta >= 1500)
+		{
+			User[playerid][dLlast] = drunk;
+			User[playerid][lastFpsTick] = curTick;
+		}
+	}
+	return 1;
+}
+
 forward OnScriptUpdate();
 public OnScriptUpdate()
 {
@@ -432,21 +478,6 @@ public OnScriptUpdate()
 
 		if(IsPlayerSpectating(i))
 			updateSpecInfo(i);
-
-		new drunk2 = GetPlayerDrunkLevel(i);
-		if(drunk2 < 100)
-		{
-			SetPlayerDrunkLevel(i, 2000);
-			User[i][dLlast] = 2000;
-		}
-		else
-		{
-			new fps = User[i][dLlast] - drunk2;
-			if(fps > 5 && fps < 450)
-				User[i][FPS] = fps;
-			
-			User[i][dLlast] = drunk2;
-		}
 
 		if(IsPlayerLogged(i) && User[i][isAlreadySpawned] && !IsPlayerAFK(i))
 		{

@@ -112,6 +112,10 @@ public OnPlayerConnect(playerid)
 	SetPVarInt(playerid, "CurrentShotId", 0);
 	SetPVarInt(playerid, "LastHitedShotId", 0);
 
+	User[playerid][dLlast] = 0;
+	User[playerid][lastFpsTick] = 0;
+	User[playerid][FPS] = 0;
+
 	playertextdraws(playerid);
 
 	return true;
@@ -496,6 +500,9 @@ public OnPlayerSpawn(playerid)
 
 	SetPlayerWorldBounds(playerid, 20000.0, -20000.0, 20000.0, -20000.0);
     SetPlayerFightingStyle(playerid, User[playerid][fightStyle]);
+	SetPlayerDrunkLevel(playerid, 2000);
+	User[playerid][dLlast] = 2000;
+	User[playerid][lastFpsTick] = GetTickCount();
 
 	if(User[playerid][playerSkin] > 0)
 	{

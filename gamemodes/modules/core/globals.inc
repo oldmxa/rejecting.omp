@@ -402,6 +402,7 @@ enum e_USER
     user_regdate[32],
     FPS,
     dLlast,
+    lastFpsTick,
     userName[MAX_PLAYER_NAME + 1],
     playerKills,
     kills_semanais,

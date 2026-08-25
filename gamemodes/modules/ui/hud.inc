@@ -264,6 +264,9 @@ public UpdateFastHUD()
     {
         if(IsPlayerNPC(i)) continue;
         if(!IsPlayerLogged(i) || !User[i][isAlreadySpawned]) continue;
+
+        UpdatePlayerFPS(i);
+
         if(!User[i][showPlayerHud]) continue;
         if(IsPlayerSpectating(i)) continue;
 
