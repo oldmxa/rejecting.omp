@@ -59,8 +59,7 @@
         new colorVal;
         if (sscanf(value, "x", colorVal)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid HEX color.");
 
-        GivePlayerMoney(playerid, -CLAN_COLOR_PRICE);
-        User[playerid][playerMoney] -= CLAN_COLOR_PRICE;
+        GivePlayerCash(playerid, -CLAN_COLOR_PRICE);
 
         SetClanColorValue(playerid, User[playerid][clanID], (colorVal << 8) | CLAN_COLOR_ALPHA_CMD);
         return 1;

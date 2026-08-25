@@ -22,7 +22,7 @@
 
 	foreach(new i : Player)
     {
-		if(User[i][adminLevel] > 0)
+		if(IsAdmin(i))
         {
 			if(IsPlayerVip(playerid))
 			{
@@ -36,11 +36,11 @@
 				va_SendClientMessage(i, -1, "{MAIN}[REPORT] Player %s[%d] reported: %s[%d] | Reason: %s", User[playerid][userName], playerid, User[targetid][userName], targetid, reason);
 				GameTextForPlayer(i, "~r~~h~NEW REPORT", 3000, 1);
 			}
-            PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+            PlaySuccessSound(i);
 		}
 	}
 	va_SendClientMessage(playerid, -1, "{MAIN}[REPORT] {FFFFFF}Your report against {MAIN}%s {FFFFFF}has been sent successfully to the Administration!", User[targetid][userName]);
-    PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+    PlayErrorSound(playerid);
     
     LogTicket(User[playerid][user_sqlid], User[targetid][userName], reason);
 

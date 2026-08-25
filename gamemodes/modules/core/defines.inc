@@ -227,3 +227,10 @@ stock ShowCoinsMenu(playerid) return CallLocalFunction("Coinshop_ShowCoinsMenu",
 forward bool:IsPlayerLogged(playerid);
 forward bool:IsPlayerInLounge(playerid);
 forward bool:IsPlayerInMatch(playerid);
+forward bool:IsAdmin(playerid, minLevel = 1);
+forward GivePlayerCash(playerid, amount);
+forward GetPlayerCash(playerid);
+forward bool:HasPlayerCash(playerid, amount);
+forward ResetPlayerCombat(playerid, Float:health = 100.0, Float:armour = 100.0);
+forward PlaySuccessSound(playerid);
+forward PlayErrorSound(playerid);

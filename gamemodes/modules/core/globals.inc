@@ -1051,3 +1051,53 @@ stock bool:IsPlayerInLounge(playerid)
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
     return (User[playerid][isAfk] || User[playerid][locationId] == -1 || User[playerid][locationId] == ARENA_AFK);
 }
+
+stock bool:IsAdmin(playerid, minLevel = 1)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (User[playerid][adminLevel] >= minLevel);
+}
+
+stock GivePlayerCash(playerid, amount)
+{
+    if(!IsPlayerLogged(playerid)) return 0;
+    User[playerid][playerMoney] += amount;
+    ResetPlayerMoney(playerid);
+    GivePlayerMoney(playerid, User[playerid][playerMoney]);
+    return 1;
+}
+
+stock GetPlayerCash(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return 0;
+    return User[playerid][playerMoney];
+}
+
+stock bool:HasPlayerCash(playerid, amount)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (User[playerid][playerMoney] >= amount);
+}
+
+stock ResetPlayerCombat(playerid, Float:health = 100.0, Float:armour = 100.0)
+{
+    if(!IsPlayerLogged(playerid)) return 0;
+    ResetPlayerWeapons(playerid);
+    SetPlayerHealth(playerid, health);
+    SetPlayerArmour(playerid, armour);
+    return 1;
+}
+
+stock PlaySuccessSound(playerid)
+{
+    if(0 <= playerid < MAX_PLAYERS)
+        PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+    return 1;
+}
+
+stock PlayErrorSound(playerid)
+{
+    if(0 <= playerid < MAX_PLAYERS)
+        PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+    return 1;
+}

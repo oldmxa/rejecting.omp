@@ -432,8 +432,7 @@ stock GivePlayerAchievement(playerid, achievement_id, bool:manual = false)
 
     if(money > 0)
     {
-        GivePlayerMoney(playerid, money);
-        User[playerid][playerMoney] += money;
+        GivePlayerCash(playerid, money);
     }
 
     if(coins > 0)
@@ -455,7 +454,7 @@ stock GivePlayerAchievement(playerid, achievement_id, bool:manual = false)
 
     va_SendClientMessage(playerid, -1, ACHIEVEMENT_UNLOCKED, g_AchievementsData[achievement_id][ach_name]);
 
-    PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+    PlaySuccessSound(playerid);
     return 1;
 }
 
@@ -699,8 +698,7 @@ stock CheckPlayerLevelUp(playerid)
 
     if(lvl > ACH_LEVEL_BONUS_MIN)
     {
-        GivePlayerMoney(playerid, ACH_LEVEL_BONUS_MONEY);
-        User[playerid][playerMoney] += ACH_LEVEL_BONUS_MONEY;
+        GivePlayerCash(playerid, ACH_LEVEL_BONUS_MONEY);
         User[playerid][playerCoins] += ACH_LEVEL_BONUS_COINS;
 
         new lvlReason[64];

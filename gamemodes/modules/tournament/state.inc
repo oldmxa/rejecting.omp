@@ -104,9 +104,7 @@ stock ResetTournament()
             if(g_PlayerTourneyMatch[i] != -1)
             {
                 g_PlayerTourneyMatch[i] = -1;
-                ResetPlayerWeapons(i);
-                SetPlayerHealth(i, 100.0);
-                SetPlayerArmour(i, 100.0);
+                ResetPlayerCombat(i, 100.0, 100.0);
                 setAfk(i);
             }
         }

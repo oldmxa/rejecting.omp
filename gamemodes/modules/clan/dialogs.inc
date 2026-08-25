@@ -394,8 +394,7 @@ public DIALOG_CLAN_EDIT_COLOR(playerid, dialogid, response, listitem, string:inp
     if (sscanf(inputtext, "x", colorVal))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid HEX color.");
 
-    GivePlayerMoney(playerid, -CLAN_COLOR_PRICE);
-    User[playerid][playerMoney] -= CLAN_COLOR_PRICE;
+    GivePlayerCash(playerid, -CLAN_COLOR_PRICE);
 
     SetClanColorValue(playerid, clanid, (len == 6) ? ((colorVal << 8) | CLAN_COLOR_ALPHA) : colorVal);
     SendClientMessage(playerid, -1, CLAN_PREFIX"Custom color applied successfully!");

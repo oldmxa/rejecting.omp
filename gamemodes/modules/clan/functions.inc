@@ -219,8 +219,7 @@ stock CreateClan(playerid, const tag[], const name[])
     for (new i = 0; i < MAX_ROLES; i++)
         format(ClanRoles[clanid][i], CLAN_ROLE_LEN, "%s", ClanDefaultRoles[i]);
 
-    GivePlayerMoney(playerid, -CLAN_PRICE);
-    User[playerid][playerMoney] -= CLAN_PRICE;
+    GivePlayerCash(playerid, -CLAN_PRICE);
     User[playerid][clanID] = clanid;
     User[playerid][clanRole] = RANK_FOUNDER;
 

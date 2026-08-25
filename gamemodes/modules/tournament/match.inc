@@ -579,9 +579,7 @@ stock FinishTourneyMatch(matchid, winnerSlot, bool:isWO = false)
         if(pid != INVALID_PLAYER_ID && IsPlayerLogged(pid))
         {
             g_PlayerTourneyMatch[pid] = -1;
-            ResetPlayerWeapons(pid);
-            SetPlayerHealth(pid, 100.0);
-            SetPlayerArmour(pid, 100.0);
+            ResetPlayerCombat(pid, 100.0, 100.0);
             setAfk(pid);
         }
     }
