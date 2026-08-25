@@ -48,15 +48,17 @@ public CB_ProcessMessage(playerid, buffer[], len)
 {
     if (playerid < 0 || playerid >= MAX_PLAYERS) return 0;
     
-    new pos;
-    while((pos = strfind(buffer, "{MAIN}")) != -1)
+    new hex[7], tag[16];
+    GetPlayerMainHex(playerid, hex);
+    format(tag, sizeof(tag), "{%s}", hex);
+    new taglen = strlen(tag);
+
+    new pos, from = 0;
+    while((pos = strfind(buffer, "{MAIN}", true, from)) != -1)
     {
-        new hex[7], tag[16];
-        GetPlayerMainHex(playerid, hex);
-        format(tag, sizeof(tag), "{%s}", hex);
-        
         strdel(buffer, pos, pos + 6);
         strins(buffer, tag, pos, len);
+        from = pos + taglen;
     }
     return 1;
 }
@@ -95,7 +97,7 @@ stock CB_SendClientMessageToAll(color, const fmat[], va_args<>)
         new player_buf[1024];
         strcopy(player_buf, buffer);
         
-        if (strfind(player_buf, "{MAIN}") != -1)
+        if (strfind(player_buf, "{MAIN}", true) != -1)
         {
             CB_ProcessMessage(i, player_buf, sizeof(player_buf));
         }
@@ -138,6 +140,48 @@ stock CB_ShowPlayerDialog(playerid, dialogid, style, const title[], const body[]
 #endif
 #define ShowPlayerDialog CB_ShowPlayerDialog
 
+stock bool:CB_Dialog_Show(playerid, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "")
+{
+    if(!IsPlayerConnected(playerid)) return false;
+
+    new t[128], b[4096];
+    strcopy(t, title);
+    strcopy(b, caption);
+    
+    CB_ProcessMessage(playerid, t, sizeof(t));
+    CB_ProcessMessage(playerid, b, sizeof(b));
+    
+    return Dialog_Show(playerid, style, t, b, button1, button2);
+}
+
+#if defined _ALS_Dialog_Show
+    #undef Dialog_Show
+#else
+    #define _ALS_Dialog_Show
+#endif
+#define Dialog_Show CB_Dialog_Show
+
+stock bool:CB_Dialog_ShowCallback(playerid, {F@_@iiiis, F@_@iis}:callback, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "", tag = tagof (callback))
+{
+    if(!IsPlayerConnected(playerid)) return false;
+
+    new t[128], b[4096];
+    strcopy(t, title);
+    strcopy(b, caption);
+    
+    CB_ProcessMessage(playerid, t, sizeof(t));
+    CB_ProcessMessage(playerid, b, sizeof(b));
+    
+    return Dialog_ShowCallback(playerid, callback, style, t, b, button1, button2, tag);
+}
+
+#if defined _ALS_Dialog_ShowCallback
+    #undef Dialog_ShowCallback
+#else
+    #define _ALS_Dialog_ShowCallback
+#endif
+#define Dialog_ShowCallback CB_Dialog_ShowCallback
+
 
 new playerCmdCooldown[MAX_PLAYERS];
 
@@ -159,7 +203,7 @@ static stock CarryColorCode(const message[], end, dest[], size = sizeof(dest))
             return 1;
         }
 
-        if(i + 6 <= end && !strcmp(message[i], "{MAIN}", false, 6))
+        if(i + 6 <= end && !strcmp(message[i], "{MAIN}", true, 6))
         {
             strmid(dest, message, i, i + 6, size);
             return 1;
@@ -173,7 +217,7 @@ stock SendWrappedClientMessage(playerid, color, const message[])
     new len = strlen(message);
 
     new mainCount, mainPos = -1;
-    while((mainPos = strfind(message, "{MAIN}", false, mainPos + 1)) != -1)
+    while((mainPos = strfind(message, "{MAIN}", true, mainPos + 1)) != -1)
         mainCount++;
 
     new reserved = mainCount * 2;

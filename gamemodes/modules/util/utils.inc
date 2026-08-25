@@ -215,7 +215,7 @@ stock format_MainColor(playerid, string[], len = sizeof(string))
     format(tag, sizeof(tag), "{%s}", hex);
 
     new pos, from, taglen = strlen(tag);
-    while((pos = strfind(string, "{MAIN}", false, from)) != -1)
+    while((pos = strfind(string, "{MAIN}", true, from)) != -1)
     {
         strdel(string, pos, pos + 6);
         strins(string, tag, pos, len);
