@@ -12,12 +12,12 @@ static g_InteractionParams[DSC_CONTENT_SIZE];
 #define DSC_DEBUG 0
 
 #define DSLASH:%0(%1,%2) \
-	forward DSC_%0(DCC_Interaction:DSC_it, DCC_User:DSC_usr); \
-	public DSC_%0(DCC_Interaction:DSC_it, DCC_User:DSC_usr) \
+	forward DSC_%0(DCC_Interaction:DSC_a, DCC_User:DSC_b); \
+	public DSC_%0(DCC_Interaction:DSC_a, DCC_User:DSC_b) \
 	{ \
-		DSC_Probe(#%0, _:DSC_it, _:DSC_usr); \
-		DSC_Begin(DSC_it, DSC_usr); \
-		DSCI_%0(DSC_usr, g_InteractionParams); \
+		DSC_Probe(#%0, _:DSC_a, _:DSC_b); \
+		DSC_Begin(DSC_a, DSC_b); \
+		DSCI_%0(g_CurrentInvoker, g_InteractionParams); \
 		return DSC_End(); \
 	} \
 	static stock DSCI_%0(DCC_User:%1, const %2)
@@ -44,21 +44,53 @@ stock DSC_Probe(const cmd[], a, b)
 
 static DCC_User:g_CurrentInvoker = DCC_INVALID_USER;
 static DCC_Channel:g_CurrentInteractionChannel = DCC_INVALID_CHANNEL;
+static DCC_Channel:g_CurrentTextChannel = DCC_INVALID_CHANNEL;
 
-stock DSC_Begin(DCC_Interaction:interaction, DCC_User:user = DCC_INVALID_USER)
+stock DSC_Begin(DCC_Interaction:it_or_user1, DCC_User:it_or_user2 = DCC_INVALID_USER)
 {
 	g_InteractionAnswered = false;
-	g_CurrentInteraction = interaction;
-	g_CurrentInvoker = user;
+	g_CurrentInteraction = DCC_Interaction:0;
+	g_CurrentInvoker = DCC_INVALID_USER;
 	g_CurrentInteractionChannel = DCC_INVALID_CHANNEL;
 
-	if(interaction != DCC_Interaction:0)
+	new uid1[DCC_ID_SIZE], uid2[DCC_ID_SIZE];
+	uid1[0] = EOS; uid2[0] = EOS;
+	DCC_GetUserId(DCC_User:it_or_user1, uid1, sizeof(uid1));
+	DCC_GetUserId(DCC_User:it_or_user2, uid2, sizeof(uid2));
+
+	if(uid1[0] != EOS && uid2[0] == EOS)
 	{
-		DCC_GetInteractionChannel(interaction, g_CurrentInteractionChannel);
+		g_CurrentInvoker = DCC_User:it_or_user1;
+		g_CurrentInteraction = DCC_Interaction:it_or_user2;
+	}
+	else if(uid2[0] != EOS && uid1[0] == EOS)
+	{
+		g_CurrentInteraction = DCC_Interaction:it_or_user1;
+		g_CurrentInvoker = DCC_User:it_or_user2;
+	}
+	else
+	{
+		new DCC_Channel:ch1 = DCC_INVALID_CHANNEL, DCC_Channel:ch2 = DCC_INVALID_CHANNEL;
+		DCC_GetInteractionChannel(DCC_Interaction:it_or_user1, ch1);
+		DCC_GetInteractionChannel(DCC_Interaction:it_or_user2, ch2);
+		if(ch1 != DCC_INVALID_CHANNEL)
+		{
+			g_CurrentInteraction = DCC_Interaction:it_or_user1;
+			g_CurrentInvoker = DCC_User:it_or_user2;
+		}
+		else
+		{
+			g_CurrentInteraction = DCC_Interaction:it_or_user2;
+			g_CurrentInvoker = DCC_User:it_or_user1;
+		}
 	}
 
-	g_InteractionParams[0] = EOS;
-	DCC_GetInteractionContent(g_CurrentInteraction, g_InteractionParams, sizeof(g_InteractionParams));
+	if(g_CurrentInteraction != DCC_Interaction:0)
+	{
+		DCC_GetInteractionChannel(g_CurrentInteraction, g_CurrentInteractionChannel);
+		g_InteractionParams[0] = EOS;
+		DCC_GetInteractionContent(g_CurrentInteraction, g_InteractionParams, sizeof(g_InteractionParams));
+	}
 
 	if(isnull(g_InteractionParams))
 	{
@@ -70,30 +102,6 @@ stock DSC_Begin(DCC_Interaction:interaction, DCC_User:user = DCC_INVALID_USER)
 
 stock DSC_End()
 {
-	if(!g_InteractionAnswered && g_CurrentInteraction != DCC_Interaction:0)
-	{
-		if(g_CurrentInvoker != DCC_INVALID_USER)
-		{
-			new uid[DCC_ID_SIZE];
-			uid[0] = EOS;
-			DCC_GetUserId(g_CurrentInvoker, uid, sizeof(uid));
-			if(!isnull(uid))
-			{
-				new msg[128];
-				format(msg, sizeof(msg), "<@%s> :hourglass_flowing_sand: Fetching data - the result appears below.", uid);
-				DCC_SendInteractionMessage(g_CurrentInteraction, msg);
-			}
-			else
-			{
-				DCC_SendInteractionMessage(g_CurrentInteraction, ":hourglass_flowing_sand: Fetching data - the result appears below.");
-			}
-		}
-		else
-		{
-			DCC_SendInteractionMessage(g_CurrentInteraction, ":hourglass_flowing_sand: Fetching data - the result appears below.");
-		}
-	}
-
 	g_CurrentInteraction = DCC_Interaction:0;
 	g_CurrentInvoker = DCC_INVALID_USER;
 	g_CurrentInteractionChannel = DCC_INVALID_CHANNEL;
@@ -160,6 +168,17 @@ static stock DSC_Deny(const message[])
     {
         g_InteractionAnswered = true;
         DCC_SendInteractionMessage(g_CurrentInteraction, message);
+        return 0;
+    }
+    if(g_CurrentTextChannel != DCC_INVALID_CHANNEL)
+    {
+        DCC_SendChannelMessage(g_CurrentTextChannel, message);
+        return 0;
+    }
+    if(g_CurrentInvoker != DCC_INVALID_USER)
+    {
+        DCC_CreatePrivateChannel(g_CurrentInvoker, "OnDiscordPrivateMsg", "s", message);
+        return 0;
     }
     return 0;
 }
@@ -226,13 +245,23 @@ public Discord_SendDiscordResponse(DCC_Channel:channel, const message[])
 	new DCC_Interaction:interaction = DSC_TakeInteraction();
 	if(interaction != DCC_Interaction:0) return DCC_SendInteractionMessage(interaction, message);
 
+	if(g_CurrentTextChannel != DCC_INVALID_CHANNEL)
+	{
+		return DCC_SendChannelMessage(g_CurrentTextChannel, message);
+	}
+
+	if(channel != DCC_INVALID_CHANNEL)
+	{
+		return DCC_SendChannelMessage(channel, message);
+	}
+
 	if(g_CurrentInvoker != DCC_INVALID_USER)
 	{
 		DCC_CreatePrivateChannel(g_CurrentInvoker, "OnDiscordPrivateMsg", "s", message);
 		return 1;
 	}
 
-	return DCC_SendChannelMessage(channel, message);
+	return 0;
 }
 
 stock SendDiscordEmbedResponse(DCC_Channel:channel, DCC_Embed:embed_data)
@@ -240,13 +269,23 @@ stock SendDiscordEmbedResponse(DCC_Channel:channel, DCC_Embed:embed_data)
 	new DCC_Interaction:interaction = DSC_TakeInteraction();
 	if(interaction != DCC_Interaction:0) return DCC_SendInteractionEmbed(interaction, embed_data);
 
+	if(g_CurrentTextChannel != DCC_INVALID_CHANNEL)
+	{
+		return DCC_SendChannelEmbedMessage(g_CurrentTextChannel, embed_data);
+	}
+
+	if(channel != DCC_INVALID_CHANNEL)
+	{
+		return DCC_SendChannelEmbedMessage(channel, embed_data);
+	}
+
 	if(g_CurrentInvoker != DCC_INVALID_USER)
 	{
 		DCC_CreatePrivateChannel(g_CurrentInvoker, "OnDiscordPrivateEmbed", "i", _:embed_data);
 		return 1;
 	}
 
-	return DCC_SendChannelEmbedMessage(channel, embed_data);
+	return 0;
 }
 
 forward Discord_SendDiscordEmbedReply(const title[], const description[], color);
@@ -1713,7 +1752,7 @@ DSLASH:rules(user, params[])
 DSLASH:help(user, params[])
 {
 	#pragma unused params
-	return DSC_commands(g_CurrentInteraction, user);
+	return DSCI_commands(user, params);
 }
 
 DSLASH:commands(user, params[])
@@ -1826,10 +1865,10 @@ DSLASH:top(user, params[])
 	{
 		new rows = cache_num_rows();
 		if(!rows)
-			return SendDiscordResponse(comandos, "No ranking data available yet.");
+			return SendDiscordResponse(comandos, ":bar_chart: No player data available yet.");
 
-		new body[1200];
-		format(body, sizeof(body), "**Top 10 - kills**\n\n");
+		new body[1024], line[128];
+		format(body, sizeof(body), "**Top 10 players - Kills**\n\n");
 
 		for(new i = 0; i < rows; i++)
 		{
@@ -1838,14 +1877,17 @@ DSLASH:top(user, params[])
 			cache_get_value_name_int(i, "kills", kills);
 			cache_get_value_name_int(i, "deaths", deaths);
 
-			strcat(body, fmat_return("**%d.** `%-20s` %d kills / %d deaths (%.2f)\n",
-				i + 1, nick, kills, deaths, ratio(kills, deaths)), sizeof(body));
+			new Float:kdr = (deaths > 0) ? (Float:kills / Float:deaths) : Float:kills;
+			format(line, sizeof(line), "**#%d** `%s` - **%d** kills | **%d** deaths (KDR: **%.2f**)\n",
+				i + 1, nick, kills, deaths, kdr);
+			strcat(body, line, sizeof(body));
 		}
+
 		return SendDiscordResponse(comandos, body);
 	}
 
 	MySQL_TQueryInline(dbHandle, using inline OnDiscordTop,
-		"SELECT `username`, `kills`, `deaths` FROM `accounts` ORDER BY `kills` DESC LIMIT 10");
+		"SELECT `username`, `kills`, `deaths` FROM `accounts` WHERE `adminlevel` = 0 ORDER BY `kills` DESC LIMIT 10");
 	return true;
 }
 
@@ -1858,30 +1900,27 @@ DSLASH:topclans(user, params[])
 	{
 		new rows = cache_num_rows();
 		if(!rows)
-			return SendDiscordResponse(comandos, "No clan ranking data available yet.");
+			return SendDiscordResponse(comandos, ":shield: No clan data available.");
 
-		new body[1400];
-		format(body, sizeof(body), "**🏆 Top 10 Clans**\n\n");
+		new body[1024], line[128];
+		format(body, sizeof(body), "**Top 10 clans - Points**\n\n");
 
 		for(new i = 0; i < rows; i++)
 		{
-			new tag[CLAN_TAG_LEN], name[CLAN_NAME_LEN], founder[MAX_PLAYER_NAME + 1], points, members;
+			new tag[10], name[32], pts;
 			cache_get_value_name(i, "clan_tag", tag, sizeof(tag));
 			cache_get_value_name(i, "clan_name", name, sizeof(name));
-			cache_get_value_name(i, "clan_owner", founder, sizeof(founder));
-			cache_get_value_name_int(i, "clan_points", points);
-			cache_get_value_name_int(i, "member_count", members);
+			cache_get_value_name_int(i, "clan_points", pts);
 
-			strcat(body, fmat_return("**%d.** `[%s]` **%s** \n> Leader: `%s` | Members: **%d** | Points: **%d**\n\n",
-				i + 1, tag, name, founder, members, points), sizeof(body));
+			format(line, sizeof(line), "**#%d** `[%s] %s` - **%d** pts\n", i + 1, tag, name, pts);
+			strcat(body, line, sizeof(body));
 		}
+
 		return SendDiscordResponse(comandos, body);
 	}
 
 	MySQL_TQueryInline(dbHandle, using inline OnDiscordTopClans,
-		"SELECT c.clan_tag, c.clan_name, c.clan_owner, c.clan_points, COUNT(a.id) AS member_count \
-		FROM `clans` c LEFT JOIN `accounts` a ON a.clanid = c.clan_id \
-		GROUP BY c.clan_id ORDER BY c.clan_points DESC, member_count DESC LIMIT 10");
+		"SELECT `clan_tag`, `clan_name`, `clan_points` FROM `clans` ORDER BY `clan_points` DESC LIMIT 10");
 	return true;
 }
 
@@ -1889,17 +1928,47 @@ DSLASH:clan(user, params[])
 {
 	if(!DSC_RequirePlayer(user)) return 1;
 
-	new queryText[64];
-	if(sscanf(params, "s[64]", queryText))
-		return SendDiscordResponse(comandos, "/clan [tag/name]");
+	new queryText[32];
+	if(sscanf(params, "s[32]", queryText))
+	{
+		new uid[DCC_ID_SIZE];
+		DCC_GetUserId(user, uid, sizeof(uid));
+		if(isnull(uid))
+			return SendDiscordResponse(comandos, "Usage: `/clan [tag | name | clanid]`");
+
+		inline const OnLookupClanByDC()
+		{
+			if(!cache_num_rows())
+				return SendDiscordResponse(comandos, "Usage: `/clan [tag | name | clanid]`");
+
+			new cid = 0;
+			cache_get_value_name_int(0, "clanid", cid);
+			if(cid <= 0)
+				return SendDiscordResponse(comandos, ":warning: You are not in a clan. Usage: `/clan [tag | name | clanid]`.");
+
+			format(queryText, sizeof(queryText), "%d", cid);
+			return DSCI_clan(user, queryText);
+		}
+
+		new q[128];
+		mysql_format(dbHandle, q, sizeof(q), "SELECT `clanid` FROM `accounts` WHERE `dc_uid` = '%e' LIMIT 1", uid);
+		MySQL_TQueryInline(dbHandle, using inline OnLookupClanByDC, q);
+		return true;
+	}
+
+	new clanIdQuery = -1;
+	if('0' <= queryText[0] <= '9')
+		clanIdQuery = strval(queryText);
 
 	inline const OnDiscordClanInfo()
 	{
-		new rows = cache_num_rows();
-		if(!rows)
-			return SendDiscordResponse(comandos, ":x: Clan not found with that tag or name!");
+		if(!cache_num_rows())
+			return SendDiscordResponse(comandos, ":x: Clan not found.");
 
-		new cid, tag[CLAN_TAG_LEN], name[CLAN_NAME_LEN], founder[MAX_PLAYER_NAME + 1], color, points, members;
+		new
+			cid, tag[10], name[32], founder[MAX_PLAYER_NAME + 1],
+			color, points, members;
+
 		cache_get_value_name_int(0, "clan_id", cid);
 		cache_get_value_name(0, "clan_tag", tag, sizeof(tag));
 		cache_get_value_name(0, "clan_name", name, sizeof(name));
@@ -1908,25 +1977,37 @@ DSLASH:clan(user, params[])
 		cache_get_value_name_int(0, "clan_points", points);
 		cache_get_value_name_int(0, "member_count", members);
 
-		new desc[1024], descEncoded[1024];
+		new desc[512], descEncoded[512];
 		format(desc, sizeof(desc),
-			"**Clan:** [%s] %s\n" \
-			"**Leader / Founder:** %s\n" \
-			"**Clan ID:** %d\n" \
-			"**Total Members:** %d\n" \
-			"**Outpost Points:** %d\n" \
-			"**Color (Hex):** #%06x\n\n" \
-			"**[View Clan on Web UCP](https://rejecting.site/?tab=view_clan&id=%d)**",
+			"**Tag:** `[%s]`\n"\
+			"**Name:** %s\n"\
+			"**Leader:** %s\n"\
+			"**Clan ID:** %d\n"\
+			"**Members:** %d\n"\
+			"**Points:** %d\n"\
+			"**Color:** `0x%06X`\n"\
+			"**Web Profile:** https://rejecting.site/clan.php?id=%d",
 			tag, name, founder, cid, members, points, (color >>> 8), cid);
 
 		utf8encode(descEncoded, desc, sizeof(descEncoded));
 		SendDiscordEmbedReply("Clan Information", descEncoded, DISCORD_COLOR_INFO);
+		return 1;
 	}
 
-	mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
-		"SELECT c.clan_id, c.clan_tag, c.clan_name, c.clan_owner, c.clan_color, c.clan_points, COUNT(a.id) AS member_count \
-		FROM `clans` c LEFT JOIN `accounts` a ON a.clanid = c.clan_id \
-		WHERE c.`clan_tag` = '%e' OR c.`clan_name` LIKE '%e' GROUP BY c.clan_id LIMIT 1", queryText, queryText);
+	if(clanIdQuery > 0)
+	{
+		mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
+			"SELECT c.clan_id, c.clan_tag, c.clan_name, c.clan_owner, c.clan_color, c.clan_points, COUNT(a.id) AS member_count \
+			FROM `clans` c LEFT JOIN `accounts` a ON a.clanid = c.clan_id \
+			WHERE c.`clan_id` = %d GROUP BY c.clan_id LIMIT 1", clanIdQuery);
+	}
+	else
+	{
+		mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
+			"SELECT c.clan_id, c.clan_tag, c.clan_name, c.clan_owner, c.clan_color, c.clan_points, COUNT(a.id) AS member_count \
+			FROM `clans` c LEFT JOIN `accounts` a ON a.clanid = c.clan_id \
+			WHERE c.`clan_tag` = '%e' OR c.`clan_name` LIKE '%e' GROUP BY c.clan_id LIMIT 1", queryText, queryText);
+	}
 	MySQL_TQueryInline(dbHandle, using inline OnDiscordClanInfo, queryGlobal);
 	return true;
 }
@@ -2002,7 +2083,57 @@ stock ProcessDiscordTextCommand(DCC_User:author, DCC_Channel:channel, const mess
 	new cmd[32], rest[256];
 	sscanf(message[1], "s[32]S()[256]", cmd, rest);
 
-	if(!strcmp(cmd, "verify", true) || !strcmp(cmd, "link", true))
+	g_CurrentInteraction = DCC_Interaction:0;
+	g_InteractionAnswered = false;
+	g_CurrentInvoker = author;
+	g_CurrentTextChannel = channel;
+	g_CurrentInteractionChannel = channel;
+
+	if(!strcmp(cmd, "help", true))
+	{
+		DSCI_help(author, rest);
+	}
+	else if(!strcmp(cmd, "commands", true))
+	{
+		DSCI_commands(author, rest);
+	}
+	else if(!strcmp(cmd, "cmds", true))
+	{
+		DSCI_cmds(author, rest);
+	}
+	else if(!strcmp(cmd, "online", true) || !strcmp(cmd, "players", true))
+	{
+		DSCI_online(author, rest);
+	}
+	else if(!strcmp(cmd, "stats", true))
+	{
+		DSCI_stats(author, rest);
+	}
+	else if(!strcmp(cmd, "clan", true))
+	{
+		DSCI_clan(author, rest);
+	}
+	else if(!strcmp(cmd, "topclans", true))
+	{
+		DSCI_topclans(author, rest);
+	}
+	else if(!strcmp(cmd, "top", true))
+	{
+		DSCI_top(author, rest);
+	}
+	else if(!strcmp(cmd, "vip", true))
+	{
+		DSCI_vip(author, rest);
+	}
+	else if(!strcmp(cmd, "rules", true))
+	{
+		DSCI_rules(author, rest);
+	}
+	else if(!strcmp(cmd, "howtolink", true))
+	{
+		DSCI_howtolink(author, rest);
+	}
+	else if(!strcmp(cmd, "verify", true) || !strcmp(cmd, "link", true))
 	{
 		if(ch_comandos_players == DCC_INVALID_CHANNEL) ch_comandos_players = DCC_FindChannelById(CH_COMANDOS_PLAYERS);
 		if(channel != ch_comandos_players)
@@ -2012,13 +2143,13 @@ stock ProcessDiscordTextCommand(DCC_User:author, DCC_Channel:channel, const mess
 			new denyMsg[256];
 			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Verification commands can only be used in <#" CH_COMANDOS_PLAYERS ">!", uid);
 			DCC_SendChannelMessage(channel, denyMsg);
-			return 1;
 		}
-		ProcessDiscordVerifyCmd(author, DCC_INVALID_CHANNEL);
-		return 1;
+		else
+		{
+			ProcessDiscordVerifyCmd(author, DCC_INVALID_CHANNEL);
+		}
 	}
-
-	if(!strcmp(cmd, "tournament", true))
+	else if(!strcmp(cmd, "tournament", true))
 	{
 		if(ch_tourney_register == DCC_INVALID_CHANNEL) ch_tourney_register = DCC_FindChannelById(CH_TOURNEY_REGISTER);
 		if(comandos == DCC_INVALID_CHANNEL) comandos = DCC_FindChannelById(CH_COMANDOS);
@@ -2031,101 +2162,95 @@ stock ProcessDiscordTextCommand(DCC_User:author, DCC_Channel:channel, const mess
 			new denyMsg[256];
 			format(denyMsg, sizeof(denyMsg), "<@%s> :no_entry: Tournament registration can only be used in <#" CH_TOURNEY_REGISTER "> or <#" CH_COMANDOS ">!", uid);
 			DCC_SendChannelMessage(channel, denyMsg);
-			return 1;
 		}
-		ProcessDiscordTourneyApp(author, channel, message);
-		return 1;
+		else
+		{
+			ProcessDiscordTourneyApp(author, channel, message);
+		}
 	}
-
-	if(!strcmp(cmd, "online", true) || !strcmp(cmd, "players", true))
+	else if(!strcmp(cmd, "r", true) || !strcmp(cmd, "reply", true))
 	{
-		g_CurrentInvoker = author;
-		DSCI_online(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
-	}
-
-	if(!strcmp(cmd, "stats", true))
-	{
-		g_CurrentInvoker = author;
-		DSCI_stats(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
-	}
-
-	if(!strcmp(cmd, "clan", true))
-	{
-		g_CurrentInvoker = author;
-		DSCI_clan(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
-	}
-
-	if(!strcmp(cmd, "topclans", true))
-	{
-		g_CurrentInvoker = author;
-		DSCI_topclans(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
-	}
-
-	if(!strcmp(cmd, "top", true))
-	{
-		g_CurrentInvoker = author;
-		DSCI_top(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
-	}
-
-	if(!strcmp(cmd, "r", true) || !strcmp(cmd, "reply", true))
-	{
-		g_CurrentInvoker = author;
 		DSCI_r(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
 	}
-
-	if(!strcmp(cmd, "d", true))
+	else if(!strcmp(cmd, "d", true))
 	{
-		g_CurrentInvoker = author;
 		DSCI_d(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
 	}
-
-	if(!strcmp(cmd, "mute", true))
+	else if(!strcmp(cmd, "mute", true))
 	{
-		g_CurrentInvoker = author;
 		DSCI_mute(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
 	}
-
-	if(!strcmp(cmd, "unmute", true))
+	else if(!strcmp(cmd, "unmute", true))
 	{
-		g_CurrentInvoker = author;
 		DSCI_unmute(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
 	}
-
-	if(!strcmp(cmd, "kick", true))
+	else if(!strcmp(cmd, "kick", true))
 	{
-		g_CurrentInvoker = author;
 		DSCI_kick(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
 	}
-
-	if(!strcmp(cmd, "warn", true))
+	else if(!strcmp(cmd, "warn", true))
 	{
-		g_CurrentInvoker = author;
 		DSCI_warn(author, rest);
-		g_CurrentInvoker = DCC_INVALID_USER;
-		return 1;
+	}
+	else if(!strcmp(cmd, "ban", true))
+	{
+		DSCI_ban(author, rest);
+	}
+	else if(!strcmp(cmd, "unban", true))
+	{
+		DSCI_unban(author, rest);
+	}
+	else if(!strcmp(cmd, "baninfo", true))
+	{
+		DSCI_baninfo(author, rest);
+	}
+	else if(!strcmp(cmd, "playerinfo", true))
+	{
+		DSCI_playerinfo(author, rest);
+	}
+	else if(!strcmp(cmd, "aka", true))
+	{
+		DSCI_aka(author, rest);
+	}
+	else if(!strcmp(cmd, "dox", true))
+	{
+		DSCI_dox(author, rest);
+	}
+	else if(!strcmp(cmd, "stafflist", true))
+	{
+		DSCI_stafflist(author, rest);
+	}
+	else if(!strcmp(cmd, "weekresults", true))
+	{
+		DSCI_weekresults(author, rest);
+	}
+	else if(!strcmp(cmd, "gmx", true))
+	{
+		DSCI_gmx(author, rest);
+	}
+	else if(!strcmp(cmd, "turnoff", true))
+	{
+		DSCI_turnoff(author, rest);
+	}
+	else if(!strcmp(cmd, "setadmin", true))
+	{
+		DSCI_setadmin(author, rest);
+	}
+	else if(!strcmp(cmd, "setmoney", true))
+	{
+		DSCI_setmoney(author, rest);
+	}
+	else if(!strcmp(cmd, "banserial", true))
+	{
+		DSCI_banserial(author, rest);
+	}
+	else if(!strcmp(cmd, "penalties", true))
+	{
+		DSCI_penalties(author, rest);
 	}
 
-	return 0;
+	g_CurrentInvoker = DCC_INVALID_USER;
+	g_CurrentTextChannel = DCC_INVALID_CHANNEL;
+	g_CurrentInteractionChannel = DCC_INVALID_CHANNEL;
+	return 1;
 }
-
-
