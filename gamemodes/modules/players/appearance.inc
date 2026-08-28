@@ -174,6 +174,7 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
             ShowPersonalizationMenu(playerid);
         }
         case 20: { ShowPlayerLifeTypesList(playerid); }
+        case 21: ShowDamageFeedDialog(playerid, APPEARANCE_SRC_PERSONAL);
     }
     return 1;
 }

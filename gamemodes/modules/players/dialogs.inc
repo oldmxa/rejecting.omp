@@ -244,6 +244,30 @@ ShowDamageStyleDialog(playerid, source)
     return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
+ShowDamageFeedDialog(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new const feedStyles[][] = {
+        "Name - Weapon (clean)",
+        "Name (HP) Weapon (detailed)"
+    };
+
+    new body[512] = "{BEBEBE}Style ID\t{BEBEBE}Format\n";
+    for(new i; i < sizeof(feedStyles); i++)
+    {
+        new bool:isSelected = (User[playerid][dmgFeedShowHP] == bool:i);
+        strcat(body, fmat_return("%s{FFFFFF}%d\t{FFFFFF}%s\n",
+            isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), i, feedStyles[i]), sizeof(body));
+    }
+
+    new title[64] = "{MAIN}Personalization - Damage Feed";
+
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_FEED<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
+}
+
 ShowHitmarkColorDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
@@ -414,6 +438,19 @@ public DIALOG_DMG_STYLE(playerid, dialogid, response, listitem, string:inputtext
     if(response && 0 <= listitem <= 3)
     {
         User[playerid][dmgInformerStyle] = listitem;
+        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+    }
+
+    return ReturnToAppearanceSource(playerid);
+}
+
+forward DIALOG_DMG_FEED(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_DMG_FEED(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response && 0 <= listitem <= 1)
+    {
+        User[playerid][dmgFeedShowHP] = (listitem == 1);
+        SetDamageFeedShowHP(playerid, User[playerid][dmgFeedShowHP]);
         SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
     }
 

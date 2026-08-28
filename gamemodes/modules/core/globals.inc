@@ -483,6 +483,7 @@ enum e_USER
     bool:customTagPerm,
     customTag[33],
     bool:show3DDeathTag,
+    bool:dmgFeedShowHP,
     bool:showRandomDeathTags,
     bool:isLogged,
     bool:isAlreadySpawned,

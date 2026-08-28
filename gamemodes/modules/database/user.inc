@@ -292,6 +292,7 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][hideGlobalMsg] = false;
     User[playerid][hideWelcomeMsg] = false;
     User[playerid][show3DDeathTag] = false;
+    User[playerid][dmgFeedShowHP] = true;
     User[playerid][showRandomDeathTags] = true;
     User[playerid][hitSoundID] = 17802;
     User[playerid][killSoundID] = 1057;
@@ -507,6 +508,8 @@ public OnPlayerJoin(playerid)
         cache_get_value_bool(0, "hide_welcome_msg", User[playerid][hideWelcomeMsg]);
         // "Welcome to server" It only appears for new accounts. (OnRegisterHash);
         cache_get_value_bool(0, "show_3d_deathtag", User[playerid][show3DDeathTag]);
+        cache_get_value_bool(0, "dmgfeed_show_hp", User[playerid][dmgFeedShowHP]);
+        SetDamageFeedShowHP(playerid, User[playerid][dmgFeedShowHP]);
         cache_get_value_bool(0, "show_random_deathtag", User[playerid][showRandomDeathTags]);
         cache_get_value_bool(0, "hide_vip_tag", User[playerid][hideVipTag]);
         cache_get_value_bool(0, "hide_clan_tag", User[playerid][hideClanTag]);
@@ -748,6 +751,7 @@ UpdatePlayerData(playerid, disconnect = 0)
         `hide_global_msg` = %d,\
         `hide_welcome_msg` = %d,\
         `show_3d_deathtag` = %d,\
+        `dmgfeed_show_hp` = %d,\
         `show_random_deathtag` = %d,\
         `hide_vip_tag` = %d,\
         `hide_clan_tag` = %d,\
@@ -836,6 +840,7 @@ UpdatePlayerData(playerid, disconnect = 0)
         User[playerid][hideGlobalMsg],
         User[playerid][hideWelcomeMsg],
         User[playerid][show3DDeathTag],
+        User[playerid][dmgFeedShowHP],
         User[playerid][showRandomDeathTags],
         User[playerid][hideVipTag],
         User[playerid][hideClanTag],

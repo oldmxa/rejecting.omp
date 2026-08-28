@@ -405,7 +405,8 @@ public Account_ShowPersonalizationMenu(playerid)
 
     new lifeName[24];
     GetLifeStyleName(User[playerid][lifeType], lifeName);
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Life Style\t{FFFFFF}%s", pStr, lifeName);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Life Style\t{FFFFFF}%s\n", pStr, lifeName);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t{FFFFFF}%s", pStr, (User[playerid][dmgFeedShowHP]) ? ("Name (HP) Weapon") : ("Name - Weapon"));
 
     new pTitle[64] = "{MAIN}Personalization Menu";
 

@@ -6178,6 +6178,15 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 	}
 }
 
+static bool:s_DamageFeedShowHP[MAX_PLAYERS] = {true, ...};
+
+stock SetDamageFeedShowHP(playerid, bool:show)
+{
+	if (0 <= playerid < MAX_PLAYERS) {
+		s_DamageFeedShowHP[playerid] = show;
+	}
+}
+
 static DamageFeedUpdateText(playerid)
 {
 	new buf[64 * WC_FEED_HEIGHT] = "";
@@ -6203,7 +6212,7 @@ static DamageFeedUpdateText(playerid)
 				weapon,
 				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
 			);
-		} else {
+		} else if (s_DamageFeedShowHP[playerid]) {
 			playerHP = s_PlayerHealth[s_DamageFeedHitsGiven[playerid][i][e_Issuer]] + s_PlayerArmour[s_DamageFeedHitsGiven[playerid][i][e_Issuer]];
 			format(
 				buf,
@@ -6212,6 +6221,16 @@ static DamageFeedUpdateText(playerid)
 				buf,
 				s_DamageFeedHitsGiven[playerid][i][e_Name],
 				(playerHP > 0) ? (sprintf("(%s%.0f~g~~h~)", (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP)) : ("-"),
+				weapon,
+				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
+			);
+		} else {
+			format(
+				buf,
+				sizeof(buf),
+				"%s~g~~h~%s - %s ~w~+%.2f~n~",
+				buf,
+				s_DamageFeedHitsGiven[playerid][i][e_Name],
 				weapon,
 				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
 			);
@@ -6253,7 +6272,7 @@ static DamageFeedUpdateText(playerid)
 				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
 				(s_PlayerHealth[playerid] > 0) ? (sprintf("~b~~h~(~w~%.2f~b~~h~)", s_PlayerHealth[playerid])) : ""
 			);
-		} else {
+		} else if (s_DamageFeedShowHP[playerid]) {
 			playerHP = s_PlayerHealth[playerid] + s_PlayerArmour[playerid];
 			format(
 				buf,
@@ -6264,6 +6283,16 @@ static DamageFeedUpdateText(playerid)
 				weapon,
 				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
 				(playerHP > 0) ? (sprintf("~b~~h~(%s%.0f~b~~h~)", (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP)) : ""
+			);
+		} else {
+			format(
+				buf,
+				sizeof(buf),
+				"%s~b~~h~%s - %s ~w~-%.2f~n~",
+				buf,
+				s_DamageFeedHitsTaken[playerid][i][e_Name],
+				weapon,
+				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009
 			);
 		}
 	}

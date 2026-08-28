@@ -71,6 +71,7 @@ CREATE TABLE `accounts` (
   `hide_global_msg` int(11) NOT NULL DEFAULT 0,
   `hide_welcome_msg` tinyint(1) NOT NULL DEFAULT 0,
   `show_3d_deathtag` tinyint(1) NOT NULL DEFAULT 0,
+  `dmgfeed_show_hp` tinyint(1) NOT NULL DEFAULT 1,
   `show_random_deathtag` tinyint(1) NOT NULL DEFAULT 1,
   `hit_sound_id` int(11) NOT NULL DEFAULT 17802,
   `kill_sound_id` int(11) NOT NULL DEFAULT 1057,
