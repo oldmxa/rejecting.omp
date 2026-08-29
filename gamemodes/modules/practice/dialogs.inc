@@ -114,7 +114,7 @@ public ShowPracticeDialog(playerid)
             g_Practice[playerid][pracHasPos2] ? ("{23C552}Defined {BEBEBE}- select to remove") : ("{F84F31}Not set {BEBEBE}- select to use your spot")));
     }
 
-    strcat(body, fmat_return("{FFFFFF}\x95 Damage Informer\t{447DBF}%s\n", GetDamageStyleName(User[playerid][dmgInformerStyle])));
+    strcat(body, fmat_return("{FFFFFF}\x95 Damage Informer\t%s {447DBF}%s\n", (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageStyleName(User[playerid][dmgInformerStyle])));
     strcat(body, fmat_return("{FFFFFF}\x95 Hitmarker Color\t{%06x}######\n", (User[playerid][hitmarkColor] >>> 8)));
     strcat(body, fmat_return("{FFFFFF}\x95 Hit Sound\t{FFFFFF}ID:%d ({BEBEBE}%s{FFFFFF})\n", User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID])));
 

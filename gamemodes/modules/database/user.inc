@@ -292,12 +292,15 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][hideGlobalMsg] = false;
     User[playerid][hideWelcomeMsg] = false;
     User[playerid][show3DDeathTag] = false;
+    User[playerid][showDamageFeed] = true;
     User[playerid][dmgFeedStyle] = 1;
     User[playerid][dmgFeedColorLeft] = -1;
     User[playerid][dmgFeedColorRight] = -1;
+    SetDamageFeedForPlayer(playerid, 1);
     SetDamageFeedStyle(playerid, 1);
     ApplyDamageFeedColors(playerid);
     User[playerid][showRandomDeathTags] = true;
+    User[playerid][showDamageInformer] = true;
     User[playerid][hitSoundID] = 17802;
     User[playerid][killSoundID] = 1057;
 
@@ -500,6 +503,8 @@ public OnPlayerJoin(playerid)
 		cache_get_value_int(0, "duel2v2_losses", User[playerid][duel2v2Losses]);
 		cache_get_value_int(0, "warnings", User[playerid][warnings]);
 		cache_get_value_bool(0, "block_pm", User[playerid][blockPM]);
+		User[playerid][showDamageInformer] = true;
+		cache_get_value_bool(0, "show_damage_informer", User[playerid][showDamageInformer]);
 		cache_get_value_int(0, "staticdamage", User[playerid][dmgInformerStyle]);
 		cache_get_value_int(0, "showplayerhud", User[playerid][showPlayerHud]);
 		cache_get_value_bool(0, "show_clan_hud", User[playerid][showClanHud]);
@@ -512,6 +517,9 @@ public OnPlayerJoin(playerid)
         cache_get_value_bool(0, "hide_welcome_msg", User[playerid][hideWelcomeMsg]);
         // "Welcome to server" It only appears for new accounts. (OnRegisterHash);
         cache_get_value_bool(0, "show_3d_deathtag", User[playerid][show3DDeathTag]);
+        User[playerid][showDamageFeed] = true;
+        cache_get_value_bool(0, "show_dmgfeed", User[playerid][showDamageFeed]);
+        SetDamageFeedForPlayer(playerid, User[playerid][showDamageFeed] ? 1 : 0);
         cache_get_value_int(0, "dmgfeed_style", User[playerid][dmgFeedStyle]);
         if(User[playerid][dmgFeedStyle] < 0 || User[playerid][dmgFeedStyle] > 2) User[playerid][dmgFeedStyle] = 1;
         SetDamageFeedStyle(playerid, User[playerid][dmgFeedStyle]);
@@ -753,6 +761,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		`ispnumber` = COALESCE(NULLIF('%e', ''), `ispnumber`), \
 		`vpn` = %d, \
 		`proxy` = %d, \
+		`show_damage_informer` = %d, \
 		`staticdamage` = %d, \
 		`showplayerhud` = %d,\
 		`show_clan_hud` = %d,\
@@ -761,6 +770,7 @@ UpdatePlayerData(playerid, disconnect = 0)
         `hide_global_msg` = %d,\
         `hide_welcome_msg` = %d,\
         `show_3d_deathtag` = %d,\
+        `show_dmgfeed` = %d,\
         `dmgfeed_style` = %d,\
 		`dmgfeed_color_left` = %d,\
 		`dmgfeed_color_right` = %d,\
@@ -844,6 +854,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][VPN],
 		User[playerid][Proxy],
 
+		User[playerid][showDamageInformer],
 		User[playerid][dmgInformerStyle],
 		User[playerid][showPlayerHud],
 		User[playerid][showClanHud],
@@ -852,6 +863,7 @@ UpdatePlayerData(playerid, disconnect = 0)
         User[playerid][hideGlobalMsg],
         User[playerid][hideWelcomeMsg],
         User[playerid][show3DDeathTag],
+        User[playerid][showDamageFeed],
         User[playerid][dmgFeedStyle],
         User[playerid][dmgFeedColorLeft],
         User[playerid][dmgFeedColorRight],

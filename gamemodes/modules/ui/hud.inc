@@ -142,6 +142,29 @@ stock updatePlayerHud(playerid)
 				{
 					PlayerTextDrawSetString(playerid, InfoStats[playerid][1], " ");
 				}
+				else if (User[playerid][hudType] == HUD_REJECTING_01)
+				{
+					new intDmg = floatround(playerArenaInfo[User[playerid][locationId]][playerid][arenaDMG]);
+					new kills = playerArenaInfo[User[playerid][locationId]][playerid][arenaKills];
+					new deaths = playerArenaInfo[User[playerid][locationId]][playerid][arenaDeaths];
+					new spree = GetPVarInt(playerid, "Spree");
+
+					format(fString, sizeof(fString),
+					"%sTime:_%sLNG~n~\
+					%sKills:_%s%d~n~\
+					%sDeaths:_%s%d~n~\
+					%sDamage:_%s%d~n~\
+					%sRatio:_%s%s~n~\
+					%sStreak:_%s%d~n~",
+					playerColorOne, playerColorTwo,
+					playerColorOne, playerColorTwo, kills,
+					playerColorOne, playerColorTwo, deaths,
+					playerColorOne, playerColorTwo, intDmg,
+					playerColorOne, playerColorTwo, RatioText(kills, deaths, User[playerid][hudType]),
+					playerColorOne, playerColorTwo, spree
+					);
+					PlayerTextDrawSetString(playerid, InfoStats[playerid][1], fString);
+				}
 				else
 				{
 					format(fString, sizeof(fString), "~n~%sLOUNGE", playerColorTwo);
@@ -162,13 +185,13 @@ stock updatePlayerHud(playerid)
 					%sKills:_%s%d~n~\
 					%sDeaths:_%s%d~n~\
 					%sDamage:_%s%d~n~\
-					%sRatio:_%s%0.2f~n~\
+					%sRatio:_%s%s~n~\
 					%sAccuracy:_%s%d%%~n~",
 					playerColorOne, playerColorTwo, spree,
 					playerColorOne, playerColorTwo, kills,
 					playerColorOne, playerColorTwo, deaths,
 					playerColorOne, playerColorTwo, intDmg,
-					playerColorOne, playerColorTwo, ratio(kills, deaths),
+					playerColorOne, playerColorTwo, RatioText(kills, deaths, User[playerid][hudType]),
 					playerColorOne, playerColorTwo, floatround(GetPlayerAccuracy(playerid, User[playerid][locationId]), floatround_round)
 					);
 				}

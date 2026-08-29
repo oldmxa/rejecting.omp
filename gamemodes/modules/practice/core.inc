@@ -485,6 +485,8 @@ stock HandlePracticeShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hit
 
 stock ShowPracticeDamageInformer(playerid, Float:amount, Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ)
 {
+    if(!User[playerid][showDamageInformer]) return 1;
+
     new PlayerText3D:hitbar, string[51];
 
     switch(User[playerid][dmgInformerStyle])

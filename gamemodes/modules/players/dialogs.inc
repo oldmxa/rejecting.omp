@@ -230,10 +230,11 @@ ShowDamageStyleDialog(playerid, source)
         "X (X)"
     };
 
-    new body[512] = "{BEBEBE}Style ID\t{BEBEBE}Style Name\n";
+    new body[512] = "{BEBEBE}Option\t{BEBEBE}Status / Format\n";
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Damage Informer State\t%s\n", (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden")), sizeof(body));
     for(new i; i < sizeof(damageStyles); i++)
     {
-        new bool:isSelected = (User[playerid][dmgInformerStyle] == i);
+        new bool:isSelected = (User[playerid][dmgInformerStyle] == i && User[playerid][showDamageInformer]);
         strcat(body, fmat_return("%s{FFFFFF}%d\t{FFFFFF}%s\n",
             isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), i, damageStyles[i]), sizeof(body));
     }
@@ -242,7 +243,7 @@ ShowDamageStyleDialog(playerid, source)
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
+    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
 }
 
 ShowDamageFeedMainMenu(playerid, source)
@@ -264,6 +265,7 @@ ShowDamageFeedMainMenu(playerid, source)
     }
 
     new body[512] = "{BEBEBE}Option\t{BEBEBE}Current Setting\n";
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Damage Feed State\t%s\n", (User[playerid][showDamageFeed]) ? ("{23C552}Visible") : ("{F84F31}Hidden")), sizeof(body));
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Display Style\t{FFFFFF}%s\n", GetDamageFeedStyleName(User[playerid][dmgFeedStyle])), sizeof(body));
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Colors (Left & Right)\t%s", fcAll), sizeof(body));
 
@@ -536,9 +538,18 @@ public CHAT_COLOR_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inpu
 forward DIALOG_DMG_STYLE(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_DMG_STYLE(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(response && 0 <= listitem <= 3)
+    if(!response) return ReturnToAppearanceSource(playerid);
+
+    if(listitem == 0)
     {
-        User[playerid][dmgInformerStyle] = listitem;
+        User[playerid][showDamageInformer] = !User[playerid][showDamageInformer];
+        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        return ShowDamageStyleDialog(playerid, GetAppearanceSource(playerid));
+    }
+    else if(1 <= listitem <= 4)
+    {
+        User[playerid][dmgInformerStyle] = listitem - 1;
+        User[playerid][showDamageInformer] = true;
         SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
     }
 
@@ -552,8 +563,15 @@ public DIALOG_DMG_FEED_MAIN(playerid, dialogid, response, listitem, string:input
 
     switch(listitem)
     {
-        case 0: ShowDamageFeedDialog(playerid, APPEARANCE_SRC_FEED);
-        case 1: ShowDamageFeedColorMenu(playerid, APPEARANCE_SRC_FEED);
+        case 0:
+        {
+            User[playerid][showDamageFeed] = !User[playerid][showDamageFeed];
+            SetDamageFeedForPlayer(playerid, User[playerid][showDamageFeed] ? 1 : 0);
+            SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+            ShowDamageFeedMainMenu(playerid, GetAppearanceSource(playerid));
+        }
+        case 1: ShowDamageFeedDialog(playerid, APPEARANCE_SRC_FEED);
+        case 2: ShowDamageFeedColorMenu(playerid, APPEARANCE_SRC_FEED);
     }
     return 1;
 }

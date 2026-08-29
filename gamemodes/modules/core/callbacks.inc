@@ -914,36 +914,39 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 		Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ,
 		PlayerText3D:hitbar, string[51];
 
-    switch(User[issuerid][dmgInformerStyle])
-    {
-        case 2: format(string, sizeof(string), "*");
-        case 3: format(string, sizeof(string), "X");
-        default: format(string, sizeof(string), "%.0f", amount);
-    }
-
-	GetPlayerLastShotVectors(issuerid, fOriginX, fOriginY, fOriginZ, fHitPosX, fHitPosY, fHitPosZ);
-
-	if(User[issuerid][dmgInformerStyle] == 0)
+	if(User[issuerid][showDamageInformer])
 	{
-		hitbar = CreatePlayer3DTextLabel(issuerid, string, User[issuerid][hitmarkColor], fHitPosX, fHitPosY, fHitPosZ, 70);
-		User[issuerid][hitmarkTimer] = SetTimerEx("updateDynamicHitmark", 30, false, "dfdffff", issuerid, amount, _:hitbar, fHitPosX, fHitPosY, fHitPosZ, 0.03);
-	}
-	else
-	{
-		hitbar = CreatePlayer3DTextLabel(issuerid, string, User[issuerid][hitmarkColor],fHitPosX, fHitPosY, fHitPosZ, 70);
-		SetTimerEx("destroyHidBar", 2000, false, "dd", issuerid, _:hitbar);
-	}
+		switch(User[issuerid][dmgInformerStyle])
+		{
+			case 2: format(string, sizeof(string), "*");
+			case 3: format(string, sizeof(string), "X");
+			default: format(string, sizeof(string), "%.0f", amount);
+		}
 
-	foreach (new specid : Player)
-	{
-		if (playerSpecID[specid] != issuerid) continue;
-
-		hitbar = CreatePlayer3DTextLabel(specid, string, User[specid][hitmarkColor], fHitPosX, fHitPosY, fHitPosZ, 70);
+		GetPlayerLastShotVectors(issuerid, fOriginX, fOriginY, fOriginZ, fHitPosX, fHitPosY, fHitPosZ);
 
 		if(User[issuerid][dmgInformerStyle] == 0)
-			SetTimerEx("updateDynamicHitmark", 30, false, "dfdffff", specid, amount, _:hitbar, fHitPosX, fHitPosY, fHitPosZ, 0.03);
+		{
+			hitbar = CreatePlayer3DTextLabel(issuerid, string, User[issuerid][hitmarkColor], fHitPosX, fHitPosY, fHitPosZ, 70);
+			User[issuerid][hitmarkTimer] = SetTimerEx("updateDynamicHitmark", 30, false, "dfdffff", issuerid, amount, _:hitbar, fHitPosX, fHitPosY, fHitPosZ, 0.03);
+		}
 		else
-			SetTimerEx("destroyHidBar", 2000, false, "dd", specid, _:hitbar);
+		{
+			hitbar = CreatePlayer3DTextLabel(issuerid, string, User[issuerid][hitmarkColor],fHitPosX, fHitPosY, fHitPosZ, 70);
+			SetTimerEx("destroyHidBar", 2000, false, "dd", issuerid, _:hitbar);
+		}
+
+		foreach (new specid : Player)
+		{
+			if (playerSpecID[specid] != issuerid) continue;
+
+			hitbar = CreatePlayer3DTextLabel(specid, string, User[specid][hitmarkColor], fHitPosX, fHitPosY, fHitPosZ, 70);
+
+			if(User[issuerid][dmgInformerStyle] == 0)
+				SetTimerEx("updateDynamicHitmark", 30, false, "dfdffff", specid, amount, _:hitbar, fHitPosX, fHitPosY, fHitPosZ, 0.03);
+			else
+				SetTimerEx("destroyHidBar", 2000, false, "dd", specid, _:hitbar);
+		}
 	}
 
 	return true;

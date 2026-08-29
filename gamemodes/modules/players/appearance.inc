@@ -292,7 +292,14 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     return 1;
 }
 
-@cmd(.alts = {"damagefeed", "feedstyle", "dmgstyle"}) dmgfeed(playerid, params[], help)
+@cmd(.alts = {"damageinformer", "informerstyle", "hitmarker"}) dmginformer(playerid, params[], help)
+{
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    ShowDamageStyleDialog(playerid, APPEARANCE_SRC_NONE);
+    return 1;
+}
+
+@cmd(.alts = {"damagefeed", "feedstyle"}) dmgfeed(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_NONE);

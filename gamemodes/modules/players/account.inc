@@ -350,7 +350,7 @@ public Account_ShowPersonalizationMenu(playerid)
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Player HUD\t%s\n", pStr, (User[playerid][showPlayerHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Clan HUD\t%s\n", pStr, (User[playerid][showClanHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
 
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Informer\t{447DBF}%s\n", pStr, GetDamageStyleName(User[playerid][dmgInformerStyle]));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Informer\t%s {447DBF}%s\n", pStr, (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageStyleName(User[playerid][dmgInformerStyle]));
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hitmarker Color\t{%06x}######\n", pStr, (User[playerid][hitmarkColor] >>> 8));
 
     new hudIdx = GetPlayerHudColorIndex(playerid);
@@ -414,7 +414,7 @@ public Account_ShowPersonalizationMenu(playerid)
     if(User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight]) format(fcAll, sizeof(fcAll), "%s", fcL);
     else format(fcAll, sizeof(fcAll), "%s {BEBEBE}/ %s", fcL, fcR);
 
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t{FFFFFF}%s {BEBEBE}(%s{BEBEBE})", pStr, GetDamageFeedStyleName(User[playerid][dmgFeedStyle]), fcAll);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t%s {FFFFFF}%s {BEBEBE}(%s{BEBEBE})", pStr, (User[playerid][showDamageFeed]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageFeedStyleName(User[playerid][dmgFeedStyle]), fcAll);
 
     new pTitle[64] = "{MAIN}Personalization Menu";
 
