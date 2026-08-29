@@ -219,7 +219,8 @@ enum E_DAMAGE_FEED_HIT {
 		   e_Name[MAX_PLAYER_NAME],
 	 Float:e_Amount,
 	WEAPON:e_Weapon,
-		   e_Tick
+		   e_Tick,
+	  bool:e_IsFatal
 }
 
 // Given in OnRejectedHit
@@ -6274,6 +6275,32 @@ static DamageFeedUpdateText(playerid)
 				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009,
 				(playerHP > 0) ? (sprintf("%s(%s%.0f%s)", DamageFeedColL(playerid, "~g~~h~"), (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP, DamageFeedColL(playerid, "~g~~h~"))) : ("")
 			);
+		} else if (s_DamageFeedStyle[playerid] == 3) {
+			if (s_DamageFeedHitsGiven[playerid][i][e_IsFatal]) {
+				format(
+					buf,
+					sizeof(buf),
+					"%s%s%s - %s %s+%.2f - KILL~n~",
+					buf,
+					DamageFeedColL(playerid, "~g~~h~"),
+					s_DamageFeedHitsGiven[playerid][i][e_Name],
+					weapon,
+					DamageFeedColR(playerid),
+					s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
+				);
+			} else {
+				format(
+					buf,
+					sizeof(buf),
+					"%s%s%s - %s %s+%.2f~n~",
+					buf,
+					DamageFeedColL(playerid, "~g~~h~"),
+					s_DamageFeedHitsGiven[playerid][i][e_Name],
+					weapon,
+					DamageFeedColR(playerid),
+					s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
+				);
+			}
 		} else {
 			format(
 				buf,
@@ -6339,6 +6366,30 @@ static DamageFeedUpdateText(playerid)
 					s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
 					(playerHP > 0) ? (sprintf("%s(%s%.0f%s)", DamageFeedColL(playerid, "~b~~h~"), (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP, DamageFeedColL(playerid, "~b~~h~"))) : ""
 				);
+			} else if (s_DamageFeedStyle[playerid] == 3) {
+				if (s_DamageFeedHitsTaken[playerid][i][e_IsFatal]) {
+					format(
+						buf,
+						sizeof(buf),
+						"%s%s%s %s-%.2f - KILL~n~",
+						buf,
+						DamageFeedColL(playerid, "~b~~h~"),
+						weapon,
+						DamageFeedColR(playerid),
+						s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009
+					);
+				} else {
+					format(
+						buf,
+						sizeof(buf),
+						"%s%s%s %s-%.2f~n~",
+						buf,
+						DamageFeedColL(playerid, "~b~~h~"),
+						weapon,
+						DamageFeedColR(playerid),
+						s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009
+					);
+				}
 			} else {
 				format(
 					buf,
@@ -6377,6 +6428,32 @@ static DamageFeedUpdateText(playerid)
 				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
 				(playerHP > 0) ? (sprintf("%s(%s%.0f%s)", DamageFeedColL(playerid, "~b~~h~"), (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP, DamageFeedColL(playerid, "~b~~h~"))) : ("")
 			);
+		} else if (s_DamageFeedStyle[playerid] == 3) {
+			if (s_DamageFeedHitsTaken[playerid][i][e_IsFatal]) {
+				format(
+					buf,
+					sizeof(buf),
+					"%s%s%s - %s %s-%.2f - KILL~n~",
+					buf,
+					DamageFeedColL(playerid, "~b~~h~"),
+					s_DamageFeedHitsTaken[playerid][i][e_Name],
+					weapon,
+					DamageFeedColR(playerid),
+					s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009
+				);
+			} else {
+				format(
+					buf,
+					sizeof(buf),
+					"%s%s%s - %s %s-%.2f~n~",
+					buf,
+					DamageFeedColL(playerid, "~b~~h~"),
+					s_DamageFeedHitsTaken[playerid][i][e_Name],
+					weapon,
+					DamageFeedColR(playerid),
+					s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009
+				);
+			}
 		} else {
 			format(
 				buf,
@@ -6404,7 +6481,7 @@ static DamageFeedUpdateText(playerid)
 	}
 }
 
-static DamageFeedAddHitGiven(playerid, issuerid, Float:amount, WEAPON:weapon)
+static DamageFeedAddHitGiven(playerid, issuerid, Float:amount, WEAPON:weapon, bool:is_fatal = false)
 {
 	#if defined _Y_ITERATE_LOCAL_VERSION || defined _FOREACH_LOCAL_VERSION
 	foreach (new i : Player) {
@@ -6412,14 +6489,14 @@ static DamageFeedAddHitGiven(playerid, issuerid, Float:amount, WEAPON:weapon)
 	for (new i = 0; i != MAX_PLAYERS; i++) {
 	#endif
 		if (s_Spectating[i] == playerid && i != playerid) {
-			DamageFeedAddHit(s_DamageFeedHitsGiven[i], i, issuerid, amount, weapon);
+			DamageFeedAddHit(s_DamageFeedHitsGiven[i], i, issuerid, amount, weapon, is_fatal);
 		}
 	}
 
-	DamageFeedAddHit(s_DamageFeedHitsGiven[playerid], playerid, issuerid, amount, weapon);
+	DamageFeedAddHit(s_DamageFeedHitsGiven[playerid], playerid, issuerid, amount, weapon, is_fatal);
 }
 
-static DamageFeedAddHitTaken(playerid, issuerid, Float:amount, WEAPON:weapon)
+static DamageFeedAddHitTaken(playerid, issuerid, Float:amount, WEAPON:weapon, bool:is_fatal = false)
 {
 	#if defined _Y_ITERATE_LOCAL_VERSION || defined _FOREACH_LOCAL_VERSION
 	foreach (new i : Player) {
@@ -6427,14 +6504,14 @@ static DamageFeedAddHitTaken(playerid, issuerid, Float:amount, WEAPON:weapon)
 	for (new i = 0; i != MAX_PLAYERS; i++) {
 	#endif
 		if (s_Spectating[i] == playerid && i != playerid) {
-			DamageFeedAddHit(s_DamageFeedHitsTaken[i], i, issuerid, amount, weapon);
+			DamageFeedAddHit(s_DamageFeedHitsTaken[i], i, issuerid, amount, weapon, is_fatal);
 		}
 	}
 
-	DamageFeedAddHit(s_DamageFeedHitsTaken[playerid], playerid, issuerid, amount, weapon);
+	DamageFeedAddHit(s_DamageFeedHitsTaken[playerid], playerid, issuerid, amount, weapon, is_fatal);
 }
 
-static DamageFeedAddHit(arr[WC_FEED_HEIGHT][E_DAMAGE_FEED_HIT], playerid, issuerid, Float:amount, WEAPON:weapon)
+static DamageFeedAddHit(arr[WC_FEED_HEIGHT][E_DAMAGE_FEED_HIT], playerid, issuerid, Float:amount, WEAPON:weapon, bool:is_fatal = false)
 {
 	if (!IsDamageFeedActive(playerid)) {
 		return;
@@ -6474,25 +6551,27 @@ static DamageFeedAddHit(arr[WC_FEED_HEIGHT][E_DAMAGE_FEED_HIT], playerid, issuer
 		for (new i = sizeof(arr) - 1; i >= 1; i--) {
 			arr[i] = arr[i - 1];
 		}
+		arr[0][e_IsFatal] = false;
 	}
 
 	arr[idx][e_Tick] = tick;
 	arr[idx][e_Amount] = amount;
 	arr[idx][e_Issuer] = issuerid;
 	arr[idx][e_Weapon] = weapon;
+	arr[idx][e_IsFatal] = (arr[idx][e_IsFatal] || is_fatal);
 
 	GetPlayerName(issuerid, arr[idx][e_Name], MAX_PLAYER_NAME);
 
 	DamageFeedUpdate(playerid, true);
 }
 
-stock WC_ShowDamageFeedGiven(playerid, targetid, Float:amount, WEAPON:weapon)
+stock WC_ShowDamageFeedGiven(playerid, targetid, Float:amount, WEAPON:weapon, bool:is_fatal = false)
 {
 	if (!IsPlayerConnected(playerid) || !IsDamageFeedActive(playerid)) {
 		return 0;
 	}
 
-	DamageFeedAddHitGiven(playerid, targetid, amount, weapon);
+	DamageFeedAddHitGiven(playerid, targetid, amount, weapon, is_fatal);
 	return 1;
 }
 
@@ -6869,11 +6948,13 @@ public OnPlayerDamageDone(playerid, Float:amount, issuerid, WEAPON:weapon, bodyp
 		}
 	}
 
+	new bool:isFatal = (s_PlayerHealth[playerid] <= 0.0005);
+
 	if (issuerid != INVALID_PLAYER_ID) {
-		DamageFeedAddHitGiven(issuerid, playerid, amount, weapon);
+		DamageFeedAddHitGiven(issuerid, playerid, amount, weapon, isFatal);
 	}
 
-	DamageFeedAddHitTaken(playerid, issuerid, amount, weapon);
+	DamageFeedAddHitTaken(playerid, issuerid, amount, weapon, isFatal);
 
 	WC_OnPlayerDamageDone(playerid, amount, issuerid, weapon, bodypart);
 }

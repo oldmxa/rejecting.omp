@@ -521,7 +521,7 @@ public OnPlayerJoin(playerid)
         cache_get_value_bool(0, "show_dmgfeed", User[playerid][showDamageFeed]);
         SetDamageFeedForPlayer(playerid, User[playerid][showDamageFeed] ? 1 : 0);
         cache_get_value_int(0, "dmgfeed_style", User[playerid][dmgFeedStyle]);
-        if(User[playerid][dmgFeedStyle] < 0 || User[playerid][dmgFeedStyle] > 2) User[playerid][dmgFeedStyle] = 1;
+        if(User[playerid][dmgFeedStyle] < 0 || User[playerid][dmgFeedStyle] > 3) User[playerid][dmgFeedStyle] = 1;
         SetDamageFeedStyle(playerid, User[playerid][dmgFeedStyle]);
         cache_get_value_int(0, "dmgfeed_color_left", User[playerid][dmgFeedColorLeft]);
         if(User[playerid][dmgFeedColorLeft] < -1 || User[playerid][dmgFeedColorLeft] >= sizeof(hudShades)) User[playerid][dmgFeedColorLeft] = -1;

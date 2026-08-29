@@ -470,7 +470,9 @@ GetDamageFeedStyleName(style)
 	switch(style)
 	{
 		case 0: name = "Name - Weapon +dmg";
+		case 1: name = "Name (HP) Weapon +dmg";
 		case 2: name = "Name - Weapon +dmg (HP)";
+		case 3: name = "Name - Weapon +dmg - KILL";
 		default: name = "Name (HP) Weapon +dmg";
 	}
 	return name;

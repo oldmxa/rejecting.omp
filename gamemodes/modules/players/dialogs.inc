@@ -283,7 +283,8 @@ ShowDamageFeedDialog(playerid, source)
     new const feedStyles[][] = {
         "Name - Weapon +dmg",
         "Name (HP) Weapon +dmg",
-        "Name - Weapon +dmg (HP)"
+        "Name - Weapon +dmg (HP)",
+        "Name - Weapon +dmg - KILL"
     };
 
     new body[512] = "{BEBEBE}Style ID\t{BEBEBE}Format\n";
@@ -579,7 +580,7 @@ public DIALOG_DMG_FEED_MAIN(playerid, dialogid, response, listitem, string:input
 forward DIALOG_DMG_FEED(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_DMG_FEED(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(response && 0 <= listitem <= 2)
+    if(response && 0 <= listitem <= 3)
     {
         User[playerid][dmgFeedStyle] = listitem;
         SetDamageFeedStyle(playerid, User[playerid][dmgFeedStyle]);
