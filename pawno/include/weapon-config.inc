@@ -6178,13 +6178,43 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 	}
 }
 
-static bool:s_DamageFeedShowHP[MAX_PLAYERS] = {true, ...};
+static s_DamageFeedStyle[MAX_PLAYERS] = {1, ...};
+static s_DamageFeedColLeft[MAX_PLAYERS][24];
+static s_DamageFeedColRight[MAX_PLAYERS][24];
 
-stock SetDamageFeedShowHP(playerid, bool:show)
+stock SetDamageFeedStyle(playerid, style)
 {
 	if (0 <= playerid < MAX_PLAYERS) {
-		s_DamageFeedShowHP[playerid] = show;
+		s_DamageFeedStyle[playerid] = style;
 	}
+}
+
+stock SetDamageFeedColors(playerid, const left[], const right[])
+{
+	if (0 <= playerid < MAX_PLAYERS) {
+		strpack(s_DamageFeedColLeft[playerid], left, 24);
+		strpack(s_DamageFeedColRight[playerid], right, 24);
+	}
+}
+
+static DamageFeedColL(playerid, const padrao[])
+{
+	static buf[24];
+	strunpack(buf, s_DamageFeedColLeft[playerid], 24);
+	if (!buf[0]) {
+		format(buf, sizeof(buf), "%s", padrao);
+	}
+	return buf;
+}
+
+static DamageFeedColR(playerid)
+{
+	static buf[24];
+	strunpack(buf, s_DamageFeedColRight[playerid], 24);
+	if (!buf[0]) {
+		buf = "~w~";
+	}
+	return buf;
 }
 
 static DamageFeedUpdateText(playerid)
@@ -6207,31 +6237,51 @@ static DamageFeedUpdateText(playerid)
 			format(
 				buf,
 				sizeof(buf),
-				"%s~g~~h~%s ~w~+%.2f~n~",
+				"%s%s%s %s+%.2f~n~",
 				buf,
+				DamageFeedColL(playerid, "~g~~h~"),
 				weapon,
+				DamageFeedColR(playerid),
 				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
 			);
-		} else if (s_DamageFeedShowHP[playerid]) {
+		} else if (s_DamageFeedStyle[playerid] == 1) {
 			playerHP = s_PlayerHealth[s_DamageFeedHitsGiven[playerid][i][e_Issuer]] + s_PlayerArmour[s_DamageFeedHitsGiven[playerid][i][e_Issuer]];
 			format(
 				buf,
 				sizeof(buf),
-				"%s~g~~h~%s %s %s ~w~+%.2f~n~",
+				"%s%s%s %s %s %s+%.2f~n~",
 				buf,
+				DamageFeedColL(playerid, "~g~~h~"),
 				s_DamageFeedHitsGiven[playerid][i][e_Name],
-				(playerHP > 0) ? (sprintf("(%s%.0f~g~~h~)", (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP)) : ("-"),
+				(playerHP > 0) ? (sprintf("(%s%.0f%s)", (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP, DamageFeedColL(playerid, "~g~~h~"))) : ("-"),
 				weapon,
+				DamageFeedColR(playerid),
 				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
+			);
+		} else if (s_DamageFeedStyle[playerid] == 2) {
+			playerHP = s_PlayerHealth[s_DamageFeedHitsGiven[playerid][i][e_Issuer]] + s_PlayerArmour[s_DamageFeedHitsGiven[playerid][i][e_Issuer]];
+			format(
+				buf,
+				sizeof(buf),
+				"%s%s%s - %s %s+%.2f %s~n~",
+				buf,
+				DamageFeedColL(playerid, "~g~~h~"),
+				s_DamageFeedHitsGiven[playerid][i][e_Name],
+				weapon,
+				DamageFeedColR(playerid),
+				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009,
+				(playerHP > 0) ? (sprintf("%s(%s%.2f%s)", DamageFeedColL(playerid, "~g~~h~"), (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP, DamageFeedColL(playerid, "~g~~h~"))) : ("")
 			);
 		} else {
 			format(
 				buf,
 				sizeof(buf),
-				"%s~g~~h~%s - %s ~w~+%.2f~n~",
+				"%s%s%s - %s %s+%.2f~n~",
 				buf,
+				DamageFeedColL(playerid, "~g~~h~"),
 				s_DamageFeedHitsGiven[playerid][i][e_Name],
 				weapon,
+				DamageFeedColR(playerid),
 				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
 			);
 		}
@@ -6266,32 +6316,52 @@ static DamageFeedUpdateText(playerid)
 			format(
 				buf,
 				sizeof(buf),
-				"%s~b~~h~%s ~w~-%.2f %s~n~",
+				"%s%s%s %s-%.2f %s~n~",
 				buf,
+				DamageFeedColL(playerid, "~b~~h~"),
 				weapon,
+				DamageFeedColR(playerid),
 				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
-				(s_PlayerHealth[playerid] > 0) ? (sprintf("~b~~h~(~w~%.2f~b~~h~)", s_PlayerHealth[playerid])) : ""
+				(s_PlayerHealth[playerid] > 0) ? (sprintf("%s(~w~%.2f%s)", DamageFeedColL(playerid, "~b~~h~"), s_PlayerHealth[playerid], DamageFeedColL(playerid, "~b~~h~"))) : ""
 			);
-		} else if (s_DamageFeedShowHP[playerid]) {
+		} else if (s_DamageFeedStyle[playerid] == 1) {
 			playerHP = s_PlayerHealth[playerid] + s_PlayerArmour[playerid];
 			format(
 				buf,
 				sizeof(buf),
-				"%s~b~~h~%s - %s ~w~-%.2f %s~n~",
+				"%s%s%s - %s %s-%.2f %s~n~",
 				buf,
+				DamageFeedColL(playerid, "~b~~h~"),
 				s_DamageFeedHitsTaken[playerid][i][e_Name],
 				weapon,
+				DamageFeedColR(playerid),
 				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
-				(playerHP > 0) ? (sprintf("~b~~h~(%s%.0f~b~~h~)", (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP)) : ""
+				(playerHP > 0) ? (sprintf("%s(%s%.0f%s)", DamageFeedColL(playerid, "~b~~h~"), (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP, DamageFeedColL(playerid, "~b~~h~"))) : ""
+			);
+		} else if (s_DamageFeedStyle[playerid] == 2) {
+			playerHP = s_PlayerHealth[playerid] + s_PlayerArmour[playerid];
+			format(
+				buf,
+				sizeof(buf),
+				"%s%s%s - %s %s-%.2f %s~n~",
+				buf,
+				DamageFeedColL(playerid, "~b~~h~"),
+				s_DamageFeedHitsTaken[playerid][i][e_Name],
+				weapon,
+				DamageFeedColR(playerid),
+				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
+				(playerHP > 0) ? (sprintf("%s(%s%.2f%s)", DamageFeedColL(playerid, "~b~~h~"), (playerHP < 50.0) ? ("~r~~h~") : ("~w~"), playerHP, DamageFeedColL(playerid, "~b~~h~"))) : ("")
 			);
 		} else {
 			format(
 				buf,
 				sizeof(buf),
-				"%s~b~~h~%s - %s ~w~-%.2f~n~",
+				"%s%s%s - %s %s-%.2f~n~",
 				buf,
+				DamageFeedColL(playerid, "~b~~h~"),
 				s_DamageFeedHitsTaken[playerid][i][e_Name],
 				weapon,
+				DamageFeedColR(playerid),
 				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009
 			);
 		}

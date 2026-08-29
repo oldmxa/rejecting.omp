@@ -406,7 +406,14 @@ public Account_ShowPersonalizationMenu(playerid)
     new lifeName[24];
     GetLifeStyleName(User[playerid][lifeType], lifeName);
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Life Style\t{FFFFFF}%s\n", pStr, lifeName);
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t{FFFFFF}%s", pStr, (User[playerid][dmgFeedShowHP]) ? ("Name (HP) Weapon") : ("Name - Weapon"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t{FFFFFF}%s\n", pStr, GetDamageFeedStyleName(User[playerid][dmgFeedStyle]));
+    new fcL[24] = "Default", fcR[24] = "Default";
+    if(0 <= User[playerid][dmgFeedColorLeft] < sizeof(hudShades)) format(fcL, sizeof(fcL), "%s", hudShades[User[playerid][dmgFeedColorLeft]][shadeName]);
+    if(0 <= User[playerid][dmgFeedColorRight] < sizeof(hudShades)) format(fcR, sizeof(fcR), "%s", hudShades[User[playerid][dmgFeedColorRight]][shadeName]);
+    new fcAll[24];
+    if(User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight]) format(fcAll, sizeof(fcAll), "%s", fcL);
+    else format(fcAll, sizeof(fcAll), "%s / %s", fcL, fcR);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Feed Color\t{FFFFFF}%s", pStr, fcAll);
 
     new pTitle[64] = "{MAIN}Personalization Menu";
 

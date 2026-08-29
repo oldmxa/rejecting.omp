@@ -292,7 +292,11 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][hideGlobalMsg] = false;
     User[playerid][hideWelcomeMsg] = false;
     User[playerid][show3DDeathTag] = false;
-    User[playerid][dmgFeedShowHP] = true;
+    User[playerid][dmgFeedStyle] = 1;
+    User[playerid][dmgFeedColorLeft] = -1;
+    User[playerid][dmgFeedColorRight] = -1;
+    SetDamageFeedStyle(playerid, 1);
+    ApplyDamageFeedColors(playerid);
     User[playerid][showRandomDeathTags] = true;
     User[playerid][hitSoundID] = 17802;
     User[playerid][killSoundID] = 1057;
@@ -508,8 +512,12 @@ public OnPlayerJoin(playerid)
         cache_get_value_bool(0, "hide_welcome_msg", User[playerid][hideWelcomeMsg]);
         // "Welcome to server" It only appears for new accounts. (OnRegisterHash);
         cache_get_value_bool(0, "show_3d_deathtag", User[playerid][show3DDeathTag]);
-        cache_get_value_bool(0, "dmgfeed_show_hp", User[playerid][dmgFeedShowHP]);
-        SetDamageFeedShowHP(playerid, User[playerid][dmgFeedShowHP]);
+        cache_get_value_int(0, "dmgfeed_style", User[playerid][dmgFeedStyle]);
+        if(User[playerid][dmgFeedStyle] < 0 || User[playerid][dmgFeedStyle] > 2) User[playerid][dmgFeedStyle] = 1;
+        SetDamageFeedStyle(playerid, User[playerid][dmgFeedStyle]);
+        cache_get_value_int(0, "dmgfeed_color_left", User[playerid][dmgFeedColorLeft]);
+        cache_get_value_int(0, "dmgfeed_color_right", User[playerid][dmgFeedColorRight]);
+        ApplyDamageFeedColors(playerid);
         cache_get_value_bool(0, "show_random_deathtag", User[playerid][showRandomDeathTags]);
         cache_get_value_bool(0, "hide_vip_tag", User[playerid][hideVipTag]);
         cache_get_value_bool(0, "hide_clan_tag", User[playerid][hideClanTag]);
@@ -751,7 +759,9 @@ UpdatePlayerData(playerid, disconnect = 0)
         `hide_global_msg` = %d,\
         `hide_welcome_msg` = %d,\
         `show_3d_deathtag` = %d,\
-        `dmgfeed_show_hp` = %d,\
+        `dmgfeed_style` = %d,\
+		`dmgfeed_color_left` = %d,\
+		`dmgfeed_color_right` = %d,\
         `show_random_deathtag` = %d,\
         `hide_vip_tag` = %d,\
         `hide_clan_tag` = %d,\
@@ -840,7 +850,9 @@ UpdatePlayerData(playerid, disconnect = 0)
         User[playerid][hideGlobalMsg],
         User[playerid][hideWelcomeMsg],
         User[playerid][show3DDeathTag],
-        User[playerid][dmgFeedShowHP],
+        User[playerid][dmgFeedStyle],
+        User[playerid][dmgFeedColorLeft],
+        User[playerid][dmgFeedColorRight],
         User[playerid][showRandomDeathTags],
         User[playerid][hideVipTag],
         User[playerid][hideClanTag],

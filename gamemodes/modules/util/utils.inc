@@ -449,6 +449,32 @@ GetDamageStyleName(style)
 	return name;
 }
 
+ApplyDamageFeedColors(playerid)
+{
+	new left[24] = "", right[24] = "";
+
+	new idx = User[playerid][dmgFeedColorLeft];
+	if(0 <= idx < sizeof(hudShades)) format(left, sizeof(left), "%s", hudShades[idx][shadeTag]);
+
+	idx = User[playerid][dmgFeedColorRight];
+	if(0 <= idx < sizeof(hudShades)) format(right, sizeof(right), "%s", hudShades[idx][shadeTag]);
+
+	SetDamageFeedColors(playerid, left, right);
+	return 1;
+}
+
+GetDamageFeedStyleName(style)
+{
+	new name[28];
+	switch(style)
+	{
+		case 0: name = "Name - Weapon";
+		case 2: name = "Weapon +dmg (HP)";
+		default: name = "Name (HP) Weapon";
+	}
+	return name;
+}
+
 GetOnlinePlayerIDByName(const name[])
 {
 	if(isnull(name)) return INVALID_PLAYER_ID;
