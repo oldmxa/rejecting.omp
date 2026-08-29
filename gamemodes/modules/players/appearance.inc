@@ -174,8 +174,7 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
             ShowPersonalizationMenu(playerid);
         }
         case 20: { ShowPlayerLifeTypesList(playerid); }
-        case 21: ShowDamageFeedDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 22: ShowDamageFeedColorMenu(playerid, APPEARANCE_SRC_PERSONAL);
+        case 21: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
     }
     return 1;
 }
@@ -292,3 +291,18 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     ShowChatColorDialog(playerid, APPEARANCE_SRC_NONE);
     return 1;
 }
+
+@cmd(.alts = {"damagefeed", "feedstyle", "dmgstyle"}) dmgfeed(playerid, params[], help)
+{
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_NONE);
+    return 1;
+}
+
+@cmd(.alts = {"feedcolor", "corfeed", "feedcol"}) dmgfeedcolor(playerid, params[], help)
+{
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    ShowDamageFeedColorMenu(playerid, APPEARANCE_SRC_NONE);
+    return 1;
+}
+

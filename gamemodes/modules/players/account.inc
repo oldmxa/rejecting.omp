@@ -406,14 +406,15 @@ public Account_ShowPersonalizationMenu(playerid)
     new lifeName[24];
     GetLifeStyleName(User[playerid][lifeType], lifeName);
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Life Style\t{FFFFFF}%s\n", pStr, lifeName);
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t{FFFFFF}%s\n", pStr, GetDamageFeedStyleName(User[playerid][dmgFeedStyle]));
-    new fcL[24] = "Default", fcR[24] = "Default";
-    if(0 <= User[playerid][dmgFeedColorLeft] < sizeof(hudShades)) format(fcL, sizeof(fcL), "%s", hudShades[User[playerid][dmgFeedColorLeft]][shadeName]);
-    if(0 <= User[playerid][dmgFeedColorRight] < sizeof(hudShades)) format(fcR, sizeof(fcR), "%s", hudShades[User[playerid][dmgFeedColorRight]][shadeName]);
-    new fcAll[24];
+
+    new fcL[48] = "{BEBEBE}Default", fcR[48] = "{BEBEBE}Default";
+    if(0 <= User[playerid][dmgFeedColorLeft] < sizeof(hudShades)) format(fcL, sizeof(fcL), "{%06x}%s", hudShades[User[playerid][dmgFeedColorLeft]][shadeHex], hudShades[User[playerid][dmgFeedColorLeft]][shadeName]);
+    if(0 <= User[playerid][dmgFeedColorRight] < sizeof(hudShades)) format(fcR, sizeof(fcR), "{%06x}%s", hudShades[User[playerid][dmgFeedColorRight]][shadeHex], hudShades[User[playerid][dmgFeedColorRight]][shadeName]);
+    new fcAll[96];
     if(User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight]) format(fcAll, sizeof(fcAll), "%s", fcL);
-    else format(fcAll, sizeof(fcAll), "%s / %s", fcL, fcR);
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Feed Color\t{FFFFFF}%s", pStr, fcAll);
+    else format(fcAll, sizeof(fcAll), "%s {BEBEBE}/ %s", fcL, fcR);
+
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t{FFFFFF}%s {BEBEBE}(%s{BEBEBE})", pStr, GetDamageFeedStyleName(User[playerid][dmgFeedStyle]), fcAll);
 
     new pTitle[64] = "{MAIN}Personalization Menu";
 

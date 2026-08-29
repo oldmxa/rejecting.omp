@@ -465,12 +465,12 @@ ApplyDamageFeedColors(playerid)
 
 GetDamageFeedStyleName(style)
 {
-	new name[28];
+	new name[32];
 	switch(style)
 	{
-		case 0: name = "Name - Weapon";
-		case 2: name = "Weapon +dmg (HP)";
-		default: name = "Name (HP) Weapon";
+		case 0: name = "Name - Weapon +dmg";
+		case 2: name = "Name - Weapon +dmg (HP)";
+		default: name = "Name (HP) Weapon +dmg";
 	}
 	return name;
 }

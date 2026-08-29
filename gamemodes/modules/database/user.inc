@@ -516,7 +516,9 @@ public OnPlayerJoin(playerid)
         if(User[playerid][dmgFeedStyle] < 0 || User[playerid][dmgFeedStyle] > 2) User[playerid][dmgFeedStyle] = 1;
         SetDamageFeedStyle(playerid, User[playerid][dmgFeedStyle]);
         cache_get_value_int(0, "dmgfeed_color_left", User[playerid][dmgFeedColorLeft]);
+        if(User[playerid][dmgFeedColorLeft] < -1 || User[playerid][dmgFeedColorLeft] >= sizeof(hudShades)) User[playerid][dmgFeedColorLeft] = -1;
         cache_get_value_int(0, "dmgfeed_color_right", User[playerid][dmgFeedColorRight]);
+        if(User[playerid][dmgFeedColorRight] < -1 || User[playerid][dmgFeedColorRight] >= sizeof(hudShades)) User[playerid][dmgFeedColorRight] = -1;
         ApplyDamageFeedColors(playerid);
         cache_get_value_bool(0, "show_random_deathtag", User[playerid][showRandomDeathTags]);
         cache_get_value_bool(0, "hide_vip_tag", User[playerid][hideVipTag]);

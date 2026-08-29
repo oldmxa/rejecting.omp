@@ -19,6 +19,7 @@ ReturnToAppearanceSource(playerid)
         case APPEARANCE_SRC_PERSONAL, APPEARANCE_SRC_MENU: ShowPersonalizationMenu(playerid);
         case APPEARANCE_SRC_SETTINGS: ShowSettingsMenu(playerid);
         case APPEARANCE_SRC_PRACTICE: CallLocalFunction("ShowPracticeDialog", "i", playerid);
+        case APPEARANCE_SRC_FEED: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
         case APPEARANCE_SRC_NONE: {} // opened from chat, nothing to reopen
         default: ShowPersonalizationMenu(playerid);
     }
@@ -244,14 +245,43 @@ ShowDamageStyleDialog(playerid, source)
     return Dialog_ShowCallback(playerid, using public DIALOG_DMG_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
 }
 
+ShowDamageFeedMainMenu(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new fcL[48] = "{BEBEBE}Default", fcR[48] = "{BEBEBE}Default";
+    if(0 <= User[playerid][dmgFeedColorLeft] < sizeof(hudShades))  format(fcL, sizeof(fcL), "{%06x}%s", hudShades[User[playerid][dmgFeedColorLeft]][shadeHex], hudShades[User[playerid][dmgFeedColorLeft]][shadeName]);
+    if(0 <= User[playerid][dmgFeedColorRight] < sizeof(hudShades)) format(fcR, sizeof(fcR), "{%06x}%s", hudShades[User[playerid][dmgFeedColorRight]][shadeHex], hudShades[User[playerid][dmgFeedColorRight]][shadeName]);
+
+    new fcAll[96];
+    if(User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight])
+    {
+        format(fcAll, sizeof(fcAll), "%s", fcL);
+    }
+    else
+    {
+        format(fcAll, sizeof(fcAll), "%s {BEBEBE}/ %s", fcL, fcR);
+    }
+
+    new body[512] = "{BEBEBE}Option\t{BEBEBE}Current Setting\n";
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Display Style\t{FFFFFF}%s\n", GetDamageFeedStyleName(User[playerid][dmgFeedStyle])), sizeof(body));
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Colors (Left & Right)\t%s", fcAll), sizeof(body));
+
+    new title[64] = "{MAIN}Personalization - Damage Feed";
+
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_FEED_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
+}
+
 ShowDamageFeedDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
 
     new const feedStyles[][] = {
-        "Name - Weapon +damage",
-        "Name (HP) Weapon +damage",
-        "Name - Weapon +damage (HP)"
+        "Name - Weapon +dmg",
+        "Name (HP) Weapon +dmg",
+        "Name - Weapon +dmg (HP)"
     };
 
     new body[512] = "{BEBEBE}Style ID\t{BEBEBE}Format\n";
@@ -266,22 +296,31 @@ ShowDamageFeedDialog(playerid, source)
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_FEED<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
+    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_FEED<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
 }
 
 ShowDamageFeedColorMenu(playerid, source)
 {
     SetAppearanceSource(playerid, source);
 
-    new fcL[24] = "Default", fcR[24] = "Default";
-    if(0 <= User[playerid][dmgFeedColorLeft] < sizeof(hudShades))  format(fcL, sizeof(fcL), "%s", hudShades[User[playerid][dmgFeedColorLeft]][shadeName]);
-    if(0 <= User[playerid][dmgFeedColorRight] < sizeof(hudShades)) format(fcR, sizeof(fcR), "%s", hudShades[User[playerid][dmgFeedColorRight]][shadeName]);
+    new fcL[48] = "{BEBEBE}Default", fcR[48] = "{BEBEBE}Default";
+    if(0 <= User[playerid][dmgFeedColorLeft] < sizeof(hudShades))  format(fcL, sizeof(fcL), "{%06x}%s", hudShades[User[playerid][dmgFeedColorLeft]][shadeHex], hudShades[User[playerid][dmgFeedColorLeft]][shadeName]);
+    if(0 <= User[playerid][dmgFeedColorRight] < sizeof(hudShades)) format(fcR, sizeof(fcR), "{%06x}%s", hudShades[User[playerid][dmgFeedColorRight]][shadeHex], hudShades[User[playerid][dmgFeedColorRight]][shadeName]);
 
-    new body[512] = "{BEBEBE}Target\t{BEBEBE}Current\n";
-    strcat(body, fmat_return("{FFFFFF}\x95 {B4B5B7}Whole feed\t{FFFFFF}%s\n",
-        (User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight]) ? (fcL) : ("Mixed")), sizeof(body));
-    strcat(body, fmat_return("{FFFFFF}\x95 {B4B5B7}Name and weapon\t{FFFFFF}%s\n", fcL), sizeof(body));
-    strcat(body, fmat_return("{FFFFFF}\x95 {B4B5B7}Damage value\t{FFFFFF}%s", fcR), sizeof(body));
+    new fcAll[96];
+    if(User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight])
+    {
+        format(fcAll, sizeof(fcAll), "%s", fcL);
+    }
+    else
+    {
+        format(fcAll, sizeof(fcAll), "%s {BEBEBE}/ %s", fcL, fcR);
+    }
+
+    new body[512] = "{BEBEBE}Target\t{BEBEBE}Current Color\n";
+    strcat(body, fmat_return("{FFFFFF}\x95 {B4B5B7}Whole feed (All)\t%s\n", fcAll), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}\x95 {B4B5B7}Left side (Name & Weapon)\t%s\n", fcL), sizeof(body));
+    strcat(body, fmat_return("{FFFFFF}\x95 {B4B5B7}Right side (Damage value)\t%s", fcR), sizeof(body));
 
     new title[64] = "{MAIN}Personalization - Feed Color";
 
@@ -298,11 +337,12 @@ ShowDamageFeedColorDialog(playerid, source, side)
     new selected;
     switch(side)
     {
+        case 0:  selected = User[playerid][dmgFeedColorLeft];
         case 1:  selected = User[playerid][dmgFeedColorRight];
         case 2:  selected = (User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight]) ? User[playerid][dmgFeedColorLeft] : -2;
         default: selected = User[playerid][dmgFeedColorLeft];
     }
-    new body[3500] = "Name\tPreview\n";
+    new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
 
     strcat(body, fmat_return("%s{BEBEBE}Default\t{BEBEBE}Preview\n",
         STYLE_MARK(selected == -1)), sizeof(body));
@@ -313,12 +353,12 @@ ShowDamageFeedColorDialog(playerid, source, side)
             STYLE_MARK(selected == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
     }
 
-    new sideName[8];
+    new sideName[16];
     switch(side)
     {
-        case 1:  sideName = "Right";
-        case 2:  sideName = "All";
-        default: sideName = "Left";
+        case 0:  sideName = "Left Side";
+        case 1:  sideName = "Right Side";
+        default: sideName = "Whole Feed";
     }
 
     new title[64];
@@ -326,7 +366,7 @@ ShowDamageFeedColorDialog(playerid, source, side)
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_FEED_COLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "*", "<");
+    return Dialog_ShowCallback(playerid, using public DIALOG_DMG_FEED_COLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
 }
 
 ShowHitmarkColorDialog(playerid, source)
@@ -505,6 +545,19 @@ public DIALOG_DMG_STYLE(playerid, dialogid, response, listitem, string:inputtext
     return ReturnToAppearanceSource(playerid);
 }
 
+forward DIALOG_DMG_FEED_MAIN(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_DMG_FEED_MAIN(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response) return ReturnToAppearanceSource(playerid);
+
+    switch(listitem)
+    {
+        case 0: ShowDamageFeedDialog(playerid, APPEARANCE_SRC_FEED);
+        case 1: ShowDamageFeedColorMenu(playerid, APPEARANCE_SRC_FEED);
+    }
+    return 1;
+}
+
 forward DIALOG_DMG_FEED(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_DMG_FEED(playerid, dialogid, response, listitem, string:inputtext[])
 {
@@ -525,6 +578,7 @@ public DIALOG_DMG_FEED_COLMENU(playerid, dialogid, response, listitem, string:in
 
     switch(listitem)
     {
+        case 0:  ShowDamageFeedColorDialog(playerid, GetAppearanceSource(playerid), 2);
         case 1:  ShowDamageFeedColorDialog(playerid, GetAppearanceSource(playerid), 0);
         case 2:  ShowDamageFeedColorDialog(playerid, GetAppearanceSource(playerid), 1);
         default: ShowDamageFeedColorDialog(playerid, GetAppearanceSource(playerid), 2);
@@ -535,14 +589,25 @@ public DIALOG_DMG_FEED_COLMENU(playerid, dialogid, response, listitem, string:in
 forward DIALOG_DMG_FEED_COLOR(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_DMG_FEED_COLOR(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if(response && 0 <= listitem <= sizeof(hudShades))
+    if(!response)
+    {
+        DeletePVar(playerid, "dmgFeedColSide");
+        return ShowDamageFeedColorMenu(playerid, GetAppearanceSource(playerid));
+    }
+
+    if(0 <= listitem <= sizeof(hudShades))
     {
         new idx = listitem - 1;
 
         switch(GetPVarInt(playerid, "dmgFeedColSide"))
         {
+            case 0: User[playerid][dmgFeedColorLeft] = idx;
             case 1: User[playerid][dmgFeedColorRight] = idx;
-            case 2: { User[playerid][dmgFeedColorLeft] = idx; User[playerid][dmgFeedColorRight] = idx; }
+            case 2:
+            {
+                User[playerid][dmgFeedColorLeft] = idx;
+                User[playerid][dmgFeedColorRight] = idx;
+            }
             default: User[playerid][dmgFeedColorLeft] = idx;
         }
 
