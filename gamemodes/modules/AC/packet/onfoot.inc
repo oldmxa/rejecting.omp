@@ -71,6 +71,7 @@ IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
         }
     }
 
+    AC_CheckHologram(playerid, onFootData[PR_specialAction]);
     AC_CheckUpsideDown(playerid, onFootData[PR_quaternion][1], onFootData[PR_quaternion][2]);
     AC_CheckStun(playerid, onFootData[PR_animationId]);
     AC_CheckNoFallAnim(playerid, onFootData[PR_animationId]);

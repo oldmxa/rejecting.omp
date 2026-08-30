@@ -151,6 +151,9 @@ new const AC_ACTION_COLOR[][] =
 #define AC_CAR_SLAPPER        (56)
 #define AC_INFINITE_AMMO      (57)
 #define AC_FAKE_LAG           (58)
+#define AC_FAKE_SERIAL        (59)
+#define AC_FAKE_ACTION        (60)
+#define AC_FAKE_SPEED         (61)
 
 forward OnRejectingACDetection(playerid, code);
 
@@ -228,7 +231,10 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Weapon hack",                  "Spawning unauthorized weapons",           AC_CAT_MEMORY,   true},
     {"Car slapper",                  "Moving unoccupied vehicles remotely",     AC_CAT_CRASHER,  true},
     {"Infinite ammo",                "Ammo not decreasing after firing",        AC_CAT_AIM,      true},
-    {"Fake lag",                     "Stops syncing in bursts to dodge damage", AC_CAT_EXPLOIT,  true}
+    {"Fake lag",                     "Stops syncing in bursts to dodge damage", AC_CAT_EXPLOIT,  true},
+    {"Fake serial",                  "GPCI is not a well formed client serial", AC_CAT_EXPLOIT,  true},
+    {"Fake action",                  "Special action forged to clone the body", AC_CAT_EXPLOIT,  true},
+    {"Fake speed",                   "Declared speed does not match movement",  AC_CAT_MOVEMENT, true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))

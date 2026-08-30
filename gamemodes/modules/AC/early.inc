@@ -30,6 +30,14 @@
 #define AC_NULL_HOLD      (2000)
 #define AC_NULL_SAMPLE    (500)
 
+#define AC_HOLO_HOLD      (4000)
+#define AC_HOLO_SAMPLE    (1000)
+
+#define AC_RATIO_SPEED    (6.0)
+#define AC_RATIO_LOW      (0.55)
+#define AC_RATIO_HOLD     (3000)
+#define AC_RATIO_SAMPLE   (500)
+
 #define AC_BPROOF_GAP     (25.0)
 #define AC_BPROOF_HOLD    (3000)
 #define AC_BPROOF_SETTLE  (2000)
@@ -304,6 +312,73 @@ stock Float:AC_PositionSpeed(playerid)
     return ACNullSpeed[playerid];
 }
 
+static ACHoloSince[MAX_PLAYERS], ACHoloLog[MAX_PLAYERS];
+static ACRatioSince[MAX_PLAYERS], ACRatioLog[MAX_PLAYERS];
+
+stock AC_CheckHologram(playerid, specialAction)
+{
+    new const tick = GetTickCount();
+
+    if (specialAction != _:SPECIAL_ACTION_ENTER_VEHICLE
+     || !IsPlayerLogged(playerid) || IsPlayerAFK(playerid)
+     || GetPlayerState(playerid) != PLAYER_STATE_ONFOOT
+     || GetPlayerVehicleID(playerid) != 0
+     || tick - ACTeleportTick[playerid] < AC_MOVE_GRACE)
+    {
+        ACHoloSince[playerid] = 0;
+        return 0;
+    }
+
+    if (!ACHoloSince[playerid]) ACHoloSince[playerid] = tick;
+
+    if (tick - ACHoloLog[playerid] >= AC_HOLO_SAMPLE)
+    {
+        ACHoloLog[playerid] = tick;
+
+        AC_Debug(playerid, AC_FAKE_ACTION, "special action %d held %d ms on foot (limit %d)",
+            specialAction, tick - ACHoloSince[playerid], AC_HOLO_HOLD);
+    }
+
+    if (tick - ACHoloSince[playerid] < AC_HOLO_HOLD) return 0;
+
+    ACHoloSince[playerid] = 0;
+    CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_FAKE_ACTION);
+    return 1;
+}
+
+static AC_CheckSpeedRatio(playerid, tick, Float:actual, Float:reported)
+{
+    if (actual < AC_RATIO_SPEED || reported < AC_NULL_REPORTED)
+    {
+        ACRatioSince[playerid] = 0;
+        return 0;
+    }
+
+    new const Float:speedRatio = reported / actual;
+
+    if (speedRatio > AC_RATIO_LOW)
+    {
+        ACRatioSince[playerid] = 0;
+        return 0;
+    }
+
+    if (!ACRatioSince[playerid]) ACRatioSince[playerid] = tick;
+
+    if (tick - ACRatioLog[playerid] >= AC_RATIO_SAMPLE)
+    {
+        ACRatioLog[playerid] = tick;
+
+        AC_Debug(playerid, AC_FAKE_SPEED, "position %.1f u/s, packet declares %.1f u/s, ratio %.2f, held %d ms",
+            actual, reported, speedRatio, tick - ACRatioSince[playerid]);
+    }
+
+    if (tick - ACRatioSince[playerid] < AC_RATIO_HOLD) return 0;
+
+    ACRatioSince[playerid] = 0;
+    CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_FAKE_SPEED);
+    return 1;
+}
+
 stock AC_CheckNullVelocity(playerid, Float:px, Float:py, Float:pz, Float:vx, Float:vy, Float:vz)
 {
     new tick = GetTickCount();
@@ -338,6 +413,8 @@ stock AC_CheckNullVelocity(playerid, Float:px, Float:py, Float:pz, Float:vx, Flo
     }
 
     new Float:reported = VectorSize(vx, vy, vz) * 179.28;
+
+    AC_CheckSpeedRatio(playerid, tick, ACNullSpeed[playerid], reported);
 
     if (!(ACNullSpeed[playerid] >= AC_NULL_SPEED && reported < AC_NULL_REPORTED))
     {
