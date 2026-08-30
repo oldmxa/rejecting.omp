@@ -14,7 +14,7 @@ stock PerformGPCILookup(playerid, const targetname[], const serial[])
                 cache_get_value_name_int(i, "ban_id", ban_id);
 
                 strcat(aka_list, fmat_return("%s%s\n",
-                    (ban_id > 0) ? ("{F3230E}* {FFFFFF}") : (""), name), sizeof(aka_list));
+                    (ban_id > 0) ? ("{F84F31}* {FFFFFF}") : (""), name), sizeof(aka_list));
             }
         }
         else
@@ -24,10 +24,10 @@ stock PerformGPCILookup(playerid, const targetname[], const serial[])
 
         new dialog_body[2048];
         format(dialog_body, sizeof(dialog_body),
-            "{FFFFFF}Target: {F3230E}%s\n{FFFFFF}GPCI: {F3230E}%s\n\n{FFFFFF}Accounts on this GPCI:\n%s\n\n{FFFF00}INFO: {FFFFFF}GPCI matches are not 100%% reliable.\n{F3230E}* {FFFFFF}= Banned account",
+            "{FFFFFF}Target: {MAIN}%s\n{FFFFFF}GPCI: {MAIN}%s\n\n{FFFFFF}Accounts on this GPCI:\n%s\n\n{FFD700}INFO: {FFFFFF}GPCI matches are not 100%% reliable.\n{F84F31}* {FFFFFF}= Banned account",
             targetname, serial, aka_list);
 
-        Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "{FFFFFF}GPCI Lookup", dialog_body, "Close", "");
+        Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "{MAIN}GPCI Lookup", dialog_body, "Close", "");
     }
     mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT a.username, b.id as ban_id FROM accounts a LEFT JOIN banimentos b ON a.username = b.username WHERE a.gpci = '%e' LIMIT 20", serial);
     MySQL_TQueryInline(dbHandle, using inline OnGPCILookup, queryGlobal);
@@ -44,7 +44,7 @@ stock PerformIPLookup(playerid, const targetname[], const ip[], const gpci[] = "
         new rows = cache_num_rows();
 
         new aka_list[2048];
-        strcat(aka_list, "Account\tLast IP\tStatus\n");
+        strcat(aka_list, "{BEBEBE}Account\t{BEBEBE}Last IP\t{BEBEBE}Status\n");
 
         if(rows)
         {
@@ -55,10 +55,10 @@ stock PerformIPLookup(playerid, const targetname[], const ip[], const gpci[] = "
                 cache_get_value_name(i, "lastip", rowip, sizeof(rowip));
                 cache_get_value_name_int(i, "ban_id", ban_id);
 
-                strcat(aka_list, fmat_return("{FFFFFF}%s\t{BEBEBE}%s\t%s\n",
+                strcat(aka_list, fmat_return("{B4B5B7}\x95 {FFFFFF}%s\t{BEBEBE}%s\t%s\n",
                     name,
                     (rowip[0] == '\0') ? ("-") : (rowip),
-                    (ban_id > 0) ? ("{F3230E}Banned") : ("{23C552}Clean")), sizeof(aka_list));
+                    (ban_id > 0) ? ("{F84F31}Banned") : ("{23C552}Clean")), sizeof(aka_list));
             }
         }
         else

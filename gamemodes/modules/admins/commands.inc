@@ -237,7 +237,7 @@ ShowAdminCmds(playerid)
     }
 
     new title[64];
-    format(title, sizeof(title), "{BEBEBE}Commands Admin - Page {23C552}%d", page + 1);
+    format(title, sizeof(title), "{MAIN}Admin Commands {B4B5B7}- Page {23C552}%d", page + 1);
 
     new btn_next[16], btn_back[16];
     format(btn_next, sizeof(btn_next), (page + 1 < total_pages) ? ("\xBB") : ("Close"));
@@ -268,7 +268,7 @@ ShowAdminCmds(playerid)
 
     new targetid, message[128];
     if(sscanf(params, "us[128]", targetid, message))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/d [id] [message]");
+        return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/d [id/nickname] [message]");
 
     if(!IsPlayerLogged(targetid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Player not connected or not logged in!");
