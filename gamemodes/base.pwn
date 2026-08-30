@@ -46,6 +46,7 @@
 
 #include <PreviewModelDialog>
 
+#define WC_CUSTOM_VENDING_MACHINES false
 #include <weapon-config>
 #include <zmessage>
 #include <sort-inline>

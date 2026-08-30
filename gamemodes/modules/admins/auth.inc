@@ -268,7 +268,7 @@ stock SendAdminLoginWelcome(playerid)
     new const adminWelcomeMsgs[][] = {
         "{MAIN}[ADMIN] {FFFFFF}Welcome back, {MAIN}%s{FFFFFF}! Your administrator commands are now unlocked and ready.",
         "{MAIN}[ADMIN] {FFFFFF}Access granted, Administrator {MAIN}%s{FFFFFF}. Staff permissions have been loaded successfully.",
-        "{MAIN}[ADMIN] {FFFFFF}Welcome {MAIN}%s{FFFFFF}! Authenticated as Administrator — all admin tools are active.",
+        "{MAIN}[ADMIN] {FFFFFF}Welcome {MAIN}%s{FFFFFF}! Authenticated as Administrator \x97 all admin tools are active.",
         "{MAIN}[ADMIN] {FFFFFF}Welcome back {MAIN}%s{FFFFFF}, your administrator commands and monitoring systems are online."
     };
 
