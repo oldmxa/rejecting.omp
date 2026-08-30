@@ -20,6 +20,26 @@ stock AC_CheckNoFallAnim(playerid, animationId)
     return 0;
 }
 
+#define AC_SURF_OFFSET_MAX   (50.0)
+#define AC_SURF_OFFSET_MIN_Z (-35.0)
+
+static bool:AC_SanitizeSurfOffsets(playerid, data[PR_OnFootSync])
+{
+    if (floatabs(data[PR_surfingOffsets][0]) < AC_SURF_OFFSET_MAX
+     && floatabs(data[PR_surfingOffsets][1]) < AC_SURF_OFFSET_MAX
+     && floatabs(data[PR_surfingOffsets][2]) < AC_SURF_OFFSET_MAX
+     && data[PR_surfingOffsets][2] > AC_SURF_OFFSET_MIN_Z) return false;
+
+    AC_Debug(playerid, AC_INVISIBLE_SURF, "surf offsets %.1f %.1f %.1f (vehicle %d) zeroed",
+        data[PR_surfingOffsets][0], data[PR_surfingOffsets][1], data[PR_surfingOffsets][2],
+        data[PR_surfingVehicleId]);
+
+    data[PR_surfingOffsets][0] = 0.0;
+    data[PR_surfingOffsets][1] = 0.0;
+    data[PR_surfingOffsets][2] = 0.0;
+    return true;
+}
+
 const AC_PM_PLAYER_SYNC = 207;
 
 IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
@@ -33,6 +53,12 @@ IPacket:AC_PM_PLAYER_SYNC(playerid, BitStream:bs)
 
     BS_IgnoreBits(bs, 8);
     BS_ReadOnFootSync(bs, onFootData);
+
+    if (AC_SanitizeSurfOffsets(playerid, onFootData))
+    {
+        BS_SetWriteOffset(bs, 8);
+        BS_WriteOnFootSync(bs, onFootData);
+    }
 
     if (onFootData[PR_specialAction] == _:SPECIAL_ACTION_NONE)
     {
