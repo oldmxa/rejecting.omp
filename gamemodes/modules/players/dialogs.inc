@@ -19,6 +19,7 @@ ReturnToAppearanceSource(playerid)
         case APPEARANCE_SRC_PERSONAL, APPEARANCE_SRC_MENU: ShowPersonalizationMenu(playerid);
         case APPEARANCE_SRC_PRACTICE: CallLocalFunction("ShowPracticeDialog", "i", playerid);
         case APPEARANCE_SRC_FEED: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
+        case APPEARANCE_SRC_DMG: ShowDamageStyleDialog(playerid, APPEARANCE_SRC_PERSONAL);
         case APPEARANCE_SRC_NONE: {} // opened from chat, nothing to reopen
         default: ShowPersonalizationMenu(playerid);
     }
@@ -229,8 +230,28 @@ ShowDamageStyleDialog(playerid, source)
         "X (X)"
     };
 
-    new body[512] = "{BEBEBE}Option\t{BEBEBE}Status / Format\n";
+    new hitHex = (User[playerid][hitmarkColor] >>> 8);
+    new hitColorName[48];
+    new bool:foundPreset = false;
+    for(new i; i < sizeof(hudShades); i++)
+    {
+        if(hudShades[i][shadeHex] == hitHex)
+        {
+            format(hitColorName, sizeof(hitColorName), "{%06x}%s", hudShades[i][shadeHex], hudShades[i][shadeName]);
+            foundPreset = true;
+            break;
+        }
+    }
+    if(!foundPreset)
+    {
+        if(hitHex == 0xFFFFFF) format(hitColorName, sizeof(hitColorName), "{FFFFFF}Default White");
+        else format(hitColorName, sizeof(hitColorName), "{%06x}#%06x", hitHex, hitHex);
+    }
+
+    new body[768] = "{BEBEBE}Option\t{BEBEBE}Status / Format\n";
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Damage Informer State\t%s\n", (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden")), sizeof(body));
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Damage Informer Color\t%s\n", hitColorName), sizeof(body));
+
     for(new i; i < sizeof(damageStyles); i++)
     {
         new bool:isSelected = (User[playerid][dmgInformerStyle] == i && User[playerid][showDamageInformer]);
@@ -375,18 +396,59 @@ ShowHitmarkColorDialog(playerid, source)
 {
     SetAppearanceSource(playerid, source);
 
-    new body[512];
-    format(body, sizeof body, ""COL_WHITE"Change the color of your hitmark.\n\
-Your current color: {%06x}#%x\n\
-"COL_WHITE"Follow this model: \n{CC0000}FF{00CC00}FF{0000CC}FF"COL_WHITE"FF\n\
-Visit this site if you prefer >> https://g.co/kgs/A2aHcY\n\
-This is the order >> {CC0000}Red, {00CC00}Green {0000CC}Blue "COL_WHITE"and Alpha (Transparency)",
-        User[playerid][hitmarkColor] >>> 8, User[playerid][hitmarkColor]);
+    new curHex = (User[playerid][hitmarkColor] >>> 8);
+    new body[3500];
+    format(body, sizeof(body), "{BEBEBE}Name\t{BEBEBE}Preview\n");
 
-    new title[64] = "{MAIN}Change hitmark color";
+    new bool:isDef = (curHex == 0xFFFFFF);
+    strcat(body, fmat_return("%s{FFFFFF}Default White (Label)\t{FFFFFF}Sample (45)\n",
+        isDef ? ("{23C552}> ") : ("{B4B5B7}\x95 ")), sizeof(body));
+
+    new bool:isCustom = true;
+    if(isDef) isCustom = false;
+    for(new i; i < sizeof(hudShades); i++)
+    {
+        if(hudShades[i][shadeHex] == curHex)
+        {
+            isCustom = false;
+            break;
+        }
+    }
+
+    strcat(body, fmat_return("%s{FFFFFF}Custom HEX Color\t{%06x}#%06x\n",
+        isCustom ? ("{23C552}> ") : ("{B4B5B7}\x95 "), curHex, curHex), sizeof(body));
+
+    for(new i; i < sizeof(hudShades); i++)
+    {
+        new bool:isSelected = (hudShades[i][shadeHex] == curHex);
+        strcat(body, fmat_return("%s{%06x}%s\t{%06x}Sample (45)\n",
+            isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+    }
+
+    new title[64] = "{MAIN}Damage Informer - Color";
 
     format_MainColor(playerid, title);
-    return Dialog_ShowCallback(playerid, using public DIALOG_HITMARK<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Cancel");
+    format_MainColor(playerid, body);
+    return Dialog_ShowCallback(playerid, using public DIALOG_HITMARK<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
+}
+
+ShowHitmarkCustomHexDialog(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new curHex = (User[playerid][hitmarkColor] >>> 8);
+    new body[512];
+    format(body, sizeof(body),
+"{FFFFFF}Current Damage Informer Color: {%06x}#%06x\n\n\
+{BEBEBE}Enter your new 6-digit HEX color code below (e.g. {23C552}23C552{BEBEBE} for Green, {F84F31}F84F31{BEBEBE} for Red).\n\
+{BEBEBE}Valid characters: 0-9, A-F.",
+        curHex, curHex);
+
+    new title[64] = "{MAIN}Custom HEX Color - Damage Informer";
+
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+    return Dialog_ShowCallback(playerid, using public DIALOG_HITMARK_CUSTOM_HEX<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "<");
 }
 
 static ApplyHudShade(playerid, listitem, bool:secondary)
@@ -546,11 +608,16 @@ public DIALOG_DMG_STYLE(playerid, dialogid, response, listitem, string:inputtext
         SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
         return ShowDamageStyleDialog(playerid, GetAppearanceSource(playerid));
     }
-    else if(1 <= listitem <= 4)
+    else if(listitem == 1)
     {
-        User[playerid][dmgInformerStyle] = listitem - 1;
+        return ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_DMG);
+    }
+    else if(2 <= listitem <= 5)
+    {
+        User[playerid][dmgInformerStyle] = listitem - 2;
         User[playerid][showDamageInformer] = true;
         SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        return ShowDamageStyleDialog(playerid, GetAppearanceSource(playerid));
     }
 
     return ReturnToAppearanceSource(playerid);
@@ -643,16 +710,53 @@ public DIALOG_HITMARK(playerid, dialogid, response, listitem, string:inputtext[]
     if(!response)
         return ReturnToAppearanceSource(playerid);
 
-    if(strlen(inputtext) != 8)
-        return SendClientMessage(playerid, -1, "%s", HITMARK_HELP);
+    if(listitem == 0)
+    {
+        User[playerid][hitmarkColor] = 0xFFFFFFFF;
+        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        return ShowHitmarkColorDialog(playerid, GetAppearanceSource(playerid));
+    }
+    else if(listitem == 1)
+    {
+        return ShowHitmarkCustomHexDialog(playerid, GetAppearanceSource(playerid));
+    }
 
-    if(!IsHex(inputtext))
-        return SendClientMessage(playerid, -1, "%s", HITMARK_HELP_2);
+    new selectedIdx = listitem - 2;
+    if(0 <= selectedIdx < sizeof(hudShades))
+    {
+        User[playerid][hitmarkColor] = (hudShades[selectedIdx][shadeHex] << 8) | 0xFF;
+        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+    }
 
-    User[playerid][hitmarkColor] = HexToInt(inputtext);
-    SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+    return ShowHitmarkColorDialog(playerid, GetAppearanceSource(playerid));
+}
 
-    return ReturnToAppearanceSource(playerid);
+forward DIALOG_HITMARK_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_HITMARK_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response)
+    {
+        return ShowHitmarkColorDialog(playerid, GetAppearanceSource(playerid));
+    }
+
+    new colorVal;
+    if(strlen(inputtext) == 8 && IsHex(inputtext))
+    {
+        User[playerid][hitmarkColor] = HexToInt(inputtext);
+        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        return ShowHitmarkColorDialog(playerid, GetAppearanceSource(playerid));
+    }
+    else if(IsValidHexColor(inputtext, colorVal))
+    {
+        User[playerid][hitmarkColor] = (colorVal << 8) | 0xFF;
+        SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        return ShowHitmarkColorDialog(playerid, GetAppearanceSource(playerid));
+    }
+    else
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid HEX format! Please enter 6 characters (e.g. FF0000).");
+        return ShowHitmarkCustomHexDialog(playerid, GetAppearanceSource(playerid));
+    }
 }
 
 

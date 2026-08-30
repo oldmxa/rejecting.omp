@@ -444,3 +444,10 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     return 1;
 }
 
+@cmd(.alts = {"hitmarkcolor", "hitcolor", "dmginformercolor", "cordano"}) hitmarkcol(playerid, params[], help)
+{
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_NONE);
+    return 1;
+}
+

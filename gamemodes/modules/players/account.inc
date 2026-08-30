@@ -293,7 +293,24 @@ public Account_ShowPersonalizationMenu(playerid)
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Clan HUD\t%s\n", pStr, (User[playerid][showClanHud]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
 
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Informer\t%s {447DBF}%s\n", pStr, (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageStyleName(User[playerid][dmgInformerStyle]));
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hitmarker Color\t{%06x}######\n", pStr, (User[playerid][hitmarkColor] >>> 8));
+    new hitHex = (User[playerid][hitmarkColor] >>> 8);
+    new hitColName[48];
+    new bool:foundHitShade = false;
+    for(new i; i < sizeof(hudShades); i++)
+    {
+        if(hudShades[i][shadeHex] == hitHex)
+        {
+            format(hitColName, sizeof(hitColName), "{%06x}%s", hudShades[i][shadeHex], hudShades[i][shadeName]);
+            foundHitShade = true;
+            break;
+        }
+    }
+    if(!foundHitShade)
+    {
+        if(hitHex == 0xFFFFFF) format(hitColName, sizeof(hitColName), "{FFFFFF}White");
+        else format(hitColName, sizeof(hitColName), "{%06x}#%06x", hitHex, hitHex);
+    }
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hitmarker Color\t%s\n", pStr, hitColName);
 
     new hudIdx = GetPlayerHudColorIndex(playerid);
 
