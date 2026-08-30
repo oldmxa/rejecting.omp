@@ -387,6 +387,7 @@ public OnPlayerDisconnect(playerid, reason)
 
 stock LoadPlayerAchievements(playerid, const achData[])
 {
+    ResetPlayerAchievements(playerid);
     DeserializeAchievements(playerid, achData);
 
     GivePlayerAchievement(playerid, ACH_WELCOME);

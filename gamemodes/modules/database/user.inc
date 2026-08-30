@@ -307,6 +307,64 @@ public OnRegisterHash(playerid, accountname[])
 	return true;
 }
 
+stock ResetPlayerPreLoginState(playerid)
+{
+    User[playerid] = User[MAX_PLAYERS];
+    ResetPlayerAchievements(playerid);
+    ResetPlayerMoney(playerid);
+    ResetPlayerWeapons(playerid);
+    SetPlayerColor(playerid, 0xFFFFFFFF);
+
+    User[playerid][user_sqlid] = 0;
+    User[playerid][isLogged] = false;
+    User[playerid][clanID] = -1;
+    User[playerid][clanRole] = -1;
+    User[playerid][vipLevel] = 0;
+    User[playerid][vipExpire] = 0;
+    User[playerid][vipHeadTag] = 0;
+    User[playerid][adminLevel] = 0;
+    User[playerid][isAdminLogged] = false;
+    User[playerid][playerMoney] = 0;
+    User[playerid][playerCoins] = 0;
+    User[playerid][playerKills] = 0;
+    User[playerid][playerDeaths] = 0;
+    User[playerid][maxDamage] = 0;
+    User[playerid][maxStreak] = 0;
+    User[playerid][wonArenas] = 0;
+    User[playerid][duelWins] = 0;
+    User[playerid][duelLosses] = 0;
+    User[playerid][duel2v2Wins] = 0;
+    User[playerid][duel2v2Losses] = 0;
+    for(new w = 0; w < 4; w++) User[playerid][playerWeapons][w] = 0;
+
+    User[playerid][locationId] = -1;
+    User[playerid][lastLocation] = ARENA_AFK;
+    User[playerid][hudColor] = ServerDefaultHudColor;
+    User[playerid][hudShadeOne] = ServerDefaultHudShadeOne;
+    User[playerid][hudShadeTwo] = ServerDefaultHudShadeTwo;
+    User[playerid][chatMainColor] = ServerDefaultChatMainColor;
+    User[playerid][hudType] = ServerDefaultHud;
+    User[playerid][lifeType] = LIFE_DEFAULT;
+    User[playerid][showClanHud] = true;
+    User[playerid][showConnectMsg] = true;
+    User[playerid][hideGlobalMsg] = false;
+    User[playerid][hideWelcomeMsg] = false;
+    User[playerid][show3DDeathTag] = false;
+    User[playerid][showDamageFeed] = true;
+    User[playerid][dmgFeedStyle] = 1;
+    User[playerid][dmgFeedColorLeft] = -1;
+    User[playerid][dmgFeedColorRight] = -1;
+    User[playerid][showRandomDeathTags] = true;
+    User[playerid][showDamageInformer] = true;
+    User[playerid][hitSoundID] = 17802;
+    User[playerid][killSoundID] = 1057;
+
+    SetPVarInt(playerid, "LoginType", 0);
+    UpdateRoundStatsColors(playerid);
+    RecreatePlayerFpsPingTd(playerid);
+    return 1;
+}
+
 forward DIALOG_LOGIN_NICK(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_LOGIN_NICK(playerid, dialogid, response, listitem, string:inputtext[])
 {
@@ -337,7 +395,7 @@ public DIALOG_LOGIN_NICK(playerid, dialogid, response, listitem, string:inputtex
             return CallLocalFunction("ShowChangeNickDialog", "d", playerid);
         }
 
-        User[playerid] = User[MAX_PLAYERS];
+        ResetPlayerPreLoginState(playerid);
 
         GetPlayerName(playerid, User[playerid][userName], MAX_PLAYER_NAME);
         
