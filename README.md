@@ -1,7 +1,7 @@
 <div align="center">
   <img src="image/logo.png" alt="rejecting.omp" width="180"/>
 
-  # rejecting.omp
+  <br/><br/>
 
   **Deathmatch gamemode for [open.mp](https://open.mp), developed by oldmxa.**
 
