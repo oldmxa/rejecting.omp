@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="image/logo.png" alt="rejecting.omp" width="180"/>
+  <img src="image/logo.png" alt="rejecting.omp" width="320"/>
 
   <br/><br/>
 
