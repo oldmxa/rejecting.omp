@@ -157,7 +157,7 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsNull(params)) return SendClientMessage(playerid, -1, "%s", WEATHER_HELP);
+    if(IsNull(params)) return ShowPersonalWeatherDialog(playerid, APPEARANCE_SRC_NONE);
     if(!IsNumeric(params)) return SendClientMessage(playerid, COLOR_BLUE, "%s", IS_NOT_NUMERIC);
 
     User[playerid][weather] = strval(params);
@@ -170,7 +170,7 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsNull(params)) return SendClientMessage(playerid, -1, "%s", TIME_HELP);
+    if(IsNull(params)) return ShowPersonalTimeDialog(playerid, APPEARANCE_SRC_NONE);
     if(!IsNumeric(params)) return SendClientMessage(playerid,COLOR_BLUE, "%s", IS_NOT_NUMERIC);
 
     User[playerid][time] = strval(params);

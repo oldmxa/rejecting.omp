@@ -153,8 +153,8 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 6: { strcopy(cmd, "/time"); Command_ReProcess(playerid, cmd, 0); }
-        case 7: { strcopy(cmd, "/weather"); Command_ReProcess(playerid, cmd, 0); }
+        case 6: ShowPersonalTimeDialog(playerid);
+        case 7: ShowPersonalWeatherDialog(playerid);
         case 8: {
             User[playerid][showPlayerHud] = !User[playerid][showPlayerHud];
             if(User[playerid][showPlayerHud]) {
@@ -213,6 +213,100 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
         case 25: { ShowPlayerLifeTypesList(playerid); }
         case 26: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
     }
+    return 1;
+}
+
+forward ShowPersonalTimeDlg(playerid, source);
+public ShowPersonalTimeDlg(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new title[64] = "{MAIN}Personalization - World Time";
+    format_MainColor(playerid, title);
+
+    new body[256];
+    format(body, sizeof(body),
+        "{FFFFFF}Enter the desired world time below:\n\n\
+        {B4B5B7}Hours: 0 - 23 (Current: {FFFFFF}%02d:00{B4B5B7})",
+        User[playerid][time]);
+
+    Dialog_ShowCallback(playerid, using public DIALOG_PERSONAL_TIME<iiiis>, DIALOG_STYLE_INPUT, title, body, "Apply", "Back");
+    return 1;
+}
+
+forward DIALOG_PERSONAL_TIME(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_PERSONAL_TIME(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response)
+    {
+        return ReturnToAppearanceSource(playerid);
+    }
+
+    if(!IsPlayerLogged(playerid))
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    if(isnull(inputtext) || !IsNumeric(inputtext))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Please enter a valid numeric hour (0-23).");
+        return ShowPersonalTimeDialog(playerid, GetAppearanceSource(playerid));
+    }
+
+    new t = strval(inputtext);
+    if(t < 0 || t > 23)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}World time must be between 0 and 23.");
+        return ShowPersonalTimeDialog(playerid, GetAppearanceSource(playerid));
+    }
+
+    ChangeTime(playerid, t);
+    ReturnToAppearanceSource(playerid);
+    return 1;
+}
+
+forward ShowPersonalWeatherDlg(playerid, source);
+public ShowPersonalWeatherDlg(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new title[64] = "{MAIN}Personalization - Weather";
+    format_MainColor(playerid, title);
+
+    new body[256];
+    format(body, sizeof(body),
+        "{FFFFFF}Enter the desired weather ID below:\n\n\
+        {B4B5B7}Weather ID: 0 - 45 (Current ID: {FFFFFF}%d{B4B5B7})",
+        User[playerid][weather]);
+
+    Dialog_ShowCallback(playerid, using public DIALOG_PERSONAL_WEATHER<iiiis>, DIALOG_STYLE_INPUT, title, body, "Apply", "Back");
+    return 1;
+}
+
+forward DIALOG_PERSONAL_WEATHER(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_PERSONAL_WEATHER(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response)
+    {
+        return ReturnToAppearanceSource(playerid);
+    }
+
+    if(!IsPlayerLogged(playerid))
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    if(isnull(inputtext) || !IsNumeric(inputtext))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Please enter a valid numeric weather ID (0-45).");
+        return ShowPersonalWeatherDialog(playerid, GetAppearanceSource(playerid));
+    }
+
+    new w = strval(inputtext);
+    if(w < 0 || w > 45)
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Weather ID must be between 0 and 45.");
+        return ShowPersonalWeatherDialog(playerid, GetAppearanceSource(playerid));
+    }
+
+    ChangeWeather(playerid, w);
+    ReturnToAppearanceSource(playerid);
     return 1;
 }
 

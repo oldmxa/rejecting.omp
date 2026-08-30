@@ -212,6 +212,8 @@ stock CanSpawnLoungeVehicle(playerid) return CallLocalFunction("Lounge_CanSpawnL
 stock SpawnLoungeVehicle(playerid, vehicle, color1 = -1, color2 = -1) return CallLocalFunction("Lounge_SpawnLoungeVehicle", "dddd", playerid, vehicle, color1, color2);
 stock ChangeTime(playerid, timeid) return CallLocalFunction("Stats_ChangeTime", "dd", playerid, timeid);
 stock ChangeWeather(playerid, weatherid) return CallLocalFunction("Stats_ChangeWeather", "dd", playerid, weatherid);
+stock ShowPersonalTimeDialog(playerid, source = APPEARANCE_SRC_PERSONAL) return CallLocalFunction("ShowPersonalTimeDlg", "dd", playerid, source);
+stock ShowPersonalWeatherDialog(playerid, source = APPEARANCE_SRC_PERSONAL) return CallLocalFunction("ShowPersonalWeatherDlg", "dd", playerid, source);
 stock showMapListDialog(playerid) return CallLocalFunction("Stats_showMapListDialog", "d", playerid);
 stock ShowStats(playerid, targetid) return CallLocalFunction("Stats_ShowStats", "dd", playerid, targetid);
 stock ShowPlayerClanInfo(playerid, targetid) return CallLocalFunction("Stats_ShowPlayerClanInfo", "dd", playerid, targetid);
