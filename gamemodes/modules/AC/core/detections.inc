@@ -43,7 +43,7 @@ static AC_GetAction(code)
 
 static AC_Alert(playerid, code, const detection[], const action[])
 {
-    new WEAPON:weaponid = GetPlayerWeapon(playerid), weapon[24], context[64];
+    new WEAPON:weaponid = GetPlayerWeapon(playerid), weapon[24];
 
     if (weaponid != WEAPON_FIST)
     {
@@ -51,22 +51,28 @@ static AC_Alert(playerid, code, const detection[], const action[])
     }
     else format(weapon, sizeof(weapon), "none");
 
-    if (code == AC_MAX_ACCURACY)
-    {
-        new loc = User[playerid][locationId];
-        new Float:acc = (0 <= loc < MAX_LOCATIONS) ? GetPlayerAccuracy(playerid, loc) : 0.0;
-        format(context, sizeof(context), "{B4B5B7}({3CCFFA}%.1f%%%{B4B5B7} / Max {3CCFFA}%d%%%{B4B5B7}) ", acc, ServerMaxAccuracy);
-    }
-    else if (weaponid != WEAPON_FIST)
-    {
-        format(context, sizeof(context), "{B4B5B7}with {3CCFFA}%s ", weapon);
-    }
-
     foreach (new i : Player)
     {
         if(IsAdmin(i))
-            va_SendClientMessage(i, -1, AC_TAG_PUN": %s[%d] {B4B5B7}suspect of using {3CCFFA}%s %s{B4B5B7}code: {3CCFFA}#%02d{B4B5B7}.",
-                User[playerid][userName], playerid, detection, context, code + 1);
+        {
+            if (code == AC_MAX_ACCURACY)
+            {
+                new loc = User[playerid][locationId];
+                new Float:acc = (0 <= loc < MAX_LOCATIONS) ? GetPlayerAccuracy(playerid, loc) : 0.0;
+                va_SendClientMessage(i, -1, AC_TAG_PUN": %s[%d] {B4B5B7}suspect of using {3CCFFA}Max Accuracy (%.1f%%/Max %d%%) {B4B5B7}code: {3CCFFA}#%02d{B4B5B7}.",
+                    User[playerid][userName], playerid, acc, ServerMaxAccuracy, code + 1);
+            }
+            else if (weaponid != WEAPON_FIST)
+            {
+                va_SendClientMessage(i, -1, AC_TAG_PUN": %s[%d] {B4B5B7}suspect of using {3CCFFA}%s {B4B5B7}with {3CCFFA}%s {B4B5B7}code: {3CCFFA}#%02d{B4B5B7}.",
+                    User[playerid][userName], playerid, detection, weapon, code + 1);
+            }
+            else
+            {
+                va_SendClientMessage(i, -1, AC_TAG_PUN": %s[%d] {B4B5B7}suspect of using {3CCFFA}%s {B4B5B7}code: {3CCFFA}#%02d{B4B5B7}.",
+                    User[playerid][userName], playerid, detection, code + 1);
+            }
+        }
     }
 
     new now = gettime();
