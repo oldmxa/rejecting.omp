@@ -50,7 +50,7 @@
 
 **rejecting.site**
 
-Web platform and control panel for the Rejecting ecosystem.
+Web platform and control panel for the rejecting.files.
 
 [![Repository](https://img.shields.io/badge/GitHub-rejecting.site-181717?style=flat-square\&logo=github)](https://github.com/oldmxa/rejecting.site)
 
