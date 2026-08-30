@@ -11,6 +11,12 @@ forward TrainingOnSetAfk(playerid);
 forward OnTrainingChallengeTick(playerid);
 forward OnTrainingWaypointTimer(playerid);
 
+stock bool:IsPlayerInTraining(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return g_PlayerTraining[playerid][pTrain_Active];
+}
+
 stock RegisterTrainingArena(
     const name[],
     const type[],

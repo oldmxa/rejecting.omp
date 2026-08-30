@@ -308,7 +308,7 @@ public Account_ShowPersonalizationMenu(playerid)
     if(!foundHitShade)
     {
         if(User[playerid][hitmarkColor] == DEFAULT_HITMARK_COLOR) format(hitColName, sizeof(hitColName), "{FFFFFF}Default White");
-        else format(hitColName, sizeof(hitColName), "{%06x}#%08X", hitHex, User[playerid][hitmarkColor]);
+        else format(hitColName, sizeof(hitColName), "{%06x}#%08x", hitHex, User[playerid][hitmarkColor]);
     }
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hitmarker Color\t%s\n", pStr, hitColName);
 

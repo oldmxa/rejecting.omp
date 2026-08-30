@@ -1267,6 +1267,16 @@ stock bool:ParseHexColorRGBA(const input[], &outColor, defaultAlpha = DEFAULT_HI
 {
     new clean[32];
     format(clean, sizeof(clean), "%s", input);
+
+    new idx = 0;
+    while(clean[idx] == ' ' || clean[idx] == '\t' || clean[idx] == '\r' || clean[idx] == '\n') idx++;
+    if(idx > 0) strdel(clean, 0, idx);
+    for(new i = strlen(clean) - 1; i >= 0; i--)
+    {
+        if(clean[i] == ' ' || clean[i] == '\t' || clean[i] == '\r' || clean[i] == '\n') clean[i] = '\0';
+        else break;
+    }
+
     if(clean[0] == '#') strdel(clean, 0, 1);
     else if(clean[0] == '0' && (clean[1] == 'x' || clean[1] == 'X')) strdel(clean, 0, 2);
 

@@ -574,6 +574,10 @@ public DIALOG_AC_MAX_ACCURACY(playerid, dialogid, response, listitem, string:inp
         {
             va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s set the server max accuracy limit to %d%%.",
                 User[playerid][userName], ServerMaxAccuracy);
+
+            PlayErrorSound(playerid);
+            SetPVarInt(playerid, "ac_category", AC_CAT_AIM);
+            return ShowACAction(playerid, AC_MAX_ACCURACY);
         }
         else
         {

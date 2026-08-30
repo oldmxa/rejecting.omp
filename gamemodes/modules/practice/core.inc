@@ -7,6 +7,12 @@ forward OnPracticeWaypoint(playerid);
 forward OnPracticeRespawn(playerid);
 forward PracticeOnSetAfk(playerid);
 
+stock bool:IsPlayerInPractice(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return g_Practice[playerid][pracActive];
+}
+
 public PracticeOnSetAfk(playerid)
 {
     EndPracticeSession(playerid);

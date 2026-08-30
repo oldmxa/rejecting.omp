@@ -250,6 +250,10 @@ public OnRejectingACDetection(playerid, code)
     {
         return 1;
     }
+    if (code == AC_MAX_ACCURACY && (IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid)))
+    {
+        return 1;
+    }
 
     new tick = GetTickCount();
 

@@ -22,7 +22,7 @@ CREATE TABLE `accounts` (
   `max_streak` int(11) NOT NULL DEFAULT 0,
   `weather` int(11) NOT NULL DEFAULT 10,
   `time` int(11) NOT NULL DEFAULT 10,
-  `hitmarkcolor` int(10) NOT NULL DEFAULT -160,
+  `hitmarkcolor` int(10) NOT NULL DEFAULT -134,
   `hudcolor` int(11) NOT NULL DEFAULT 0,
   `hud_shade_one` int(11) NOT NULL DEFAULT -1,
   `hud_shade_two` int(11) NOT NULL DEFAULT -1,

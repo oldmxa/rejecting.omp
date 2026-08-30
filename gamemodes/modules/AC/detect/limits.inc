@@ -86,7 +86,7 @@ public AC_CheckLimits()
         if (ServerMaxAccuracy > 0)
         {
             new loc = User[playerid][locationId];
-            if (0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && playerArenaInfo[loc][playerid][firedShots] >= 15)
+            if (0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && !IsPlayerInTraining(playerid) && !IsPlayerInPractice(playerid) && playerArenaInfo[loc][playerid][firedShots] >= 15)
             {
                 new Float:curAcc = GetPlayerAccuracy(playerid, loc);
                 if (curAcc > float(ServerMaxAccuracy))

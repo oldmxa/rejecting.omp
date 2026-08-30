@@ -245,7 +245,7 @@ ShowDamageStyleDialog(playerid, source)
     if(!foundPreset)
     {
         if(User[playerid][hitmarkColor] == DEFAULT_HITMARK_COLOR) format(hitColorName, sizeof(hitColorName), "{FFFFFF}Default White");
-        else format(hitColorName, sizeof(hitColorName), "{%06x}#%08X", hitHex, User[playerid][hitmarkColor]);
+        else format(hitColorName, sizeof(hitColorName), "{%06x}#%08x", hitHex, User[playerid][hitmarkColor]);
     }
 
     new body[768] = "{BEBEBE}Option\t{BEBEBE}Status / Format\n";
@@ -415,7 +415,7 @@ ShowHitmarkColorDialog(playerid, source)
         }
     }
 
-    strcat(body, fmat_return("%s{FFFFFF}Custom HEX Color\t{%06x}#%08X\n",
+    strcat(body, fmat_return("%s{FFFFFF}Custom HEX Color\t{%06x}#%08x\n",
         isCustom ? ("{23C552}> ") : ("{B4B5B7}\x95 "), curHex, User[playerid][hitmarkColor]), sizeof(body));
 
     for(new i; i < sizeof(hudShades); i++)
@@ -439,7 +439,7 @@ ShowHitmarkCustomHexDialog(playerid, source)
     new curHex = (User[playerid][hitmarkColor] >>> 8);
     new body[512];
     format(body, sizeof(body),
-"{FFFFFF}Current Damage Informer Color: {%06x}#%08X\n\n\
+"{FFFFFF}Current Damage Informer Color: {%06x}#%08x\n\n\
 {BEBEBE}Enter your HEX color code below:\n\
 {FFFFFF}\x95 {BEBEBE}6 digits ({MAIN}RRGGBB{BEBEBE}): Applies color with default transparency (e.g. {23C552}23C552{BEBEBE}, {F84F31}F84F31{BEBEBE})\n\
 {FFFFFF}\x95 {BEBEBE}8 digits ({MAIN}RRGGBBAA{BEBEBE}): Custom color & transparency/alpha (e.g. {MAIN}FFFFFF60{BEBEBE}, {MAIN}FF0000AA{BEBEBE})\n\n\

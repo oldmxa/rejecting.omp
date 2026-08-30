@@ -458,6 +458,40 @@ ShowAdminCmds(playerid)
 
     CheckAdminAuth(playerid);
 
+    new option[32], value;
+    if (!sscanf(params, "s[32]d", option, value))
+    {
+        if (!strcmp(option, "accuracy", true) || !strcmp(option, "acc", true) || !strcmp(option, "maxaccuracy", true))
+        {
+            if (!IsAdmin(playerid, 5))
+                return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+            if (value < 0 || value > 100)
+                return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid accuracy value! Choose between 0 and 100 (0 = disabled).");
+
+            ServerMaxAccuracy = value;
+            SaveServerConfig();
+            AC_SaveSetting("max_accuracy", ServerMaxAccuracy);
+
+            if (ServerMaxAccuracy > 0)
+            {
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s set the server max accuracy limit to %d%%.",
+                    User[playerid][userName], ServerMaxAccuracy);
+
+                PlayErrorSound(playerid);
+                SetPVarInt(playerid, "ac_category", AC_CAT_AIM);
+                return ShowACAction(playerid, AC_MAX_ACCURACY);
+            }
+            else
+            {
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s disabled the server max accuracy limit.",
+                    User[playerid][userName]);
+                PlayErrorSound(playerid);
+                return 1;
+            }
+        }
+    }
+
     ShowAdminConfig(playerid);
     return true;
 }
