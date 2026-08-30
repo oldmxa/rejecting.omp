@@ -15,6 +15,7 @@
 #define AC_ROW_CJWALK    (9)
 #define AC_ROW_STUNS     (10)
 #define AC_ROW_OMP       (11)
+#define AC_ROW_ACCURACY  (12)
 #define AC_ROW_CATEGORY  (100)
 
 #define AC_RECENT_ROWS   (30)
@@ -207,6 +208,10 @@ ShowACMenu(playerid)
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Connection Limits\t{FFFFFF}%d ms {B4B5B7}/ {FFFFFF}%.2f%% {B4B5B7}/ {FFFFFF}%d-%d FPS\n",
         ServerMaxPing, ServerMaxPacketLoss, ServerMinFPS, ServerMaxFPS), sizeof(body));
     rows[count++] = AC_ROW_LIMITS;
+
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Accuracy Limit\t%s\n",
+        ServerMaxAccuracy > 0 ? fmat_return("{23C552}%d%%", ServerMaxAccuracy) : ("{F84F31}Disabled")), sizeof(body));
+    rows[count++] = AC_ROW_ACCURACY;
 
     strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Debug\t%s",
         ACDebugOn[playerid] ? ("{23C552}Enabled") : ("{F84F31}Disabled")), sizeof(body));
@@ -529,6 +534,14 @@ public DIALOG_AC_MENU(playerid, dialogid, response, listitem, string:inputtext[]
             ShowAdminConfig(playerid);
             return 1;
         }
+        case AC_ROW_ACCURACY:
+        {
+            new accStr[256];
+            format(accStr, sizeof(accStr), "{FFFFFF}Current Limit: %s\n\n{BEBEBE}Enter the maximum allowed weapon accuracy in %% (e.g. 40 for 40%%).\n{BEBEBE}Enter {FFFFFF}0{BEBEBE} to disable the accuracy limit check:",
+                ServerMaxAccuracy > 0 ? fmat_return("{23C552}%d%%", ServerMaxAccuracy) : ("{F84F31}Disabled"));
+            Dialog_ShowCallback(playerid, using public DIALOG_AC_MAX_ACCURACY<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}RAC - Max Accuracy Limit", accStr, "Save", "<");
+            return 1;
+        }
         case AC_ROW_FLAGGED: return ShowACFlagged(playerid);
         case AC_ROW_RECENT: return ShowACRecent(playerid);
 
@@ -538,6 +551,38 @@ public DIALOG_AC_MENU(playerid, dialogid, response, listitem, string:inputtext[]
         case AC_ROW_STUNS:    AC_ToggleExtra(playerid, ACFastStuns, "fast_stuns", "fast stuns");
     }
 
+    return ShowACMenu(playerid);
+}
+
+forward DIALOG_AC_MAX_ACCURACY(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_AC_MAX_ACCURACY(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if (response && !isnull(inputtext))
+    {
+        new value = strval(inputtext);
+        if (value < 0 || value > 100)
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid accuracy value! Enter a number between 0 and 100 (0 = disabled).");
+            return ShowACMenu(playerid);
+        }
+
+        ServerMaxAccuracy = value;
+        SaveServerConfig();
+        AC_SaveSetting("max_accuracy", ServerMaxAccuracy);
+
+        if (ServerMaxAccuracy > 0)
+        {
+            va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s set the server max accuracy limit to %d%%.",
+                User[playerid][userName], ServerMaxAccuracy);
+        }
+        else
+        {
+            va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s disabled the server max accuracy limit.",
+                User[playerid][userName]);
+        }
+
+        PlayErrorSound(playerid);
+    }
     return ShowACMenu(playerid);
 }
 

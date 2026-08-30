@@ -43,14 +43,24 @@ static AC_GetAction(code)
 
 static AC_Alert(playerid, code, const detection[], const action[])
 {
-    new WEAPON:weaponid = GetPlayerWeapon(playerid), weapon[24], context[40];
+    new WEAPON:weaponid = GetPlayerWeapon(playerid), weapon[24], context[64];
 
     if (weaponid != WEAPON_FIST)
     {
         GetWeaponName(weaponid, weapon, sizeof(weapon));
-        format(context, sizeof(context), "{B4B5B7}with {3CCFFA}%s ", weapon);
     }
     else format(weapon, sizeof(weapon), "none");
+
+    if (code == AC_MAX_ACCURACY)
+    {
+        new loc = User[playerid][locationId];
+        new Float:acc = (0 <= loc < MAX_LOCATIONS) ? GetPlayerAccuracy(playerid, loc) : 0.0;
+        format(context, sizeof(context), "{B4B5B7}({3CCFFA}%.1f%%%{B4B5B7} / Max {3CCFFA}%d%%%{B4B5B7}) ", acc, ServerMaxAccuracy);
+    }
+    else if (weaponid != WEAPON_FIST)
+    {
+        format(context, sizeof(context), "{B4B5B7}with {3CCFFA}%s ", weapon);
+    }
 
     foreach (new i : Player)
     {
@@ -67,11 +77,24 @@ static AC_Alert(playerid, code, const detection[], const action[])
         new pip[18], details[512];
         GetPlayerIp(playerid, pip, sizeof(pip));
 
-        format(details, sizeof(details),
-            "**Player:** %s [%d]\n**Detection:** %s (#%02d)\n**Weapon:** %s\n**Action:** %s\n**FPS:** %d  |  **Ping:** %d ms  |  **PL:** %.2f%%\n**IP:** %s\n**GPCI:** %s",
-            User[playerid][userName], playerid, detection, code + 1, weapon, action,
-            User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid),
-            pip, User[playerid][user_gpci]);
+        if (code == AC_MAX_ACCURACY)
+        {
+            new loc = User[playerid][locationId];
+            new Float:acc = (0 <= loc < MAX_LOCATIONS) ? GetPlayerAccuracy(playerid, loc) : 0.0;
+            format(details, sizeof(details),
+                "**Player:** %s [%d]\n**Detection:** %s (#%02d)\n**Accuracy:** %.1f%% (Max Limit: %d%%)\n**Weapon:** %s\n**Action:** %s\n**FPS:** %d  |  **Ping:** %d ms  |  **PL:** %.2f%%\n**IP:** %s\n**GPCI:** %s",
+                User[playerid][userName], playerid, detection, code + 1, acc, ServerMaxAccuracy, weapon, action,
+                User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid),
+                pip, User[playerid][user_gpci]);
+        }
+        else
+        {
+            format(details, sizeof(details),
+                "**Player:** %s [%d]\n**Detection:** %s (#%02d)\n**Weapon:** %s\n**Action:** %s\n**FPS:** %d  |  **Ping:** %d ms  |  **PL:** %.2f%%\n**IP:** %s\n**GPCI:** %s",
+                User[playerid][userName], playerid, detection, code + 1, weapon, action,
+                User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid),
+                pip, User[playerid][user_gpci]);
+        }
 
         SendDiscordEmbed(logs_ac, "Rejecting AC", details, DISCORD_COLOR_ERROR);
         LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "warns", "Rejecting AC", detection);

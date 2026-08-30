@@ -257,8 +257,12 @@ forward GetPlayerClanRank(playerid);
 forward Float:ratio(value1, value2);
 forward bool:SanitizeString(const input[], dest[], size = sizeof(dest), minLen = 2);
 forward bool:IsValidHexColor(const input[], &outColor = 0);
+forward bool:ParseHexColorRGBA(const input[], &outColor, defaultAlpha = 0x60);
 forward bool:HasPlayerConfiguredWeapons(playerid);
 forward RestartServerSafe();
+
+#define DEFAULT_HITMARK_COLOR (0xFFFFFF60)
+#define DEFAULT_HITMARK_ALPHA (0x60)
 
 #define LOUNGE_SPAWN_X (1209.1161)
 #define LOUNGE_SPAWN_Y (-2036.4353)

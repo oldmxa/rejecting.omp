@@ -131,6 +131,9 @@ public Stats_ShowAdminConfig(playerid)
 
             format(strb, sizeof(strb), "%s{B4B5B7}\x95 {FFFFFF}Toggle Anti Sprint Macro\t%s\t{BEBEBE}Stops players tapping sprint faster than humanly possible\n", strb, (ACSprintMacro) ? ("{23C552}Enabled") : ("{F84F31}Disabled"));
             actions[count++] = 27; // Anti Sprint Macro
+
+            format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Max. Accuracy Limit\t%s\t{BEBEBE}Limit of weapon hit accuracy\n", strb, (ServerMaxAccuracy > 0) ? fmat_return("{BEBEBE}%d%%", ServerMaxAccuracy) : ("{F84F31}Disabled"));
+            actions[count++] = 28; // Max Accuracy Limit
         }
 
         strcat(strb, "{MAIN}\xA4 Server & Security\t \t \n");

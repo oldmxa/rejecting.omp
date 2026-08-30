@@ -375,7 +375,7 @@ fmat_return(const fmat[], va_args<>)
 	return str;
 }
 
-HexToInt(const str[])
+stock HexToInt(const str[])
 {
 	new ret;
 	unformat(str, "x", ret);

@@ -166,6 +166,15 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 ShowAdminConfig(playerid);
                 PlayErrorSound(playerid);
             }
+            case 28: // Max Accuracy Limit
+            {
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+                new accStr[256];
+                format(accStr, sizeof(accStr), "{FFFFFF}Current Limit: %s\n\n{BEBEBE}Enter the maximum allowed weapon accuracy in %% (e.g. 40 for 40%%).\n{BEBEBE}Enter {FFFFFF}0{BEBEBE} to disable the accuracy limit check:",
+                    ServerMaxAccuracy > 0 ? fmat_return("{23C552}%d%%", ServerMaxAccuracy) : ("{F84F31}Disabled"));
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_MAXACCURACY<iiiis>, DIALOG_STYLE_INPUT, "{BEBEBE}Max Accuracy Limit", accStr, "*", "<");
+            }
             case 6: // See PMs
             {
                 User[playerid][acfg_pm] = !User[playerid][acfg_pm];
@@ -681,6 +690,35 @@ public DIALOG_ADM_DEFAULTCHATCOLOR(playerid, dialogid, response, listitem, strin
         else format(cName, sizeof(cName), "%s", hudShades[value - 1][shadeName]);
 
         va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default chat color ({MAIN}) updated to: %s (applies to new accounts).", cName);
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_MAXACCURACY(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_MAXACCURACY(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response && !isnull(inputtext))
+    {
+        new value = strval(inputtext);
+        if(value < 0 || value > 100)
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid accuracy value. Choose between 0 and 100 (0 = disabled).");
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+        ServerMaxAccuracy = value;
+        SaveServerConfig();
+        AC_SaveSetting("max_accuracy", ServerMaxAccuracy);
+
+        if(ServerMaxAccuracy > 0)
+        {
+            va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s set the server max accuracy limit to %d%%.", User[playerid][userName], ServerMaxAccuracy);
+        }
+        else
+        {
+            va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s disabled the server max accuracy limit.", User[playerid][userName]);
+        }
     }
     ShowAdminConfig(playerid);
     return 1;

@@ -82,6 +82,19 @@ public AC_CheckLimits()
             new bool:badFps = (fps > 0 && (fps < ServerMinFPS || fps > ServerMaxFPS));
             AC_CheckLimit(playerid, AC_LIMIT_FPS, badFps, detail);
         }
+
+        if (ServerMaxAccuracy > 0)
+        {
+            new loc = User[playerid][locationId];
+            if (0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && playerArenaInfo[loc][playerid][firedShots] >= 15)
+            {
+                new Float:curAcc = GetPlayerAccuracy(playerid, loc);
+                if (curAcc > float(ServerMaxAccuracy))
+                {
+                    CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_MAX_ACCURACY);
+                }
+            }
+        }
     }
     return 1;
 }

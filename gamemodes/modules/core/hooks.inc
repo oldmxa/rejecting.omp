@@ -360,7 +360,7 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][hitmarkTimer] = -1;
     User[MAX_PLAYERS][lastDamageTime] = -1;
     User[MAX_PLAYERS][lastDamagerId] = INVALID_PLAYER_ID;
-    User[MAX_PLAYERS][hitmarkColor] = 0xffffff60;
+    User[MAX_PLAYERS][hitmarkColor] = DEFAULT_HITMARK_COLOR;
     User[MAX_PLAYERS][loginTime] = gettime();
     User[MAX_PLAYERS][lastTimeUpdated] = gettime();
     User[MAX_PLAYERS][timerRespawn] = gettime();

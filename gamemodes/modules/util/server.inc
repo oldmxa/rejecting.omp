@@ -62,6 +62,7 @@ stock LoadServerConfig()
         else if(!strcmp(key, "AntiCapslock", true)) ServerAntiCapslock = (strval(val) != 0);
         else if(!strcmp(key, "AdminsCmd", true)) ServerAdminsCmd = (strval(val) != 0);
         else if(!strcmp(key, "SprintMacro", true)) ACSprintMacro = (strval(val) != 0);
+        else if(!strcmp(key, "MaxAccuracy", true)) ServerMaxAccuracy = strval(val);
         else if(!strcmp(key, "DefaultHud", true))
         {
             ServerDefaultHud = strval(val);
@@ -139,8 +140,11 @@ stock SaveServerConfig()
     format(str, sizeof(str), "SprintMacro=%d\r\n", _:ACSprintMacro);
     fwrite(file, str);
 
+    format(str, sizeof(str), "MaxAccuracy=%d\r\n", ServerMaxAccuracy);
+    fwrite(file, str);
+
     fclose(file);
-    printf("[SERVER CONFIG] Saved: MaxPing=%d, MaxPL=%.2f, MinFPS=%d, MaxFPS=%d, R2Kick=%d, DefaultHud=%d, DefaultHudColor=%d, DefaultChatMainColor=%d", ServerMaxPing, ServerMaxPacketLoss, ServerMinFPS, ServerMaxFPS, _:R2KickEnabled, ServerDefaultHud, ServerDefaultHudColor, ServerDefaultChatMainColor);
+    printf("[SERVER CONFIG] Saved: MaxPing=%d, MaxPL=%.2f, MinFPS=%d, MaxFPS=%d, MaxAcc=%d, R2Kick=%d, DefaultHud=%d, DefaultHudColor=%d, DefaultChatMainColor=%d", ServerMaxPing, ServerMaxPacketLoss, ServerMinFPS, ServerMaxFPS, ServerMaxAccuracy, _:R2KickEnabled, ServerDefaultHud, ServerDefaultHudColor, ServerDefaultChatMainColor);
     return 1;
 }
 

@@ -869,6 +869,15 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 			
 			if(playerArenaInfo[loc_issuer][issuerid][firedShots] < playerArenaInfo[loc_issuer][issuerid][hitedShots])
 				playerArenaInfo[loc_issuer][issuerid][firedShots] = playerArenaInfo[loc_issuer][issuerid][hitedShots];
+
+			if(ServerMaxAccuracy > 0 && playerArenaInfo[loc_issuer][issuerid][firedShots] >= 15)
+			{
+				new Float:curAccuracy = GetPlayerAccuracy(issuerid, loc_issuer);
+				if(curAccuracy > float(ServerMaxAccuracy))
+				{
+					CallRemoteFunction("OnRejectingACDetection", "ii", issuerid, AC_MAX_ACCURACY);
+				}
+			}
 		}
 	}
 

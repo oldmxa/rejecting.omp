@@ -22,7 +22,7 @@ CREATE TABLE `accounts` (
   `max_streak` int(11) NOT NULL DEFAULT 0,
   `weather` int(11) NOT NULL DEFAULT 10,
   `time` int(11) NOT NULL DEFAULT 10,
-  `hitmarkcolor` int(10) NOT NULL DEFAULT -52,
+  `hitmarkcolor` int(10) NOT NULL DEFAULT -160,
   `hudcolor` int(11) NOT NULL DEFAULT 0,
   `hud_shade_one` int(11) NOT NULL DEFAULT -1,
   `hud_shade_two` int(11) NOT NULL DEFAULT -1,
@@ -135,6 +135,11 @@ CREATE TABLE `ac_config` (
   `key` varchar(32) NOT NULL,
   `value` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `ac_config` (`key`, `value`) VALUES
+('punish', 1),
+('max_accuracy', 0),
+('code_66', 1);
 
 CREATE TABLE `ac_detection_totals` (
   `user_id` int(11) NOT NULL DEFAULT 0,

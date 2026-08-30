@@ -298,7 +298,7 @@ public Account_ShowPersonalizationMenu(playerid)
     new bool:foundHitShade = false;
     for(new i; i < sizeof(hudShades); i++)
     {
-        if(hudShades[i][shadeHex] == hitHex)
+        if(User[playerid][hitmarkColor] == ((hudShades[i][shadeHex] << 8) | DEFAULT_HITMARK_ALPHA))
         {
             format(hitColName, sizeof(hitColName), "{%06x}%s", hudShades[i][shadeHex], hudShades[i][shadeName]);
             foundHitShade = true;
@@ -307,8 +307,8 @@ public Account_ShowPersonalizationMenu(playerid)
     }
     if(!foundHitShade)
     {
-        if(hitHex == 0xFFFFFF) format(hitColName, sizeof(hitColName), "{FFFFFF}White");
-        else format(hitColName, sizeof(hitColName), "{%06x}#%06x", hitHex, hitHex);
+        if(User[playerid][hitmarkColor] == DEFAULT_HITMARK_COLOR) format(hitColName, sizeof(hitColName), "{FFFFFF}Default White");
+        else format(hitColName, sizeof(hitColName), "{%06x}#%08X", hitHex, User[playerid][hitmarkColor]);
     }
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hitmarker Color\t%s\n", pStr, hitColName);
 

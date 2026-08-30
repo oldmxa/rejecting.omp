@@ -115,7 +115,7 @@ public ShowPracticeDialog(playerid)
     }
 
     strcat(body, fmat_return("{FFFFFF}\x95 Damage Informer\t%s {447DBF}%s\n", (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageStyleName(User[playerid][dmgInformerStyle])));
-    strcat(body, fmat_return("{FFFFFF}\x95 Hitmarker Color\t{%06x}######\n", (User[playerid][hitmarkColor] >>> 8)));
+    strcat(body, fmat_return("{FFFFFF}\x95 Hitmarker Color\t{%06x}Sample (45)\n", (User[playerid][hitmarkColor] >>> 8)));
     strcat(body, fmat_return("{FFFFFF}\x95 Hit Sound\t{FFFFFF}ID:%d ({BEBEBE}%s{FFFFFF})\n", User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID])));
 
     new Float:acc = 0.0;

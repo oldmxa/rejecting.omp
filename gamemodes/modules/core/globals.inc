@@ -765,6 +765,7 @@ new ServerMaxPing = MAX_PING;
 new Float:ServerMaxPacketLoss = MAX_PL;
 new ServerMinFPS = MIN_FPS;
 new ServerMaxFPS = MAX_FPS;
+new ServerMaxAccuracy = 0;
 new ServerDefaultHud = 1;
 new ServerDefaultHudColor = 0;
 new ServerDefaultHudShadeOne = -1;
@@ -1259,6 +1260,46 @@ stock bool:IsValidHexColor(const input[], &outColor = 0)
     new val = 0;
     sscanf(clean, "x", val);
     outColor = val;
+    return true;
+}
+
+stock bool:ParseHexColorRGBA(const input[], &outColor, defaultAlpha = DEFAULT_HITMARK_ALPHA)
+{
+    new clean[32];
+    format(clean, sizeof(clean), "%s", input);
+    if(clean[0] == '#') strdel(clean, 0, 1);
+    else if(clean[0] == '0' && (clean[1] == 'x' || clean[1] == 'X')) strdel(clean, 0, 2);
+
+    new len = strlen(clean);
+    if(len != 6 && len != 8) return false;
+
+    for(new i = 0; i < len; i++)
+    {
+        new c = clean[i];
+        if(!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+            return false;
+    }
+
+    new val = 0;
+    for(new i = 0; i < len; i++)
+    {
+        new c = clean[i];
+        new digit;
+        if(c >= '0' && c <= '9') digit = c - '0';
+        else if(c >= 'a' && c <= 'f') digit = c - 'a' + 10;
+        else if(c >= 'A' && c <= 'F') digit = c - 'A' + 10;
+
+        val = (val << 4) | digit;
+    }
+
+    if(len == 6)
+    {
+        outColor = (val << 8) | (defaultAlpha & 0xFF);
+    }
+    else
+    {
+        outColor = val;
+    }
     return true;
 }
 

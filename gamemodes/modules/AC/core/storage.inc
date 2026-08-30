@@ -80,6 +80,7 @@ stock AC_SaveConfig()
     AC_SaveSetting("no_fall_damage", _:ACNoFallDamage);
     AC_SaveSetting("no_fall_anim", _:ACNoFallAnimation);
     AC_SaveSetting("fast_stuns", _:ACFastStuns);
+    AC_SaveSetting("max_accuracy", ServerMaxAccuracy);
     return 1;
 }
 
@@ -99,6 +100,7 @@ public OnACConfigLoad()
         if (!strcmp(key, "no_fall_damage")) { ACNoFallDamage = bool:(value != 0); continue; }
         if (!strcmp(key, "no_fall_anim")) { ACNoFallAnimation = bool:(value != 0); continue; }
         if (!strcmp(key, "fast_stuns")) { ACFastStuns = bool:(value != 0); continue; }
+        if (!strcmp(key, "max_accuracy")) { ServerMaxAccuracy = value; continue; }
 
         if (strfind(key, "code_") != 0) continue;
 
