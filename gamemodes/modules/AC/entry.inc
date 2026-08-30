@@ -13,6 +13,7 @@
 #include "modules/AC/detect/macro.inc"
 
 #include "modules/AC/packet/onfoot.inc"
+#include "modules/AC/packet/vehicle.inc"
 #include "modules/AC/packet/weapon.inc"
 #include "modules/AC/packet/aim.inc"
 

@@ -154,6 +154,8 @@ new const AC_ACTION_COLOR[][] =
 #define AC_FAKE_SERIAL        (59)
 #define AC_FAKE_ACTION        (60)
 #define AC_FAKE_SPEED         (61)
+#define AC_FAKE_CAR_SYNC      (62)
+#define AC_FAKE_CAMMODE       (63)
 
 forward OnRejectingACDetection(playerid, code);
 
@@ -234,7 +236,9 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Fake lag",                     "Stops syncing in bursts to dodge damage", AC_CAT_EXPLOIT,  true},
     {"Fake serial",                  "GPCI is not a well formed client serial", AC_CAT_EXPLOIT,  true},
     {"Fake action",                  "Special action forged to clone the body", AC_CAT_EXPLOIT,  true},
-    {"Fake speed",                   "Declared speed does not match movement",  AC_CAT_MOVEMENT, true}
+    {"Fake speed",                   "Declared speed does not match movement",  AC_CAT_MOVEMENT, true},
+    {"Fake car sync",                "Vehicle sync carries an impossible float", AC_CAT_EXPLOIT,  true},
+    {"Fake scope",                   "Scope camera without a scoped weapon",    AC_CAT_AIM,      true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))
