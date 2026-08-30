@@ -51,7 +51,7 @@ ShowHudShadeDialog(playerid, source, bool:secondary)
     if (secondary) hex = GetColorHexTag(hudPersonalization[presetColor][colorTwo]);
     else hex = GetColorHexTag(hudPersonalization[presetColor][colorOne]);
 
-    new body[3500] = "Name\tPreview\n";
+    new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
 
     strcat(body, fmat_return("%s{BEBEBE}Use interface preset\t{%s}Preview\n",
         STYLE_MARK(selected == -1), hex), sizeof(body));

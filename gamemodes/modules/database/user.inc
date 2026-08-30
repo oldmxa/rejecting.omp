@@ -187,7 +187,7 @@ public OnLoginVerify(playerid, bool:success)
         }
         else
         {
-            va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Incorrect password. Attempt {FFFFFF}%d{FFFFFF}/{FF0000}%d.", User[playerid][loginAttempts], ServerMaxLoginAttempts);
+            va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Incorrect password. Attempt {FFFFFF}%d{FFFFFF}/{F84F31}%d{FFFFFF}.", User[playerid][loginAttempts], ServerMaxLoginAttempts);
  		    showAutorizationDialog(playerid);
         }
  	}

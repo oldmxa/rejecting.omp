@@ -547,7 +547,7 @@ public Punish_ShowPenaltyHistory(playerid, const targetname[], page)
                 strcat(chadString, "\n"COL_KGREEN">>> Next Page\t\t\tGo next");
             }
 
-            Dialog_ShowCallback(playerid, using public DIALOG_HISTORY_NAV<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{FF4500}%s's penalty history - Page %d", targetname, page + 1), chadString, "Select", "Close");
+            Dialog_ShowCallback(playerid, using public DIALOG_HISTORY_NAV<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{MAIN}%s's penalty history {B4B5B7}- Page %d", targetname, page + 1), chadString, "Select", "Close");
         }
         else
         {

@@ -56,7 +56,7 @@ public ShowTrainingChallengeDialog(playerid)
     }
 
     new line[192];
-    format(g_TrainingDialogBuf, sizeof(g_TrainingDialogBuf), "{MAIN}Arena\t{MAIN}Your Record\t{MAIN}Server Record\t{MAIN}Holder\n");
+    format(g_TrainingDialogBuf, sizeof(g_TrainingDialogBuf), "{BEBEBE}Arena\t{BEBEBE}Your Record\t{BEBEBE}Server Record\t{BEBEBE}Holder\n");
 
     for (new i = 0; i < g_TotalTrainingArenas; i++)
     {
@@ -115,7 +115,7 @@ stock ShowTrainingDialog(playerid)
     format(title, sizeof(title), "{MAIN}Training System - Arenas");
 
     format_MainColor(playerid, title);
-    format(g_TrainingDialogBuf, sizeof(g_TrainingDialogBuf), "{MAIN}Arena Name\t{MAIN}Category\t{MAIN}Your Record\t{MAIN}Server Record\t{MAIN}Status\n");
+    format(g_TrainingDialogBuf, sizeof(g_TrainingDialogBuf), "{BEBEBE}Arena Name\t{BEBEBE}Category\t{BEBEBE}Your Record\t{BEBEBE}Server Record\t{BEBEBE}Status\n");
 
     for (new i = 0; i < g_TotalTrainingArenas; i++)
     {

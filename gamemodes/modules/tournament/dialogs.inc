@@ -31,7 +31,7 @@ static stock ShowTourneyDuelArenasDialog(playerid)
 
     format_MainColor(playerid, title);
     new body[2048];
-    format(body, sizeof(body), "{MAIN}ID\t{MAIN}Arena Name\t{MAIN}Interior\n");
+    format(body, sizeof(body), "{BEBEBE}ID\t{BEBEBE}Arena Name\t{BEBEBE}Interior\n");
     strcat(body, "{23C552}#00\t{23C552}[Random] Duel Arena\t{B4B5B7}Any Duel Map\n");
 
     for(new i = 0; i < sizeof(DuelS_ArenaNames); i++)
@@ -49,7 +49,7 @@ static stock ShowTourneyServerArenasDialog(playerid)
 
     format_MainColor(playerid, title);
     new body[4096];
-    format(body, sizeof(body), "{MAIN}ID\t{MAIN}Zone Name\t{MAIN}Size\n");
+    format(body, sizeof(body), "{BEBEBE}ID\t{BEBEBE}Zone Name\t{BEBEBE}Size\n");
     strcat(body, "{23C552}#00\t{23C552}[Random] Server Arena\t{B4B5B7}Any Zone\n");
 
     for(new i = 0; i < MAX_TOURNEY_SERVER_ARENAS; i++)
@@ -60,7 +60,7 @@ static stock ShowTourneyServerArenasDialog(playerid)
             case ARENA_CATEGORY_SMALL: strcopy(sizeName, "{23C552}Small");
             case ARENA_CATEGORY_MEDIUM: strcopy(sizeName, "{FFD700}Medium");
             case ARENA_CATEGORY_BIG: strcopy(sizeName, "{FF6347}Big");
-            default: strcopy(sizeName, "{FFFFFF}Normal");
+            default: strcopy(sizeName, "{BEBEBE}Standard");
         }
         strcat(body, fmat_return("{B4B5B7}#%02d\t{FFFFFF}%s\t%s\n", i + 1, arenaData[i][arenaName], sizeName));
     }
@@ -75,7 +75,7 @@ static stock ShowTourneyCustomArenasDialog(playerid)
 
     format_MainColor(playerid, title);
     new body[1024];
-    format(body, sizeof(body), "{MAIN}ID\t{MAIN}Custom Map Name\t{MAIN}Environment\n");
+    format(body, sizeof(body), "{BEBEBE}ID\t{BEBEBE}Custom Map Name\t{BEBEBE}Environment\n");
     strcat(body, "{23C552}#00\t{23C552}[Random] Custom Map\t{B4B5B7}Any Custom Map\n");
     strcat(body, "{B4B5B7}#01\t{FFFFFF}Chinese Garden\t{B4B5B7}Asian Garden & Bridge\n");
     strcat(body, "{B4B5B7}#02\t{FFFFFF}Desert\t{B4B5B7}Desert Military Compound\n");
@@ -92,7 +92,7 @@ static stock ShowTourneyManageDialog(playerid)
     new title[64] = "{MAIN}Manage Tournament Participants";
 
     new body[2048];
-    format(body, sizeof(body), "{MAIN}Slot\t{MAIN}Participant\t{MAIN}Status\n");
+    format(body, sizeof(body), "{BEBEBE}Slot\t{BEBEBE}Participant\t{BEBEBE}Status\n");
 
     for(new i = 0; i < g_TourneyData[t_MaxSlots]; i++)
     {
@@ -119,7 +119,7 @@ stock ShowTournamentAdminMenu(playerid)
     new title[64] = "{MAIN}Tournament Control Panel";
 
     new body[2048];
-    format(body, sizeof(body), "{MAIN}Setting\t{MAIN}Current Value\n");
+    format(body, sizeof(body), "{BEBEBE}Setting\t{BEBEBE}Current Value\n");
 
     // 0: Status
     new statusStr[64];

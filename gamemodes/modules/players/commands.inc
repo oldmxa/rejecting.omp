@@ -5,7 +5,7 @@
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     new targetid;
-    if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}/id [id player/ nickname player]");
+    if (sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/id [id/nickname]");
 	if (!IsPlayerLogged(targetid))
 		return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     new pip[18], sampVERSION[24];

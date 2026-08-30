@@ -260,6 +260,9 @@ forward bool:IsValidHexColor(const input[], &outColor = 0);
 forward bool:ParseHexColorRGBA(const input[], &outColor, defaultAlpha = 0x7A);
 forward bool:IsPlayerInTraining(playerid);
 forward bool:IsPlayerInPractice(playerid);
+forward bool:IsPlayerInDuel(playerid);
+forward bool:IsPlayerInSpecialActivity(playerid);
+forward bool:IsPlayerInLegitArena(playerid);
 forward bool:HasPlayerConfiguredWeapons(playerid);
 forward RestartServerSafe();
 

@@ -858,7 +858,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
     SetPVarInt(playerid, "LastBodyPart", bodypart);
 
 	new loc_issuer = User[issuerid][locationId];
-	new bool:loc_issuer_ok = (0 <= loc_issuer < MAX_LOCATIONS) && loc_issuer != ARENA_AFK && !pInDuel && !iInDuel && !pInDuel2v2 && !iInDuel2v2 && !pInTourney && !iInTourney && !g_PlayerTraining[issuerid][pTrain_Active] && !g_Practice[issuerid][pracActive];
+	new bool:loc_issuer_ok = IsPlayerInLegitArena(issuerid);
 
 	if(loc_issuer_ok && (weapon == WEAPON_DEAGLE || weapon == WEAPON_SHOTGUN || weapon == WEAPON_M4 || weapon == WEAPON_SNIPER))
 	{
@@ -966,10 +966,8 @@ public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hi
 	if(IsPlayerLogged(playerid) && !IsPlayerAFK(playerid))
 	{
 		new loc = User[playerid][locationId];
-		new bool:pInDuel = (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING);
-		new bool:pInDuel2v2 = (IsPlayerInDuel2v2(playerid) != 0);
 
-		if(0 <= loc < MAX_LOCATIONS && loc != ARENA_AFK && !pInDuel && !pInDuel2v2 && !g_PlayerTraining[playerid][pTrain_Active] && !g_Practice[playerid][pracActive])
+		if(IsPlayerInLegitArena(playerid))
 		{
 			if(weaponid == WEAPON_DEAGLE || weaponid == WEAPON_SHOTGUN || weaponid == WEAPON_M4 || weaponid == WEAPON_SNIPER)
 			{

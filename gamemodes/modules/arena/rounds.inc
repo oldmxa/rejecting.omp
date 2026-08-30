@@ -9,7 +9,7 @@ stock GetLocationDisplaySlot(location)
 
 showLocationSelectDialog(playerid)
 {
-	new dialogBody[1500] = "ID\tArena Mode\tCurrent Arena\tPlayers\n";
+	new dialogBody[1500] = "{BEBEBE}ID\t{BEBEBE}Arena Mode\t{BEBEBE}Current Arena\t{BEBEBE}Players\n";
 
 	for (new slot; slot < sizeof(LOCATION_DISPLAY_ORDER); slot ++)
 	{
@@ -35,7 +35,6 @@ showLocationSelectDialog(playerid)
 	}
 
     new dialogTitle[64] = "{MAIN}Changemode - Arena Selection";
-    format_MainColor(playerid, dialogBody, sizeof(dialogBody));
 
     format_MainColor(playerid, dialogTitle);
     format_MainColor(playerid, dialogBody, sizeof(dialogBody));

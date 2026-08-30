@@ -49,32 +49,32 @@ public ShowPracticeDialog(playerid)
     new sidx = g_Practice[playerid][pracMoveStyle];
     if (sidx < 0 || sidx >= sizeof(g_PracticeStyles)) sidx = 0;
 
-    strcat(body, "{A29582}Setting\t{A29582}Value\n");
+    strcat(body, "{BEBEBE}Setting\t{BEBEBE}Value\n");
 
     new bool:isNpc = (g_Practice[playerid][pracTargetType] == PRACTICE_TYPE_NPC);
     new bool:locked = PracticeRecordLocks(playerid);
 
-    strcat(body, fmat_return("{FFFFFF}\x95 Target Type\t%s\n",
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Target Type\t%s\n",
         isNpc ? ("{23C552}NPC") : ("{BEBEBE}Ball")));
 
-    if (isNpc) strcat(body, fmat_return("{FFFFFF}\x95 NPC Skin\t{BEBEBE}ID %d\n", g_Practice[playerid][pracSkin]));
-    else strcat(body, fmat_return("{FFFFFF}\x95 Target Model\t{BEBEBE}%s\n", g_PracticeModels[idx][pmName]));
+    if (isNpc) strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}NPC Skin\t{BEBEBE}ID %d\n", g_Practice[playerid][pracSkin]));
+    else strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Target Model\t{BEBEBE}%s\n", g_PracticeModels[idx][pmName]));
 
-    strcat(body, fmat_return("{FFFFFF}\x95 NPC Combat\t%s\n",
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}NPC Combat\t%s\n",
         !isNpc ? ("{7F7F7F}-") : (g_Practice[playerid][pracNpcFight] ? ("{23C552}Shoots back") : ("{F84F31}Passive"))));
 
     new wepLabel[20] = "{7F7F7F}-";
     if (isNpc && g_Practice[playerid][pracNpcFight])
         format(wepLabel, sizeof(wepLabel), "{BEBEBE}%s", g_PracticeWeapons[widx][pwName]);
 
-    strcat(body, fmat_return("{FFFFFF}\x95 NPC Weapon\t%s\n", wepLabel));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}NPC Weapon\t%s\n", wepLabel));
 
 
-    if (!isNpc) strcat(body, fmat_return("{FFFFFF}\x95 Speed\t{BEBEBE}%.1f\n", g_Practice[playerid][pracSpeed]));
-    else if (locked) strcat(body, "{FFFFFF}\x95 Move Style\t{7F7F7F}Locked by recording\n");
-    else strcat(body, fmat_return("{FFFFFF}\x95 Move Style\t{BEBEBE}%s\n", g_PracticeStyles[sidx][psName]));
-    strcat(body, fmat_return("{FFFFFF}\x95 Height\t{BEBEBE}%.1f\n", g_Practice[playerid][pracHeight]));
-    strcat(body, fmat_return("{FFFFFF}\x95 Hit Tolerance\t{BEBEBE}%d ms\n", g_Practice[playerid][pracTolerance]));
+    if (!isNpc) strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Speed\t{BEBEBE}%.1f\n", g_Practice[playerid][pracSpeed]));
+    else if (locked) strcat(body, "{B4B5B7}\x95 {FFFFFF}Move Style\t{7F7F7F}Locked by recording\n");
+    else strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Move Style\t{BEBEBE}%s\n", g_PracticeStyles[sidx][psName]));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Height\t{BEBEBE}%.1f\n", g_Practice[playerid][pracHeight]));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Hit Tolerance\t{BEBEBE}%d ms\n", g_Practice[playerid][pracTolerance]));
 
     new lagLabel[40] = "{7F7F7F}Ball target only";
     if (!isNpc)
@@ -83,7 +83,7 @@ public ShowPracticeDialog(playerid)
         else format(lagLabel, sizeof(lagLabel), "{BEBEBE}Off");
     }
 
-    strcat(body, fmat_return("{FFFFFF}\x95 Lag Simulation\t%s\n", lagLabel));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Lag Simulation\t%s\n", lagLabel));
 
     new recLabel[44] = "{7F7F7F}NPC target only";
     if (isNpc)
@@ -94,38 +94,38 @@ public ShowPracticeDialog(playerid)
         else                                           format(recLabel, sizeof(recLabel), "{BEBEBE}None - select to record");
     }
 
-    strcat(body, fmat_return("{FFFFFF}\x95 NPC Record\t%s\n", recLabel));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}NPC Record\t%s\n", recLabel));
 
     if (locked)
     {
-        strcat(body, "{FFFFFF}\x95 Movement\t{7F7F7F}Locked by recording\n");
-        strcat(body, "{FFFFFF}\x95 Position 1\t{7F7F7F}Locked by recording\n");
-        strcat(body, "{FFFFFF}\x95 Position 2\t{7F7F7F}Locked by recording\n");
+        strcat(body, "{B4B5B7}\x95 {FFFFFF}Movement\t{7F7F7F}Locked by recording\n");
+        strcat(body, "{B4B5B7}\x95 {FFFFFF}Position 1\t{7F7F7F}Locked by recording\n");
+        strcat(body, "{B4B5B7}\x95 {FFFFFF}Position 2\t{7F7F7F}Locked by recording\n");
     }
     else
     {
-        strcat(body, fmat_return("{FFFFFF}\x95 Movement\t%s\n",
+        strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Movement\t%s\n",
             g_Practice[playerid][pracMoving] ? ("{23C552}Moving") : ("{F84F31}Static")));
 
-        strcat(body, fmat_return("{FFFFFF}\x95 Position 1\t%s\n",
+        strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Position 1\t%s\n",
             g_Practice[playerid][pracHasPos1] ? ("{23C552}Defined {BEBEBE}- select to remove") : ("{F84F31}Not set {BEBEBE}- select to use your spot")));
 
-        strcat(body, fmat_return("{FFFFFF}\x95 Position 2\t%s\n",
+        strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Position 2\t%s\n",
             g_Practice[playerid][pracHasPos2] ? ("{23C552}Defined {BEBEBE}- select to remove") : ("{F84F31}Not set {BEBEBE}- select to use your spot")));
     }
 
-    strcat(body, fmat_return("{FFFFFF}\x95 Damage Informer\t%s {447DBF}%s\n", (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageStyleName(User[playerid][dmgInformerStyle])));
-    strcat(body, fmat_return("{FFFFFF}\x95 Hitmarker Color\t{%06x}Sample (45)\n", (User[playerid][hitmarkColor] >>> 8)));
-    strcat(body, fmat_return("{FFFFFF}\x95 Hit Sound\t{FFFFFF}ID:%d ({BEBEBE}%s{FFFFFF})\n", User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID])));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Damage Informer\t%s {447DBF}%s\n", (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageStyleName(User[playerid][dmgInformerStyle])));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Hitmarker Color\t{%06x}Sample (45)\n", (User[playerid][hitmarkColor] >>> 8)));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Hit Sound\t{FFFFFF}ID:%d ({BEBEBE}%s{FFFFFF})\n", User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID])));
 
     new Float:acc = 0.0;
     if (g_Practice[playerid][pracShots] > 0)
         acc = (float(g_Practice[playerid][pracHits]) / float(g_Practice[playerid][pracShots])) * 100.0;
 
-    strcat(body, fmat_return("{FFFFFF}\x95 Accuracy\t{BEBEBE}%d/%d {B4B5B7}(%.1f%%) - select to reset\n",
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Accuracy\t{BEBEBE}%d/%d {B4B5B7}(%.1f%%) - select to reset\n",
         g_Practice[playerid][pracHits], g_Practice[playerid][pracShots], acc));
 
-    strcat(body, "{FFFFFF}\x95 Respawn Target\t{BEBEBE}Apply changes\n");
+    strcat(body, "{B4B5B7}\x95 {FFFFFF}Respawn Target\t{BEBEBE}Apply changes\n");
     strcat(body, "{F84F31}\x95 Exit Practice\t{BEBEBE}Leave the private world\n");
 
     new title[64] = "{MAIN}Practice - Settings";
@@ -138,7 +138,7 @@ public ShowPracticeDialog(playerid)
 stock ShowPracticeModelDialog(playerid)
 {
     new body[512];
-    strcat(body, "{A29582}Model\t{A29582}ID\n");
+    strcat(body, "{BEBEBE}Model\t{BEBEBE}ID\n");
 
     for (new i; i < sizeof(g_PracticeModels); i++)
     {
@@ -178,7 +178,7 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 format(body, sizeof(body), "{FFFFFF}\x95 {B4B5B7}Current skin: "COL_WHITE"%d\n\n{FFFFFF}\x95 {B4B5B7}Allowed range: "COL_WHITE"%d to %d",
                     g_Practice[playerid][pracSkin], PRACTICE_SKIN_MIN, PRACTICE_SKIN_MAX);
 
-                return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_SKIN<iiiis>, DIALOG_STYLE_INPUT, "Practice - NPC Skin", body, "Confirm", "Back");
+                return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_SKIN<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Practice - NPC Skin", body, "Confirm", "Back");
             }
             return ShowPracticeModelDialog(playerid);
         }
@@ -199,7 +199,7 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 return ShowPracticeDialog(playerid);
 
             new body[320];
-            strcat(body, "{A29582}Weapon\t{A29582}ID\n");
+            strcat(body, "{BEBEBE}Weapon\t{BEBEBE}ID\n");
 
             for (new i; i < sizeof(g_PracticeWeapons); i++)
             {
@@ -209,7 +209,7 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
             }
 
             format_MainColor(playerid, body);
-            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_WEAPON<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "Practice - NPC Weapon", body, "Select", "Back");
+            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_WEAPON<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{MAIN}Practice - NPC Weapon", body, "Select", "Back");
         }
 
         case PRAC_ROW_SPEED:
@@ -223,7 +223,7 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 }
 
                 new sbody[256];
-                strcat(sbody, "{A29582}Move Style\t{A29582}Selected\n");
+                strcat(sbody, "{BEBEBE}Move Style\t{BEBEBE}Selected\n");
 
                 for (new i; i < sizeof(g_PracticeStyles); i++)
                 {
@@ -234,14 +234,14 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
                 }
 
                 format_MainColor(playerid, sbody);
-                return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "Practice - Move Style", sbody, "Select", "Back");
+                return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_STYLE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{MAIN}Practice - Move Style", sbody, "Select", "Back");
             }
 
             new body[192];
             format(body, sizeof(body), "{FFFFFF}\x95 {B4B5B7}Current: "COL_WHITE"%.1f\n\n{FFFFFF}\x95 {B4B5B7}Allowed range: "COL_WHITE"%.1f to %.1f",
                 g_Practice[playerid][pracSpeed], PRACTICE_SPEED_MIN, PRACTICE_SPEED_MAX);
 
-            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_SPEED<iiiis>, DIALOG_STYLE_INPUT, "Practice - Speed", body, "Confirm", "Back");
+            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_SPEED<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Practice - Speed", body, "Confirm", "Back");
         }
 
         case PRAC_ROW_HEIGHT:
@@ -250,7 +250,7 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
             format(body, sizeof(body), "{FFFFFF}\x95 {B4B5B7}Current: "COL_WHITE"%.1f\n\n{FFFFFF}\x95 {B4B5B7}Allowed range: "COL_WHITE"%.1f to %.1f",
                 g_Practice[playerid][pracHeight], PRACTICE_HEIGHT_MIN, PRACTICE_HEIGHT_MAX);
 
-            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_HEIGHT<iiiis>, DIALOG_STYLE_INPUT, "Practice - Height", body, "Confirm", "Back");
+            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_HEIGHT<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Practice - Height", body, "Confirm", "Back");
         }
 
         case PRAC_ROW_TOLERANCE:
@@ -259,7 +259,7 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
             format(body, sizeof(body), "{FFFFFF}\x95 {B4B5B7}Current: "COL_WHITE"%d ms\n\n{FFFFFF}\x95 {B4B5B7}Allowed range: "COL_WHITE"%d to %d\n\n{BEBEBE}Ping compensation when checking hits on the moving ball. Higher is more forgiving. Does not affect the NPC.",
                 g_Practice[playerid][pracTolerance], PRACTICE_TOLERANCE_MIN, PRACTICE_TOLERANCE_MAX);
 
-            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_TOLERANCE<iiiis>, DIALOG_STYLE_INPUT, "Practice - Hit Tolerance", body, "Confirm", "Back");
+            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_TOLERANCE<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Practice - Hit Tolerance", body, "Confirm", "Back");
         }
 
         case PRAC_ROW_LATENCY:
@@ -274,7 +274,7 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
             format(body, sizeof(body), "{FFFFFF}\x95 {B4B5B7}Current: "COL_WHITE"%d ms\n\n{FFFFFF}\x95 {B4B5B7}Allowed range: "COL_WHITE"%d to %d\n\n{BEBEBE}Simulates a lagging target. The valid position runs ahead of the ball you see, so hitting it on screen no longer counts - you have to lead the shot. Needs Movement on. 0 turns it off.",
                 g_Practice[playerid][pracLatency], PRACTICE_LATENCY_MIN, PRACTICE_LATENCY_MAX);
 
-            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_LATENCY<iiiis>, DIALOG_STYLE_INPUT, "Practice - Lag Simulation", body, "Confirm", "Back");
+            return Dialog_ShowCallback(playerid, using public DIALOG_PRAC_LATENCY<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Practice - Lag Simulation", body, "Confirm", "Back");
         }
 
         case PRAC_ROW_RECORD:

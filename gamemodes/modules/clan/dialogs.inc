@@ -106,27 +106,27 @@ stock ShowClanSettingsDialog(playerid, clanid)
     if (!IsValidClanID(clanid)) return 0;
 
     new body[1024];
-    format(body, sizeof(body), "{MAIN}Setting\t{MAIN}Permission / Cost\n");
+    format(body, sizeof(body), "{BEBEBE}Setting\t{BEBEBE}Permission / Cost\n");
 
     if (HasClanRank(playerid, RANK_COFOUNDER))
     {
-        strcat(body, "{MAIN}Manage Roles\t{BEBEBE}Configure rank titles & permissions\n");
-        strcat(body, "{MAIN}Change Clan Name\t{BEBEBE}Co-Founder+ Permission\n");
-        strcat(body, "{MAIN}Change Clan Tag\t{BEBEBE}Co-Founder+ Permission\n");
-        strcat(body, fmat_return("{MAIN}Change Clan Color\t{BEBEBE}Default or Custom (%s)\n", FormatMoney(CLAN_COLOR_PRICE)));
+        strcat(body, "{B4B5B7}\x95 {FFFFFF}Manage Roles\t{BEBEBE}Configure rank titles & permissions\n");
+        strcat(body, "{B4B5B7}\x95 {FFFFFF}Change Clan Name\t{BEBEBE}Co-Founder+ Permission\n");
+        strcat(body, "{B4B5B7}\x95 {FFFFFF}Change Clan Tag\t{BEBEBE}Co-Founder+ Permission\n");
+        strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Change Clan Color\t{BEBEBE}Default or Custom (%s)\n", FormatMoney(CLAN_COLOR_PRICE)));
     }
     else
     {
-        strcat(body, "{808080}Manage Roles\t{808080}Co-Founder+ Required\n");
-        strcat(body, "{808080}Change Clan Name\t{808080}Co-Founder+ Required\n");
-        strcat(body, "{808080}Change Clan Tag\t{808080}Co-Founder+ Required\n");
-        strcat(body, "{808080}Change Clan Color\t{808080}Co-Founder+ Required\n");
+        strcat(body, "{808080}\x95 Manage Roles\t{808080}Co-Founder+ Required\n");
+        strcat(body, "{808080}\x95 Change Clan Name\t{808080}Co-Founder+ Required\n");
+        strcat(body, "{808080}\x95 Change Clan Tag\t{808080}Co-Founder+ Required\n");
+        strcat(body, "{808080}\x95 Change Clan Color\t{808080}Co-Founder+ Required\n");
     }
 
     if (IsClanLeader(playerid))
-        strcat(body, "{FF0000}Delete Clan\t{FF4500}Permanent Action");
+        strcat(body, "{F84F31}\x95 Delete Clan\t{F84F31}Permanent Action");
     else
-        strcat(body, "{FF0000}Leave Clan\t{FF4500}Exit this clan");
+        strcat(body, "{F84F31}\x95 Leave Clan\t{F84F31}Exit this clan");
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Settings: {FFFFFF}%s", ClanInfo[clanid][clanName]);
@@ -265,10 +265,10 @@ stock ShowClanRolesDialog(playerid, clanid)
     new maxRole = (IsClanLeader(playerid)) ? MAX_ROLES : (MAX_ROLES - 1);
 
     new body[2500];
-    format(body, sizeof(body), "{MAIN}Level\t{MAIN}Role Title\n");
+    format(body, sizeof(body), "{BEBEBE}Level\t{BEBEBE}Role Title\n");
 
     for (new i = 0; i < maxRole; i++)
-        strcat(body, fmat_return("{MAIN}Level %d\t{FFFFFF}%s\n", i, ClanRoles[clanid][i]));
+        strcat(body, fmat_return("{B4B5B7}\x95 Level %d\t{FFFFFF}%s\n", i, ClanRoles[clanid][i]));
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Clan Roles: {FFFFFF}%s", ClanInfo[clanid][clanName]);
@@ -294,7 +294,7 @@ public DIALOG_CLAN_ROLES(playerid, dialogid, response, listitem, string:inputtex
     new body[512];
     format(body, sizeof(body), "{B4B5B7}Current name: "COL_WHITE"%s\n\n{B4B5B7}Requirements: "COL_WHITE"min %d and max %d characters", ClanRoles[clanid][listitem], CLAN_ROLE_MIN, MAX_ROLE_NAME);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_ROLE<iiiis>, DIALOG_STYLE_INPUT, "Clan Settings - Edit Role Name", body, "Confirm", "Cancel");
+    Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_ROLE<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Clan - Edit Role Name", body, "Confirm", "Cancel");
     return 1;
 }
 
@@ -332,7 +332,7 @@ public DIALOG_CLAN_COLOR_TYPE(playerid, dialogid, response, listitem, string:inp
     if (listitem == 0)
     {
         new body[1024];
-        format(body, sizeof(body), "{MAIN}Color Preview\t{MAIN}Color Name\n");
+        format(body, sizeof(body), "{BEBEBE}Color Preview\t{BEBEBE}Color Name\n");
 
         for (new i = 0; i < sizeof(DefaultClanColors); i++)
             strcat(body, fmat_return("{%06x}==========\t{FFFFFF}%s\n", DefaultClanColors[i] >>> 8, DefaultClanColorNames[i]));
@@ -386,17 +386,13 @@ public DIALOG_CLAN_EDIT_COLOR(playerid, dialogid, response, listitem, string:inp
     if (User[playerid][playerMoney] < CLAN_COLOR_PRICE)
         return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need %s to change the clan color.", FormatMoney(CLAN_COLOR_PRICE));
 
-    new len = strlen(inputtext);
-    if (len != 6 && len != 8)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid format. Use 6 (RRGGBB) or 8 (RRGGBBAA) characters.");
-
-    new colorVal;
-    if (sscanf(inputtext, "x", colorVal))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid HEX color.");
+    new parsedColor;
+    if (!ParseHexColorRGBA(inputtext, parsedColor, CLAN_COLOR_ALPHA))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Invalid format. Use 6 (RRGGBB) or 8 (RRGGBBAA) characters (0-9, A-F).");
 
     GivePlayerCash(playerid, -CLAN_COLOR_PRICE);
 
-    SetClanColorValue(playerid, clanid, (len == 6) ? ((colorVal << 8) | CLAN_COLOR_ALPHA) : colorVal);
+    SetClanColorValue(playerid, clanid, parsedColor);
     SendClientMessage(playerid, -1, CLAN_PREFIX"Custom color applied successfully!");
     return 1;
 }

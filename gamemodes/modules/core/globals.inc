@@ -1013,6 +1013,33 @@ stock IsPlayerInDuel2v2(playerid)
     return (g_PlayerDuel2v2ID[playerid] != -1) ? 1 : 0;
 }
 
+stock bool:IsPlayerInDuel(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    return (GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE || g_PlayerDuel2v2ID[playerid] != -1);
+}
+
+stock bool:IsPlayerInSpecialActivity(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE) return true;
+    if(g_PlayerDuel2v2ID[playerid] != -1) return true;
+    if(g_PlayerTourneyMatch[playerid] != -1) return true;
+    if(IsPlayerInTraining(playerid)) return true;
+    if(IsPlayerInPractice(playerid)) return true;
+    return false;
+}
+
+stock bool:IsPlayerInLegitArena(playerid)
+{
+    if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
+    if(!IsPlayerLogged(playerid)) return false;
+    new loc = User[playerid][locationId];
+    if(loc < 0 || loc >= MAX_LOCATIONS || loc == ARENA_AFK) return false;
+    if(IsPlayerInSpecialActivity(playerid)) return false;
+    return true;
+}
+
 stock IsPlayerInTournamentMatch(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;

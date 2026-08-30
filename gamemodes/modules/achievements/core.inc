@@ -837,14 +837,13 @@ stock ShowAchievementsMainMenu(playerid, targetid = INVALID_PLAYER_ID)
 
 
     format_MainColor(playerid, title);
-    strcopy(menuStr, "{MAIN}Category\t{MAIN}Unlocked\n", sizeof(menuStr));
+    strcopy(menuStr, "{BEBEBE}Category\t{BEBEBE}Unlocked\n", sizeof(menuStr));
 
     format(line, sizeof(line), "{MAIN}\xBB {FFFFFF}General Achievements\t{FFFFFF}%d{BEBEBE}/%d\n", genDone, genTotal);
     strcat(menuStr, line);
 
     format(line, sizeof(line), "{MAIN}\xBB {FFFFFF}Exclusive Achievements\t{FFFFFF}%d{BEBEBE}/%d", vipDone, vipTotal);
     strcat(menuStr, line);
-
 
     format_MainColor(playerid, menuStr);
     Dialog_ShowCallback(playerid, using public DIALOG_ACHIEVEMENTS_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, menuStr, "Select", "Close");
@@ -898,7 +897,7 @@ stock ShowAchievementsCategoryList(playerid, ach_cat)
 
     format_MainColor(playerid, title);
     g_achDialogBuf[0] = '\0';
-    strcat(g_achDialogBuf, "{MAIN}Achievement\t{MAIN}Status\n", sizeof(g_achDialogBuf));
+    strcat(g_achDialogBuf, "{BEBEBE}Achievement\t{BEBEBE}Status\n", sizeof(g_achDialogBuf));
 
     new count = 0, line[192], nameStr[128];
 
@@ -930,8 +929,6 @@ stock ShowAchievementsCategoryList(playerid, ach_cat)
         else
             strcat(g_achDialogBuf, "{BEBEBE}No achievements in this category\t{BEBEBE}None\n", sizeof(g_achDialogBuf));
     }
-
-    format_MainColor(playerid, g_achDialogBuf, sizeof(g_achDialogBuf));
 
     format_MainColor(playerid, g_achDialogBuf, sizeof(g_achDialogBuf));
     Dialog_ShowCallback(playerid, using public DIALOG_ACHIEVEMENTS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, g_achDialogBuf, "Select", "Back");

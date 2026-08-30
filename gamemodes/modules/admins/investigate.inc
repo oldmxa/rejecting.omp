@@ -194,7 +194,7 @@ public Invest_ShowNameHistory(playerid, targetid, page)
                 strcat(chadString, "\n"COL_KGREEN">>> Next Page\t\t\tGo next");
             }
 
-            Dialog_ShowCallback(playerid, using public DIALOG_HISTORY_NAV<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{FF4500}%s's name changes - Page %d", User[targetid][userName], page + 1), chadString, "Select", "Close");
+            Dialog_ShowCallback(playerid, using public DIALOG_HISTORY_NAV<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, sprintf("{MAIN}%s's name changes {B4B5B7}- Page %d", User[targetid][userName], page + 1), chadString, "Select", "Close");
         }
         else
         {

@@ -6,8 +6,8 @@
 
 // GENERAL SERVER PREFIXES & SYSTEM NOTIFICATIONS
 
-#define INFO                        ""COL_IRED"[INFO] "
-#define HELP                        ""COL_GREEN"[HELP] "
+#define INFO                        "{MAIN}[INFO] {FFFFFF}"
+#define HELP                        "{MAIN}[HELP] {FFFFFF}"
 
 #define WELCOME_MSG                 "{FFFFFF}Welcome to {MAIN}%s{FFFFFF} server"
 #define REGISTER_WRITE_MSG          "{MAIN}[INFO] {FFFFFF}Your account has been created. {MAIN}Welcome to %s!"
@@ -33,52 +33,52 @@
 // COMMON VALIDATION & CHECKER ERRORS
 
 #define UNKNOWN_COMMAND_MSG         "{MAIN} << {FFFFFF}Unknown command. Use /help /cmds {MAIN}>>"
-#define IS_NOT_CONNECTED            "{MAIN}[ERROR] {FFFFFF} The user is not logged in."
-#define IS_NOT_LOGGED               "{MAIN}[ERROR] {FFFFFF} The player is not logged yet."
-#define NOT_LOGGED_ERROR            "{MAIN}[ERROR] {FFFFFF} You must be logged in to use commands!"
-#define NOT_SPAWNED_MSG             "{MAIN}[ERROR] {FFFFFF} You are not spawned."
-#define CANNOT_DO_THIS              "{MAIN}[ERROR] {FFFFFF} You cannot do this now."
-#define CANNOT_RESPAWN              "{MAIN}**{FFFFFF} You cannot respawn."
-#define IN_VEHICLE_ERROR            "{MAIN}**{FFFFFF}You cannot use this while inside a vehicle."
-#define IS_NOT_NUMERIC              "{MAIN}**{FFFFFF}Enter a valid number."
+#define IS_NOT_CONNECTED            "{MAIN}[ERROR] {FFFFFF}The user is not logged in."
+#define IS_NOT_LOGGED               "{MAIN}[ERROR] {FFFFFF}The player is not logged yet."
+#define NOT_LOGGED_ERROR            "{MAIN}[ERROR] {FFFFFF}You must be logged in to use commands!"
+#define NOT_SPAWNED_MSG             "{MAIN}[ERROR] {FFFFFF}You are not spawned."
+#define CANNOT_DO_THIS              "{MAIN}[ERROR] {FFFFFF}You cannot do this now."
+#define CANNOT_RESPAWN              "{MAIN}[ERROR] {FFFFFF}You cannot respawn."
+#define IN_VEHICLE_ERROR            "{MAIN}[ERROR] {FFFFFF}You cannot use this while inside a vehicle."
+#define IS_NOT_NUMERIC              "{MAIN}[ERROR] {FFFFFF}Enter a valid number."
 #define KEEP_CALM_MSG               "{MAIN}[ERROR] {FFFFFF}Please wait %d seconds."
-#define HEALTH_ERROR_MSG            "{MAIN}[ERROR] {FFFFFF} You need at least %d health"
-#define LOW_HEALTH_ERROR            "{MAIN}[ERROR] {FFFFFF} You need to have full health to change mode."
-#define RECENT_DAMAGE_ERROR         "{MAIN}[ERROR] {FFFFFF} You cannot change mode while in combat or having taken damage recently."
-#define RETARD                      "{MAIN}**{FFFFFF} YOU ARE A FUCKING RETARD!!!"
+#define HEALTH_ERROR_MSG            "{MAIN}[ERROR] {FFFFFF}You need at least %d health"
+#define LOW_HEALTH_ERROR            "{MAIN}[ERROR] {FFFFFF}You need to have full health to change mode."
+#define RECENT_DAMAGE_ERROR         "{MAIN}[ERROR] {FFFFFF}You cannot change mode while in combat or having taken damage recently."
+#define RETARD                      "{MAIN}[ERROR] {FFFFFF}Invalid operation."
 
 // PLAYER COMMANDS & PREFERENCES
 
-#define NAMES_HELP                  "{MAIN}[ERROR] {FFFFFF}/names [ID] - Check the player's name history."
-#define DANCE_HELP                  "{MAIN}[ERROR] {FFFFFF} /dance [1-4]"
+#define NAMES_HELP                  "{MAIN}[HELP] {FFFFFF}/names [ID] - Check the player's name history."
+#define DANCE_HELP                  "{MAIN}[HELP] {FFFFFF}/dance [1-4]"
 
-#define TIME_HELP                   "{MAIN}[ERROR] {FFFFFF}/time [id time]"
-#define TIME_INFO                   "{MAIN}[INFO] {FFFFFF}You have set the time for {2275FF}%d:00"
+#define TIME_HELP                   "{MAIN}[HELP] {FFFFFF}/time [id time]"
+#define TIME_INFO                   "{MAIN}[INFO] {FFFFFF}You have set the time for {MAIN}%d:00"
 
-#define WEATHER_HELP                "{MAIN}[ERROR] {FFFFFF}/weather [id weather]"
-#define WEATHER_INFO                "{MAIN}[INFO] {FFFFFF}Weather changed to {2275FF}%d"
+#define WEATHER_HELP                "{MAIN}[HELP] {FFFFFF}/weather [id weather]"
+#define WEATHER_INFO                "{MAIN}[INFO] {FFFFFF}Weather changed to {MAIN}%d"
 
-#define SKIN_HELP2                  "{MAIN}**{FFFFFF} Select a number between 2 and 311."
-#define SKIN_INFO                   "{MAIN}[INFO] {FFFFFF}You changed your skin to {2275FF}%d"
+#define SKIN_HELP2                  "{MAIN}[HELP] {FFFFFF}Select a number between 2 and 311."
+#define SKIN_INFO                   "{MAIN}[INFO] {FFFFFF}You changed your skin to {MAIN}%d"
 
 #define NICK_CHANGE_WHILE_FAKE      "{MAIN}[ERROR] {FFFFFF}You cannot change your nickname with a fake nick active. Use {MAIN}/fake {FFFFFF}with no arguments to reset it first."
 
-#define PM_HELP                     "{MAIN}[ERROR] {FFFFFF}/pm [name/id] [Message]"
-#define PM_SEND                     "[PM] Message sent to %s (%d): %s"
-#define PM_RECIVED                  "[PM] Message received from %s (%d): %s"
+#define PM_HELP                     "{MAIN}[HELP] {FFFFFF}/pm [name/id] [Message]"
+#define PM_SEND                     "{MAIN}[PM] {FFFFFF}Message sent to %s (%d): %s"
+#define PM_RECIVED                  "{MAIN}[PM] {FFFFFF}Message received from %s (%d): %s"
 
-#define REPORT_HELP                 "{MAIN}[ERROR] {FFFFFF} /report [id] [reason]"
-#define CANNOT_REPORT_SELF          "{MAIN}[ERROR] {FFFFFF} You cannot report yourself."
-#define CANNOT_REPORT_ADMIN         "{MAIN}[ERROR] {FFFFFF} You cannot report an administrator."
+#define REPORT_HELP                 "{MAIN}[HELP] {FFFFFF}/report [id] [reason]"
+#define CANNOT_REPORT_SELF          "{MAIN}[ERROR] {FFFFFF}You cannot report yourself."
+#define CANNOT_REPORT_ADMIN         "{MAIN}[ERROR] {FFFFFF}You cannot report an administrator."
 
 // ECONOMY & MONEY TRANSFERS
 
-#define ERROR_TRANSFERMONEY         "{MAIN}[ERROR] {FFFFFF}/transfer [ID/name] [money]"
+#define ERROR_TRANSFERMONEY         "{MAIN}[HELP] {FFFFFF}/transfer [ID/name] [money]"
 #define TRANSFERMONEY_SELF          "{MAIN}[ERROR] {FFFFFF}You cannot transfer money to yourself."
 #define TRANSFERMONEY_AMOUNT        "{MAIN}[ERROR] {FFFFFF}The amount must be greater than zero."
 #define TRANSFERMONEY_NOMONEY       "{MAIN}[ERROR] {FFFFFF}You don't have enough money."
-#define TRANSFERMONEY_SENT          "{MAIN}**{FFFFFF} You sent "COL_GREEN"%d {FFFFFF}to "COL_GREEN"%s."
-#define TRANSFERMONEY_GIVEN         "{MAIN}**{FFFFFF} You received "COL_GREEN"%d {FFFFFF}from "COL_GREEN"%s."
+#define TRANSFERMONEY_SENT          "{MAIN}[TRANSFER] {FFFFFF}You sent "COL_GREEN"%d {FFFFFF}to "COL_GREEN"%s."
+#define TRANSFERMONEY_GIVEN         "{MAIN}[TRANSFER] {FFFFFF}You received "COL_GREEN"%d {FFFFFF}from "COL_GREEN"%s."
 
 // LOUNGE
 

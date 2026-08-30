@@ -272,8 +272,8 @@ stock ShowEAccountDialog(playerid)
     if (EAcc_OwnsClan(playerid))
         strcat(body, fmat_return("{23C552}\x95 Clan Settings\t{BEBEBE}%s\n", ClanInfo[EAcc_ClanID(playerid)][clanName]));
 
-    if (EAcc_IsOffline(playerid)) format(title, sizeof(title), "Edit Account: %s (offline)", name);
-    else format(title, sizeof(title), "Edit Account: %s [%d]", name, EAcc_OnlineTarget(playerid));
+    if (EAcc_IsOffline(playerid)) format(title, sizeof(title), "{MAIN}Edit Account: {FFFFFF}%s (offline)", name);
+    else format(title, sizeof(title), "{MAIN}Edit Account: {FFFFFF}%s [%d]", name, EAcc_OnlineTarget(playerid));
 
     Dialog_ShowCallback(playerid, using public DIALOG_EACC_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Close");
     return 1;
@@ -288,11 +288,11 @@ stock ShowEAccountClanDialog(playerid)
 
     new clanid = EAcc_ClanID(playerid), body[512], title[96];
 
-    strcat(body, "{A29582}Setting\t{A29582}Current Value\n");
-    strcat(body, fmat_return("{FFFFFF}\x95 %s\t{BEBEBE}%d\n", EClanField[ECLAN_KILLS][eaccLabel], ClanInfo[clanid][clanKills]));
-    strcat(body, fmat_return("{FFFFFF}\x95 %s\t{BEBEBE}%d\n", EClanField[ECLAN_POINTS][eaccLabel], ClanInfo[clanid][clanPoints]));
+    strcat(body, "{BEBEBE}Setting\t{BEBEBE}Current Value\n");
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}%s\t{BEBEBE}%d\n", EClanField[ECLAN_KILLS][eaccLabel], ClanInfo[clanid][clanKills]));
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}%s\t{BEBEBE}%d\n", EClanField[ECLAN_POINTS][eaccLabel], ClanInfo[clanid][clanPoints]));
 
-    format(title, sizeof(title), "Edit Clan: %s", ClanInfo[clanid][clanName]);
+    format(title, sizeof(title), "{MAIN}Edit Clan: {FFFFFF}%s", ClanInfo[clanid][clanName]);
 
     Dialog_ShowCallback(playerid, using public DIALOG_EACC_CLAN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
@@ -318,7 +318,7 @@ public DIALOG_EACC_LIST(playerid, dialogid, response, listitem, string:inputtext
         name, EAccField[listitem][eaccLabel], EAcc_Read(playerid, listitem),
         EAccField[listitem][eaccMin], EAccField[listitem][eaccMax]);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_EACC_INPUT<iiiis>, DIALOG_STYLE_INPUT, "Edit Account - New Value", body, "Confirm", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_EACC_INPUT<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Edit Account - New Value", body, "Confirm", "Back");
     return 1;
 }
 
@@ -380,7 +380,7 @@ public DIALOG_EACC_CLAN(playerid, dialogid, response, listitem, string:inputtext
         ClanInfo[clanid][clanName], EClanField[listitem][eaccLabel], current,
         EClanField[listitem][eaccMin], EClanField[listitem][eaccMax]);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_EACC_CLANINPUT<iiiis>, DIALOG_STYLE_INPUT, "Edit Clan - New Value", body, "Confirm", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_EACC_CLANINPUT<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Edit Clan - New Value", body, "Confirm", "Back");
     return 1;
 }
 

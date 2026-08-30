@@ -178,7 +178,7 @@ public DIALOG_CREATE_ADMIN_PASS(playerid, dialogid, response, listitem, string:i
 
     if(strlen(inputtext) < 4 || strlen(inputtext) > 32)
     {
-        SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {FF0000}Admin password must be between 4 and 32 characters long!");
+        SendClientMessage(playerid, -1, "{MAIN}[SECURITY] {F84F31}Admin password must be between 4 and 32 characters long!");
         ShowCreateAdminPasswordDialog(playerid);
         return 1;
     }
@@ -233,7 +233,7 @@ stock ShowAdminPasswordDialog(playerid)
     new title[64] = "{MAIN}Admin Authentication";
 
     new body[280];
-    format(body, sizeof(body), "{FFFFFF}Welcome back, Admin %s.\n\nPlease enter your Admin Password below to log in as Administrator:\n\n{FFFFFF}\x95 {FF0000}Note: You have 30 seconds to enter your password or you will be kicked.", User[playerid][userName]);
+    format(body, sizeof(body), "{FFFFFF}Welcome back, Admin %s.\n\nPlease enter your Admin Password below to log in as Administrator:\n\n{FFFFFF}\x95 {F84F31}Note: You have 30 seconds to enter your password or you will be kicked.", User[playerid][userName]);
 
     Dialog_ShowCallback(playerid, using public DIALOG_ADMIN_LOGIN_PASS<iiiis>, DIALOG_STYLE_PASSWORD, title, body, "Login", "Disconnect");
     return 1;
@@ -301,7 +301,7 @@ public OnAdminPasswordVerify(playerid, bool:success)
         {
             Admin_KillLoginTimer(playerid);
 
-            SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FF0000}You failed 3 password attempts and have been temp-banned for 2 minutes.");
+            SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {F84F31}You failed 3 password attempts and have been temp-banned for 2 minutes.");
 
             new timestamp = gettime();
             new unban_timestamp = timestamp + 120;
@@ -318,7 +318,7 @@ public OnAdminPasswordVerify(playerid, bool:success)
             return 1;
         }
 
-        va_SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FFFFFF}Incorrect password! Attempt {FF0000}%d{FFFFFF}/3.", User[playerid][adminAuthAttempts]);
+        va_SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FFFFFF}Incorrect password! Attempt {F84F31}%d{FFFFFF}/3.", User[playerid][adminAuthAttempts]);
         ShowAdminPasswordDialog(playerid);
     }
     return 1;
@@ -330,7 +330,7 @@ public OnAdminLoginTimeout(playerid)
 
     if(IsPlayerConnected(playerid) && User[playerid][adminLevel] > 0 && !User[playerid][isAdminLogged])
     {
-        SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FF0000}You failed to enter your admin password within 30 seconds and were kicked.");
+        SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {F84F31}You failed to enter your admin password within 30 seconds and were kicked.");
         KickEx(playerid, 500);
     }
     return 1;

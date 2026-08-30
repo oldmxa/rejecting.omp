@@ -329,7 +329,7 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 		Ach_OnDuelWin(winner);
 		GivePlayerCash(winner, 2000);
 		GameTextForPlayer(winner, sprintf("~g~~h~YOU WON THE DUEL!~n~~w~+%s", FormatMoney(2000)), 3000, 1);
-		va_SendClientMessage(winner, -1, "{MAIN}[DUEL] {FFFFFF}You won the duel and earned {00FF00}+%s{FFFFFF}!", FormatMoney(2000));
+		va_SendClientMessage(winner, -1, "{MAIN}[DUEL] {FFFFFF}You won the duel and earned {23C552}+%s{FFFFFF}!", FormatMoney(2000));
 		UpdatePlayerData(winner);
 	}
 
@@ -339,7 +339,7 @@ stock DuelS_End(winner, loser, bool:forfeited = false, bool:disconnected = false
 		GivePlayerCash(loser, -2000);
 		if(User[loser][playerMoney] < 0) User[loser][playerMoney] = 0;
 		GameTextForPlayer(loser, sprintf("~r~~h~YOU LOST THE DUEL!~n~~w~-%s", FormatMoney(2000)), 3000, 1);
-		va_SendClientMessage(loser, -1, "{MAIN}[DUEL] {FFFFFF}You lost the duel and lost {FF0000}-%s{FFFFFF}.", FormatMoney(2000));
+		va_SendClientMessage(loser, -1, "{MAIN}[DUEL] {FFFFFF}You lost the duel and lost {F84F31}-%s{FFFFFF}.", FormatMoney(2000));
 		UpdatePlayerData(loser);
 	}
 
