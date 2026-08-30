@@ -1,10 +1,14 @@
-# rejecting.omp
+<div align="center">
+  <img src="image/logo.png" alt="rejecting.omp" width="180"/>
 
-**Deathmatch gamemode for [open.mp](https://open.mp), developed by oldmxa.**
+  # rejecting.omp
 
-[![open.mp](https://img.shields.io/badge/open.mp-compatible-2f80ed?style=flat-square)](https://open.mp/)
-[![Pawn](https://img.shields.io/badge/language-Pawn-8b5cf6?style=flat-square)](https://www.compuphase.com/pawn/pawn.htm)
-[![License](https://img.shields.io/badge/license-Proprietary-lightgrey?style=flat-square)](#)
+  **Deathmatch gamemode for [open.mp](https://open.mp), developed by oldmxa.**
+
+  [![open.mp](https://img.shields.io/badge/open.mp-compatible-2f80ed?style=flat-square)](https://open.mp/)
+  [![Pawn](https://img.shields.io/badge/language-Pawn-8b5cf6?style=flat-square)](https://www.compuphase.com/pawn/pawn.htm)
+  [![License](https://img.shields.io/badge/license-Proprietary-lightgrey?style=flat-square)](#)
+</div>
 
 ---
 
