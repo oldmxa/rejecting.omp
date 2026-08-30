@@ -646,8 +646,8 @@ public Stats_ShowBanDialog(playerid, const adminname[], const reason[], const ba
         format(strban, sizeof(strban), "%s{FF644D}Reason: {FFFFFF}%s\n", strban, safe_reason);
         format(strban, sizeof(strban), "%s{FF644D}Date: {FFFFFF}%s\n", strban, safe_date);
         
-        format(strban, sizeof(strban), "%s{FF644D}GPCI: %s\n", strban, (gpci_ban_count > 0) ? ("{FF0000}Banned") : ("{00FF00}Clean"));
-        format(strban, sizeof(strban), "%s{FF644D}ISP: %s\n\n", strban, (isp_ban_count > 0) ? ("{FF0000}Banned") : ("{00FF00}Clean"));
+        format(strban, sizeof(strban), "%s{FF644D}GPCI: %s\n", strban, (gpci_ban_count > 0) ? ("{F84F31}Banned") : ("{23C552}Clean"));
+        format(strban, sizeof(strban), "%s{FF644D}ISP: %s\n\n", strban, (isp_ban_count > 0) ? ("{F84F31}Banned") : ("{23C552}Clean"));
 
         strcat(strban, fmat_return("{FFFFFF}Site({4282b3}%s {FFFFFF})", ServerHostname));
 

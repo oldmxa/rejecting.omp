@@ -71,7 +71,7 @@
         return SendClientMessage(playerid, -1, "{MAIN}[ASK] {FFFFFF}Please wait 30 seconds before sending another question.");
 
     if(isnull(params))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}/ask [your question]");
+        return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}/ask [your question]");
 
     SetPVarInt(playerid, "ask_cooldown", 1);
     SetTimerEx("ReleaseAsk", 30000, false, "i", playerid);
@@ -116,13 +116,13 @@
             "**User:** %s (ID: %d)\n" \
             "**Question:** %s\n\n" \
             "**Location:** %s\n" \
-            "**Level:** %d | **Money:** $%d\n" \
+            "**Level:** %d | **Money:** %s\n" \
             "**Ping:** %d ms | **FPS:** %d\n\n" \
             "**Reply:** `.d %d [message]` or `/d %d [message]`", 
             User[playerid][userName], playerid,
             params,
             locName,
-            User[playerid][playerLevel], User[playerid][playerMoney],
+            User[playerid][playerLevel], FormatMoney(User[playerid][playerMoney]),
             GetPlayerPing(playerid), User[playerid][FPS],
             playerid, playerid);
 

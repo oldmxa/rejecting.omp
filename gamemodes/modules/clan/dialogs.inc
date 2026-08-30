@@ -156,7 +156,7 @@ stock ShowClanLogsDialog(playerid, clanid)
         }
 
         new body[4096], arena[64], winner[MAX_PLAYER_NAME + 1], kills, dmg, date_str[32];
-        format(body, sizeof(body), "{MAIN}Date\t{MAIN}Arena\t{MAIN}Winner\t{MAIN}Kills\t{MAIN}Damage\n");
+        format(body, sizeof(body), "{BEBEBE}Date\t{BEBEBE}Arena\t{BEBEBE}Winner\t{BEBEBE}Kills\t{BEBEBE}Damage\n");
 
         for (new i = 0; i < rows; i++)
         {
@@ -166,7 +166,7 @@ stock ShowClanLogsDialog(playerid, clanid)
             cache_get_value_int(i, "total_damage", dmg);
             cache_get_value_name(i, "date_str", date_str);
 
-            strcat(body, fmat_return("{BEBEBE}%s\t{FFFFFF}%s\t{90C3D4}%s\t{FFD700}%d Kills\t{FF4500}%d DMG\n", date_str, arena, winner, kills, dmg));
+            strcat(body, fmat_return("{BEBEBE}%s\t{FFFFFF}%s\t{3CCFFA}%s\t{FFD700}%d Kills\t{FF6347}%d DMG\n", date_str, arena, winner, kills, dmg));
         }
 
         new title[128];
@@ -410,9 +410,9 @@ stock ShowClanMembersDialog(playerid, page)
     new end = start + CLAN_MEMBERS_PER_PAGE;
 
     new body[2048];
-    format(body, sizeof(body), "{MAIN}Member\t{MAIN}Role\t{MAIN}Status\t{MAIN}Kills\n");
+    format(body, sizeof(body), "{BEBEBE}Member\t{BEBEBE}Role\t{BEBEBE}Status\t{BEBEBE}Kills\n");
 
-    if (page > 0) strcat(body, "{FF0000}<<<\tPrevious Page\t \t \n");
+    if (page > 0) strcat(body, "{F84F31}<<<\tPrevious Page\t \t \n");
 
     for (new i = start; i < end && i < count; i++)
     {
@@ -420,14 +420,14 @@ stock ShowClanMembersDialog(playerid, page)
         new roleIdx = ClanMembers[clanid][slot][member_role];
         if (!IsValidClanRole(roleIdx)) roleIdx = RANK_TRIAL;
 
-        strcat(body, fmat_return("{FFFFFF}%s\t{90C3D4}%s\t%s\t{FFD700}%d Kills\n",
+        strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}%s\t{3CCFFA}%s\t%s\t{FFD700}%d Kills\n",
             ClanMembers[clanid][slot][member_name],
             ClanRoles[clanid][roleIdx],
             IsAccountOnline(ClanMembers[clanid][slot][member_id]) ? ("{23C552}Online") : ("{808080}Offline"),
             ClanMembers[clanid][slot][member_score]));
     }
 
-    if (count > end) strcat(body, "{00FF00}>>>\tNext Page\t \t \n");
+    if (count > end) strcat(body, "{23C552}>>>\tNext Page\t \t \n");
 
     SetPVarInt(playerid, "ClanMemPage", page);
 
@@ -481,12 +481,12 @@ public DIALOG_CLANMEMBERS_PAGED(playerid, dialogid, response, listitem, string:i
     SetPVarInt(playerid, "EditingClanPlayer", slot);
 
     new body[256];
-    format(body, sizeof(body), "{MAIN}Action\t{MAIN}Role Level\n");
+    format(body, sizeof(body), "{BEBEBE}Action\t{BEBEBE}Role Level\n");
 
     for (new i = 0; i < MAX_ROLES - 1; i++)
-        strcat(body, fmat_return("{MAIN}Set Role: %s\tLevel %d\n", ClanRoles[clanid][i], i));
+        strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Set Role: %s\t{BEBEBE}Level %d\n", ClanRoles[clanid][i], i));
 
-    strcat(body, "{FF0000}Kick Member from Clan\t{FF4500}Action");
+    strcat(body, "{F84F31}\x95 Kick Member from Clan\t{F84F31}Action");
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Manage Member: {FFFFFF}%s", ClanMembers[clanid][slot][member_name]);

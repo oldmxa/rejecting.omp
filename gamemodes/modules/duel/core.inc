@@ -499,7 +499,7 @@ stock DuelS_Host(playerid)
 		if(Result < 190.0)
 			return SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}You need at least 190 total HP + Armour to create a duel.");
 
-		new stre[1500] = "ID\tArena Name\tEnvironment\tStatus\n";
+		new stre[1500] = "{BEBEBE}ID\t{BEBEBE}Arena Name\t{BEBEBE}Environment\t{BEBEBE}Status\n";
 		for(new i = 0; i < sizeof(DuelS_ArenaNames); i++)
 		{
 			new envStr[32], statusStr[32], waitingCount = 0;
@@ -527,7 +527,7 @@ stock DuelS_Host(playerid)
 			}
 			else
 			{
-				format(statusStr, sizeof(statusStr), "{00FF00}Available");
+				format(statusStr, sizeof(statusStr), "{23C552}Available");
 			}
 
 			strcat(stre, fmat_return("{MAIN}#%02d\t{FFFFFF}%s\t%s\t%s\n", i + 1, DuelS_ArenaNames[i], envStr, statusStr), sizeof(stre));

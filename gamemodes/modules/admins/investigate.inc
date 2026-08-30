@@ -394,7 +394,7 @@ static stock AppendACSuspects(dest[], size)
         }
         else if(ACSuspect[i][ac_weaponFlags] > 0)
         {
-            format(reason, sizeof(reason), "{FF0000}Weapon");
+            format(reason, sizeof(reason), "{F84F31}Weapon");
 
             if(ACSuspect[i][ac_rejectedHits] > 0)
             {
@@ -430,7 +430,7 @@ static stock AppendACSuspects(dest[], size)
     inline OnSuspectsQuery()
     {
         new str[2048], listed = 0;
-        strcat(str, "Player\tReason\tDetails\n");
+        strcat(str, "{BEBEBE}Player\t{BEBEBE}Reason\t{BEBEBE}Details\n");
 
         if(cache_num_rows() > 0)
         {
@@ -454,7 +454,7 @@ static stock AppendACSuspects(dest[], size)
 
                 if(is_banned)
                 {
-                    format(reason, sizeof(reason), "{FF0000}Ban Evader");
+                    format(reason, sizeof(reason), "{F84F31}Ban Evader");
                     format(details, sizeof(details), "{BEBEBE}Linked to: %s", banned_name);
                 }
                 else if(vpn || proxy)

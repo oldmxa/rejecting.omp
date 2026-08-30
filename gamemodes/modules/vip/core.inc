@@ -403,7 +403,7 @@ public DIALOG_VIP_TAG(playerid, dialogid, response, listitem, string:inputtext[]
                 mysql_format(dbHandle, query, sizeof(query), "UPDATE accounts SET vip_head_tag = 10, hide_vip_tag = 1 WHERE id = %d", User[playerid][user_sqlid]);
                 mysql_tquery(dbHandle, query);
 
-                va_SendClientMessage(playerid, -1, "{MAIN}[VIP] {FFFFFF}Your VIP 3D head tag has been {FF0000}Hidden{FFFFFF}.");
+                va_SendClientMessage(playerid, -1, "{MAIN}[VIP] {FFFFFF}Your VIP 3D head tag has been {F84F31}Hidden{FFFFFF}.");
             }
         }
     }
@@ -536,7 +536,7 @@ public DIALOG_VIP_CMDS(playerid, dialogid, response, listitem, string:inputtext[
                 format(vipTimeStr, sizeof(vipTimeStr), "%dd %dh", remaining / 86400, (remaining % 86400) / 3600);
             }
 
-            format(string, sizeof(string), "{FFFFFF}%s[%d]\t{FFFFFF}%02d:%02d:%02d\t{00FF00}%s\n",
+            format(string, sizeof(string), "{FFFFFF}%s[%d]\t{FFFFFF}%02d:%02d:%02d\t{23C552}%s\n",
                 User[i][userName], i, ontime / 3600, (ontime % 3600) / 60, ontime % 60, vipTimeStr);
             strcat(gs_Buffer, string);
             vipsonline++;
@@ -682,7 +682,7 @@ ShowVipTagDialog(playerid)
     strcat(tagList, fmat_return("{FFFFFF}Custom HEX Color\t{%s}#%s{FFFFFF}\n", curColorHex, curColorHex));
     if(User[playerid][vipHeadTag] == 10)
     {
-        strcat(tagList, "{FFFFFF}Toggle Tag Visibility\t{FF0000}[Hidden]");
+        strcat(tagList, "{FFFFFF}Toggle Tag Visibility\t{F84F31}[Hidden]");
     }
     else
     {

@@ -1476,10 +1476,10 @@ stock ShowCustomTagOptionsMenu(playerid)
     }
 
     new body[512];
-    format(body, sizeof(body), "{MAIN}Option\t{MAIN}Description\t{MAIN}Action\n");
-    strcat(body, "{MAIN}Predefined Tags\t{BEBEBE}Choose from server preset tags\t{90C3D4}[Select]\n");
-    strcat(body, "{MAIN}Custom Tag Text\t{BEBEBE}Enter your own custom tag (2-16 chars)\t{90C3D4}[Enter]\n");
-    strcat(body, "{MAIN}Remove Tag\t{BEBEBE}Unequip current custom tag\t{FF6347}[Remove]\n");
+    format(body, sizeof(body), "{BEBEBE}Option\t{BEBEBE}Description\t{BEBEBE}Action\n");
+    strcat(body, "{B4B5B7}\x95 {FFFFFF}Predefined Tags\t{BEBEBE}Choose from server preset tags\t{3CCFFA}[Select]\n");
+    strcat(body, "{B4B5B7}\x95 {FFFFFF}Custom Tag Text\t{BEBEBE}Enter your own custom tag (2-16 chars)\t{3CCFFA}[Enter]\n");
+    strcat(body, "{B4B5B7}\x95 {FFFFFF}Remove Tag\t{BEBEBE}Unequip current custom tag\t{F84F31}[Remove]\n");
 
     new title[64] = "{MAIN}Custom Tag - Options";
 
@@ -1509,16 +1509,16 @@ stock ShowPredefinedTagsDialog(playerid)
     }
 
     new listStr[1024];
-    format(listStr, sizeof(listStr), "{MAIN}#\t{MAIN}Tag Preview\t{MAIN}Status\n");
+    format(listStr, sizeof(listStr), "{BEBEBE}#\t{BEBEBE}Tag Preview\t{BEBEBE}Status\n");
 
     for(new i = 0; i < sizeof(g_PredefinedTags); i++)
     {
         new isEquipped = (!User[playerid][hideCustomTag] && !strcmp(User[playerid][customTag], g_PredefinedTags[i], true));
-        format(listStr, sizeof(listStr), "%s{FFFFFF}%02d.\t{FF4500}%s\t%s\n",
+        format(listStr, sizeof(listStr), "%s{B4B5B7}\x95 {FFFFFF}%02d.\t{3CCFFA}%s\t%s\n",
             listStr,
             i + 1,
             g_PredefinedTags[i],
-            isEquipped ? "{23C552}[Equipped]" : "{90C3D4}[Select]");
+            isEquipped ? "{23C552}[Equipped]" : "{3CCFFA}[Select]");
     }
 
     new title[64] = "{MAIN}Predefined Tags";
@@ -1779,11 +1779,11 @@ stock ShowTagMenu(playerid)
     if(!CanPlayerUseCustomTag(playerid) && User[playerid][customTag][0] == '\0')
         format(customStatus, sizeof(customStatus), "{B4B5B7}[No Access]");
     else if(User[playerid][customTag][0] == '\0')
-        format(customStatus, sizeof(customStatus), "{90C3D4}[Configure]");
+        format(customStatus, sizeof(customStatus), "{3CCFFA}[Configure]");
     else
-        format(customStatus, sizeof(customStatus), "%s", User[playerid][hideCustomTag] ? "{FF6347}[Hidden]" : "{23C552}[Visible]");
+        format(customStatus, sizeof(customStatus), "%s", User[playerid][hideCustomTag] ? "{F84F31}[Hidden]" : "{23C552}[Visible]");
 
-    format(tagList, sizeof(tagList), "%s{FFFFFF}Custom Tag\t%s\t%s\n",
+    format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}Custom Tag\t%s\t%s\n",
         tagList,
         customPreview,
         customStatus);
@@ -1792,12 +1792,12 @@ stock ShowTagMenu(playerid)
     if(CanPlayerUseCustomTag(playerid))
     {
         g_PlayerTagMenu[playerid][count++] = TAG_TYPE_EDIT_CUSTOM;
-        format(tagList, sizeof(tagList), "%s{MAIN}Configure Custom Tag\t{BEBEBE}Presets or Custom Text\t{90C3D4}[Configure]\n", tagList);
+        format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}Configure Custom Tag\t{BEBEBE}Presets or Custom Text\t{3CCFFA}[Configure]\n", tagList);
     }
 
     // 6. Manage Tournament Tags
     g_PlayerTagMenu[playerid][count++] = TAG_TYPE_TOURNAMENT;
-    format(tagList, sizeof(tagList), "%s{MAIN}Tournament Tags\t{BEBEBE}Manage won champion tags\t{90C3D4}[Select]\n", tagList);
+    format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}Tournament Tags\t{BEBEBE}Manage won champion tags\t{3CCFFA}[Select]\n", tagList);
 
     g_PlayerTagMenuCount[playerid] = count;
 
