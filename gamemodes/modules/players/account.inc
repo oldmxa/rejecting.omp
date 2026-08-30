@@ -147,8 +147,7 @@ ShowMyAccountMenu(playerid)
 
     format_MainColor(playerid, title);
     format(accStr, sizeof(accStr), "{MAIN}Option\t{MAIN}Description\n");
-    strcat(accStr, "{MAIN}\xBB {B4B5B7}Settings\t{FFFFFF}Configure preferences, sound & HUD toggles\n");
-    strcat(accStr, "{MAIN}\xBB {B4B5B7}Personalization\t{FFFFFF}Customize skin, hitmark, colors & sounds\n");
+    strcat(accStr, "{MAIN}\xBB {B4B5B7}Personalization\t{FFFFFF}Preferences, HUD, sounds, appearance & account\n");
     strcat(accStr, "{MAIN}\xBB {B4B5B7}My Stats\t{FFFFFF}View your detailed account statistics\n");
     strcat(accStr, "{MAIN}\xBB {B4B5B7}Discord ID\t{FFFFFF}View your linked Discord ID & status");
 
@@ -200,71 +199,7 @@ public Account_ShowSecurityMenu(playerid)
 forward Account_ShowSettingsMenu(playerid);
 public Account_ShowSettingsMenu(playerid)
 {
-    new setStr[1024], title[64];
-    format(title, sizeof(title), "{MAIN}Account & Gameplay Settings");
-
-    format_MainColor(playerid, title);
-    format(setStr, sizeof(setStr), "{MAIN}Option\t{MAIN}Status / Value\n");
-    strcat(setStr, "{MAIN}\xBB {B4B5B7}Change Nickname\t \n");
-    strcat(setStr, "{MAIN}\xBB {B4B5B7}Change Password\t \n");
-    strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Private Messages\t%s\n", (User[playerid][blockPM]) ? ("{F84F31}Blocked") : ("{23C552}Allowed")));
-    strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Connect Messages\t%s\n", (User[playerid][showConnectMsg]) ? ("{23C552}Visible") : ("{F84F31}Hidden")));
-    strcat(setStr, fmat_return("{FFFFFF}\x95 {B4B5B7}Global Broadcasts\t%s", (User[playerid][hideGlobalMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible")));
-
-    format_MainColor(playerid, setStr);
-    Dialog_ShowCallback(playerid, using public DIALOG_HELP_SETTINGS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, setStr, "Select", "Back");
-    return 1;
-}
-
-forward DIALOG_HELP_SETTINGS(playerid, dialogid, response, listitem, string:inputtext[]);
-public DIALOG_HELP_SETTINGS(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    new cmd[32];
-    if(!response)
-    {
-        return ShowMyAccountMenu(playerid);
-    }
-
-    switch(listitem)
-    {
-        case 0:
-        {
-            strcopy(cmd, "/changenick");
-            Command_ReProcess(playerid, cmd, 0);
-        }
-        case 1:
-        {
-            SetPVarInt(playerid, "changepass_source", 0);
-            new passBody[192];
-            format(passBody, sizeof(passBody),
-                "{FFFFFF}Enter your new password below:\n\n{B4B5B7}Only letters and numbers, between %d and %d characters.",
-                MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
-
-            Dialog_ShowCallback(playerid, using public DIALOG_CHANGE_PASSWORD<iiiis>, DIALOG_STYLE_PASSWORD, "Change Password", passBody, "Change", "Cancel");
-        }
-        case 2:
-        {
-            User[playerid][blockPM] = !User[playerid][blockPM];
-            if(User[playerid][blockPM])
-                SendClientMessage(playerid, -1, "{MAIN}[PM] {FFFFFF}You turned off incoming messages.");
-            else
-                SendClientMessage(playerid, -1, "{MAIN}[PM] {FFFFFF}You turned on incoming messages.");
-            
-            ShowSettingsMenu(playerid);
-        }
-        case 3:
-        {
-            User[playerid][showConnectMsg] = !User[playerid][showConnectMsg];
-            ShowSettingsMenu(playerid);
-        }
-        case 4:
-        {
-            User[playerid][hideGlobalMsg] = !User[playerid][hideGlobalMsg];
-            SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
-            ShowSettingsMenu(playerid);
-        }
-    }
-    return 1;
+    return Account_ShowPersonalizationMenu(playerid);
 }
 
 forward DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -276,7 +211,7 @@ public DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inp
     if(!response)
     {
         if(src == 1) return ShowSecurityMenu(playerid);
-        return ShowSettingsMenu(playerid);
+        return ShowPersonalizationMenu(playerid);
     }
 
     if(!IsPlayerLogged(playerid))
@@ -286,14 +221,14 @@ public DIALOG_CHANGE_PASSWORD(playerid, dialogid, response, listitem, string:inp
     {
         SendClientMessage(playerid, -1, "%s", ERROR_CHANGEPASS);
         if(src == 1) return ShowSecurityMenu(playerid);
-        return ShowSettingsMenu(playerid);
+        return ShowPersonalizationMenu(playerid);
     }
 
     if(!IsValidPassword(inputtext))
     {
         va_SendClientMessage(playerid, -1, ERROR_INVALIDPASS, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
         if(src == 1) return ShowSecurityMenu(playerid);
-        return ShowSettingsMenu(playerid);
+        return ShowPersonalizationMenu(playerid);
     }
 
     bcrypt_hash(playerid, "OnPlayerChangePass", inputtext, BCRYPT_COST);
@@ -342,8 +277,15 @@ public DIALOG_HELP_DISCORDID(playerid, dialogid, response, listitem, string:inpu
 forward Account_ShowPersonalizationMenu(playerid);
 public Account_ShowPersonalizationMenu(playerid)
 {
-    new pStr[2048];
+    new pStr[3072];
     format(pStr, sizeof(pStr), "{MAIN}Preference\t{MAIN}Status / Value\n");
+
+    format(pStr, sizeof(pStr), "%s{MAIN}\xBB {B4B5B7}Change Nickname\t \n", pStr);
+    format(pStr, sizeof(pStr), "%s{MAIN}\xBB {B4B5B7}Change Password\t \n", pStr);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Private Messages\t%s\n", pStr, (User[playerid][blockPM]) ? ("{F84F31}Blocked") : ("{23C552}Allowed"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Connect Messages\t%s\n", pStr, (User[playerid][showConnectMsg]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Global Random Messages\t%s\n", pStr, (User[playerid][hideGlobalMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Welcome Messages\t%s\n", pStr, (User[playerid][hideWelcomeMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));
 
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}World Time\t{FFFFFF}%02d:00\n", pStr, User[playerid][time]);
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Weather ID\t{FFFFFF}%d\n", pStr, User[playerid][weather]);
@@ -401,7 +343,6 @@ public Account_ShowPersonalizationMenu(playerid)
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Headshot Text\t%s\n", pStr, (User[playerid][showHeadshot]) ? ("{23C552}Visible") : ("{F84F31}Hidden"));
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Hit Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID]));
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Kill Sound\t{FFFFFF}ID:%d (%s)\n", pStr, User[playerid][killSoundID], GetSoundName(User[playerid][killSoundID]));
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Welcome Messages\t%s\n", pStr, (User[playerid][hideWelcomeMsg]) ? ("{F84F31}Hidden") : ("{23C552}Visible"));
 
     new lifeName[24];
     GetLifeStyleName(User[playerid][lifeType], lifeName);
@@ -438,18 +379,14 @@ public DIALOG_HELP_MYACCOUNT(playerid, dialogid, response, listitem, string:inpu
     {
         case 0:
         {
-            ShowSettingsMenu(playerid);
-        }
-        case 1:
-        {
             ShowPersonalizationMenu(playerid);
         }
-        case 2:
+        case 1:
         {
             strcopy(cmd, "/stats");
             Command_ReProcess(playerid, cmd, 0);
         }
-        case 3:
+        case 2:
         {
             Account_ShowDiscordIDDialog(playerid);
         }

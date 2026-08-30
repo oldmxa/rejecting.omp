@@ -332,7 +332,7 @@ public SendMSG(playerid)
     new stringe[24][160];
     format(stringe[0], 160, "{MAIN}[INFO] {FFFFFF}Have a question for staff? Use {MAIN}'/ask [question]'{FFFFFF} to get help from admins.");
     format(stringe[1], 160, "{MAIN}[INFO] {FFFFFF}Suspect someone of cheating or breaking rules? Report them: {MAIN}'/report [id] [reason]'{FFFFFF}.");
-    format(stringe[2], 160, "{MAIN}[INFO] {FFFFFF}Press {MAIN}'N'{FFFFFF} anytime to open your quick menu (Settings, My Account, Security & Help).");
+    format(stringe[2], 160, "{MAIN}[INFO] {FFFFFF}Press {MAIN}'N'{FFFFFF} anytime to open your quick menu (Personalization, My Account, Security & Help).");
     format(stringe[3], 160, "{MAIN}[INFO] {FFFFFF}Explore all our arenas: RP Walk, FPS Lock, FPS Unlock & Custom using {MAIN}'/changemode'{FFFFFF}.");
     format(stringe[4], 160, "{MAIN}[INFO] {FFFFFF}Want to train your aim and break server records? Use {MAIN}'/training'{FFFFFF} for timed challenges!");
     format(stringe[5], 160, "{MAIN}[INFO] {FFFFFF}Practice against configurable moving NPC bots anytime using {MAIN}'/prac'{FFFFFF} (or {MAIN}'/practice'{FFFFFF})!");
@@ -345,14 +345,14 @@ public SendMSG(playerid)
     format(stringe[12], 160, "{MAIN}[INFO] {FFFFFF}Customize your change weather ({MAIN}'/weather [id]'{FFFFFF}) and world time ({MAIN}'/t [0-23]'{FFFFFF}).");
     format(stringe[13], 160, "{MAIN}[INFO] {FFFFFF}Change your skin anytime using {MAIN}'/setskin (/ss) [skin id]'{FFFFFF}.");
     format(stringe[14], 160, "{MAIN}[INFO] {FFFFFF}Change your melee fighting style using {MAIN}'/fightstyle'{FFFFFF}.");
-    format(stringe[15], 160, "{MAIN}[INFO] {FFFFFF}Customize your hit sound (Bell), Headshot text, and HUD in Settings ({MAIN}'N'{FFFFFF} key).");
+    format(stringe[15], 160, "{MAIN}[INFO] {FFFFFF}Customize your hit sound (Bell), Headshot text, and HUD in Personalization ({MAIN}'N'{FFFFFF} key).");
     format(stringe[16], 160, "{MAIN}[INFO] {FFFFFF}Check your K/D ratio, achievements, clan rank and registration date with {MAIN}'/stats [id]'{FFFFFF}.");
     format(stringe[17], 160, "{MAIN}[INFO] {FFFFFF}Configure your security, Auto-Login & Admin Auth in {MAIN}'/help'{FFFFFF} -> Security.");
     format(stringe[18], 160, "{MAIN}[INFO] {FFFFFF}Join our Discord community to participate in tournaments, claim roles, and submit feedback!");
     format(stringe[19], 160, "{MAIN}[INFO] {FFFFFF}To change your nickname, password, or gameplay toggles, press {MAIN}'N'{FFFFFF}.");
     format(stringe[20], 160, "{MAIN}[INFO] {FFFFFF}Try our {MAIN}RP Walk Arenas{FFFFFF} for authentic, tactical foot combat movement!");
     format(stringe[21], 160, "{MAIN}[INFO] {FFFFFF}Looking for max smoothness? Play in our {MAIN}FPS Unlock Arenas{FFFFFF} via {MAIN}'/changemode'{FFFFFF}.");
-    format(stringe[22], 160, "{MAIN}[INFO] {FFFFFF}Toggle PMs, hit sound, HUD and connect messages in Settings ({MAIN}'N'{FFFFFF} key).");
+    format(stringe[22], 160, "{MAIN}[INFO] {FFFFFF}Toggle PMs, hit sound, HUD and connect messages in Personalization ({MAIN}'N'{FFFFFF} key).");
     format(stringe[23], 160, "{MAIN}[INFO] {FFFFFF}Need a complete list of commands? Check {MAIN}'/help'{FFFFFF} and {MAIN}'/cmds'{FFFFFF}.");
 
     SendClientMessage(playerid, -1, "%s", stringe[randomEx(0, sizeof(stringe) - 1)]);

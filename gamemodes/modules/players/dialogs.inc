@@ -17,7 +17,6 @@ ReturnToAppearanceSource(playerid)
     switch(GetPVarInt(playerid, "appearance_source"))
     {
         case APPEARANCE_SRC_PERSONAL, APPEARANCE_SRC_MENU: ShowPersonalizationMenu(playerid);
-        case APPEARANCE_SRC_SETTINGS: ShowSettingsMenu(playerid);
         case APPEARANCE_SRC_PRACTICE: CallLocalFunction("ShowPracticeDialog", "i", playerid);
         case APPEARANCE_SRC_FEED: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
         case APPEARANCE_SRC_NONE: {} // opened from chat, nothing to reopen

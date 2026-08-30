@@ -119,7 +119,7 @@
     "rcon": {
         "allow_teleport": false,
         "enable": true,
-        "password": "Family123"
+        "password": "password"
     },
     "sleep": 5,
     "use_dyn_ticks": true,
