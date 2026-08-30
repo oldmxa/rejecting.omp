@@ -5,6 +5,12 @@
 
 #define AC_PRESSED(%0) (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
 
+#define AC_PROBE_SILENCE (25_000)
+#define AC_PROBE_TIMER   (5000)
+#define AC_PROBE_STRIKES (3)
+
+forward AC_CheckProbeSilence();
+
 #include <YSI_Coding\y_hooks>
 
 static enum E_AC_PROBE
@@ -111,7 +117,11 @@ static
 
     bool:ACProbeSupport[MAX_PLAYERS char],
     ACHasCleo[MAX_PLAYERS],
-    ACHasSampfuncs[MAX_PLAYERS];
+    ACHasSampfuncs[MAX_PLAYERS],
+
+    ACProbeSentTick[MAX_PLAYERS],
+    ACProbeReplyTick[MAX_PLAYERS],
+    ACProbeSilence[MAX_PLAYERS];
 
 static ACProbeRand[MAX_PLAYERS][sizeof(AC_PROBE)];
 
@@ -141,6 +151,7 @@ static AC_SendProbe(playerid, index)
     ACProbeRand[playerid][index] = rand;
 
     SendClientCheck(playerid, 5, base, rand, AC_PROBE[index][E_AC_PROBE_BYTE_COUNT]);
+    ACProbeSentTick[playerid] = GetTickCount();
     return 1;
 }
 
@@ -212,7 +223,11 @@ hook OnPlayerConnect(playerid)
 
     ACSweepTick[playerid] =
     ACFullSweepTick[playerid] =
-    ACSprintProbeTick[playerid] = GetTickCount();
+    ACSprintProbeTick[playerid] =
+    ACProbeSentTick[playerid] =
+    ACProbeReplyTick[playerid] = GetTickCount();
+
+    ACProbeSilence[playerid] = 0;
 
     AC_ClearProbes(playerid);
 
@@ -259,6 +274,9 @@ static AC_ResolveProbe(index, retndata)
 hook OnClientCheckResponse(playerid, actionid, memaddr, retndata)
 {
     if (actionid != 5) return 1;
+
+    ACProbeReplyTick[playerid] = GetTickCount();
+    ACProbeSilence[playerid] = 0;
 
     new index = AC_ProbeIndexFromAddress(playerid, memaddr);
 
@@ -316,5 +334,47 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         AC_SendProbes(playerid, true);
     }
 
+    return 1;
+}
+
+public AC_CheckProbeSilence()
+{
+    new const tickCount = GetTickCount();
+
+    foreach (new playerid : Player)
+    {
+        if (IsPlayerNPC(playerid) || !ACProbeSupport{playerid}) continue;
+
+        if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)
+         || IsPlayerSpectating(playerid) || GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+        {
+            ACProbeReplyTick[playerid] = tickCount;
+            ACProbeSilence[playerid] = 0;
+            continue;
+        }
+
+        if (ACProbeSentTick[playerid] - ACProbeReplyTick[playerid] <= 0
+         || tickCount - ACProbeReplyTick[playerid] < AC_PROBE_SILENCE)
+        {
+            ACProbeSilence[playerid] = 0;
+            continue;
+        }
+
+        AC_Debug(playerid, E_REJECTING_AC_BYPASS, "no probe answer for %d ms (strike %d/%d)",
+            tickCount - ACProbeReplyTick[playerid], ACProbeSilence[playerid] + 1, AC_PROBE_STRIKES);
+
+        if (++ACProbeSilence[playerid] < AC_PROBE_STRIKES) continue;
+
+        ACProbeSilence[playerid] = 0;
+        ACProbeReplyTick[playerid] = tickCount;
+
+        CallRemoteFunction("OnRejectingACDetection", "ii", playerid, E_REJECTING_AC_BYPASS);
+    }
+    return 1;
+}
+
+hook OnGameModeInit()
+{
+    SetTimer("AC_CheckProbeSilence", AC_PROBE_TIMER, true);
     return 1;
 }

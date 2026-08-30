@@ -150,6 +150,7 @@ new const AC_ACTION_COLOR[][] =
 #define AC_WEAPON_HACK        (55)
 #define AC_CAR_SLAPPER        (56)
 #define AC_INFINITE_AMMO      (57)
+#define AC_FAKE_LAG           (58)
 
 forward OnRejectingACDetection(playerid, code);
 
@@ -226,7 +227,8 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Mega jump",                    "Abnormal upward jump velocity",           AC_CAT_MOVEMENT, true},
     {"Weapon hack",                  "Spawning unauthorized weapons",           AC_CAT_MEMORY,   true},
     {"Car slapper",                  "Moving unoccupied vehicles remotely",     AC_CAT_CRASHER,  true},
-    {"Infinite ammo",                "Ammo not decreasing after firing",        AC_CAT_AIM,      true}
+    {"Infinite ammo",                "Ammo not decreasing after firing",        AC_CAT_AIM,      true},
+    {"Fake lag",                     "Stops syncing in bursts to dodge damage", AC_CAT_EXPLOIT,  true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))

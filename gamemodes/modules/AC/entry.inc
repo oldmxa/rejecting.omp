@@ -18,6 +18,7 @@
 
 #include "modules/AC/detect/version.inc"
 #include "modules/AC/detect/limits.inc"
+#include "modules/AC/detect/desync.inc"
 #include "modules/AC/detect/combat.inc"
 #include "modules/AC/detect/crashers.inc"
 
