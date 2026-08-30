@@ -278,7 +278,7 @@ ShowHelpMainMenu(playerid)
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}My Account\t{FFFFFF}View account info, statistics & settings\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Security\t{FFFFFF}Account security, password & Discord link\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Changemode\t{FFFFFF}Select an arena or change game mode\n");
-    strcat(helpStr, "{MAIN}\xBB {B4B5B7}Training Mode\t{FFFFFF}Guide, commands & features of Training System\n");
+    strcat(helpStr, "{MAIN}\xBB {B4B5B7}Training & Practice\t{FFFFFF}Arenas, Aim Challenges, NPC Bots & Commands\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}VIP System\t{FFFFFF}View VIP benefits & commands\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Rankings\t{FFFFFF}View top 10 player & clan leaderboards\n");
     strcat(helpStr, "{MAIN}\xBB {B4B5B7}Rules\t{FFFFFF}Read official server rules & guidelines\n");

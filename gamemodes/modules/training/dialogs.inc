@@ -176,16 +176,20 @@ public DIALOG_TRAINING_HELP(playerid, dialogid, response, listitem, string:input
 
 stock ShowTrainingHelpDialog(playerid)
 {
-    new title[64] = "{MAIN}Training System";
+    new title[64] = "{MAIN}Training & Practice Guide";
 
     format_MainColor(playerid, title);
     new buf[1024];
-    format(buf, sizeof(buf), "{MAIN}Command / Feature\t{MAIN}Description\n");
-    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/training\t{FFFFFF}Open Training menu & select an arena\n");
-    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/rt\t{FFFFFF}Restart current training challenge instantly\n");
-    strcat(buf, "{FFFFFF}\x95 {B4B5B7}Key 'N'\t{FFFFFF}Shortcut key to restart the challenge in real-time\n");
-    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/exittraining\t{FFFFFF}Exit current training arena and return to Lounge\n");
-    strcat(buf, "{FFFFFF}\x95 {B4B5B7}Records\t{FFFFFF}Personal & server high-scores are shown in the /training menu");
+    format(buf, sizeof(buf), "{MAIN}Command\t{MAIN}Description\n");
+
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/training\t{FFFFFF}Select aim challenge arena\n");
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/rt {BEBEBE}('N')\t{FFFFFF}Restart current challenge\n");
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/exittraining\t{FFFFFF}Exit arena to Lounge\n");
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/prac\t{FFFFFF}Open NPC Practice menu\n");
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/prac pos1 / pos2\t{FFFFFF}Set NPC movement points\n");
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/prac rec\t{FFFFFF}Record custom NPC path\n");
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/prac exit\t{FFFFFF}Exit practice world\n");
+    strcat(buf, "{FFFFFF}\x95 {B4B5B7}/showagain\t{FFFFFF}Show last round stats");
 
     format_MainColor(playerid, buf);
 
