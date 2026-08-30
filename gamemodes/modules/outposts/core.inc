@@ -34,12 +34,23 @@ forward RewardOutpostOwners();
 forward UpdateOutpostsVisibility();
 forward ResetPlayerOutpostCapture(playerid);
 
+stock bool:IsOutpostZone(zoneid)
+{
+    if(zoneid < 0 || zoneid >= MAX_ZONES) return false;
+    switch(arenaData[zoneid][category])
+    {
+        case ARENA_CATEGORY_MEDIUM, ARENA_CATEGORY_BIG: return true;
+    }
+    return false;
+}
+
 stock GetClanOwnedOutposts(clanid)
 {
     if(clanid == -1) return 0;
     new count = 0;
     for(new i = 0; i < MAX_ZONES; i++)
     {
+        if(!IsOutpostZone(i)) continue;
         for(new j = 0; j < MAX_OUTPOSTS_PER_ARENA; j++)
         {
             if(OutpostInfo[i][j][oOwnerClan] == clanid)
@@ -56,6 +67,7 @@ stock bool:IsClanCapturingAnyOutpost(clanid)
     if(clanid == -1) return false;
     for(new z = 0; z < MAX_ZONES; z++)
     {
+        if(!IsOutpostZone(z)) continue;
         for(new o = 0; o < MAX_OUTPOSTS_PER_ARENA; o++)
         {
             if(OutpostInfo[z][o][oCapturingClan] == clanid) return true;
@@ -178,6 +190,7 @@ public InitOutposts()
 {
     for(new i = 0; i < MAX_ZONES; i++)
     {
+        if(!IsOutpostZone(i)) continue;
         CreateOutpost(i, 0, arenaData[i][arenaPos][0] + 15.0, arenaData[i][arenaPos][1] + 15.0);
         CreateOutpost(i, 1, arenaData[i][arenaPos][2] - 15.0, arenaData[i][arenaPos][3] - 15.0);
     }
@@ -201,7 +214,7 @@ public OnOutpostsLoad()
 
 			if(clanid < 0 || clanid >= MAX_CLANS) clanid = -1;
 
-			if(zoneid >= 0 && zoneid < MAX_ZONES && outpostid >= 0 && outpostid < MAX_OUTPOSTS_PER_ARENA)
+			if(zoneid >= 0 && zoneid < MAX_ZONES && IsOutpostZone(zoneid) && outpostid >= 0 && outpostid < MAX_OUTPOSTS_PER_ARENA)
 			{
 				SetOutpostOwner(zoneid, outpostid, clanid, false);
 			}
@@ -257,7 +270,7 @@ public UpdateOutpostsVisibility()
     {
         if(loc == ARENA_AFK) continue;
         new aid = arenaInfo[loc][arenaId];
-        if(aid >= 0 && aid < MAX_ZONES)
+        if(aid >= 0 && aid < MAX_ZONES && IsOutpostZone(aid))
         {
             zoneVWs[aid][zoneVWCount[aid]++] = loc * 99;
         }
@@ -265,6 +278,7 @@ public UpdateOutpostsVisibility()
 
     for(new z=0; z<MAX_ZONES; z++)
     {
+        if(!IsOutpostZone(z)) continue;
         for(new o=0; o<MAX_OUTPOSTS_PER_ARENA; o++)
         {
             if(zoneVWCount[z] > 0)
@@ -294,6 +308,7 @@ public CheckOutpostCapture()
 {
     for(new z = 0; z < MAX_ZONES; z++)
     {
+        if(!IsOutpostZone(z)) continue;
         for(new o = 0; o < MAX_OUTPOSTS_PER_ARENA; o++)
         {
             new capClan = OutpostInfo[z][o][oCapturingClan];
@@ -446,7 +461,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 
         new arena = arenaInfo[location][arenaId];
         
-        if(arena >= 0 && arena < MAX_ZONES)
+        if(arena >= 0 && arena < MAX_ZONES && IsOutpostZone(arena))
         {
             for(new o = 0; o < MAX_OUTPOSTS_PER_ARENA; o++)
             {
@@ -646,6 +661,7 @@ ReleaseClanOutposts(clanid)
     new released = 0;
     for(new z = 0; z < MAX_ZONES; z++)
     {
+        if(!IsOutpostZone(z)) continue;
         for(new o = 0; o < MAX_OUTPOSTS_PER_ARENA; o++)
         {
             if(OutpostInfo[z][o][oCapturingClan] == clanid)
@@ -668,6 +684,7 @@ public RewardOutpostOwners()
     new points[MAX_CLANS];
     for(new i = 0; i < MAX_ZONES; i++)
     {
+        if(!IsOutpostZone(i)) continue;
         for(new j = 0; j < MAX_OUTPOSTS_PER_ARENA; j++)
         {
             new clan = OutpostInfo[i][j][oOwnerClan];

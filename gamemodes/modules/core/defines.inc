@@ -120,7 +120,7 @@
 #define MAX_LOGIN_ATTEMPTS 3
 #define MAX_ACCOUNT_LOCKTIME 2
 
-#define MAX_ZONES 73
+#define MAX_ZONES 78
 
 #define MAX_LINES 			6
 #define DEATH_LINE_LEN		128
