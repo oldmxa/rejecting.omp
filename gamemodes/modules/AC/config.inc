@@ -156,6 +156,7 @@ new const AC_ACTION_COLOR[][] =
 #define AC_FAKE_SPEED         (61)
 #define AC_FAKE_CAR_SYNC      (62)
 #define AC_FAKE_CAMMODE       (63)
+#define AC_FAKE_CAMSHAKE      (64)
 
 forward OnRejectingACDetection(playerid, code);
 
@@ -238,7 +239,8 @@ new const AC_DETECTION[][e_AC_DETECTION] =
     {"Fake action",                  "Special action forged to clone the body", AC_CAT_EXPLOIT,  true},
     {"Fake speed",                   "Declared speed does not match movement",  AC_CAT_MOVEMENT, true},
     {"Fake car sync",                "Vehicle sync carries an impossible float", AC_CAT_EXPLOIT,  true},
-    {"Fake scope",                   "Scope camera without a scoped weapon",    AC_CAT_AIM,      true}
+    {"Fake scope",                   "Scope camera without a scoped weapon",    AC_CAT_AIM,      true},
+    {"Fake shake",                   "Camera mode flipped to dodge incoming aim", AC_CAT_EXPLOIT, true}
 };
 
 #define MAX_AC_DETECTIONS (sizeof(AC_DETECTION))

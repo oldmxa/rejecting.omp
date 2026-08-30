@@ -17,6 +17,39 @@ static ACAimProbe[MAX_PLAYERS];
 
 static ACScopeStrike[MAX_PLAYERS];
 
+#define AC_SHAKE_FLIPS  (8)
+#define AC_SHAKE_WINDOW (2000)
+
+static ACShakeLast[MAX_PLAYERS], ACShakeFlips[MAX_PLAYERS], ACShakeTick[MAX_PLAYERS];
+
+static AC_CheckCamShake(playerid, camMode)
+{
+    new const tick = GetTickCount();
+
+    if (tick - ACShakeTick[playerid] > AC_SHAKE_WINDOW)
+    {
+        ACShakeTick[playerid] = tick;
+        ACShakeFlips[playerid] = 0;
+    }
+
+    if (camMode == ACShakeLast[playerid]) return 0;
+
+    ACShakeLast[playerid] = camMode;
+
+    if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) return 0;
+
+    if (++ACShakeFlips[playerid] < AC_SHAKE_FLIPS) return 0;
+
+    ACShakeFlips[playerid] = 0;
+    ACShakeTick[playerid] = tick;
+
+    AC_Debug(playerid, AC_FAKE_CAMSHAKE, "camera mode changed %d times in under %d ms",
+        AC_SHAKE_FLIPS, AC_SHAKE_WINDOW);
+
+    CallRemoteFunction("OnRejectingACDetection", "ii", playerid, AC_FAKE_CAMSHAKE);
+    return 1;
+}
+
 static AC_CheckScopeCam(playerid, camMode)
 {
     if (camMode != AC_SCOPE_CAM_MODE || !IsPlayerLogged(playerid) || IsPlayerAFK(playerid))
@@ -70,6 +103,7 @@ IPacket:AC_AIM_SYNC(playerid, BitStream:bs)
     }
 
     AC_CheckScopeCam(playerid, aimData[PR_camMode]);
+    AC_CheckCamShake(playerid, aimData[PR_camMode]);
 
     new bool:bad = false;
 
@@ -114,6 +148,9 @@ hook OnPlayerConnect(playerid)
 {
     ACAimStrike[playerid] = 0;
     ACScopeStrike[playerid] = 0;
+    ACShakeLast[playerid] = -1;
+    ACShakeFlips[playerid] = 0;
+    ACShakeTick[playerid] = GetTickCount();
     AC_ResetAim(playerid);
     return 1;
 }

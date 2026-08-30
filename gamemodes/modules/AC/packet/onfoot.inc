@@ -23,11 +23,19 @@ stock AC_CheckNoFallAnim(playerid, animationId)
 #define AC_SURF_OFFSET_MAX   (50.0)
 #define AC_SURF_OFFSET_MIN_Z (-35.0)
 
+static bool:AC_SurfFloatIsSane(Float:value)
+{
+    if (IsNaN(value)) return false;
+    if (value < -AC_SURF_OFFSET_MAX || value > AC_SURF_OFFSET_MAX) return false;
+
+    return true;
+}
+
 static bool:AC_SanitizeSurfOffsets(playerid, data[PR_OnFootSync])
 {
-    if (floatabs(data[PR_surfingOffsets][0]) < AC_SURF_OFFSET_MAX
-     && floatabs(data[PR_surfingOffsets][1]) < AC_SURF_OFFSET_MAX
-     && floatabs(data[PR_surfingOffsets][2]) < AC_SURF_OFFSET_MAX
+    if (AC_SurfFloatIsSane(data[PR_surfingOffsets][0])
+     && AC_SurfFloatIsSane(data[PR_surfingOffsets][1])
+     && AC_SurfFloatIsSane(data[PR_surfingOffsets][2])
      && data[PR_surfingOffsets][2] > AC_SURF_OFFSET_MIN_Z) return false;
 
     AC_Debug(playerid, AC_INVISIBLE_SURF, "surf offsets %.1f %.1f %.1f (vehicle %d) zeroed",
