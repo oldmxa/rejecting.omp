@@ -263,6 +263,21 @@ public DIALOG_ADMIN_LOGIN_PASS(playerid, dialogid, response, listitem, string:in
     return 1;
 }
 
+stock SendAdminLoginWelcome(playerid)
+{
+    new const adminWelcomeMsgs[][] = {
+        "{MAIN}[ADMIN] {FFFFFF}Welcome back, {MAIN}%s{FFFFFF}! Your administrator commands are now unlocked and ready.",
+        "{MAIN}[ADMIN] {FFFFFF}Access granted, Administrator {MAIN}%s{FFFFFF}. Staff permissions have been loaded successfully.",
+        "{MAIN}[ADMIN] {FFFFFF}Welcome {MAIN}%s{FFFFFF}! Authenticated as Administrator — all admin tools are active.",
+        "{MAIN}[ADMIN] {FFFFFF}Welcome back {MAIN}%s{FFFFFF}, your administrator commands and monitoring systems are online."
+    };
+
+    new randIdx = random(sizeof(adminWelcomeMsgs));
+    va_SendClientMessage(playerid, -1, adminWelcomeMsgs[randIdx], User[playerid][userName]);
+    PlaySuccessSound(playerid);
+    return 1;
+}
+
 public OnAdminPasswordVerify(playerid, bool:success)
 {
     if(!IsPlayerConnected(playerid)) return 0;
@@ -273,7 +288,7 @@ public OnAdminPasswordVerify(playerid, bool:success)
 
         User[playerid][adminAuthAttempts] = 0;
         User[playerid][isAdminLogged] = true;
-        SendServerInfoMessage(playerid, ADMIN_LOGIN_WELCOME, User[playerid][userName]);
+        SendAdminLoginWelcome(playerid);
         
         new log_details[128];
         format(log_details, sizeof(log_details), "Admin %s logged in successfully (Password)", User[playerid][userName]);

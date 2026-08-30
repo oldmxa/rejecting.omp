@@ -303,7 +303,7 @@ new const g_CmdCategories[CMD_CATEGORIES][] = {
 
 ShowPlayerCommands(playerid)
 {
-    new body[512], title[64];
+    new body[768], title[64];
     format(title, sizeof(title), "{MAIN}Server Commands");
 
     format_MainColor(playerid, title);
@@ -312,6 +312,10 @@ ShowPlayerCommands(playerid)
     for(new i = 0; i < CMD_CATEGORIES; i++)
         strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}%s\t{FFFFFF}\xBB\n", g_CmdCategories[i]), sizeof(body));
 
+    if(IsAdmin(playerid, 1))
+    {
+        strcat(body, "{MAIN}\xBB {B4B5B7}Administrator Commands\t{FFFFFF}\xBB\n", sizeof(body));
+    }
 
     format_MainColor(playerid, body);
     Dialog_ShowCallback(playerid, using public DIALOG_PLAYERCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
@@ -322,9 +326,17 @@ forward DIALOG_PLAYERCMDS(playerid, dialogid, response, listitem, string:inputte
 public DIALOG_PLAYERCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response) return ShowHelpMainMenu(playerid);
-    if(listitem < 0 || listitem >= CMD_CATEGORIES) return ShowPlayerCommands(playerid);
-
-    return ShowCommandCategory(playerid, listitem);
+    if(listitem >= 0 && listitem < CMD_CATEGORIES)
+    {
+        return ShowCommandCategory(playerid, listitem);
+    }
+    else if(listitem == CMD_CATEGORIES && IsAdmin(playerid, 1))
+    {
+        new cmd[32];
+        strcopy(cmd, "/acmds");
+        return Command_ReProcess(playerid, cmd, 0);
+    }
+    return ShowPlayerCommands(playerid);
 }
 
 forward DIALOG_CMDCATEGORY(playerid, dialogid, response, listitem, string:inputtext[]);

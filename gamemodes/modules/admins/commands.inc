@@ -131,7 +131,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     User[playerid][isAdminLogged] = true;
     User[playerid][adminAuthTimer] = 0;
     User[playerid][adminAuthCode] = 0;
-    SendServerInfoMessage(playerid, ADMIN_LOGIN_WELCOME, User[playerid][userName]);
+    SendAdminLoginWelcome(playerid);
     
     new log_details[128];
     format(log_details, sizeof(log_details), "Admin %s logged in successfully (2FA)", User[playerid][userName]);
