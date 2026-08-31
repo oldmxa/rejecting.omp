@@ -175,14 +175,13 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
             ShowPersonalizationMenu(playerid);
         }
         case 10: ShowDamageStyleDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 11: ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 12: ShowHudColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 13: ShowHudShadeDialog(playerid, APPEARANCE_SRC_PERSONAL, false);
-        case 14: ShowHudShadeDialog(playerid, APPEARANCE_SRC_PERSONAL, true);
-        case 15: ShowChatColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 16: ShowSkinDialog(playerid, APPEARANCE_SRC_PERSONAL);
-        case 17: { strcopy(cmd, "/fight"); Command_ReProcess(playerid, cmd, 0); }
-        case 18: {
+        case 11: ShowHudColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
+        case 12: ShowHudShadeDialog(playerid, APPEARANCE_SRC_PERSONAL, false);
+        case 13: ShowHudShadeDialog(playerid, APPEARANCE_SRC_PERSONAL, true);
+        case 14: ShowChatColorDialog(playerid, APPEARANCE_SRC_PERSONAL);
+        case 15: ShowSkinDialog(playerid, APPEARANCE_SRC_PERSONAL);
+        case 16: { strcopy(cmd, "/fight"); Command_ReProcess(playerid, cmd, 0); }
+        case 17: {
             if(!IsPlayerInLounge(playerid))
             {
                 SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}You can only configure weapon loadout via menu while in the Lounge.");
@@ -192,26 +191,26 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
             SetPVarInt(playerid, "gunmenu_from_personalization", 1);
             gunMenu(playerid);
         }
-        case 19: { ShowPlayerHudTypesList(playerid); }
-        case 20: {
+        case 18: { ShowPlayerHudTypesList(playerid); }
+        case 19: {
             User[playerid][show3DDeathTag] = !User[playerid][show3DDeathTag];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 21: {
+        case 20: {
             User[playerid][showRandomDeathTags] = !User[playerid][showRandomDeathTags];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 22: {
+        case 21: {
             User[playerid][showHeadshot] = !User[playerid][showHeadshot];
             SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
             ShowPersonalizationMenu(playerid);
         }
-        case 23: { ShowHitSoundDialog(playerid); }
-        case 24: { ShowKillSoundDialog(playerid); }
-        case 25: { ShowPlayerLifeTypesList(playerid); }
-        case 26: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
+        case 22: { ShowHitSoundDialog(playerid); }
+        case 23: { ShowKillSoundDialog(playerid); }
+        case 24: { ShowPlayerLifeTypesList(playerid); }
+        case 25: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
     }
     return 1;
 }

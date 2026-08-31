@@ -18,7 +18,6 @@ enum
     PRAC_ROW_POS1,
     PRAC_ROW_POS2,
     PRAC_ROW_DMGINFORMER,
-    PRAC_ROW_HITMARKCOLOR,
     PRAC_ROW_HITSOUND,
     PRAC_ROW_STATS,
     PRAC_ROW_RESTART,
@@ -115,7 +114,6 @@ public ShowPracticeDialog(playerid)
     }
 
     strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Damage Informer\t%s {447DBF}%s\n", (User[playerid][showDamageInformer]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageStyleName(User[playerid][dmgInformerStyle])));
-    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Hitmarker Color\t{%06x}Sample (45)\n", (User[playerid][hitmarkColor] >>> 8)));
     strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Hit Sound\t{FFFFFF}ID:%d ({BEBEBE}%s{FFFFFF})\n", User[playerid][hitSoundID], GetSoundName(User[playerid][hitSoundID])));
 
     new Float:acc = 0.0;
@@ -331,11 +329,6 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
         case PRAC_ROW_DMGINFORMER:
         {
             return ShowDamageStyleDialog(playerid, APPEARANCE_SRC_PRACTICE);
-        }
-
-        case PRAC_ROW_HITMARKCOLOR:
-        {
-            return ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_PRACTICE);
         }
 
         case PRAC_ROW_HITSOUND:
