@@ -211,19 +211,7 @@ public DIALOG_HELP_PERSONALIZATION(playerid, dialogid, response, listitem, strin
         case 23: { ShowKillSoundDialog(playerid); }
         case 24: { ShowPlayerLifeTypesList(playerid); }
         case 25: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
-        case 26: {
-            if(!ServerHpArmourText)
-            {
-                SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}The HP and armour text is disabled server-wide.");
-                ShowPersonalizationMenu(playerid);
-                return 1;
-            }
-
-            User[playerid][showHpArmour] = !User[playerid][showHpArmour];
-            RefreshHpArmourText(playerid);
-            SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
-            ShowPersonalizationMenu(playerid);
-        }
+        case 26: ShowHpTextMenu(playerid, APPEARANCE_SRC_PERSONAL);
     }
     return 1;
 }

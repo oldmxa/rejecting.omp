@@ -47,12 +47,21 @@ stock DestroyHpArmourText(playerid)
     return 1;
 }
 
+stock GetHpTextColour(playerid)
+{
+    new idx = User[playerid][hpTextColor];
+
+    if(idx < 0 || idx >= sizeof(hudShades)) return -1;
+
+    return (hudShades[idx][shadeHex] << 8) | 0xFF;
+}
+
 static StyleHpArmourText(playerid, PlayerText:td)
 {
     PlayerTextDrawFont(playerid, td, TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, td, 0.260000, 0.800000);
     PlayerTextDrawAlignment(playerid, td, TEXT_DRAW_ALIGN_CENTRE);
-    PlayerTextDrawColor(playerid, td, -1);
+    PlayerTextDrawColor(playerid, td, GetHpTextColour(playerid));
     PlayerTextDrawSetOutline(playerid, td, 1);
     PlayerTextDrawSetShadow(playerid, td, 0);
     PlayerTextDrawSetProportional(playerid, td, true);
@@ -122,12 +131,7 @@ stock UpdateHpArmourText(playerid)
 
 stock RefreshHpArmourText(playerid)
 {
-    HpValueLast[playerid] = -1;
-    ArmourValueLast[playerid] = -1;
-
-    if(!HpArmourTextAllowed(playerid))
-        return DestroyHpArmourText(playerid);
-
+    DestroyHpArmourText(playerid);
     return UpdateHpArmourText(playerid);
 }
 

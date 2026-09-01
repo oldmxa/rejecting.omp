@@ -20,6 +20,7 @@ ReturnToAppearanceSource(playerid)
         case APPEARANCE_SRC_PRACTICE: CallLocalFunction("ShowPracticeDialog", "i", playerid);
         case APPEARANCE_SRC_FEED: ShowDamageFeedMainMenu(playerid, APPEARANCE_SRC_PERSONAL);
         case APPEARANCE_SRC_DMG: ShowDamageStyleDialog(playerid, APPEARANCE_SRC_PERSONAL);
+        case APPEARANCE_SRC_HPTEXT: ShowHpTextMenu(playerid, APPEARANCE_SRC_PERSONAL);
         case APPEARANCE_SRC_NONE: {} // opened from chat, nothing to reopen
         default: ShowPersonalizationMenu(playerid);
     }
@@ -71,6 +72,52 @@ ShowHudShadeDialog(playerid, source, bool:secondary)
         return Dialog_ShowCallback(playerid, using public HUD_SHADE_TWO<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
 
     return Dialog_ShowCallback(playerid, using public HUD_SHADE_ONE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
+}
+
+ShowHpTextMenu(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new colName[40] = "{BEBEBE}Default";
+    if(0 <= User[playerid][hpTextColor] < sizeof(hudShades))
+        format(colName, sizeof(colName), "{%06x}%s", hudShades[User[playerid][hpTextColor]][shadeHex], hudShades[User[playerid][hpTextColor]][shadeName]);
+
+    new body[512] = "{BEBEBE}Option\t{BEBEBE}Current Setting\n";
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}HP Text State\t%s\n",
+        (!ServerHpArmourText) ? ("{F84F31}Disabled by server") : ((User[playerid][showHpArmour]) ? ("{23C552}Visible") : ("{F84F31}Hidden"))), sizeof(body));
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Text Color\t%s", colName), sizeof(body));
+
+    new title[64] = "{MAIN}Personalization - HP Text";
+
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+    return Dialog_ShowCallback(playerid, using public DIALOG_HP_TEXT_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
+}
+
+ShowHpColorDialog(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new selected = User[playerid][hpTextColor];
+    if(selected < -1 || selected >= sizeof(hudShades)) selected = -1;
+
+    new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
+
+    strcat(body, fmat_return("%s{BEBEBE}Default (white)\t{FFFFFF}Preview\n",
+        STYLE_MARK(selected == -1)), sizeof(body));
+
+    for(new i; i < sizeof(hudShades); i++)
+    {
+        strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
+            STYLE_MARK(selected == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+    }
+
+    new title[64] = "{MAIN}Personalization - HP Text Color";
+
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+
+    return Dialog_ShowCallback(playerid, using public HP_TEXT_COLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
 }
 
 ShowChatColorDialog(playerid, source)
@@ -473,6 +520,48 @@ static ApplyHudShade(playerid, listitem, bool:secondary)
         PlayerTextDrawShow(playerid, InfoStats[playerid][1]);
     }
     return 1;
+}
+
+forward DIALOG_HP_TEXT_MAIN(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_HP_TEXT_MAIN(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response) return ReturnToAppearanceSource(playerid);
+
+    switch(listitem)
+    {
+        case 0:
+        {
+            if(!ServerHpArmourText)
+            {
+                SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}The HP text is disabled server-wide.");
+                return ShowHpTextMenu(playerid, GetAppearanceSource(playerid));
+            }
+
+            User[playerid][showHpArmour] = !User[playerid][showHpArmour];
+            RefreshHpArmourText(playerid);
+            SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+            return ShowHpTextMenu(playerid, GetAppearanceSource(playerid));
+        }
+        case 1: return ShowHpColorDialog(playerid, APPEARANCE_SRC_HPTEXT);
+    }
+    return ReturnToAppearanceSource(playerid);
+}
+
+forward HP_TEXT_COLOR(playerid, dialogid, response, listitem, string:inputtext[]);
+public HP_TEXT_COLOR(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response)
+    {
+        new value = (listitem == 0) ? -1 : (listitem - 1);
+
+        if(value < sizeof(hudShades))
+        {
+            User[playerid][hpTextColor] = value;
+            RefreshHpArmourText(playerid);
+            SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        }
+    }
+    return ReturnToAppearanceSource(playerid);
 }
 
 forward HUD_SHADE_ONE(playerid, dialogid, response, listitem, string:inputtext[]);

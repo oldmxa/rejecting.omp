@@ -499,6 +499,7 @@ enum e_USER
     bool:showPlayerHud,
     bool:showClanHud,
     bool:showHpArmour,
+    hpTextColor,
     bool:blockPM,
     bool:isShowingHud,
     bool:isSpectating,

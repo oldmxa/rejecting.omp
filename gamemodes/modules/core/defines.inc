@@ -108,6 +108,7 @@
 #define APPEARANCE_SRC_PRACTICE (3)   // /prac dialog
 #define APPEARANCE_SRC_FEED     (4)   // Damage feed submenus
 #define APPEARANCE_SRC_DMG      (5)   // Damage Informer submenus
+#define APPEARANCE_SRC_HPTEXT   (6)   // HP text submenus
 
 #define GIVE_MONEY_ONDEATH		300
 #define VOTEKICK_MIN_VOTES		3
