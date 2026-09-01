@@ -884,6 +884,9 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 	if(loc_issuer_ok)
 		playerArenaInfo[loc_issuer][issuerid][arenaDMG] += amount;
 
+	if(g_PlayerDuel2v2ID[issuerid] != -1 && g_PlayerDuel2v2ID[issuerid] == g_PlayerDuel2v2ID[playerid])
+		g_Duel2v2Damage[issuerid] += amount;
+
 	Ach_OnPlayerDamage(issuerid, playerid, amount);
 
 	User[issuerid][dmgSession] += amount;

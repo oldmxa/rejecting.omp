@@ -354,7 +354,9 @@ public Account_ShowPersonalizationMenu(playerid)
     if(User[playerid][dmgFeedColorLeft] == User[playerid][dmgFeedColorRight]) format(fcAll, sizeof(fcAll), "%s", fcL);
     else format(fcAll, sizeof(fcAll), "%s {BEBEBE}/ %s", fcL, fcR);
 
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t%s {FFFFFF}%s {BEBEBE}(%s{BEBEBE})", pStr, (User[playerid][showDamageFeed]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageFeedStyleName(User[playerid][dmgFeedStyle]), fcAll);
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Damage Feed\t%s {FFFFFF}%s {BEBEBE}(%s{BEBEBE})\n", pStr, (User[playerid][showDamageFeed]) ? ("{23C552}Visible") : ("{F84F31}Hidden"), GetDamageFeedStyleName(User[playerid][dmgFeedStyle]), fcAll);
+
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}HP & Armour Text\t%s", pStr, (!ServerHpArmourText) ? ("{F84F31}Disabled by server") : ((User[playerid][showHpArmour]) ? ("{23C552}Visible") : ("{F84F31}Hidden")));
 
     new pTitle[64] = "{MAIN}Personalization Menu";
 

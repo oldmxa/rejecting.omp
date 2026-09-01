@@ -59,6 +59,7 @@
 #include "modules/players/session.inc"
 #include "modules/players/spectate.inc"
 #include "modules/players/combat.inc"
+#include "modules/ui/hp_armour.inc"
 #include "modules/ui/hud.inc"
 #include "modules/arena/rounds.inc"
 #include "modules/misc/rank.inc"

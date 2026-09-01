@@ -9,7 +9,8 @@ enum
     HUD_REJECTING = 0,
     HUD_UNDERLINE,
     HUD_REJECTING_01,
-    
+    HUD_RL,
+
     MAX_HUD_TYPES
 }
 
@@ -23,7 +24,8 @@ new const HUD_TYPES[MAX_HUD_TYPES][] =
 {
     "Rejecting",
     "Underline",
-    "RLOW"
+    "RLOW",
+    "RL"
 };
 
 static const g_monthNameTD[13][7] = {
@@ -61,7 +63,7 @@ stock RecreatePlayerHudTextDraws(playerid)
 
     switch (User[playerid][hudType])
     {
-        case HUD_UNDERLINE:
+        case HUD_UNDERLINE, HUD_RL:
         {
             FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid, 578.000000, 16.000000, "_");
             PlayerTextDrawFont(playerid, FPSPingPacket[playerid], TEXT_DRAW_FONT_1);
@@ -282,7 +284,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     forward HSTY_OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]);
 #endif
 
-stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col[], fps, ping, Float:packet_loss, output[], len = sizeof(output))
+stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col[], fps, ping, Float:packet_loss, output[], len = sizeof(output), speed = 0)
 {
     switch (hud_type)
     {
@@ -300,6 +302,15 @@ stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col
                 getDateStrTDInfo(primary_col, secondary_col),
                 primary_col, secondary_col, fps,
                 primary_col, secondary_col, packet_loss
+            );
+        }
+        case HUD_RL:
+        {
+            format(output, len, "%sFPS: %s%d %sPing: %s%d %sPL: %s%.2f%% %sSpeed: %s%d",
+                primary_col, secondary_col, fps,
+                primary_col, secondary_col, ping,
+                primary_col, secondary_col, packet_loss,
+                primary_col, secondary_col, speed
             );
         }
         case HUD_REJECTING_01:
@@ -335,7 +346,7 @@ stock GetCustomClockString(hud_type, const primary_col[] = "", const secondary_c
     {
         case HUD_REJECTING:
             format(string, sizeof(string), "%02d.%02d.%04d - %02d:%02d", day, month, year, hour, minute);
-        case HUD_UNDERLINE:
+        case HUD_UNDERLINE, HUD_RL:
             string[0] = '\0';
         case HUD_REJECTING_01:
         {

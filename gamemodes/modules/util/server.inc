@@ -61,6 +61,7 @@ stock LoadServerConfig()
         else if(!strcmp(key, "AntiSpam", true)) ServerAntiSpam = (strval(val) != 0);
         else if(!strcmp(key, "AntiCapslock", true)) ServerAntiCapslock = (strval(val) != 0);
         else if(!strcmp(key, "AdminsCmd", true)) ServerAdminsCmd = (strval(val) != 0);
+        else if(!strcmp(key, "HpArmourText", true)) ServerHpArmourText = (strval(val) != 0);
         else if(!strcmp(key, "SprintMacro", true)) ACSprintMacro = (strval(val) != 0);
         else if(!strcmp(key, "MaxAccuracy", true)) ServerMaxAccuracy = strval(val);
         else if(!strcmp(key, "DefaultHud", true))
@@ -138,6 +139,9 @@ stock SaveServerConfig()
     fwrite(file, str);
 
     format(str, sizeof(str), "SprintMacro=%d\r\n", _:ACSprintMacro);
+    fwrite(file, str);
+
+    format(str, sizeof(str), "HpArmourText=%d\r\n", _:ServerHpArmourText);
     fwrite(file, str);
 
     format(str, sizeof(str), "MaxAccuracy=%d\r\n", ServerMaxAccuracy);

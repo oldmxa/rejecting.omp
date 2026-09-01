@@ -396,6 +396,25 @@ getVehicleName(vehicleid)
 	return nameVeh;
 }
 
+Float:GetPlayerSpeedKmh(playerid)
+{
+	new Float:vel[3];
+
+	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER || GetPlayerState(playerid) == PLAYER_STATE_PASSENGER)
+	{
+		GetVehicleVelocity(GetPlayerVehicleID(playerid), vel[0], vel[1], vel[2]);
+		return VectorSize(vel[0], vel[1], vel[2]) * 179.28;
+	}
+
+	GetPlayerVelocity(playerid, vel[0], vel[1], vel[2]);
+	return VectorSize(vel[0], vel[1], 0.0) * 179.28;
+}
+
+GetPlayerSpeed(playerid)
+{
+	return floatround(GetPlayerSpeedKmh(playerid), floatround_round);
+}
+
 GetVehicleSpeed(vehicleid)
 {
 	new Float:xPos[3];

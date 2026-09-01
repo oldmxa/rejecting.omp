@@ -306,21 +306,44 @@ stock UpdateTrainingHud(playerid, secondsLeft)
     new bool:lowTime = (secondsLeft <= 5);
     new fString[300];
 
-    if (User[playerid][hudType] == HUD_UNDERLINE)
+    if (User[playerid][hudType] == HUD_UNDERLINE || User[playerid][hudType] == HUD_RL)
     {
-        format(fString, sizeof(fString), "%s~n~%sFPS: %s%d %sPL: %s%.1f~n~%sTraining: %s%d:%s%02d",
-            getDateStrTDInfo(colorOne_, colorTwo_),
-            colorOne_, colorTwo_, User[playerid][FPS],
-            colorOne_, colorTwo_, NetStats_PacketLossPercent(playerid),
-            colorOne_,
-            lowTime ? ("~r~~h~") : (colorOne_), secondsLeft / 60,
-            lowTime ? ("~r~~h~") : (colorTwo_), secondsLeft % 60
-        );
+        new netLine[144];
+
+        if (User[playerid][hudType] == HUD_RL)
+            format(netLine, sizeof(netLine), "%sFPS: %s%d %sPing: %s%d~n~%sPL: %s%.1f%% %sSpeed: %s%d",
+                colorOne_, colorTwo_, User[playerid][FPS],
+                colorOne_, colorTwo_, GetPlayerPing(playerid),
+                colorOne_, colorTwo_, NetStats_PacketLossPercent(playerid),
+                colorOne_, colorTwo_, GetPlayerSpeed(playerid));
+        else
+            format(netLine, sizeof(netLine), "%sFPS: %s%d %sPL: %s%.1f",
+                colorOne_, colorTwo_, User[playerid][FPS],
+                colorOne_, colorTwo_, NetStats_PacketLossPercent(playerid));
+
+        if (User[playerid][hudType] == HUD_RL)
+        {
+            format(fString, sizeof(fString), "%s~n~%sTraining: %s%d:%s%02d",
+                netLine,
+                colorOne_,
+                lowTime ? ("~r~~h~") : (colorOne_), secondsLeft / 60,
+                lowTime ? ("~r~~h~") : (colorTwo_), secondsLeft % 60
+            );
+        }
+        else
+        {
+            format(fString, sizeof(fString), "%s~n~%s~n~%sTraining: %s%d:%s%02d",
+                getDateStrTDInfo(colorOne_, colorTwo_), netLine,
+                colorOne_,
+                lowTime ? ("~r~~h~") : (colorOne_), secondsLeft / 60,
+                lowTime ? ("~r~~h~") : (colorTwo_), secondsLeft % 60
+            );
+        }
         PlayerTextDrawSetString(playerid, FPSPingPacket[playerid], fString);
     }
     else
     {
-        FormatNetworkDataForHud(User[playerid][hudType], colorOne_, colorTwo_, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString));
+        FormatNetworkDataForHud(User[playerid][hudType], colorOne_, colorTwo_, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString), GetPlayerSpeed(playerid));
         PlayerTextDrawSetString(playerid, FPSPingPacket[playerid], fString);
 
         format(fString, sizeof(fString), "~n~%sTraining: %s%d:%s%02d",

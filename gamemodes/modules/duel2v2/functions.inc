@@ -363,7 +363,13 @@ stock StartDuel2v2Round(matchid)
 
     for(new i = 0; i < 4; i++)
     {
+        g_Duel2v2Damage[players[i]] = 0.0;
         SpawnPlayerEx(players[i]);
+    }
+
+    for(new i = 0; i < 4; i++)
+    {
+        CreateDuel2v2HpBar(players[i]);
     }
 
     UpdateDuel2v2ScoreTextDraw(matchid);

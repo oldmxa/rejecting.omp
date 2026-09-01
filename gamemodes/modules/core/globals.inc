@@ -498,6 +498,7 @@ enum e_USER
     lifeType,
     bool:showPlayerHud,
     bool:showClanHud,
+    bool:showHpArmour,
     bool:blockPM,
     bool:isShowingHud,
     bool:isSpectating,
@@ -752,6 +753,7 @@ new ServerMaxAccountsPerIP = 3;
 new bool:ServerAntiSpam = true;
 new bool:ServerAntiCapslock = true;
 new bool:ServerAdminsCmd = true;
+new bool:ServerHpArmourText = true;
 
 new bool:ACPunishEnabled = true;
 

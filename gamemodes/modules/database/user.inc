@@ -288,6 +288,7 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][loungeVW] = LOUNGEVW;
     User[playerid][loungeINT] = 0;
     User[playerid][showClanHud] = true;
+    User[playerid][showHpArmour] = true;
     User[playerid][showConnectMsg] = true;
     User[playerid][hideGlobalMsg] = false;
     User[playerid][hideWelcomeMsg] = false;
@@ -346,6 +347,7 @@ stock ResetPlayerPreLoginState(playerid)
     User[playerid][hudType] = ServerDefaultHud;
     User[playerid][lifeType] = LIFE_DEFAULT;
     User[playerid][showClanHud] = true;
+    User[playerid][showHpArmour] = true;
     User[playerid][showConnectMsg] = true;
     User[playerid][hideGlobalMsg] = false;
     User[playerid][hideWelcomeMsg] = false;
@@ -566,6 +568,7 @@ public OnPlayerJoin(playerid)
 		cache_get_value_int(0, "staticdamage", User[playerid][dmgInformerStyle]);
 		cache_get_value_int(0, "showplayerhud", User[playerid][showPlayerHud]);
 		cache_get_value_bool(0, "show_clan_hud", User[playerid][showClanHud]);
+		cache_get_value_bool(0, "show_hp_armour", User[playerid][showHpArmour]);
 		cache_get_value_int(0, "hud_type", User[playerid][hudType]);
 		cache_get_value_int(0, "life_type", User[playerid][lifeType]);
 		RecreatePlayerFpsPingTd(playerid);
@@ -823,6 +826,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		`staticdamage` = %d, \
 		`showplayerhud` = %d,\
 		`show_clan_hud` = %d,\
+		`show_hp_armour` = %d,\
         `show_headshot` = %d,\
         `show_connect_msg` = %d,\
         `hide_global_msg` = %d,\
@@ -916,6 +920,7 @@ UpdatePlayerData(playerid, disconnect = 0)
 		User[playerid][dmgInformerStyle],
 		User[playerid][showPlayerHud],
 		User[playerid][showClanHud],
+		User[playerid][showHpArmour],
         User[playerid][showHeadshot],
         User[playerid][showConnectMsg],
         User[playerid][hideGlobalMsg],

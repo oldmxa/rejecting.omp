@@ -81,7 +81,12 @@ static const AC_PROBE[][E_AC_PROBE] =
     {0x40685F,  4,  0,        E_REJECTING_AC_MODLOADER,       E_REJECTING_AC_UNKNOWN},
     {0x4067B0,  4,  0,        E_REJECTING_AC_MODLOADER,       E_REJECTING_AC_UNKNOWN},
     {0x96916D,  1,  0,        AC_BULLET_PROOF,                E_REJECTING_AC_UNKNOWN}, // bulletproof
-    {0xB7CEE4,  1,  0,        E_REJECTING_AC_SPRINTHOOK,      E_REJECTING_AC_UNKNOWN}  // infinity run
+    {0xB7CEE4,  1,  0,        E_REJECTING_AC_SPRINTHOOK,      E_REJECTING_AC_UNKNOWN}, // infinity run
+
+    // --- Awaiting calibration: -1 never matches, so these only log ---
+    {0x58E1D9,  1,  -1,       E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}, // fast crosshair
+    {0x8703C0,  4,  -1,       E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}, // mega jump (8.5f)
+    {0x8D6110,  4,  -1,       E_REJECTING_AC_UNKNOWN,         E_REJECTING_AC_UNKNOWN}  // no recoil (0.75f)
 };
 
 #define AC_PROBE_SPRINTHOOK       (4)

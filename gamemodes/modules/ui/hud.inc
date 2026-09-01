@@ -83,14 +83,35 @@ stock updatePlayerHud(playerid)
 		format(playerColorOne, sizeof playerColorOne, "%s", GetPlayerHudTag(playerid, false));
 		format(playerColorTwo, sizeof playerColorTwo, "%s", GetPlayerHudTag(playerid, true));
 
-		if (User[playerid][hudType] == HUD_UNDERLINE)
+		if (User[playerid][hudType] == HUD_UNDERLINE || User[playerid][hudType] == HUD_RL)
 		{
-			if (IsPlayerInLounge(playerid))
+			new netLine[144];
+
+			if (User[playerid][hudType] == HUD_RL)
 			{
-				format(fString, sizeof(fString), "%s~n~%sFPS: %s%d %sPL: %s%.1f~n~%sArena Time: %slounge",
-					getDateStrTDInfo(playerColorOne, playerColorTwo),
+				format(netLine, sizeof(netLine), "%sFPS: %s%d %sPing: %s%d~n~%sPL: %s%.1f%% %sSpeed: %s%d",
 					playerColorOne, playerColorTwo, User[playerid][FPS],
+					playerColorOne, playerColorTwo, GetPlayerPing(playerid),
 					playerColorOne, playerColorTwo, NetStats_PacketLossPercent(playerid),
+					playerColorOne, playerColorTwo, GetPlayerSpeed(playerid)
+				);
+			}
+			else
+			{
+				format(netLine, sizeof(netLine), "%sFPS: %s%d %sPL: %s%.1f",
+					playerColorOne, playerColorTwo, User[playerid][FPS],
+					playerColorOne, playerColorTwo, NetStats_PacketLossPercent(playerid)
+				);
+			}
+
+			if (User[playerid][hudType] == HUD_RL)
+			{
+				format(fString, sizeof(fString), "%s", netLine);
+			}
+			else if (IsPlayerInLounge(playerid))
+			{
+				format(fString, sizeof(fString), "%s~n~%s~n~%sArena Time: %slounge",
+					getDateStrTDInfo(playerColorOne, playerColorTwo), netLine,
 					playerColorOne, playerColorTwo
 				);
 			}
@@ -98,10 +119,8 @@ stock updatePlayerHud(playerid)
 			{
 				new bool:lowTime = (gMins < 1 && gSecs <= 30);
 
-				format(fString, sizeof(fString), "%s~n~%sFPS: %s%d %sPL: %s%.1f~n~%sArena Time: %s%d:%s%02d",
-					getDateStrTDInfo(playerColorOne, playerColorTwo),
-					playerColorOne, playerColorTwo, User[playerid][FPS],
-					playerColorOne, playerColorTwo, NetStats_PacketLossPercent(playerid),
+				format(fString, sizeof(fString), "%s~n~%s~n~%sArena Time: %s%d:%s%02d",
+					getDateStrTDInfo(playerColorOne, playerColorTwo), netLine,
 					playerColorOne,
 					lowTime ? ("~r~~h~") : (playerColorOne), gMins,
 					lowTime ? ("~r~~h~") : (playerColorTwo), gSecs
@@ -111,7 +130,7 @@ stock updatePlayerHud(playerid)
 		}
 		else
 		{
-			FormatNetworkDataForHud(User[playerid][hudType], playerColorOne, playerColorTwo, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString));
+			FormatNetworkDataForHud(User[playerid][hudType], playerColorOne, playerColorTwo, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString), GetPlayerSpeed(playerid));
 			PlayerTextDrawSetString(playerid, FPSPingPacket[playerid], fString);
 		}
 
@@ -142,7 +161,7 @@ stock updatePlayerHud(playerid)
 				{
 					PlayerTextDrawSetString(playerid, InfoStats[playerid][1], " ");
 				}
-				else if (User[playerid][hudType] == HUD_REJECTING_01)
+				else if (User[playerid][hudType] == HUD_REJECTING_01 || User[playerid][hudType] == HUD_RL)
 				{
 					new intDmg = floatround(playerArenaInfo[User[playerid][locationId]][playerid][arenaDMG]);
 					new kills = playerArenaInfo[User[playerid][locationId]][playerid][arenaKills];
@@ -289,6 +308,8 @@ public UpdateFastHUD()
         if(!IsPlayerLogged(i) || !User[i][isAlreadySpawned]) continue;
 
         UpdatePlayerFPS(i);
+        UpdateHpArmourText(i);
+        CallLocalFunction("CheckDuel2v2HpBarOnUpdate", "d", i);
 
         if(!User[i][showPlayerHud]) continue;
         if(IsPlayerSpectating(i)) continue;

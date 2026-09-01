@@ -154,6 +154,19 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 ShowAdminConfig(playerid);
                 PlayErrorSound(playerid);
             }
+            case 29: // HP & Armour Text
+            {
+                if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);
+
+                ServerHpArmourText = !ServerHpArmourText;
+                SaveServerConfig();
+                RefreshHpArmourTextForAll();
+
+                va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s %s the HP and armour text.", User[playerid][userName], (ServerHpArmourText) ? ("enabled") : ("disabled"));
+
+                ShowAdminConfig(playerid);
+                PlayErrorSound(playerid);
+            }
             case 27: // Anti Sprint Macro
             {
                 if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "%s", NEED_ADMIN_LEVEL);

@@ -27,6 +27,8 @@ stock CreateDuel2v2PlayerTextDraws(playerid)
 
 stock DestroyDuel2v2PlayerTextDraws(playerid)
 {
+    DestroyDuel2v2HpBar(playerid);
+
     if(TD2v2MatchInfo[playerid] != PlayerText:INVALID_TEXT_DRAW)
     {
         PlayerTextDrawDestroy(playerid, TD2v2MatchInfo[playerid]);
