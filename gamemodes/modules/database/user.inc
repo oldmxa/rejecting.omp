@@ -632,7 +632,7 @@ public OnPlayerJoin(playerid)
 		cache_get_value_int(0, "lounge_vw", User[playerid][loungeVW]);
 		cache_get_value_int(0, "lounge_int", User[playerid][loungeINT]);
 
-		if((User[playerid][loungeX] == 0.0 && User[playerid][loungeY] == 0.0) || User[playerid][loungeX] == -1504.1549 || User[playerid][loungeX] == 1209.1161 || User[playerid][loungeVW] == 0 || User[playerid][loungeVW] == LOUNGEVW)
+		if((User[playerid][loungeX] == 0.0 && User[playerid][loungeY] == 0.0) || User[playerid][loungeX] == -1504.1549 || User[playerid][loungeX] == 1209.1161 || User[playerid][loungeVW] == 0)
 		{
 			User[playerid][loungeX] = g_LoungeSpawnPos[0];
 			User[playerid][loungeY] = g_LoungeSpawnPos[1];

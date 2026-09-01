@@ -319,24 +319,15 @@ public DIALOG_EL_SPAWN(playerid, dialogid, response, listitem, string:inputtext[
             g_LoungeSpawnPos[2] = z;
             g_LoungeSpawnPos[3] = a;
 
-            SaveLoungeConfig();
-
-            foreach(new i : Player)
-            {
-                if(IsPlayerLogged(i))
-                {
-                    if(User[i][loungeVW] == LOUNGEVW || User[i][loungeVW] == 0)
-                    {
-                        User[i][loungeX] = x;
-                        User[i][loungeY] = y;
-                        User[i][loungeZ] = z;
-                        User[i][loungeA] = a;
-                        User[i][loungeVW] = LOUNGEVW;
-                        User[i][loungeINT] = 0;
-                    }
-                }
-            }
+            User[playerid][loungeX] = x;
+            User[playerid][loungeY] = y;
+            User[playerid][loungeZ] = z;
+            User[playerid][loungeA] = a;
+            User[playerid][loungeVW] = LOUNGEVW;
+            User[playerid][loungeINT] = 0;
             UpdatePlayerData(playerid);
+
+            SaveLoungeConfig();
 
             va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}New default server spawn set: {MAIN}%.2f, %.2f, %.2f (Angle: %.1f)", x, y, z, a);
             new empty[1];
@@ -360,23 +351,6 @@ public DIALOG_EL_SPAWN(playerid, dialogid, response, listitem, string:inputtext[
             g_LoungeSpawnPos[3] = 90.5514;
 
             SaveLoungeConfig();
-
-            foreach(new i : Player)
-            {
-                if(IsPlayerLogged(i))
-                {
-                    if(User[i][loungeVW] == LOUNGEVW || User[i][loungeVW] == 0)
-                    {
-                        User[i][loungeX] = g_LoungeSpawnPos[0];
-                        User[i][loungeY] = g_LoungeSpawnPos[1];
-                        User[i][loungeZ] = g_LoungeSpawnPos[2];
-                        User[i][loungeA] = g_LoungeSpawnPos[3];
-                        User[i][loungeVW] = LOUNGEVW;
-                        User[i][loungeINT] = 0;
-                    }
-                }
-            }
-            UpdatePlayerData(playerid);
 
             SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Lounge Spawn reset to server default.");
             new empty[1];
