@@ -178,9 +178,10 @@ stock AcceptDuel2v2Challenge(playerid)
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You do not have any pending 2v2 duel invitations.");
     }
 
-    if(IsPlayerSpectating(playerid) || IsPlayerAFK(playerid) ||
+    if(IsPlayerSpectating(playerid) ||
        GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE ||
-       g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive])
+       g_PlayerTraining[playerid][pTrain_Active] || g_Practice[playerid][pracActive] ||
+       IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
     {
         return SendClientMessage(playerid, -1, "{MAIN}[DUEL 2v2] {FFFFFF}You are busy and cannot accept the 2v2 duel right now.");
     }
@@ -256,6 +257,8 @@ stock ApplyDuel2v2RoundSpawn(playerid)
 
     new arenaid = g_Duel2v2Data[matchid][d2_ArenaID];
     if(arenaid < 0 || arenaid >= sizeof(DuelS_ArenaNames)) return 0;
+
+    User[playerid][isAfk] = false;
 
     ResetPlayerWeapons(playerid);
     SetPlayerVirtualWorld(playerid, g_Duel2v2Data[matchid][d2_VirtualWorld]);

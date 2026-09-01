@@ -331,6 +331,8 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][playerExp] = 0;
     User[MAX_PLAYERS][playerSkin] = 0;
     User[MAX_PLAYERS][isLogged] = false;
+    User[MAX_PLAYERS][hpTextColor] = -1;
+    User[MAX_PLAYERS][hpBarColor] = -1;
     User[MAX_PLAYERS][isAdminLogged] = false;
     User[MAX_PLAYERS][isAfk] = false;
     User[MAX_PLAYERS][isSpectating] = false;

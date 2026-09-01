@@ -130,7 +130,7 @@ stock updatePlayerHud(playerid)
 		}
 		else
 		{
-			FormatNetworkDataForHud(User[playerid][hudType], playerColorOne, playerColorTwo, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString), GetPlayerSpeed(playerid));
+			FormatNetworkDataForHud(User[playerid][hudType], playerColorOne, playerColorTwo, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString));
 			PlayerTextDrawSetString(playerid, FPSPingPacket[playerid], fString);
 		}
 

@@ -343,7 +343,7 @@ stock UpdateTrainingHud(playerid, secondsLeft)
     }
     else
     {
-        FormatNetworkDataForHud(User[playerid][hudType], colorOne_, colorTwo_, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString), GetPlayerSpeed(playerid));
+        FormatNetworkDataForHud(User[playerid][hudType], colorOne_, colorTwo_, User[playerid][FPS], GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid), fString, sizeof(fString));
         PlayerTextDrawSetString(playerid, FPSPingPacket[playerid], fString);
 
         format(fString, sizeof(fString), "~n~%sTraining: %s%d:%s%02d",

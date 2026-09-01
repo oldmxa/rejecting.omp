@@ -79,6 +79,7 @@ public OnPlayerConnect(playerid)
 
 	User[playerid] = User[MAX_PLAYERS];
 	StopSpectate(playerid);
+	ApplyHpBarColour(playerid);
 
 	GetPlayerIp(playerid, User[playerid][user_lastip], 18);
 	GetPlayerName(playerid, User[playerid][userName], MAX_PLAYER_NAME + 1);

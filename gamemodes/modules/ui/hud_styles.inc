@@ -284,7 +284,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     forward HSTY_OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]);
 #endif
 
-stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col[], fps, ping, Float:packet_loss, output[], len = sizeof(output), speed = 0)
+stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col[], fps, ping, Float:packet_loss, output[], len = sizeof(output))
 {
     switch (hud_type)
     {
@@ -302,15 +302,6 @@ stock FormatNetworkDataForHud(hud_type, const primary_col[], const secondary_col
                 getDateStrTDInfo(primary_col, secondary_col),
                 primary_col, secondary_col, fps,
                 primary_col, secondary_col, packet_loss
-            );
-        }
-        case HUD_RL:
-        {
-            format(output, len, "%sFPS: %s%d %sPing: %s%d %sPL: %s%.2f%% %sSpeed: %s%d",
-                primary_col, secondary_col, fps,
-                primary_col, secondary_col, ping,
-                primary_col, secondary_col, packet_loss,
-                primary_col, secondary_col, speed
             );
         }
         case HUD_REJECTING_01:
