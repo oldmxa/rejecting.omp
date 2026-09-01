@@ -85,9 +85,11 @@ ShowHpTextMenu(playerid, source)
     new body[512] = "{BEBEBE}Option\t{BEBEBE}Current Setting\n";
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}HP Text State\t%s\n",
         (!ServerHpArmourText) ? ("{F84F31}Disabled by server") : ((User[playerid][showHpArmour]) ? ("{23C552}Visible") : ("{F84F31}Hidden"))), sizeof(body));
-    new barName[40] = "{BEBEBE}Default";
+    new barName[40] = "{BEBEBE}Default (Red)";
     if(0 <= User[playerid][hpBarColor] < sizeof(hudShades))
         format(barName, sizeof(barName), "{%06x}%s", hudShades[User[playerid][hpBarColor]][shadeHex], hudShades[User[playerid][hpBarColor]][shadeName]);
+    else if(0 <= ServerDefaultHpBarColor < sizeof(hudShades))
+        format(barName, sizeof(barName), "{%06x}%s (Default)", hudShades[ServerDefaultHpBarColor][shadeHex], hudShades[ServerDefaultHpBarColor][shadeName]);
 
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Text Color\t%s\n", colName), sizeof(body));
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Bar Color\t%s", barName), sizeof(body));
@@ -108,8 +110,15 @@ ShowHpBarColorDialog(playerid, source)
 
     new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
 
-    strcat(body, fmat_return("%s{BEBEBE}Default\t{B4191D}Preview\n",
-        STYLE_MARK(selected == -1)), sizeof(body));
+    new defBarName[40] = "{BEBEBE}Default (Red)", defBarHex = 0xB4191D;
+    if(0 <= ServerDefaultHpBarColor < sizeof(hudShades))
+    {
+        format(defBarName, sizeof(defBarName), "{BEBEBE}Default (%s)", hudShades[ServerDefaultHpBarColor][shadeName]);
+        defBarHex = hudShades[ServerDefaultHpBarColor][shadeHex];
+    }
+
+    strcat(body, fmat_return("%s%s\t{%06x}Preview\n",
+        STYLE_MARK(selected == -1), defBarName, defBarHex), sizeof(body));
 
     for(new i; i < sizeof(hudShades); i++)
     {
@@ -212,8 +221,12 @@ ShowChatColorSelectionDialog(playerid, color_type, source)
     if(color_type == 2)
     {
         new bool:isDef = (User[playerid][chatMainColor] <= 0);
-        strcat(body, fmat_return("%s{FFFFFF}Use Interface Color (Default)\t{BEBEBE}Follows your HUD color\n",
-            isDef ? ("{23C552}> ") : ("{B4B5B7}\x95 ")), sizeof(body));
+        new defMsg[64] = "Follows your HUD color";
+        if(1 <= ServerDefaultChatMainColor <= sizeof(hudShades))
+            format(defMsg, sizeof(defMsg), "Default: %s", hudShades[ServerDefaultChatMainColor - 1][shadeName]);
+
+        strcat(body, fmat_return("%s{FFFFFF}Default Chat Color\t{%s}%s\n",
+            isDef ? ("{23C552}> ") : ("{B4B5B7}\x95 "), curHex, defMsg), sizeof(body));
 
         new bool:isCustom = (User[playerid][chatMainColor] & 0x10000000) != 0;
         strcat(body, fmat_return("%s{FFFFFF}Custom HEX Color\t{%s}#%s\n",

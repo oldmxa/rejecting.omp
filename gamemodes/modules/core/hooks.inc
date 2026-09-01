@@ -17,6 +17,11 @@ stock GetPlayerMainHex(playerid, dest[], len = sizeof(dest))
     }
 
     new mainVal = User[playerid][chatMainColor];
+    if(mainVal <= 0 && ServerDefaultChatMainColor > 0)
+    {
+        mainVal = ServerDefaultChatMainColor;
+    }
+
     if(1 <= mainVal <= sizeof(hudShades))
     {
         format(dest, len, "%06x", hudShades[mainVal - 1][shadeHex]);
@@ -30,6 +35,10 @@ stock GetPlayerMainHex(playerid, dest[], len = sizeof(dest))
 
     // Default / 0 / -1: Follows HUD primary shade or HUD preset color
     new shade = User[playerid][hudShadeOne];
+    if(shade < 0 && ServerDefaultHudShadeOne >= 0)
+    {
+        shade = ServerDefaultHudShadeOne;
+    }
     if(0 <= shade < sizeof(hudShades))
     {
         format(dest, len, "%06x", hudShades[shade][shadeHex]);
@@ -37,6 +46,7 @@ stock GetPlayerMainHex(playerid, dest[], len = sizeof(dest))
     }
 
     new idx = User[playerid][hudColor];
+    if(idx < 0 || idx >= sizeof(CoresDoBglh)) idx = ServerDefaultHudColor;
     if(idx < 0 || idx >= sizeof(CoresDoBglh)) idx = 0;
 
     format(dest, len, "%s", CoresDoBglh[idx]);
@@ -332,7 +342,6 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][playerSkin] = 0;
     User[MAX_PLAYERS][isLogged] = false;
     User[MAX_PLAYERS][hpTextColor] = -1;
-    User[MAX_PLAYERS][hpBarColor] = -1;
     User[MAX_PLAYERS][isAdminLogged] = false;
     User[MAX_PLAYERS][isAfk] = false;
     User[MAX_PLAYERS][isSpectating] = false;
@@ -349,12 +358,14 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][fightStyle] = FIGHT_STYLE_NORMAL;
     User[MAX_PLAYERS][weather] = 10;
     User[MAX_PLAYERS][time] = 10;
-    User[MAX_PLAYERS][hudColor] = 0;
-    User[MAX_PLAYERS][hudShadeOne] = -1;
-    User[MAX_PLAYERS][hudShadeTwo] = -1;
+    User[MAX_PLAYERS][hudColor] = ServerDefaultHudColor;
+    User[MAX_PLAYERS][hudShadeOne] = ServerDefaultHudShadeOne;
+    User[MAX_PLAYERS][hudShadeTwo] = ServerDefaultHudShadeTwo;
     User[MAX_PLAYERS][chatColor] = 0;
     User[MAX_PLAYERS][chatIDColor] = 0;
-    User[MAX_PLAYERS][chatMainColor] = 0;
+    User[MAX_PLAYERS][chatMainColor] = ServerDefaultChatMainColor;
+    User[MAX_PLAYERS][hpBarColor] = ServerDefaultHpBarColor;
+    User[MAX_PLAYERS][hudType] = ServerDefaultHud;
     User[MAX_PLAYERS][clanID] = -1;
     User[MAX_PLAYERS][clanRole] = -1;
     User[MAX_PLAYERS][clanIDInvite] = -1;
@@ -408,12 +419,14 @@ hook OnPlayerConnect(playerid)
     if (IsPlayerNPC(playerid)) return 1;
 
     User[playerid][adminLevel] = 0;
-    User[playerid][hudColor] = 0;
-    User[playerid][hudShadeOne] = -1;
-    User[playerid][hudShadeTwo] = -1;
+    User[playerid][hudColor] = ServerDefaultHudColor;
+    User[playerid][hudShadeOne] = ServerDefaultHudShadeOne;
+    User[playerid][hudShadeTwo] = ServerDefaultHudShadeTwo;
     User[playerid][chatColor] = 0;
     User[playerid][chatIDColor] = 0;
-    User[playerid][chatMainColor] = 0;
+    User[playerid][chatMainColor] = ServerDefaultChatMainColor;
+    User[playerid][hpBarColor] = ServerDefaultHpBarColor;
+    User[playerid][hudType] = ServerDefaultHud;
     User[playerid][vipLevel] = 0;
     User[playerid][vipExpire] = 0;
     User[playerid][vipHeadTag] = 1;

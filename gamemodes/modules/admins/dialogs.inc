@@ -324,6 +324,27 @@ public DIALOG_AMENU(playerid, dialogid, response, listitem, string:inputtext[])
                 format_MainColor(playerid, body);
                 Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTCHATCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default Chat Color", body, "*", "<");
             }
+            case 30: // Default HP Bar Color
+            {
+                if (!IsAdmin(playerid, 5))
+                    return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required to change default HP bar color.");
+
+                new selected = ServerDefaultHpBarColor;
+                if(selected < -1 || selected >= sizeof(hudShades)) selected = -1;
+
+                new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
+                strcat(body, fmat_return("%s{FFFFFF}Default (Red)\t{B4191D}Preview\n",
+                    STYLE_MARK(selected == -1)), sizeof(body));
+
+                for(new i; i < sizeof(hudShades); i++)
+                {
+                    strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
+                        STYLE_MARK(selected == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+                }
+
+                format_MainColor(playerid, body);
+                Dialog_ShowCallback(playerid, using public DIALOG_ADM_DEFAULTHPBARCOLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, "{BEBEBE}Default HP Bar Color", body, "*", "<");
+            }
         }
     }
 
@@ -605,7 +626,16 @@ public DIALOG_ADM_DEFAULTHUD(playerid, dialogid, response, listitem, string:inpu
         ServerDefaultHud = listitem;
         SaveServerConfig();
 
-        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD style updated to: %s (applies to new accounts).", HUD_TYPES[ServerDefaultHud]);
+        foreach(new i : Player)
+        {
+            if(IsPlayerConnected(i) && User[i][isAlreadySpawned])
+            {
+                RecreatePlayerFpsPingTd(i);
+                if(User[i][isShowingHud]) updatePlayerHud(i);
+            }
+        }
+
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD style updated to: %s.", HUD_TYPES[ServerDefaultHud]);
     }
     ShowAdminConfig(playerid);
     return 1;
@@ -621,7 +651,17 @@ public DIALOG_ADM_DEFAULTHUDCOLOR(playerid, dialogid, response, listitem, string
         ServerDefaultHudColor = listitem;
         SaveServerConfig();
 
-        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD color updated to: %s (applies to new accounts).", hudPersonalization[ServerDefaultHudColor][lineInfo]);
+        foreach(new i : Player)
+        {
+            if(IsPlayerConnected(i) && User[i][isAlreadySpawned])
+            {
+                RecreatePlayerFpsPingTd(i);
+                UpdateRoundStatsColors(i);
+                if(User[i][isShowingHud]) updatePlayerHud(i);
+            }
+        }
+
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD color updated to: %s.", hudPersonalization[ServerDefaultHudColor][lineInfo]);
     }
     ShowAdminConfig(playerid);
     return 1;
@@ -644,11 +684,21 @@ public DIALOG_ADM_DEFAULTSHADE1(playerid, dialogid, response, listitem, string:i
         ServerDefaultHudShadeOne = value;
         SaveServerConfig();
 
+        foreach(new i : Player)
+        {
+            if(IsPlayerConnected(i) && User[i][isAlreadySpawned])
+            {
+                RecreatePlayerFpsPingTd(i);
+                UpdateRoundStatsColors(i);
+                if(User[i][isShowingHud]) updatePlayerHud(i);
+            }
+        }
+
         new shadeName_[16];
         if(value == -1) format(shadeName_, sizeof(shadeName_), "Interface preset");
         else format(shadeName_, sizeof(shadeName_), "%s", hudShades[value][shadeName]);
 
-        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD primary color updated to: %s (applies to new accounts).", shadeName_);
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD primary color updated to: %s.", shadeName_);
     }
     ShowAdminConfig(playerid);
     return 1;
@@ -671,11 +721,21 @@ public DIALOG_ADM_DEFAULTSHADE2(playerid, dialogid, response, listitem, string:i
         ServerDefaultHudShadeTwo = value;
         SaveServerConfig();
 
+        foreach(new i : Player)
+        {
+            if(IsPlayerConnected(i) && User[i][isAlreadySpawned])
+            {
+                RecreatePlayerFpsPingTd(i);
+                UpdateRoundStatsColors(i);
+                if(User[i][isShowingHud]) updatePlayerHud(i);
+            }
+        }
+
         new shadeName_[16];
         if(value == -1) format(shadeName_, sizeof(shadeName_), "Interface preset");
         else format(shadeName_, sizeof(shadeName_), "%s", hudShades[value][shadeName]);
 
-        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD secondary color updated to: %s (applies to new accounts).", shadeName_);
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HUD secondary color updated to: %s.", shadeName_);
     }
     ShowAdminConfig(playerid);
     return 1;
@@ -698,11 +758,11 @@ public DIALOG_ADM_DEFAULTCHATCOLOR(playerid, dialogid, response, listitem, strin
         ServerDefaultChatMainColor = value;
         SaveServerConfig();
 
-        new cName[32];
-        if(value == 0) format(cName, sizeof(cName), "Interface preset");
-        else format(cName, sizeof(cName), "%s", hudShades[value - 1][shadeName]);
+        new cName[48];
+        if(value == 0) format(cName, sizeof(cName), "{BEBEBE}Interface preset{FFFFFF}");
+        else format(cName, sizeof(cName), "{%06x}%s{FFFFFF}", hudShades[value - 1][shadeHex], hudShades[value - 1][shadeName]);
 
-        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default chat color ({MAIN}) updated to: %s (applies to new accounts).", cName);
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default chat color updated to: %s.", cName);
     }
     ShowAdminConfig(playerid);
     return 1;
@@ -736,6 +796,41 @@ public DIALOG_ADM_MAXACCURACY(playerid, dialogid, response, listitem, string:inp
         {
             va_SendClientMessageToAll(-1, ADM_TAG_NORM"Admin %s disabled the server max accuracy limit.", User[playerid][userName]);
         }
+    }
+    ShowAdminConfig(playerid);
+    return 1;
+}
+
+forward DIALOG_ADM_DEFAULTHPBARCOLOR(playerid, dialogid, response, listitem, string:inputtext[]);
+public DIALOG_ADM_DEFAULTHPBARCOLOR(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response)
+    {
+        if (!IsAdmin(playerid, 5)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Level 5+ required.");
+
+        new value = (listitem == 0) ? -1 : (listitem - 1);
+        if(value < -1 || value >= sizeof(hudShades))
+        {
+            ShowAdminConfig(playerid);
+            return 1;
+        }
+
+        ServerDefaultHpBarColor = value;
+        SaveServerConfig();
+
+        foreach(new i : Player)
+        {
+            if(IsPlayerConnected(i))
+            {
+                ApplyHpBarColour(i);
+            }
+        }
+
+        new barName_[32];
+        if(value == -1) format(barName_, sizeof(barName_), "Default (Red)");
+        else format(barName_, sizeof(barName_), "%s", hudShades[value][shadeName]);
+
+        va_SendClientMessage(playerid, -1, ADM_TAG_NORM"Server default HP bar color updated to: %s.", barName_);
     }
     ShowAdminConfig(playerid);
     return 1;

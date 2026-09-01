@@ -109,6 +109,14 @@ public Stats_ShowAdminConfig(playerid)
             format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Default Chat Color\t%s\t{BEBEBE}Main accent color new players start with\n", strb, defChatColorName);
             actions[count++] = 26; // Default Chat Color
 
+            new defBarColorName[40];
+            if(0 <= ServerDefaultHpBarColor < sizeof(hudShades))
+                format(defBarColorName, sizeof(defBarColorName), "{%06x}%s", hudShades[ServerDefaultHpBarColor][shadeHex], hudShades[ServerDefaultHpBarColor][shadeName]);
+            else
+                format(defBarColorName, sizeof(defBarColorName), "{BEBEBE}Default (Red)");
+            format(strb, sizeof(strb), "%s{B4B5B7}\xBB {FFFFFF}Default HP Bar Color\t%s\t{BEBEBE}Health bar color new players start with\n", strb, defBarColorName);
+            actions[count++] = 30; // Default HP Bar Color
+
             strcat(strb, "{MAIN}\xA4 Moderation\t \t \n");
             actions[count++] = 0;
 

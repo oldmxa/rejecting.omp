@@ -290,7 +290,7 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][showClanHud] = true;
     User[playerid][showHpArmour] = false;
     User[playerid][hpTextColor] = -1;
-    User[playerid][hpBarColor] = -1;
+    User[playerid][hpBarColor] = ServerDefaultHpBarColor;
     ApplyHpBarColour(playerid);
     User[playerid][showConnectMsg] = true;
     User[playerid][hideGlobalMsg] = false;
@@ -352,7 +352,7 @@ stock ResetPlayerPreLoginState(playerid)
     User[playerid][showClanHud] = true;
     User[playerid][showHpArmour] = false;
     User[playerid][hpTextColor] = -1;
-    User[playerid][hpBarColor] = -1;
+    User[playerid][hpBarColor] = ServerDefaultHpBarColor;
     ApplyHpBarColour(playerid);
     User[playerid][showConnectMsg] = true;
     User[playerid][hideGlobalMsg] = false;

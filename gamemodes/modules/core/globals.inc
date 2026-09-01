@@ -779,6 +779,7 @@ new ServerDefaultHudColor = 0;
 new ServerDefaultHudShadeOne = -1;
 new ServerDefaultHudShadeTwo = -1;
 new ServerDefaultChatMainColor = 0;
+new ServerDefaultHpBarColor = -1;
 
 new MySQL: dbHandle;
 new queryGlobal[4096];

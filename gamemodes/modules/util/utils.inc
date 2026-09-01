@@ -96,19 +96,36 @@ stock GetColorHexTag(const colorTag[])
 
 stock GetPlayerHudColorIndex(playerid)
 {
-    if(playerid < 0 || playerid > MAX_PLAYERS) return 0;
+    if(playerid < 0 || playerid >= MAX_PLAYERS)
+    {
+        if(0 <= ServerDefaultHudColor < sizeof(hudPersonalization)) return ServerDefaultHudColor;
+        return 0;
+    }
 
     new idx = User[playerid][hudColor];
-    if(idx < 0 || idx >= sizeof(hudPersonalization)) return 0;
+    if(idx < 0 || idx >= sizeof(hudPersonalization))
+    {
+        if(0 <= ServerDefaultHudColor < sizeof(hudPersonalization)) return ServerDefaultHudColor;
+        return 0;
+    }
     return idx;
 }
 
 stock GetPlayerShadeIndex(playerid, bool:secondary)
 {
-    if(playerid < 0 || playerid >= MAX_PLAYERS) return -1;
+    if(playerid < 0 || playerid >= MAX_PLAYERS)
+    {
+        new def = secondary ? ServerDefaultHudShadeTwo : ServerDefaultHudShadeOne;
+        if(def < 0 || def >= sizeof(hudShades)) return -1;
+        return def;
+    }
 
     new idx = secondary ? User[playerid][hudShadeTwo] : User[playerid][hudShadeOne];
-    if(idx < 0 || idx >= sizeof(hudShades)) return -1;
+    if(idx < 0 || idx >= sizeof(hudShades))
+    {
+        idx = secondary ? ServerDefaultHudShadeTwo : ServerDefaultHudShadeOne;
+        if(idx < 0 || idx >= sizeof(hudShades)) return -1;
+    }
     return idx;
 }
 
@@ -184,6 +201,11 @@ stock GetPlayerChatMainColorHex(playerid, dest[], len = sizeof(dest))
         return 1;
     }
     new val = User[playerid][chatMainColor];
+    if(val <= 0 && ServerDefaultChatMainColor > 0)
+    {
+        val = ServerDefaultChatMainColor;
+    }
+
     if(1 <= val <= sizeof(hudShades))
     {
         format(dest, len, "%06x", hudShades[val - 1][shadeHex]);
@@ -474,7 +496,11 @@ ApplyHpBarColour(playerid)
 	new idx = User[playerid][hpBarColor];
 
 	if(idx < 0 || idx >= sizeof(hudShades))
-		return SetPlayerHealthBarColour(playerid, 0);
+	{
+		idx = ServerDefaultHpBarColor;
+		if(idx < 0 || idx >= sizeof(hudShades))
+			return SetPlayerHealthBarColour(playerid, 0);
+	}
 
 	return SetPlayerHealthBarColour(playerid, (hudShades[idx][shadeHex] << 8) | 0xFF);
 }
