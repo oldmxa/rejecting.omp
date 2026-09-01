@@ -92,6 +92,7 @@
 #include "modules/players/social.inc"
 #include "modules/players/appearance.inc"
 #include "modules/players/lounge.inc"
+#include "modules/players/lounge_editor.inc"
 #include "modules/players/account.inc"
 #include "modules/players/stats.inc"
 #include "modules/players/coinslog.inc"

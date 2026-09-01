@@ -660,15 +660,12 @@ initializeServer(const gamemodeName[])
 	createZones();
 	initArena();
 	initTop5();
+	updateKillRank();
+	SetTimer("updateKillRank", 300000, true);
 	LoadClans();
 	UpdateTOP10Clans();
 	CreateObject(19911, 1786.4516, -1301.2150, 119.3707, -89.8999, 0.0000, 90.0999);
 	AddStaticPickup(1314, 0, 2068.8516, -1556.8025, 13.4260, 909);
-
-	CreateObject(3077, 1177.4373, -2037.1335, 67.8771, 0.0000, 0.0000, -97.4003); //nf_blackboard
-	g_Object = CreateObject(3077,1177.4472, -2037.1240, 67.8771, 0.0000, 0.0000, -97.4003); //nf_blackboard
-
-	updateKillRank();
 
 	for (new i = 0, rand; i < 30; i++)
 	{
@@ -678,14 +675,6 @@ initializeServer(const gamemodeName[])
 		while (rand == 0 || rand == 1 || rand == 74 || rand == 86);
 
 		AddPlayerClass(rand, 0, 0, 0, 0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
-	}
-
-	// ACTORS LOUNGE
-	for(new i; i < 8; i++)
-	{
-		ActorLounge[i] = CreateDynamicActor(randomEx(0, 299), ActorLoungeCoords[i][0], ActorLoungeCoords[i][1], ActorLoungeCoords[i][2], ActorLoungeCoords[i][3], 0, 100.0, 909, 0);
-		SetDynamicActorInvulnerable(ActorLounge[i], false);
-		ApplyDynamicActorAnimation(ActorLounge[i], "PED", "Idlestance_fat", 4.1, true, false, false, false, false);
 	}
 
 	SetTimer("SendGlobalMSG", 360000, true);

@@ -244,6 +244,19 @@ public DIALOG_PRAC_MAIN(playerid, dialogid, response, listitem, string:inputtext
 
         case PRAC_ROW_HEIGHT:
         {
+            if (g_Practice[playerid][pracTargetType] == PRACTICE_TYPE_BALL)
+            {
+                if (g_Practice[playerid][pracObject] == INVALID_STREAMER_ID || !IsValidDynamicObject(g_Practice[playerid][pracObject]))
+                {
+                    CreatePracticeTarget(playerid);
+                }
+
+                StopDynamicObject(g_Practice[playerid][pracObject]);
+                EditDynamicObject(playerid, g_Practice[playerid][pracObject]);
+                SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}3D Edit Mode enabled! Drag the vertical arrow to adjust height and click the save icon when done.");
+                return 1;
+            }
+
             new body[192];
             format(body, sizeof(body), "{FFFFFF}\x95 {B4B5B7}Current: "COL_WHITE"%.1f\n\n{FFFFFF}\x95 {B4B5B7}Allowed range: "COL_WHITE"%.1f to %.1f",
                 g_Practice[playerid][pracHeight], PRACTICE_HEIGHT_MIN, PRACTICE_HEIGHT_MAX);

@@ -6,10 +6,12 @@ public initTop5()
 	UpdateTOP5Kills();
 	CreateTOP5Damage();
 	UpdateTOP5Damage();
+	updateKillRank();
 	return true;
 }
 
-updateKillRank()
+forward updateKillRank();
+public updateKillRank()
 {
 	inline const OnKillRankLoad()
 	{
@@ -53,9 +55,31 @@ updateKillRank()
 			}
 		}
 
-		DestroyObject(g_Object);
-		g_Object = CreateObject(3077, 1177.4472, -2037.1240, 67.8771, 0.0000, 0.0000, -97.4003); // Top kills board
-		SetObjectMaterialText(g_Object, str, 0, OBJECT_MATERIAL_SIZE_512x256, "Lucida Console", 18, false, 0xFFD9A0A9, 0, OBJECT_MATERIAL_TEXT_ALIGN_LEFT);
+		format(g_LoungeRankStr, sizeof(g_LoungeRankStr), "%s", str);
+
+		new Float:frontX = g_LoungeBoardPos[0] + 0.015 * floatsin(-g_LoungeBoardPos[3], degrees);
+		new Float:frontY = g_LoungeBoardPos[1] + 0.015 * floatcos(-g_LoungeBoardPos[3], degrees);
+
+		if (!IsValidDynamicObject(g_BoardBaseObject))
+		{
+			g_BoardBaseObject = CreateDynamicObject(3077, g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2], 0.0000, 0.0000, g_LoungeBoardPos[3], LOUNGEVW, 0, -1, 300.0, 300.0);
+		}
+		else
+		{
+			SetDynamicObjectPos(g_BoardBaseObject, g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2]);
+			SetDynamicObjectRot(g_BoardBaseObject, 0.0000, 0.0000, g_LoungeBoardPos[3]);
+		}
+
+		if (!IsValidDynamicObject(g_Object))
+		{
+			g_Object = CreateDynamicObject(3077, frontX, frontY, g_LoungeBoardPos[2], 0.0000, 0.0000, g_LoungeBoardPos[3], LOUNGEVW, 0, -1, 300.0, 300.0);
+		}
+		else
+		{
+			SetDynamicObjectPos(g_Object, frontX, frontY, g_LoungeBoardPos[2]);
+			SetDynamicObjectRot(g_Object, 0.0000, 0.0000, g_LoungeBoardPos[3]);
+		}
+		SetDynamicObjectMaterialText(g_Object, 0, str, OBJECT_MATERIAL_SIZE_512x256, "Lucida Console", 18, false, 0xFFD9A0A9, 0, OBJECT_MATERIAL_TEXT_ALIGN_LEFT);
 	}
 	MySQL_TQueryInline(dbHandle, using inline OnKillRankLoad,
 		"SELECT `username`, `kills`, `deaths` FROM `accounts` ORDER BY `kills` DESC LIMIT 10");

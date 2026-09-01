@@ -742,6 +742,10 @@ new Iterator:ArenaQueue<MAX_ARENA_CATEGORIES, MAX_ZONES>;
 new changeArenaDelay = -1;
 
 new g_Object;
+new g_BoardBaseObject;
+new Float:g_LoungeSpawnPos[4] = { 934.4449, -1086.8077, 24.2891, 90.5514 };
+new Float:g_LoungeBoardPos[4] = { 926.0289, -1062.7606, 24.2891, 182.8419 };
+new g_LoungeRankStr[1024];
 
 new bool:R2KickEnabled = false;
 new bool:OMPKickEnabled = false;
@@ -860,7 +864,6 @@ new Float:TOP5Kills[5][4] = {
     { 1165.3832,-2032.8639,69.0078,235.5392 }
 };
 
-new ActorLounge[8];
 new Top5DamageActor[5];
 new Text3D:Top5Damage[5];
 new Text3D:Top5DamageNome[5];
@@ -871,17 +874,6 @@ new Float:TOP5Damage[5][4] = {
     { 1180.6578,-2045.7148,69.0078,34.9736 },
     { 1169.7711,-2045.6019,69.0006,346.1958 },
     { 1165.5803,-2041.0651,69.0078,320.7744 }
-};
-
-new Float:ActorLoungeCoords[8][4] = {
-    {1131.4117,-2044.2993,69.0078,273.5329},
-    {1125.3280,-2037.1938,69.8815,269.0763},
-    {1131.4326,-2029.6290,69.0078,269.8611},
-    {1136.8027,-2007.7343,69.0006,157.7136},
-    {1136.7711,-2066.1260,69.0078,36.9320},
-    {1125.1427,-2029.8063,75.8093,270.0000},
-    {1125.1427,-2044.1575,75.8093,270.0000},
-    {1117.7090,-2036.9181,78.7500,268.6331}
 };
 
 new LoaderFreezer = 1;

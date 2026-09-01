@@ -7,6 +7,10 @@ Respawn(playerid, timestamp)
     if(duelState != DUELS_STATE_NONE)
         return SendClientMessage(playerid, -1, "%s", ERROR_RESPAWN_DUEL);
 
+    new loc = User[playerid][locationId];
+    if(loc != ARENA_AFK && (loc < 0 || loc >= MAX_LOCATIONS || !arenaInfo[loc][isRunningArena]))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot respawn while the round has ended.");
+
     if(IsAdmin(playerid, 4))
     {
         SetPlayerPos(playerid, 0, 0, 0);

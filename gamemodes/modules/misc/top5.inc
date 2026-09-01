@@ -1,20 +1,13 @@
 CreateTOP5Kills()
 {
-    Top5Kills[0] = CreateDynamic3DTextLabel("", -1, 1184.2400,-2032.3656,69.0078,123.0535, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5KillsNome[0] = CreateDynamic3DTextLabel("", -1, 1184.2400,-2032.3656,70.0000,123.0535, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
+    for(new i = 0; i < 5; i++)
+    {
+        if(IsValidDynamic3DTextLabel(Top5Kills[i])) DestroyDynamic3DTextLabel(Top5Kills[i]);
+        if(IsValidDynamic3DTextLabel(Top5KillsNome[i])) DestroyDynamic3DTextLabel(Top5KillsNome[i]);
 
-    Top5Kills[1] = CreateDynamic3DTextLabel("", -1, 1182.5326,-2029.8873,69.0078,123.0753, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5KillsNome[1] = CreateDynamic3DTextLabel("", -1, 1182.5326,-2029.8873,70.0000,123.0753, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
-    Top5Kills[2] = CreateDynamic3DTextLabel("", -1, 1180.1112,-2027.8939,69.0078,148.8109, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5KillsNome[2] = CreateDynamic3DTextLabel("", -1, 1180.1112,-2027.8939,70.0000,148.8109, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
-    Top5Kills[3] = CreateDynamic3DTextLabel("", -1, 1169.2753,-2028.4543,69.0006,230.1996, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5KillsNome[3] = CreateDynamic3DTextLabel("", -1, 1169.2753,-2028.4543,70.0000,230.1996, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
-    Top5Kills[4] = CreateDynamic3DTextLabel("", -1, 1165.3832,-2032.8639,69.0078,235.5392, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5KillsNome[4] = CreateDynamic3DTextLabel("", -1, 1165.3832,-2032.8639,70.0000,235.5392, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
+        Top5Kills[i] = CreateDynamic3DTextLabel("", -1, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25.0);
+        Top5KillsNome[i] = CreateDynamic3DTextLabel("", -1, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2] + 1.0, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25.0);
+    }
     return true;
 }
 
@@ -54,21 +47,14 @@ UpdateTOP5Kills()
 
 CreateTOP5Damage()
 {
-    Top5Damage[0] = CreateDynamic3DTextLabel("", -1, 1184.4551,-2041.2717,69.0078,46.4216, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5DamageNome[0] = CreateDynamic3DTextLabel("", -1, 1184.4551,-2041.2717,70.0000,46.4216, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
+    for(new i = 0; i < 5; i++)
+    {
+        if(IsValidDynamic3DTextLabel(Top5Damage[i])) DestroyDynamic3DTextLabel(Top5Damage[i]);
+        if(IsValidDynamic3DTextLabel(Top5DamageNome[i])) DestroyDynamic3DTextLabel(Top5DamageNome[i]);
 
-    Top5Damage[1] = CreateDynamic3DTextLabel("", -1, 1182.9928,-2043.0415,69.0078,56.8577, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5DamageNome[1] = CreateDynamic3DTextLabel("", -1, 1182.9928,-2043.0415,70.0000,56.8577, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
-    Top5Damage[2] = CreateDynamic3DTextLabel("", -1, 1180.6578,-2045.7148,69.0078,34.9736, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5DamageNome[2] = CreateDynamic3DTextLabel("", -1, 1180.6578,-2045.7148,70.0000,34.9736, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
-    Top5Damage[3] = CreateDynamic3DTextLabel("", -1, 1169.7711,-2045.6019,69.0006,346.1958, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5DamageNome[3] = CreateDynamic3DTextLabel("", -1, 1169.7711,-2045.6019,70.0000,346.1958, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
-    Top5Damage[4] = CreateDynamic3DTextLabel("", -1, 1165.5803,-2041.0651,69.0078,320.7744, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-    Top5DamageNome[4] = CreateDynamic3DTextLabel("", -1, 1165.5803,-2041.0651,70.0000,320.7744, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25);
-
+        Top5Damage[i] = CreateDynamic3DTextLabel("", -1, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25.0);
+        Top5DamageNome[i] = CreateDynamic3DTextLabel("", -1, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2] + 1.0, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, LOUNGEVW, 0, -1, 25.0);
+    }
     return true;
 }
 

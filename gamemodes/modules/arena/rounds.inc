@@ -590,9 +590,16 @@ static stock PickCustomSpawn(playerid, zone, &Float:outX, &Float:outY, &Float:ou
 
 spawnOnLocation(playerid)
 {
-	if(User[playerid][locationId] == -1) return true;
+	new loc = User[playerid][locationId];
+	if(loc == -1) return true;
 
-	new zone = arenaInfo[User[playerid][locationId]][arenaId];
+	if(loc != ARENA_AFK && (loc < 0 || loc >= sizeof(arenaInfo) || !arenaInfo[loc][isRunningArena]))
+	{
+		TogglePlayerControllable(playerid, false);
+		return true;
+	}
+
+	new zone = arenaInfo[loc][arenaId];
 	new Float:posX, Float:posY, Float:posZ;
 	new Float:bestX, Float:bestY, Float:bestZ, Float:bestClearance = -1.0;
 

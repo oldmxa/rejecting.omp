@@ -266,12 +266,12 @@ setAfk(playerid)
 	CallLocalFunction("ForfeitDuel2v2OnAfk", "i", playerid);
 	CallLocalFunction("TrainingOnSetAfk", "i", playerid);
 	CallLocalFunction("PracticeOnSetAfk", "i", playerid);
-	if((User[playerid][loungeX] == 0.0 && User[playerid][loungeY] == 0.0) || User[playerid][loungeX] == -1504.1549 || User[playerid][loungeVW] == 0)
+	if((User[playerid][loungeX] == 0.0 && User[playerid][loungeY] == 0.0) || User[playerid][loungeX] == -1504.1549 || User[playerid][loungeX] == 1209.1161 || User[playerid][loungeVW] == 0 || User[playerid][loungeVW] == LOUNGEVW)
 	{
-		User[playerid][loungeX] = LOUNGE_SPAWN_X;
-		User[playerid][loungeY] = LOUNGE_SPAWN_Y;
-		User[playerid][loungeZ] = LOUNGE_SPAWN_Z;
-		User[playerid][loungeA] = LOUNGE_SPAWN_A;
+		User[playerid][loungeX] = g_LoungeSpawnPos[0];
+		User[playerid][loungeY] = g_LoungeSpawnPos[1];
+		User[playerid][loungeZ] = g_LoungeSpawnPos[2];
+		User[playerid][loungeA] = g_LoungeSpawnPos[3];
 		User[playerid][loungeVW] = LOUNGEVW;
 		User[playerid][loungeINT] = 0;
 	}

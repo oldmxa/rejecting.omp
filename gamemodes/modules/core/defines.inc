@@ -269,8 +269,3 @@ forward RestartServerSafe();
 
 #define DEFAULT_HITMARK_COLOR (0xFFFFFF7A)
 #define DEFAULT_HITMARK_ALPHA (0x7A)
-
-#define LOUNGE_SPAWN_X (1209.1161)
-#define LOUNGE_SPAWN_Y (-2036.4353)
-#define LOUNGE_SPAWN_Z (69.0078)
-#define LOUNGE_SPAWN_A (91.1024)

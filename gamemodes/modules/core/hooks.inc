@@ -375,11 +375,11 @@ hook OnGameModeInit()
     User[MAX_PLAYERS][hitSoundID] = 17802;
     User[MAX_PLAYERS][killSoundID] = 1057;
     User[MAX_PLAYERS][dmgInformerStyle] = 1;
-    User[MAX_PLAYERS][loungeX] = LOUNGE_SPAWN_X;
-    User[MAX_PLAYERS][loungeY] = LOUNGE_SPAWN_Y;
-    User[MAX_PLAYERS][loungeZ] = LOUNGE_SPAWN_Z;
-    User[MAX_PLAYERS][loungeA] = LOUNGE_SPAWN_A;
-    User[MAX_PLAYERS][loungeVW] = 909;
+    User[MAX_PLAYERS][loungeX] = g_LoungeSpawnPos[0];
+    User[MAX_PLAYERS][loungeY] = g_LoungeSpawnPos[1];
+    User[MAX_PLAYERS][loungeZ] = g_LoungeSpawnPos[2];
+    User[MAX_PLAYERS][loungeA] = g_LoungeSpawnPos[3];
+    User[MAX_PLAYERS][loungeVW] = LOUNGEVW;
     User[MAX_PLAYERS][loungeINT] = 0;
     format(User[MAX_PLAYERS][dc_username], 100, "-1");
     format(User[MAX_PLAYERS][dc_discriminator], 100, "-1");

@@ -530,7 +530,16 @@ public OnPlayerSpawn(playerid)
 		if(IsPlayerAFK(playerid))
 			setAfk(playerid);
 		else
+		{
+			new loc = User[playerid][locationId];
+			if(loc >= 0 && loc < sizeof(arenaInfo) && loc != ARENA_AFK && !arenaInfo[loc][isRunningArena])
+			{
+				TogglePlayerControllable(playerid, false);
+				SetPlayerVirtualWorld(playerid, loc);
+				return 1;
+			}
 			spawnOnLocation(playerid);
+		}
 	}
 
 	SetPlayerTime(playerid, User[playerid][time], 0);

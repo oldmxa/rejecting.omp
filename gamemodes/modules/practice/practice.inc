@@ -200,3 +200,50 @@ public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hi
 #if defined PRAC_OnPlayerWeaponShot
     forward PRAC_OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ);
 #endif
+
+public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
+{
+    if (g_Practice[playerid][pracActive] && g_Practice[playerid][pracTargetType] == PRACTICE_TYPE_BALL && objectid == g_Practice[playerid][pracObject])
+    {
+        if (response == _:EDIT_RESPONSE_FINAL)
+        {
+            new Float:px, Float:py, Float:pz;
+            GetPlayerPos(playerid, px, py, pz);
+
+            new Float:baseZ = g_Practice[playerid][pracHasPos1] ? g_Practice[playerid][pracPos1][2] : pz;
+            new Float:newHeight = z - baseZ - PRACTICE_BALL_LIFT;
+
+            if (newHeight < PRACTICE_HEIGHT_MIN) newHeight = PRACTICE_HEIGHT_MIN;
+            if (newHeight > PRACTICE_HEIGHT_MAX) newHeight = PRACTICE_HEIGHT_MAX;
+
+            g_Practice[playerid][pracHeight] = newHeight;
+            CreatePracticeTarget(playerid);
+
+            va_SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}Target height saved: {MAIN}%.2f", newHeight);
+            ShowPracticeDialog(playerid);
+        }
+        else if (response == _:EDIT_RESPONSE_CANCEL)
+        {
+            CreatePracticeTarget(playerid);
+            SendClientMessage(playerid, -1, "{MAIN}[PRACTICE] {FFFFFF}3D editing canceled.");
+            ShowPracticeDialog(playerid);
+        }
+        return 1;
+    }
+
+    #if defined PRAC_OnPlayerEditDynamicObject
+        return PRAC_OnPlayerEditDynamicObject(playerid, objectid, response, x, y, z, rx, ry, rz);
+    #else
+        return 1;
+    #endif
+}
+#if defined _ALS_OnPlayerEditDynamicObject
+    #undef OnPlayerEditDynamicObject
+#else
+    #define _ALS_OnPlayerEditDynamicObject
+#endif
+#define OnPlayerEditDynamicObject PRAC_OnPlayerEditDynamicObject
+#if defined PRAC_OnPlayerEditDynamicObject
+    forward PRAC_OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);
+#endif
+
