@@ -500,6 +500,7 @@ enum e_USER
     bool:showClanHud,
     bool:showHpArmour,
     hpTextColor,
+    hpBarColor,
     bool:blockPM,
     bool:isShowingHud,
     bool:isSpectating,

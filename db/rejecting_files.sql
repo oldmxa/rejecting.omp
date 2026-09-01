@@ -69,6 +69,7 @@ CREATE TABLE `accounts` (
   `show_clan_hud` tinyint(1) NOT NULL DEFAULT 1,
   `show_hp_armour` tinyint(1) NOT NULL DEFAULT 0,
   `hp_text_color` int(11) NOT NULL DEFAULT -1,
+  `hp_bar_color` int(11) NOT NULL DEFAULT -1,
   `show_headshot` int(11) NOT NULL DEFAULT 0,
   `show_connect_msg` int(11) NOT NULL DEFAULT 1,
   `hide_global_msg` int(11) NOT NULL DEFAULT 0,

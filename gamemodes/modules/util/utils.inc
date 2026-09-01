@@ -469,6 +469,16 @@ GetDamageStyleName(style)
 	return name;
 }
 
+ApplyHpBarColour(playerid)
+{
+	new idx = User[playerid][hpBarColor];
+
+	if(idx < 0 || idx >= sizeof(hudShades))
+		return SetPlayerHealthBarColour(playerid, 0);
+
+	return SetPlayerHealthBarColour(playerid, (hudShades[idx][shadeHex] << 8) | 0xFF);
+}
+
 ApplyDamageFeedColors(playerid)
 {
 	new left[24] = "", right[24] = "";

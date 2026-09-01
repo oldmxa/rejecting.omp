@@ -85,13 +85,44 @@ ShowHpTextMenu(playerid, source)
     new body[512] = "{BEBEBE}Option\t{BEBEBE}Current Setting\n";
     strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}HP Text State\t%s\n",
         (!ServerHpArmourText) ? ("{F84F31}Disabled by server") : ((User[playerid][showHpArmour]) ? ("{23C552}Visible") : ("{F84F31}Hidden"))), sizeof(body));
-    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Text Color\t%s", colName), sizeof(body));
+    new barName[40] = "{BEBEBE}Default";
+    if(0 <= User[playerid][hpBarColor] < sizeof(hudShades))
+        format(barName, sizeof(barName), "{%06x}%s", hudShades[User[playerid][hpBarColor]][shadeHex], hudShades[User[playerid][hpBarColor]][shadeName]);
+
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Text Color\t%s\n", colName), sizeof(body));
+    strcat(body, fmat_return("{B4B5B7}\xBB {FFFFFF}Bar Color\t%s", barName), sizeof(body));
 
     new title[64] = "{MAIN}Personalization - HP Text";
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
     return Dialog_ShowCallback(playerid, using public DIALOG_HP_TEXT_MAIN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "<");
+}
+
+ShowHpBarColorDialog(playerid, source)
+{
+    SetAppearanceSource(playerid, source);
+
+    new selected = User[playerid][hpBarColor];
+    if(selected < -1 || selected >= sizeof(hudShades)) selected = -1;
+
+    new body[3500] = "{BEBEBE}Name\t{BEBEBE}Preview\n";
+
+    strcat(body, fmat_return("%s{BEBEBE}Default\t{B4191D}Preview\n",
+        STYLE_MARK(selected == -1)), sizeof(body));
+
+    for(new i; i < sizeof(hudShades); i++)
+    {
+        strcat(body, fmat_return("%s{%06x}%s\t{%06x}Preview\n",
+            STYLE_MARK(selected == i), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
+    }
+
+    new title[64] = "{MAIN}Personalization - Health Bar Color";
+
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+
+    return Dialog_ShowCallback(playerid, using public HP_BAR_COLOR<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Accept", "Cancel");
 }
 
 ShowHpColorDialog(playerid, source)
@@ -543,6 +574,24 @@ public DIALOG_HP_TEXT_MAIN(playerid, dialogid, response, listitem, string:inputt
             return ShowHpTextMenu(playerid, GetAppearanceSource(playerid));
         }
         case 1: return ShowHpColorDialog(playerid, APPEARANCE_SRC_HPTEXT);
+        case 2: return ShowHpBarColorDialog(playerid, APPEARANCE_SRC_HPTEXT);
+    }
+    return ReturnToAppearanceSource(playerid);
+}
+
+forward HP_BAR_COLOR(playerid, dialogid, response, listitem, string:inputtext[]);
+public HP_BAR_COLOR(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(response)
+    {
+        new value = (listitem == 0) ? -1 : (listitem - 1);
+
+        if(value < sizeof(hudShades))
+        {
+            User[playerid][hpBarColor] = value;
+            ApplyHpBarColour(playerid);
+            SendClientMessage(playerid, -1, "%s", INFO_PREFERENCES);
+        }
     }
     return ReturnToAppearanceSource(playerid);
 }

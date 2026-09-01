@@ -1039,6 +1039,7 @@ static s_SyncData[MAX_PLAYERS][E_RESYNC_DATA];
 static Text:s_HealthBarBorder = Text:INVALID_TEXT_DRAW;
 static Text:s_HealthBarBackground = Text:INVALID_TEXT_DRAW;
 static PlayerText:s_HealthBarForeground[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+static s_HealthBarFgColour[MAX_PLAYERS] = {WC_HEALTH_BAR_FG_COLOR, ...};
 static s_DamageRangeSteps[55];
 static Float:s_DamageRangeRanges[55][WC_MAX_DAMAGE_RANGES];
 static Float:s_DamageRangeValues[55][WC_MAX_DAMAGE_RANGES];
@@ -1244,6 +1245,23 @@ stock EnableHealthBarForPlayer(playerid, bool:enable)
 		return true;
 	}
 	return false;
+}
+
+stock SetPlayerHealthBarColour(playerid, colour)
+{
+	if (playerid < 0 || playerid >= MAX_PLAYERS || !IsPlayerConnected(playerid)) {
+		return false;
+	}
+
+	s_HealthBarFgColour[playerid] = (colour == 0) ? WC_HEALTH_BAR_FG_COLOR : colour;
+
+	if (s_HealthBarForeground[playerid] != PlayerText:INVALID_TEXT_DRAW) {
+		PlayerTextDrawDestroy(playerid, s_HealthBarForeground[playerid]);
+		s_HealthBarForeground[playerid] = PlayerText:INVALID_TEXT_DRAW;
+	}
+
+	UpdateHealthBar(playerid, true);
+	return true;
 }
 
 stock SetWeaponDamage(WEAPON:weaponid, damage_type, Float:amount, Float:...)
@@ -5133,7 +5151,7 @@ static UpdateHealthBar(playerid, bool:force = false)
 				} else {
 					s_InternalPlayerTextDraw[playerid][s_HealthBarForeground[playerid]] = true;
 
-					PlayerTextDrawColour(playerid, 			s_HealthBarForeground[playerid], WC_HEALTH_BAR_FG_COLOR);
+					PlayerTextDrawColour(playerid, 			s_HealthBarForeground[playerid], s_HealthBarFgColour[playerid]);
 					PlayerTextDrawFont(playerid, 			s_HealthBarForeground[playerid], TEXT_DRAW_FONT_SPRITE_DRAW);
 					PlayerTextDrawShow(playerid, 			s_HealthBarForeground[playerid]);
 				}
