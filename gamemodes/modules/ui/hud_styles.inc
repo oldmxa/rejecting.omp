@@ -211,6 +211,22 @@ stock RecreatePlayerHudTextDraws(playerid)
             PlayerTextDrawBackgroundColor(playerid, InfoStats[playerid][2], MAIN_BACKGROUND_COLOUR);
         }
     }
+
+    if (User[playerid][showPlayerHud] && !IsPlayerSpectating(playerid))
+    {
+        for (new i = 0; i < 3; i++)
+        {
+            if (InfoStats[playerid][i] != PlayerText:INVALID_TEXT_DRAW)
+                PlayerTextDrawShow(playerid, InfoStats[playerid][i]);
+        }
+        if (FPSPingPacket[playerid] != PlayerText:INVALID_TEXT_DRAW)
+            PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+
+        User[playerid][isShowingHud] = true;
+
+        if (User[playerid][locationId] != -1)
+            updatePlayerHud(playerid);
+    }
     return 1;
 }
 

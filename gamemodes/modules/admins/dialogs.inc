@@ -655,9 +655,11 @@ public DIALOG_ADM_DEFAULTHUDCOLOR(playerid, dialogid, response, listitem, string
         {
             if(IsPlayerConnected(i) && User[i][isAlreadySpawned])
             {
-                RecreatePlayerFpsPingTd(i);
                 UpdateRoundStatsColors(i);
-                if(User[i][isShowingHud]) updatePlayerHud(i);
+                if(User[i][locationId] != -1 && User[i][showPlayerHud])
+                {
+                    updatePlayerHud(i);
+                }
             }
         }
 
@@ -688,9 +690,11 @@ public DIALOG_ADM_DEFAULTSHADE1(playerid, dialogid, response, listitem, string:i
         {
             if(IsPlayerConnected(i) && User[i][isAlreadySpawned])
             {
-                RecreatePlayerFpsPingTd(i);
                 UpdateRoundStatsColors(i);
-                if(User[i][isShowingHud]) updatePlayerHud(i);
+                if(User[i][locationId] != -1 && User[i][showPlayerHud])
+                {
+                    updatePlayerHud(i);
+                }
             }
         }
 
@@ -725,9 +729,11 @@ public DIALOG_ADM_DEFAULTSHADE2(playerid, dialogid, response, listitem, string:i
         {
             if(IsPlayerConnected(i) && User[i][isAlreadySpawned])
             {
-                RecreatePlayerFpsPingTd(i);
                 UpdateRoundStatsColors(i);
-                if(User[i][isShowingHud]) updatePlayerHud(i);
+                if(User[i][locationId] != -1 && User[i][showPlayerHud])
+                {
+                    updatePlayerHud(i);
+                }
             }
         }
 

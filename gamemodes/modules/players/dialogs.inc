@@ -559,9 +559,7 @@ static ApplyHudShade(playerid, listitem, bool:secondary)
 
     if(User[playerid][showPlayerHud])
     {
-        PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
-        PlayerTextDrawShow(playerid, InfoStats[playerid][0]);
-        PlayerTextDrawShow(playerid, InfoStats[playerid][1]);
+        showPlayerTextDraw(playerid);
     }
     return 1;
 }
@@ -663,9 +661,7 @@ public HUD_COLORS(playerid, dialogid, response, listitem, string:inputtext[])
 
         if(User[playerid][showPlayerHud])
         {
-            PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
-            PlayerTextDrawShow(playerid, InfoStats[playerid][0]);
-            PlayerTextDrawShow(playerid, InfoStats[playerid][1]);
+            showPlayerTextDraw(playerid);
         }
     }
 
