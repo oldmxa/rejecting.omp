@@ -67,7 +67,11 @@ stock RecreatePlayerHudTextDraws(playerid)
         {
             FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid, 578.000000, 16.000000, "_");
             PlayerTextDrawFont(playerid, FPSPingPacket[playerid], TEXT_DRAW_FONT_1);
-            PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.200000, 0.900000);
+            if (User[playerid][hudType] == HUD_RL)
+                PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.180000, 0.799998);
+            else
+                PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.200000, 0.900000);
+
             PlayerTextDrawSetShadow(playerid, FPSPingPacket[playerid], 0);
             PlayerTextDrawSetOutline(playerid, FPSPingPacket[playerid], 1);
             PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], TEXT_DRAW_ALIGN_CENTRE);
