@@ -5,7 +5,7 @@
 
 // Arena: Skinhit Marina LS
 
-#define SKINHIT_MARINA_NAME           "Double hit marina"
+#define SKINHIT_MARINA_NAME           "Skinhit Marina"
 #define SKINHIT_MARINA_TYPE           "Double hit"
 
 // Player Spawn Point

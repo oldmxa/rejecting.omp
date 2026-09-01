@@ -65,7 +65,8 @@ stock RecreatePlayerHudTextDraws(playerid)
     {
         case HUD_UNDERLINE, HUD_RL:
         {
-            FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid, 578.000000, 16.000000, "_");
+            new Float:hudPosY = (User[playerid][hudType] == HUD_RL) ? (26.000000) : (16.000000);
+            FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid, 578.000000, hudPosY, "_");
             PlayerTextDrawFont(playerid, FPSPingPacket[playerid], TEXT_DRAW_FONT_1);
             if (User[playerid][hudType] == HUD_RL)
                 PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.180000, 0.799998);

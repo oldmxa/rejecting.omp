@@ -3,7 +3,7 @@
 #endif
 #define _training_skinhit_ganton_incl
 
-#define SKINHIT_GANTON_NAME         "Ganton SkinHit"
+#define SKINHIT_GANTON_NAME         "Skinhit Ganton"
 #define SKINHIT_GANTON_TYPE         "Skinhit"
 
 // Player Spawn Point

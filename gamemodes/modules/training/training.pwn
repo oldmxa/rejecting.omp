@@ -32,13 +32,13 @@ public OnGameModeInit()
         g_TrainingCountdownTD[i] = PlayerText:INVALID_TEXT_DRAW;
     }
 
-    CallLocalFunction("Init_SkinhitSF", "");
-    CallLocalFunction("Init_SkinhitLS", "");
-    CallLocalFunction("Init_SkinhitCommerce", "");
-    CallLocalFunction("Init_SkinhitMarina", "");
-    CallLocalFunction("Init_SkinhitLV", "");
-    CallLocalFunction("Init_SkinhitGanton", "");
-    CallLocalFunction("Init_ReflexBayside", "");
+    Init_SkinhitSF();
+    Init_SkinhitLS();
+    Init_SkinhitCommerce();
+    Init_SkinhitMarina();
+    Init_SkinhitLV();
+    Init_SkinhitGanton();
+    Init_ReflexBayside();
 
     InitTrainingRecords();
 

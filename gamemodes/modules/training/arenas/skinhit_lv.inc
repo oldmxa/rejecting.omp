@@ -5,7 +5,7 @@
 
 // Arena: Skinhit Aero LV
 
-#define SKINHIT_LV_NAME           "Airport LV"
+#define SKINHIT_LV_NAME           "Skinhit Airport LV"
 #define SKINHIT_LV_TYPE           "Double hit"
 
 // Player Spawn Point
