@@ -11,6 +11,55 @@ CreateTOP5Kills()
     return true;
 }
 
+stock GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, dest[], len = sizeof(dest))
+{
+    if(t_clanid >= 0 && t_clanColor != -1 && t_clanColor != 0)
+    {
+        new colorVal = (t_clanColor >>> 8) & 0xFFFFFF;
+        if(colorVal != 0 && colorVal != 0x4e5458 && colorVal != 0xa4aba8)
+        {
+            format(dest, len, "%06x", colorVal);
+            return 1;
+        }
+    }
+
+    if(1 <= t_chatMainColor <= sizeof(hudShades))
+    {
+        format(dest, len, "%06x", hudShades[t_chatMainColor - 1][shadeHex]);
+        return 1;
+    }
+    else if(t_chatMainColor & 0x10000000)
+    {
+        format(dest, len, "%06x", t_chatMainColor & 0xFFFFFF);
+        return 1;
+    }
+
+    if(0 <= t_hudShadeOne < sizeof(hudShades))
+    {
+        format(dest, len, "%06x", hudShades[t_hudShadeOne][shadeHex]);
+        return 1;
+    }
+
+    if(t_clanid >= 0 && t_clanColor != -1 && t_clanColor != 0)
+    {
+        new colorVal = (t_clanColor >>> 8) & 0xFFFFFF;
+        if(colorVal != 0)
+        {
+            format(dest, len, "%06x", colorVal);
+            return 1;
+        }
+    }
+
+    if(0 < t_hudColor < sizeof(CoresDoBglh))
+    {
+        format(dest, len, "%s", CoresDoBglh[t_hudColor]);
+        return 1;
+    }
+
+    format(dest, len, "B4B5B7");
+    return 1;
+}
+
 UpdateTOP5Kills()
 {
     inline const OnTop5KillsLoad()
@@ -18,29 +67,42 @@ UpdateTOP5Kills()
         new rows = cache_num_rows();
         if(rows > 0)
         {
-            new nome[MAX_PLAYER_NAME + 1], skin, kills, string[96], string2[96];
+            new nome[MAX_PLAYER_NAME + 1], t_skin, t_kills, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
+            new pColorHex[10], string[128], string2[128];
             for(new i = 0; i < rows; i++)
             {
                 cache_get_value_name(i, "username", nome, sizeof(nome));
-                cache_get_value_int(i, "kills_semanais", kills);
-                cache_get_value_int(i, "skin_id", skin);
+                cache_get_value_name_int(i, "kills_semanais", t_kills);
+                cache_get_value_name_int(i, "skin_id", t_skin);
+                cache_get_value_name_int(i, "clanid", t_clanid);
+                cache_get_value_name_int(i, "chat_main_color", t_chatMainColor);
+                cache_get_value_name_int(i, "hud_shade_one", t_hudShadeOne);
+                cache_get_value_name_int(i, "hudcolor", t_hudColor);
+                t_clanColor = -1;
+                cache_get_value_name_int(i, "clan_color", t_clanColor);
 
-                format(string, sizeof(string), "%d Kills", kills);
-                UpdateDynamic3DTextLabelText(Top5Kills[i], 0x9b2f25ff, string);
-                format(string2, sizeof(string2), "%d. %s", i+1, nome);
-                UpdateDynamic3DTextLabelText(Top5KillsNome[i], 0x9b2f25ff, string2);
+                GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
+
+                format(string, sizeof(string), "{F3230E}%s {B4B5B7}Kills", FormatNumber(t_kills));
+                UpdateDynamic3DTextLabelText(Top5Kills[i], -1, string);
+
+                format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
+                UpdateDynamic3DTextLabelText(Top5KillsNome[i], -1, string2);
 
                 if(IsValidDynamicActor(Top5KillsActor[i]))
-                 DestroyDynamicActor(Top5KillsActor[i]);
-                Top5KillsActor[i] = CreateDynamicActor(skin, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2], TOP5Kills[i][3]);
+                    DestroyDynamicActor(Top5KillsActor[i]);
+                Top5KillsActor[i] = CreateDynamicActor(t_skin, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2], TOP5Kills[i][3]);
                 SetDynamicActorVirtualWorld(Top5KillsActor[i], LOUNGEVW);
             }
         }
     }
     MySQL_TQueryInline(dbHandle, using inline OnTop5KillsLoad,
-        "SELECT `username`, `kills_semanais`, `skin_id` FROM `accounts` \
+        "SELECT `accounts`.`username`, `accounts`.`kills_semanais`, `accounts`.`skin_id`, `accounts`.`clanid`, \
+        `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, `clans`.`clan_color` \
+        FROM `accounts` \
+        LEFT JOIN `clans` ON `accounts`.`clanid` = `clans`.`clan_id` \
         WHERE NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \
-        ORDER BY `kills_semanais` DESC LIMIT 5");
+        ORDER BY `accounts`.`kills_semanais` DESC LIMIT 5");
 
     return true;
 }
@@ -65,29 +127,43 @@ UpdateTOP5Damage()
         new rows = cache_num_rows();
         if(rows > 0)
         {
-            new nome[MAX_PLAYER_NAME + 1], skin, damage, string[96], string2[96];
+            new nome[MAX_PLAYER_NAME + 1], t_skin, Float:t_dmgFloat, t_damage, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
+            new pColorHex[10], string[128], string2[128];
             for(new i = 0; i < rows; i++)
             {
                 cache_get_value_name(i, "username", nome, sizeof(nome));
-                cache_get_value_int(i, "damage_semanal", damage);
-                cache_get_value_int(i, "skin_id", skin);
+                cache_get_value_name_float(i, "damage_semanal", t_dmgFloat);
+                t_damage = floatround(t_dmgFloat);
+                cache_get_value_name_int(i, "skin_id", t_skin);
+                cache_get_value_name_int(i, "clanid", t_clanid);
+                cache_get_value_name_int(i, "chat_main_color", t_chatMainColor);
+                cache_get_value_name_int(i, "hud_shade_one", t_hudShadeOne);
+                cache_get_value_name_int(i, "hudcolor", t_hudColor);
+                t_clanColor = -1;
+                cache_get_value_name_int(i, "clan_color", t_clanColor);
 
-                format(string, sizeof(string), "Damage %d", damage);
-                UpdateDynamic3DTextLabelText(Top5Damage[i], 0x9b2f25ff, string);
-                format(string2, sizeof(string2), "%d. %s", i+1, nome);
-                UpdateDynamic3DTextLabelText(Top5DamageNome[i], 0x9b2f25ff, string2);
+                GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
+
+                format(string, sizeof(string), "{F3230E}%s {B4B5B7}Damage", FormatNumber(t_damage));
+                UpdateDynamic3DTextLabelText(Top5Damage[i], -1, string);
+
+                format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
+                UpdateDynamic3DTextLabelText(Top5DamageNome[i], -1, string2);
 
                 if(IsValidDynamicActor(Top5DamageActor[i]))
                     DestroyDynamicActor(Top5DamageActor[i]);
-                Top5DamageActor[i] = CreateDynamicActor(skin, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2], TOP5Damage[i][3]);
+                Top5DamageActor[i] = CreateDynamicActor(t_skin, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2], TOP5Damage[i][3]);
                 SetDynamicActorVirtualWorld(Top5DamageActor[i], LOUNGEVW);
             }
         }
     }
     MySQL_TQueryInline(dbHandle, using inline OnTop5DamageLoad,
-        "SELECT `username`, `damage_semanal`, `skin_id` FROM `accounts` \
+        "SELECT `accounts`.`username`, `accounts`.`damage_semanal`, `accounts`.`skin_id`, `accounts`.`clanid`, \
+        `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, `clans`.`clan_color` \
+        FROM `accounts` \
+        LEFT JOIN `clans` ON `accounts`.`clanid` = `clans`.`clan_id` \
         WHERE NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \
-        ORDER BY `damage_semanal` DESC LIMIT 5");
+        ORDER BY `accounts`.`damage_semanal` DESC LIMIT 5");
 
     return true;
 }
