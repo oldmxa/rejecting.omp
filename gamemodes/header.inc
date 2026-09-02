@@ -91,6 +91,7 @@
 #include "modules/players/commands.inc"
 #include "modules/players/social.inc"
 #include "modules/players/appearance.inc"
+#include "modules/players/animations.inc"
 #include "modules/players/lounge.inc"
 #include "modules/players/lounge_editor.inc"
 #include "modules/players/account.inc"

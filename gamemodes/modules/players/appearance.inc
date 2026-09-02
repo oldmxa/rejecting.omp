@@ -1,42 +1,4 @@
 
-@cmd() piss(playerid, params[], help)
-{
-    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-	SetPlayerSpecialAction(playerid, SPECIAL_ACTION:68);
-	return true;
-}
-
-@cmd() dance(playerid, params[], help)
-{
-    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-
-	new danceid;
-	if(sscanf(params, "d", danceid))
-		return SendClientMessage(playerid, -1, "%s", DANCE_HELP);
-	if(danceid < 1 || danceid > 4)
-		return SendClientMessage(playerid, -1, "%s", DANCE_HELP);
-
-	switch(danceid)
-	{
-		case 1: SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE1);
-		case 2: SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE2);
-		case 3: SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE3);
-		case 4: SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE4);
-	}
-	return true;
-}
-
-@cmd() stopanim(playerid, params[], help)
-{
-    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
-
-	if(GetPlayerSpecialAction(playerid) == 	SPECIAL_ACTION_NONE)
-		return true;
-	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-	return true;
-}
-
-
 @cmd(.alts = {"ss", "skin"}) changeskin(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
@@ -56,13 +18,16 @@
     return true;
 }
 
-@cmd() flash(playerid, params[], help)
+@cmd() highlight(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
+    if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You must be a VIP member or Administrator to use this command.");
+
     new option[4], optionid;
     if(sscanf(params, "s[4]", option))
-        return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/flash [on/off]");
+        return SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/highlight [on/off]");
 
     if(!strcmp(option, "on", false, strlen(option)))
         optionid = 1;
@@ -81,7 +46,7 @@
             SetPlayerColor(playerid, (randomcolor[random(sizeof(randomcolor))] & 0xFFFFFF00) | 0x65);
             piscaTimer[playerid] = SetTimerEx("updateColor", 1000, true, "i", playerid);
             User[playerid][isPiscando] = true;
-            SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Flashing colors enabled.");
+            SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Highlight flashing colors enabled.");
         }
         case 2:
         {
@@ -92,7 +57,11 @@
             }
             SetClanColor(playerid);
             User[playerid][isPiscando] = false;
-            SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Flashing colors disabled.");
+            SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Highlight flashing colors disabled.");
+        }
+        default:
+        {
+            SendClientMessage(playerid, -1, "{MAIN}[USAGE] {FFFFFF}/highlight [on/off]");
         }
     }
 

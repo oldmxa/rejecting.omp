@@ -221,67 +221,31 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
     return true;
 }
 
-new const LoungeCmdsList[][2][] = {
-    {"/car", "Spawn a vehicle"},
-    {"/bike", "Spawn a bike"},
-    {"/jetpack", "Get a jetpack"},
-    {"/getgun", "Get weapons"},
-    {"/tune", "Tune your current vehicle"},
-    {"/fix", "Repair your current vehicle"},
-    {"/flip", "Flip your vehicle back"},
-    {"/spec", "Spectate a player"},
-    {"/specoff", "Stop spectating"},
-    {"/lounge", "Exit from lounge room"},
-    {"/changelounge", "Change your lounge spawn location"}
-};
-
-ShowLoungeCommands(playerid, page)
+ShowLoungeCommands(playerid)
 {
-    new cmdsstr[1024], title[64];
+    new title[64], cmdsstr[1536];
+    format(title, sizeof(title), "{MAIN}Lounge Commands");
+    format_MainColor(playerid, title, sizeof(title));
 
-    format(title, sizeof(title), "{MAIN}Lounge Commands - Page %d", page + 1);
+    format(cmdsstr, sizeof(cmdsstr), "{BEBEBE}Command\t{BEBEBE}Description\n");
+    strcat(cmdsstr, "{FFFFFF}/car [name/id]\t{BEBEBE}Spawn custom vehicle (or visual picker)\n");
+    strcat(cmdsstr, "{FFFFFF}/bike\t{BEBEBE}Spawn a fast bicycle\n");
+    strcat(cmdsstr, "{FFFFFF}/fix\t{BEBEBE}Repair and restore vehicle health\n");
+    strcat(cmdsstr, "{FFFFFF}/tune\t{BEBEBE}Add Nitro and Hydraulics to vehicle\n");
+    strcat(cmdsstr, "{FFFFFF}/flip\t{BEBEBE}Flip overturned vehicle back up\n");
+    strcat(cmdsstr, "{FFFFFF}/jetpack\t{BEBEBE}Equip a jetpack to fly freely in lounge\n");
+    strcat(cmdsstr, "{FFFFFF}/getgun [gun] [ammo]\t{BEBEBE}Spawn custom weapons with ammo\n");
+    strcat(cmdsstr, "{FFFFFF}/changelounge\t{BEBEBE}Save custom lounge spawn position\n");
+    strcat(cmdsstr, "{FFFFFF}/training\t{BEBEBE}Open training arena & bot challenges menu\n");
+    strcat(cmdsstr, "{FFFFFF}/prac\t{BEBEBE}Private aim practice with target NPC\n");
+    strcat(cmdsstr, "{FFFFFF}/spec [id]\t{BEBEBE}Spectate players in combat arenas\n");
+    strcat(cmdsstr, "{FFFFFF}/specoff\t{BEBEBE}Stop spectating and return to lounge\n");
+    strcat(cmdsstr, "{FFFFFF}/anims\t{BEBEBE}Open animations & gestures menu\n");
+    strcat(cmdsstr, "{FFFFFF}/stopanim\t{BEBEBE}Stop active animation (or press 'F')\n");
+    strcat(cmdsstr, "{FFFFFF}/changemode\t{BEBEBE}Select a DM arena to battle\n");
+    strcat(cmdsstr, "{FFFFFF}/lounge\t{BEBEBE}Exit lounge and return to combat arena");
 
-    format_MainColor(playerid, title);
-    format(cmdsstr, sizeof(cmdsstr), "{MAIN}Command\t{MAIN}Description\n");
-
-    new start = page * 10;
-    new end = start + 10;
-    if(end > sizeof(LoungeCmdsList)) end = sizeof(LoungeCmdsList);
-
-    for(new i = start; i < end; i++)
-    {
-        strcat(cmdsstr, "{BEBEBE}");
-        strcat(cmdsstr, LoungeCmdsList[i][0]);
-        strcat(cmdsstr, "\t"COL_WHITE"");
-        strcat(cmdsstr, LoungeCmdsList[i][1]);
-        strcat(cmdsstr, "\n");
-    }
-
-    if(end < sizeof(LoungeCmdsList)) strcat(cmdsstr, ""COL_KGREEN">>> Next Page\tGo next\n");
-
-    format_MainColor(playerid, cmdsstr, sizeof(cmdsstr));
-
-    format_MainColor(playerid, cmdsstr, sizeof(cmdsstr));
-    SetPVarInt(playerid, "LcmdsPage", page);
-    Dialog_ShowCallback(playerid, using public DIALOG_LCMDS<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, "Select", (page > 0) ? ("<") : ("Close"));
-    return 1;
-}
-
-forward DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[]);
-public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
-{
-    new page = GetPVarInt(playerid, "LcmdsPage");
-
-    if(!response)
-    {
-        if(page > 0)
-            return ShowLoungeCommands(playerid, page - 1);
-        return 1;
-    }
-
-    if(strfind(inputtext, "Next Page") != -1)
-        return ShowLoungeCommands(playerid, page + 1);
-
+    Dialog_Show(playerid, DIALOG_STYLE_TABLIST_HEADERS, title, cmdsstr, "Close", "");
     return 1;
 }
 
@@ -290,7 +254,7 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     if(!CanUseLoungeUtility(playerid, false, "view lounge commands"))
         return true;
 
-    ShowLoungeCommands(playerid, 0);
+    ShowLoungeCommands(playerid);
     return true;
 }
 
@@ -495,7 +459,7 @@ static const g_LoungeTips[][] =
     "{FFFFFF}Get custom weapon loadouts while in the lounge using {MAIN}/getgun [name/id] [ammo]{FFFFFF}.",
     "{FFFFFF}Perform dance animations anytime for fun using {MAIN}/dance [1-4]{FFFFFF}.",
     "{FFFFFF}Stop any active character animation immediately using {MAIN}/stopanim{FFFFFF}.",
-    "{FFFFFF}Flash your screen or test visual alerts in-game using {MAIN}/flash{FFFFFF}.",
+    "{FFFFFF}VIPs & Staff can toggle highlight flashing colors using {MAIN}/highlight [on/off]{FFFFFF}.",
     "{FFFFFF}Check your weekly kills and damage on the lounge ranking board.",
     "{FFFFFF}Reach the weekly TOP 5 to have your character immortalized as a lounge statue!",
     "{FFFFFF}Join our official Discord community for events, tournaments and support: {MAIN}/discord{FFFFFF}.",

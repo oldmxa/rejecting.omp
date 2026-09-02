@@ -93,6 +93,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/acdebug", "Anti cheat debug.", 5},
     {"/eaccount [id/name]", "Account Editor.", 5},
     {"/editsafehouse", "Open the safehouse panel: create, place, edit and configure bases.", 5},
+    {"/elounge", "Lounge 3D in-game editor: spawn, rank board & actors.", 5},
     {"/givecustomtag [id]", "Toggle custom tag permission for a player.", 5},
     {"/lifez [height]", "Calibrate the height of the custom life bar above the head.", 5},
     {"/setcoins [id/name] [amount]", "Set the Coins balance of an account (works offline).", 5}

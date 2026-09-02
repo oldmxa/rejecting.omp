@@ -476,6 +476,7 @@ ShowVipCommandsMenu(playerid)
     strcat(strCmds, "{BEBEBE}/voff\t{FFFFFF}Disable receiving messages from VIP Chat\n");
     strcat(strCmds, "{BEBEBE}/vips\t{FFFFFF}View the list of all online VIP members\n");
     strcat(strCmds, "{BEBEBE}/vtag\t{FFFFFF}Customize or toggle your 3D VIP Head Tag color\n");
+    strcat(strCmds, "{BEBEBE}/highlight [on/off]\t{FFFFFF}Toggle flashing radar and nickname color\n");
     strcat(strCmds, "{BEBEBE}/buyvip\t{FFFFFF}Activate or renew your VIP package\n");
     strcat(strCmds, "{BEBEBE}/vip\t{FFFFFF}View all VIP Perks, status & subscription details\n");
 

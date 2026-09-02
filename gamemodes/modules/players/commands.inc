@@ -398,10 +398,8 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/fight (/fightstyle)\t{FFFFFF}Change your fighting style\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/weather (/w)\t{FFFFFF}Change your local weather\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/time (/t)\t{FFFFFF}Change your local time\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dance\t{FFFFFF}Perform dance animations\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/piss\t{FFFFFF}Perform pee animation\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/stopanim\t{FFFFFF}Stop current animation\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/flash\t{FFFFFF}Toggle hitmark flash effect\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/anims (/animlist)\t{FFFFFF}Open animations & gestures menu\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/stopanim\t{FFFFFF}Stop active animation (or press 'F')\n");
         }
         case 2:
         {
@@ -466,6 +464,7 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/v [message]\t{FFFFFF}Send a message in VIP chat\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/von (/voff)\t{FFFFFF}Turn ON or OFF VIP chat channel\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vtag\t{FFFFFF}Customize 3D VIP Head Tag\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/highlight [on/off]\t{FFFFFF}Toggle flashing radar and name color\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tag\t{FFFFFF}Manage tag visibility (VIP, Clan, Admin, Custom)\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vipcmds\t{FFFFFF}View full list of VIP commands\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/linkdiscord (/discord)\t{FFFFFF}Link your Discord account\n");
