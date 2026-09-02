@@ -218,7 +218,10 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 #define SPEC_HELP                   "{MAIN}[ERROR] {FFFFFF}/spec [name/id]"
 #define SPEC_HELP2                  "{MAIN}**{FFFFFF} You can't watch yourself"
 #define NO_SPEC_MODE                "{MAIN}**{FFFFFF}You're not spectating anyone."
-#define IN_SPEC_MODE                "{MAIN}**{FFFFFF}You're in spectate mode. Type {MAIN}/specoff {FFFFFF}to leave."
+#define IN_SPEC_MODE                "{MAIN}**{FFFFFF}You're in spectate mode. Mouse buttons switch players, {MAIN}/specoff {FFFFFF}to leave."
+#define SPEC_TOO_MANY               "{MAIN}[ERROR] {FFFFFF}This player already has too many spectators."
+#define SPEC_NO_TARGET              "{MAIN}**{FFFFFF}There is no one else available to spectate."
+#define SPEC_TARGET_LEFT            "{MAIN}**{FFFFFF}The player you were watching left the server."
 
 // --- Mute ---
 #define MUTE_HELP                   "{MAIN}[ERROR] {FFFFFF}/mute [name/id] [minutes] [reason]"

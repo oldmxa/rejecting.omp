@@ -8,7 +8,7 @@ new PlayerText:speedometer[MAX_PLAYERS];
 new PlayerText:topLocationTable[MAX_PLAYERS][MAX_LOCATIONS * 20 + 26];
 
 
-new PlayerText:specTextDraw[MAX_PLAYERS][7];
+new PlayerText:specTextDraw[MAX_PLAYERS][8];
 new PlayerText:OutpostBar[MAX_PLAYERS][5];
 new Text:votekickTextdraws[3];
 new PlayerText:ClanHUD[MAX_PLAYERS][4];
@@ -411,6 +411,15 @@ playertextdraws(playerid)
 	PlayerTextDrawAlignment(playerid, specTextDraw[playerid][6], TEXT_DRAW_ALIGN_LEFT);
 	PlayerTextDrawColor(playerid, specTextDraw[playerid][6], -1);
 	PlayerTextDrawBackgroundColor(playerid, specTextDraw[playerid][6], 40);
+
+	specTextDraw[playerid][7] = CreatePlayerTextDraw(playerid, 11.000000, 380.000000, "_");
+	PlayerTextDrawFont(playerid, specTextDraw[playerid][7], TEXT_DRAW_FONT_1);
+	PlayerTextDrawLetterSize(playerid, specTextDraw[playerid][7], 0.200000, 0.750000);
+	PlayerTextDrawSetOutline(playerid, specTextDraw[playerid][7], 1);
+	PlayerTextDrawSetShadow(playerid, specTextDraw[playerid][7], 0);
+	PlayerTextDrawAlignment(playerid, specTextDraw[playerid][7], TEXT_DRAW_ALIGN_LEFT);
+	PlayerTextDrawColor(playerid, specTextDraw[playerid][7], -1);
+	PlayerTextDrawBackgroundColor(playerid, specTextDraw[playerid][7], 40);
 
 
 

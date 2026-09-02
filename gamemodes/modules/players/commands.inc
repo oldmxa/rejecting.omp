@@ -247,6 +247,22 @@ ShowRankingsMenu(playerid)
     return true;
 }
 
+@cmd(.alts = {"sn"}) specnext(playerid, params[], help)
+{
+    if(!IsPlayerSpectating(playerid))
+        return SendClientMessage(playerid, -1, "%s", NO_SPEC_MODE);
+
+    return specCycle(playerid, true);
+}
+
+@cmd(.alts = {"sp"}) specprev(playerid, params[], help)
+{
+    if(!IsPlayerSpectating(playerid))
+        return SendClientMessage(playerid, -1, "%s", NO_SPEC_MODE);
+
+    return specCycle(playerid, false);
+}
+
 @cmd(.alts = {"re"}) respawn(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid))

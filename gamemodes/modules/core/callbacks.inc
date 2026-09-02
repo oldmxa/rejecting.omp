@@ -78,7 +78,7 @@ public OnPlayerConnect(playerid)
 	if (IsPlayerNPC(playerid)) return true;
 
 	User[playerid] = User[MAX_PLAYERS];
-	StopSpectate(playerid);
+	initPlayerSpectate(playerid);
 	ApplyHpBarColour(playerid);
 
 	GetPlayerIp(playerid, User[playerid][user_lastip], 18);
@@ -181,11 +181,8 @@ public OnPlayerDisconnect(playerid, reason)
         }
     }
 
-	foreach (new i : Player)
-	{
-		if (playerSpecID[i] == playerid)
-			StopSpectate(i);
-	}
+	forgetSpecWatcher(playerid);
+	handleSpecTargetLeft(playerid);
 
 	for (new i; i < MAX_LOCATIONS; i ++)
 	{
@@ -513,11 +510,8 @@ public OnPlayerSpawn(playerid)
 			TextDrawShowForPlayer(playerid, votekickTextdraws[i]);
 	}
 
-	foreach (new i : Player)
-	{
-		if (playerSpecID[i] == playerid)
-			SetTimerEx("reSpectate", 1500, false, "ii", i, playerid);
-	}
+	foreach (new i : specWatchers[playerid])
+		SetTimerEx("reSpectate", 1500, false, "ii", i, playerid);
 
 	if(IsPlayerInAnyVehicle(playerid))
 		RemovePlayerFromVehicle(playerid);
@@ -748,6 +742,10 @@ public OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstat
 			pVehicle[playerid]  = 999;
 		}
 	}
+
+	foreach (new i : specWatchers[playerid])
+		attachSpecCamera(i, playerid);
+
 	return true;
 }
 
@@ -1324,6 +1322,12 @@ public e_COMMAND_ERRORS:OnPlayerCommandPerformed(playerid, cmdtext[], e_COMMAND_
 public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
 	if(!IsPlayerLogged(playerid)) return 1;
+
+	if(IsPlayerSpectating(playerid))
+	{
+		if(PRESSED(KEY_FIRE)) return specCycle(playerid, true);
+		if(PRESSED(KEY_HANDBRAKE)) return specCycle(playerid, false);
+	}
 
 	if(PRESSED(KEY_SECONDARY_ATTACK) || PRESSED(KEY_JUMP) || PRESSED(KEY_SUBMISSION))
 	{

@@ -389,6 +389,7 @@ new objecthporarmour[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...};
 new hpandarmourtimer[MAX_PLAYERS];
 
 new playerSpecID[MAX_PLAYERS + 1];
+new Iterator:specWatchers[MAX_PLAYERS]<MAX_PLAYERS>;
 
 // CLAN: modules/clan/enums.inc
 
