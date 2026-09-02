@@ -427,7 +427,6 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     TestDamageFeedForPlayer(playerid);
 
     va_SendClientMessage(playerid, -1, "{MAIN}[DAMAGE FEED] {FFFFFF}Damage feed textdraw test triggered! (Style: {MAIN}%s{FFFFFF})", GetDamageFeedStyleName(User[playerid][dmgFeedStyle]));
-    SendClientMessage(playerid, -1, "{MAIN}[TIP] {FFFFFF}Use {MAIN}/dmgfeed {FFFFFF}to change style and {MAIN}/dmgfeedcolor {FFFFFF}to customize colors.");
     return 1;
 }
 
