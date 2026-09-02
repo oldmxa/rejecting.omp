@@ -16,6 +16,7 @@
 forward updateKillRank();
 forward UpdateTOP5Kills();
 forward UpdateTOP5Damage();
+forward InitLoungeTipSystem();
 
 // Re-creates / repositions the lounge blackboard ranking board
 stock RespawnLoungeBoard()
@@ -105,6 +106,12 @@ stock LoadLoungeConfig()
         else if(!strcmp(key, "BoardZ", true)) g_LoungeBoardPos[2] = floatstr(val);
         else if(!strcmp(key, "BoardA", true)) g_LoungeBoardPos[3] = floatstr(val);
 
+        // Info / Tips NPC
+        else if(!strcmp(key, "TipNPC_X", true)) g_LoungeTipPos[0] = floatstr(val);
+        else if(!strcmp(key, "TipNPC_Y", true)) g_LoungeTipPos[1] = floatstr(val);
+        else if(!strcmp(key, "TipNPC_Z", true)) g_LoungeTipPos[2] = floatstr(val);
+        else if(!strcmp(key, "TipNPC_A", true)) g_LoungeTipPos[3] = floatstr(val);
+
         // Top 5 Kills Actors
         for(new k = 0; k < 5; k++)
         {
@@ -161,6 +168,11 @@ stock SaveLoungeConfig()
         g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2], g_LoungeBoardPos[3]);
     fwrite(file, str);
 
+    // Info / Tips NPC
+    format(str, sizeof(str), "TipNPC_X=%.4f\r\nTipNPC_Y=%.4f\r\nTipNPC_Z=%.4f\r\nTipNPC_A=%.4f\r\n",
+        g_LoungeTipPos[0], g_LoungeTipPos[1], g_LoungeTipPos[2], g_LoungeTipPos[3]);
+    fwrite(file, str);
+
     // Top 5 Kills
     for(new k = 0; k < 5; k++)
     {
@@ -181,8 +193,6 @@ stock SaveLoungeConfig()
     return 1;
 }
 
-// DIALOGS & MENUS
-
 forward DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_SPAWN(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_BOARD(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -190,6 +200,7 @@ forward DIALOG_EL_TOP5KILLS_LIST(playerid, dialogid, response, listitem, string:
 forward DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_TOP5DMG_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_TOP5DMG_OPT(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext[]);
 
 stock ShowLoungeEditorMenu(playerid)
 {
@@ -206,7 +217,8 @@ stock ShowLoungeEditorMenu(playerid)
         "{FFFFFF}2. Kills Board\t{B4B5B7}Position, height and 3D mode for rank board\n"\
         "{FFFFFF}3. TOP 5 Kills Actors\t{B4B5B7}Position the 5 top kills actors\n"\
         "{FFFFFF}4. TOP 5 Damage Actors\t{B4B5B7}Position the 5 top damage actors\n"\
-        "{23C552}5. Save & Reload All\t{FFFFFF}Save configuration and reload all entities"
+        "{FFFFFF}5. Info / Tips NPC\t{B4B5B7}Position server tips & info NPC\n"\
+        "{23C552}6. Save & Reload All\t{FFFFFF}Save configuration and reload all entities"
     );
 
     format_MainColor(playerid, body);
@@ -284,7 +296,22 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
             format_MainColor(playerid, body);
             Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP5DMG_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
         }
-        case 4: // Save & Reload All
+        case 4: // Info / Tips NPC
+        {
+            new body[256], title[64];
+            format(title, sizeof(title), "{MAIN}Lounge Editor - Info / Tips NPC");
+            format_MainColor(playerid, title);
+
+            format(body, sizeof(body),
+                "{MAIN}Action\t{MAIN}Details\n"\
+                "{23C552}Move NPC to Me\t{FFFFFF}Position tips NPC at current location and angle\n"\
+                "{FFFFFF}Teleport to NPC\t{B4B5B7}Teleport to current tips NPC position\n"\
+                "{F3230E}Reset Default Position\t{B4B5B7}Restore default coordinates"
+            );
+            format_MainColor(playerid, body);
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_TIPNPC<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+        }
+        case 5: // Save & Reload All
         {
             SaveLoungeConfig();
             RespawnLoungeBoard();
@@ -292,6 +319,7 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
             UpdateTOP5Kills();
             CreateTOP5Damage();
             UpdateTOP5Damage();
+            InitLoungeTipSystem();
 
             SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}All lounge settings saved to {MAIN}lounge_config.ini{FFFFFF} and reloaded!");
             ShowLoungeEditorMenu(playerid);
@@ -544,6 +572,59 @@ public DIALOG_EL_TOP5DMG_OPT(playerid, dialogid, response, listitem, string:inpu
         }
     }
     return 1;
+}
+
+// INFO / TIPS NPC HANDLER
+public DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response) return ShowLoungeEditorMenu(playerid);
+
+    switch(listitem)
+    {
+        case 0: // Move NPC to Me
+        {
+            new Float:x, Float:y, Float:z, Float:a;
+            GetPlayerPos(playerid, x, y, z);
+            GetPlayerFacingAngle(playerid, a);
+
+            g_LoungeTipPos[0] = x;
+            g_LoungeTipPos[1] = y;
+            g_LoungeTipPos[2] = z;
+            g_LoungeTipPos[3] = a;
+
+            SaveLoungeConfig();
+            InitLoungeTipSystem();
+
+            va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Info / Tips NPC repositioned at: {MAIN}%.2f, %.2f, %.2f (Angle: %.1f)", x, y, z, a);
+            new empty[1];
+            return DIALOG_EL_MAIN(playerid, 0, 1, 4, empty);
+        }
+        case 1: // Teleport to NPC
+        {
+            SetPlayerPos(playerid, g_LoungeTipPos[0], g_LoungeTipPos[1], g_LoungeTipPos[2]);
+            SetPlayerFacingAngle(playerid, g_LoungeTipPos[3]);
+            SetPlayerVirtualWorld(playerid, LOUNGEVW);
+            SetPlayerInterior(playerid, 0);
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Teleported to Info / Tips NPC position.");
+            new empty[1];
+            return DIALOG_EL_MAIN(playerid, 0, 1, 4, empty);
+        }
+        case 2: // Reset Default Position
+        {
+            g_LoungeTipPos[0] = 919.0244;
+            g_LoungeTipPos[1] = -1067.8599;
+            g_LoungeTipPos[2] = 24.2992;
+            g_LoungeTipPos[3] = 270.0235;
+
+            SaveLoungeConfig();
+            InitLoungeTipSystem();
+
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Info / Tips NPC reset to default position.");
+            new empty[1];
+            return DIALOG_EL_MAIN(playerid, 0, 1, 4, empty);
+        }
+    }
+    return ShowLoungeEditorMenu(playerid);
 }
 
 // /elounge

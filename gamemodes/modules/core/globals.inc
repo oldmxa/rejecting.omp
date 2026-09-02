@@ -746,6 +746,7 @@ new g_Object;
 new g_BoardBaseObject;
 new Float:g_LoungeSpawnPos[4] = { 934.4449, -1086.8077, 24.2891, 90.5514 };
 new Float:g_LoungeBoardPos[4] = { 926.0289, -1062.7606, 24.2891, 182.8419 };
+new Float:g_LoungeTipPos[4] = { 919.0244, -1067.8599, 24.2992, 270.0235 };
 new g_LoungeRankStr[1024];
 
 new bool:R2KickEnabled = false;

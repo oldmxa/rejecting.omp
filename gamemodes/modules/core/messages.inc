@@ -109,7 +109,7 @@ stock const g_PlayerLeaveLoungeMsgs[][] = {
 
 // 7. WEAPONS, RESPAWN & COMBAT
 
-#define GETGUN_HELP                 "{MAIN}[ERROR] {FFFFFF}/getgun [Weapon Name [Max 18 characters]] [Ammo]"
+#define GETGUN_HELP                 "{MAIN}[ERROR] {FFFFFF}/getgun [Weapon Name / ID] [Ammo]"
 #define INVALID_AMMO_MSG            "{MAIN}**{FFFFFF} Invalid Ammo."
 #define INVALID_ID_MSG              "{MAIN}**{FFFFFF} Invalid Weapon ID."
 #define CHOOSE_WEAPON_MSG           "{MAIN}**{FFFFFF} You didn't take a weapon. Please choose something."

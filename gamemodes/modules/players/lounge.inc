@@ -135,23 +135,33 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
     if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun right now.");
 
-    new weaponStr[18], weapid,Ammo;
+    new weaponInput[32], ammo, weapid = -1;
 
-    if(sscanf(params, "s[18]d", weaponStr, Ammo))
+    if(sscanf(params, "s[32]d", weaponInput, ammo))
         return SendClientMessage(playerid, -1, "%s", GETGUN_HELP);
-    weapid = GetWeaponModelIDFromName(weaponStr);
+
+    if(IsNumeric(weaponInput))
+    {
+        weapid = strval(weaponInput);
+    }
+    else
+    {
+        weapid = GetWeaponModelIDFromName(weaponInput);
+    }
+
     if(weapid == -1)
         return SendClientMessage(playerid, -1, "%s", GETGUN_HELP);
-    if(Ammo < 0 || Ammo > 9999)
+
+    if(ammo < 0 || ammo > 9999)
         return SendClientMessage(playerid, -1, "%s", INVALID_AMMO_MSG);
 
-    if(weapid < 1 || weapid > 46 || weapid == 19 || weapid == 20 || weapid == 21 || weapid == 22)
+    if(weapid < 1 || weapid > 46 || weapid == 19 || weapid == 20 || weapid == 21)
         return SendClientMessage(playerid, -1, "%s", INVALID_ID_MSG);
+
     if(weapid == 44 || weapid == 45)
         return SendClientMessage(playerid, -1, "%s", RETARD);
 
-    GivePlayerWeapon(playerid, WEAPON:weapid, Ammo);
-
+    GivePlayerWeapon(playerid, WEAPON:weapid, ammo);
     return true;
 }
 
@@ -406,4 +416,202 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     
     SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Vehicle tuned (Nitro + Hydraulics).");
     return true;
+}
+
+// Lounge Server Info & Tips System
+static const g_LoungeTips[][] =
+{
+    "{FFFFFF}Press {MAIN}'N' {FFFFFF}key to open the quick navigation and server help menu.",
+    "{FFFFFF}Use {MAIN}/help {FFFFFF}or {MAIN}/cmds {FFFFFF}for tutorials, full commands and server rules.",
+    "{FFFFFF}Type {MAIN}/changemode {FFFFFF}to choose or switch your DM combat arena anytime.",
+    "{FFFFFF}Type {MAIN}/lounge {FFFFFF}or {MAIN}/afk {FFFFFF}to enter or leave the AFK lounge lobby.",
+    "{FFFFFF}Use {MAIN}/gunmenu {FFFFFF}to customize and save your arena spawn weapon loadout.",
+    "{FFFFFF}Got low health in the lounge? Step near snacks or wait to auto-regenerate.",
+    "{FFFFFF}Challenge another player to an isolated 1v1 battle using {MAIN}/duel [id]{FFFFFF}.",
+    "{FFFFFF}Accept incoming 1v1 duel challenges from players using {MAIN}/acceptduel{FFFFFF}.",
+    "{FFFFFF}Exit or cancel an active duel match at any moment with {MAIN}/backduel{FFFFFF}.",
+    "{FFFFFF}Team up with a partner and challenge pairs using {MAIN}/duel2v2{FFFFFF}.",
+    "{FFFFFF}Accept a 2v2 duel request with your teammate using {MAIN}/accept2v2{FFFFFF}.",
+    "{FFFFFF}Cancel or decline an ongoing 2v2 duel invitation with {MAIN}/cancel2v2{FFFFFF}.",
+    "{FFFFFF}Start individual aim practice with custom targets using {MAIN}/prac{FFFFFF}.",
+    "{FFFFFF}Practice mode allows you to switch targets between {MAIN}NPC {FFFFFF}and {MAIN}Ball{FFFFFF}.",
+    "{FFFFFF}Customize the practice target skin ID directly inside the {MAIN}/prac {FFFFFF}menu.",
+    "{FFFFFF}Simulate real combat lag by adjusting target latency in {MAIN}/prac{FFFFFF}.",
+    "{FFFFFF}Adjust target movement speed in practice mode to train high-speed tracking.",
+    "{FFFFFF}Set custom movement paths and routes for your practice target in {MAIN}/prac{FFFFFF}.",
+    "{FFFFFF}Check your practice DPS, accuracy rate and shots landed via {MAIN}/prac stats{FFFFFF}.",
+    "{FFFFFF}Restart or reposition your practice session quickly with {MAIN}/prac restart{FFFFFF}.",
+    "{FFFFFF}Leave the practice arena and return to the lounge with {MAIN}/prac exit{FFFFFF}.",
+    "{FFFFFF}Enter dedicated training obstacle courses and bot arenas with {MAIN}/training{FFFFFF}.",
+    "{FFFFFF}Compete for the fastest record on server training challenges via {MAIN}/training{FFFFFF}.",
+    "{FFFFFF}Restart your current training arena challenge using {MAIN}/restarttraining{FFFFFF}.",
+    "{FFFFFF}Exit your active training arena anytime using {MAIN}/exittraining{FFFFFF}.",
+    "{FFFFFF}Create or manage your clan with {MAIN}/clan {FFFFFF}and dominate territories!",
+    "{FFFFFF}Found a new clan with friends for $500k using {MAIN}/createclan [tag] [name]{FFFFFF}.",
+    "{FFFFFF}Clan leaders can invite new members to the clan using {MAIN}/invite [id]{FFFFFF}.",
+    "{FFFFFF}Received a clan invitation? Type {MAIN}/accept {FFFFFF}to accept and join.",
+    "{FFFFFF}Leave your current clan at any time by typing {MAIN}/leaveclan{FFFFFF}.",
+    "{FFFFFF}Check all active clans, leaders and statistics using {MAIN}/clans{FFFFFF}.",
+    "{FFFFFF}View full clan commands list and permissions using {MAIN}/clancmds{FFFFFF}.",
+    "{FFFFFF}Approach an Outpost torch and press {MAIN}'Y' {FFFFFF}to capture it for your clan.",
+    "{FFFFFF}Captured Outposts grant passive money and points for your clan every 5 mins.",
+    "{FFFFFF}Check the ownership status of all Outpost zones with {MAIN}/territories{FFFFFF}.",
+    "{FFFFFF}Outposts stay locked for 10 minutes after capture before enemies can re-take.",
+    "{FFFFFF}Visit, upgrade and manage your clan hideout using {MAIN}/safemenu{FFFFFF}.",
+    "{FFFFFF}Leave your clan safehouse and return to the lounge with {MAIN}/exitsafehouse{FFFFFF}.",
+    "{FFFFFF}Clan leaders can customize and edit base furniture with {MAIN}/editsafehouse{FFFFFF}.",
+    "{FFFFFF}Access {MAIN}/settings {FFFFFF}to customize HUD, sounds, PMs and fighting styles.",
+    "{FFFFFF}Enable or disable the combat hit sound (bell) inside {MAIN}/settings{FFFFFF}.",
+    "{FFFFFF}Toggle spawn protection on/off to suit your combat style in {MAIN}/settings{FFFFFF}.",
+    "{FFFFFF}Change your melee fighting style using {MAIN}/fight {FFFFFF}or via {MAIN}/settings{FFFFFF}.",
+    "{FFFFFF}Toggle private messages on or off anytime inside the {MAIN}/settings {FFFFFF}menu.",
+    "{FFFFFF}Toggle connect and disconnect chat notifications inside {MAIN}/settings{FFFFFF}.",
+    "{FFFFFF}Toggle headshot announcement text on or off inside {MAIN}/settings{FFFFFF}.",
+    "{FFFFFF}Customize your health, armor and HUD layout using {MAIN}/customhud{FFFFFF}.",
+    "{FFFFFF}Personalize your main chat text color using {MAIN}/chatcolor{FFFFFF}.",
+    "{FFFFFF}Configure damage informer floating numbers with {MAIN}/dmginformer{FFFFFF}.",
+    "{FFFFFF}Toggle and customize your combat damage feed with {MAIN}/dmgfeed{FFFFFF}.",
+    "{FFFFFF}Set custom colors for your damage feed using {MAIN}/dmgfeedcolor{FFFFFF}.",
+    "{FFFFFF}Change your crosshair hitmarker color using {MAIN}/hitmarkcol{FFFFFF}.",
+    "{FFFFFF}Choose between classic, bar or compact HP HUDs via {MAIN}/customhud{FFFFFF}.",
+    "{FFFFFF}Check your KD, kills, damage, streaks and history with {MAIN}/stats{FFFFFF}.",
+    "{FFFFFF}View rank requirements and progression table using {MAIN}/ranks{FFFFFF}.",
+    "{FFFFFF}Complete in-game challenges to earn coins and perks via {MAIN}/achievements{FFFFFF}.",
+    "{FFFFFF}Check your server coins balance and rewards using {MAIN}/coins{FFFFFF}.",
+    "{FFFFFF}Track your coin transactions, purchases and history using {MAIN}/logcoins{FFFFFF}.",
+    "{FFFFFF}Change your account nickname anytime using {MAIN}/changenick{FFFFFF}.",
+    "{FFFFFF}Update and secure your account password with {MAIN}/changepass{FFFFFF}.",
+    "{FFFFFF}Link your account to Discord for sync & rewards: {MAIN}/linkdiscord{FFFFFF}.",
+    "{FFFFFF}Enter your Discord verification code in-game using {MAIN}/dcode [code]{FFFFFF}.",
+    "{FFFFFF}Unlink your Discord account from the server using {MAIN}/udiscord{FFFFFF}.",
+    "{FFFFFF}Watch other players in combat using {MAIN}/spec [id] {FFFFFF}and {MAIN}/specoff{FFFFFF}.",
+    "{FFFFFF}Switch between spectated players easily with {MAIN}/specnext {FFFFFF}and {MAIN}/specprev{FFFFFF}.",
+    "{FFFFFF}Respawn instantly in your arena using {MAIN}/respawn {FFFFFF}or {MAIN}/re{FFFFFF}.",
+    "{FFFFFF}Found a rule breaker or suspect? Report them via {MAIN}/report [id] [reason]{FFFFFF}.",
+    "{FFFFFF}Have a question or need help? Submit it to staff with {MAIN}/ask [question]{FFFFFF}.",
+    "{FFFFFF}Send a private whisper to another player using {MAIN}/pm [id] [message]{FFFFFF}.",
+    "{FFFFFF}Look up a player's ID and connection details using {MAIN}/id [name/id]{FFFFFF}.",
+    "{FFFFFF}Check active administrators online on the server using {MAIN}/admins{FFFFFF}.",
+    "{FFFFFF}Resynchronize your player position and stream using {MAIN}/sync{FFFFFF}.",
+    "{FFFFFF}Change client weather with {MAIN}/weather [id] {FFFFFF}and time with {MAIN}/time [hour]{FFFFFF}.",
+    "{FFFFFF}Vote to kick an arena disrupter using {MAIN}/votekick [id]{FFFFFF}.",
+    "{FFFFFF}Discover exclusive perks, custom tags and VIP benefits using {MAIN}/vip{FFFFFF}.",
+    "{FFFFFF}Check all VIP commands and privileges available with {MAIN}/vipcmds{FFFFFF}.",
+    "{FFFFFF}See all active VIP members currently playing with {MAIN}/vips{FFFFFF}.",
+    "{FFFFFF}VIP members can toggle their VIP chat visibility using {MAIN}/von {FFFFFF}and {MAIN}/voff{FFFFFF}.",
+    "{FFFFFF}VIP players can select custom visual name tags using {MAIN}/vtag{FFFFFF}.",
+    "{FFFFFF}Activate your purchased VIP key directly in-game using {MAIN}/buyvip [key]{FFFFFF}.",
+    "{FFFFFF}Spawn a bike in the lounge with {MAIN}/bike {FFFFFF}and tune it with {MAIN}/tune{FFFFFF}.",
+    "{FFFFFF}Spawn a car in the lounge using {MAIN}/car [model/name]{FFFFFF}.",
+    "{FFFFFF}Repair your lounge vehicle instantly by typing {MAIN}/fix{FFFFFF}.",
+    "{FFFFFF}Flipped your vehicle in the lounge? Unflip it instantly using {MAIN}/flip{FFFFFF}.",
+    "{FFFFFF}Fly and explore the lounge freely by equipping a jetpack with {MAIN}/jetpack{FFFFFF}.",
+    "{FFFFFF}Customize your lounge spawn position coordinates using {MAIN}/changelounge{FFFFFF}.",
+    "{FFFFFF}See all available lounge utilities and shortcuts with {MAIN}/lcmds{FFFFFF}.",
+    "{FFFFFF}Get custom weapon loadouts while in the lounge using {MAIN}/getgun [name/id] [ammo]{FFFFFF}.",
+    "{FFFFFF}Perform dance animations anytime for fun using {MAIN}/dance [1-4]{FFFFFF}.",
+    "{FFFFFF}Stop any active character animation immediately using {MAIN}/stopanim{FFFFFF}.",
+    "{FFFFFF}Flash your screen or test visual alerts in-game using {MAIN}/flash{FFFFFF}.",
+    "{FFFFFF}Check your weekly kills and damage on the lounge ranking board.",
+    "{FFFFFF}Reach the weekly TOP 5 to have your character immortalized as a lounge statue!",
+    "{FFFFFF}Join our official Discord community for events, tournaments and support: {MAIN}/discord{FFFFFF}.",
+    "{FFFFFF}Check server development team and contributors using {MAIN}/credits{FFFFFF}.",
+    "{FFFFFF}Keep your kill streak going in DM arenas to trigger exclusive Spree announcements!",
+    "{FFFFFF}Headshots with Sniper or Desert Eagle deal lethal bonus critical damage.",
+    "{FFFFFF}Change your skin appearance instantly using {MAIN}/changeskin [skin_id]{FFFFFF}.",
+    "{FFFFFF}Fast-switch weapons using Q/E or scroll wheel to master C-Bug and slide mechanics.",
+    "{FFFFFF}Have fun, respect other players and welcome to Rejecting Deathmatch!"
+};
+
+static Text3D:s_LoungeTipLabel = Text3D:INVALID_3DTEXT_ID;
+static Text3D:s_LoungeTipNameLabel = Text3D:INVALID_3DTEXT_ID;
+static s_LoungeTipActor = INVALID_ACTOR_ID;
+static s_CurrentTipIdx = 0;
+
+stock GetServerMainHex(dest[], len = sizeof(dest))
+{
+    if(1 <= ServerDefaultChatMainColor <= sizeof(hudShades))
+    {
+        format(dest, len, "%06x", hudShades[ServerDefaultChatMainColor - 1][shadeHex]);
+        return 1;
+    }
+    if(0 <= ServerDefaultHudShadeOne < sizeof(hudShades))
+    {
+        format(dest, len, "%06x", hudShades[ServerDefaultHudShadeOne][shadeHex]);
+        return 1;
+    }
+    new idx = ServerDefaultHudColor;
+    if(idx < 0 || idx >= sizeof(CoresDoBglh)) idx = 0;
+    format(dest, len, "%s", CoresDoBglh[idx]);
+    return 1;
+}
+
+stock FormatLoungeTipStr(idx, dest[], len = sizeof(dest))
+{
+    new mainHex[7], tag[16], formattedTip[256];
+    GetServerMainHex(mainHex);
+    format(tag, sizeof(tag), "{%s}", mainHex);
+
+    format(formattedTip, sizeof(formattedTip), "%s", g_LoungeTips[idx]);
+
+    new pos, from, taglen = strlen(tag);
+    while((pos = strfind(formattedTip, "{MAIN}", true, from)) != -1)
+    {
+        strdel(formattedTip, pos, pos + 6);
+        strins(formattedTip, tag, pos, sizeof(formattedTip));
+        from = pos + taglen;
+    }
+
+    format(dest, len, "%s", formattedTip);
+    return 1;
+}
+
+forward RotateLoungeTip();
+public RotateLoungeTip()
+{
+    if (s_LoungeTipLabel == Text3D:INVALID_3DTEXT_ID) return 1;
+
+    s_CurrentTipIdx = (s_CurrentTipIdx + 1) % sizeof(g_LoungeTips);
+
+    new tipBuf[256];
+    FormatLoungeTipStr(s_CurrentTipIdx, tipBuf);
+    UpdateDynamic3DTextLabelText(s_LoungeTipLabel, -1, tipBuf);
+    return 1;
+}
+
+stock InitLoungeTipSystem()
+{
+    if (IsValidDynamicActor(s_LoungeTipActor))
+        DestroyDynamicActor(s_LoungeTipActor);
+
+    s_LoungeTipActor = CreateDynamicActor(154, g_LoungeTipPos[0], g_LoungeTipPos[1], g_LoungeTipPos[2], g_LoungeTipPos[3]);
+    SetDynamicActorVirtualWorld(s_LoungeTipActor, LOUNGEVW);
+    ApplyDynamicActorAnimation(s_LoungeTipActor, "PAULNMAC", "wank_loop", 4.1, 1, 0, 0, 0, 0);
+
+    if (IsValidDynamic3DTextLabel(s_LoungeTipNameLabel))
+        DestroyDynamic3DTextLabel(s_LoungeTipNameLabel);
+
+    new nameBuf[64], mainHex[7];
+    GetServerMainHex(mainHex);
+    format(nameBuf, sizeof(nameBuf), "{%s}man the fvck up", mainHex);
+    s_LoungeTipNameLabel = CreateDynamic3DTextLabel(nameBuf, -1, g_LoungeTipPos[0], g_LoungeTipPos[1], g_LoungeTipPos[2] + 1.0, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 15.0);
+
+    if (IsValidDynamic3DTextLabel(s_LoungeTipLabel))
+        DestroyDynamic3DTextLabel(s_LoungeTipLabel);
+
+    s_CurrentTipIdx = random(sizeof(g_LoungeTips));
+
+    new tipBuf[256];
+    FormatLoungeTipStr(s_CurrentTipIdx, tipBuf);
+    s_LoungeTipLabel = CreateDynamic3DTextLabel(tipBuf, -1, g_LoungeTipPos[0], g_LoungeTipPos[1], g_LoungeTipPos[2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 15.0);
+
+    SetTimer("RotateLoungeTip", 15000, true);
+    return 1;
+}
+
+#include <YSI_Coding/y_hooks>
+hook OnGameModeInit()
+{
+    InitLoungeTipSystem();
+    return 1;
 }
