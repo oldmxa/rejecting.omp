@@ -420,3 +420,14 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     return 1;
 }
 
+@cmd(.alts = {"testfeed", "testfeeddmg", "tdmgfeed", "testdamagefeed"}) testdmgfeed(playerid, params[], help)
+{
+    if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    TestDamageFeedForPlayer(playerid);
+
+    va_SendClientMessage(playerid, -1, "{MAIN}[DAMAGE FEED] {FFFFFF}Damage feed textdraw test triggered! (Style: {MAIN}%s{FFFFFF})", GetDamageFeedStyleName(User[playerid][dmgFeedStyle]));
+    SendClientMessage(playerid, -1, "{MAIN}[TIP] {FFFFFF}Use {MAIN}/dmgfeed {FFFFFF}to change style and {MAIN}/dmgfeedcolor {FFFFFF}to customize colors.");
+    return 1;
+}
+

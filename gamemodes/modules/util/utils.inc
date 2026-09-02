@@ -507,7 +507,7 @@ ApplyHpBarColour(playerid)
 
 ApplyDamageFeedColors(playerid)
 {
-	new left[24] = "", right[24] = "";
+	new left[24] = "", right[24] = "", val[24] = "";
 
 	new idx = User[playerid][dmgFeedColorLeft];
 	if(0 <= idx < sizeof(hudShades)) format(left, sizeof(left), "%s", hudShades[idx][shadeTag]);
@@ -515,7 +515,10 @@ ApplyDamageFeedColors(playerid)
 	idx = User[playerid][dmgFeedColorRight];
 	if(0 <= idx < sizeof(hudShades)) format(right, sizeof(right), "%s", hudShades[idx][shadeTag]);
 
-	SetDamageFeedColors(playerid, left, right);
+	idx = User[playerid][dmgFeedColorValue];
+	if(0 <= idx < sizeof(hudShades)) format(val, sizeof(val), "%s", hudShades[idx][shadeTag]);
+
+	SetDamageFeedColors(playerid, left, right, val);
 	return 1;
 }
 
@@ -531,6 +534,31 @@ GetDamageFeedStyleName(style)
 		default: name = "Name (HP) Weapon +dmg";
 	}
 	return name;
+}
+
+stock TestDamageFeedForPlayer(playerid)
+{
+	if(!IsPlayerLogged(playerid)) return 0;
+
+	SetDamageFeedForPlayer(playerid, 1);
+	ApplyDamageFeedColors(playerid);
+
+	// Given - hits
+	WC_ShowDamageFeedGiven(playerid, playerid, 46.20, WEAPON_DEAGLE, false);
+	WC_ShowDamageFeedGiven(playerid, playerid, 30.00, WEAPON_SHOTGUN, false);
+	WC_ShowDamageFeedGiven(playerid, playerid, 9.90, WEAPON_M4, false);
+	WC_ShowDamageFeedGiven(playerid, playerid, 41.00, WEAPON_SNIPER, true);
+
+	// Taken - hits
+	WC_ShowDamageFeedTaken(playerid, playerid, 46.20, WEAPON_DEAGLE, false);
+	WC_ShowDamageFeedTaken(playerid, playerid, 30.00, WEAPON_SHOTGUN, false);
+	WC_ShowDamageFeedTaken(playerid, playerid, 9.90, WEAPON_M4, false);
+
+	new hitSnd = User[playerid][hitSoundID];
+	if(hitSnd == 0) hitSnd = 17802;
+	PlayerPlaySound(playerid, hitSnd, 0.0, 0.0, 0.0);
+
+	return 1;
 }
 
 GetOnlinePlayerIDByName(const name[])

@@ -79,6 +79,7 @@ CREATE TABLE `accounts` (
   `dmgfeed_style` tinyint(1) NOT NULL DEFAULT 1,
   `dmgfeed_color_left` int(11) NOT NULL DEFAULT -1,
   `dmgfeed_color_right` int(11) NOT NULL DEFAULT -1,
+  `dmgfeed_color_value` int(11) NOT NULL DEFAULT -1,
   `show_random_deathtag` tinyint(1) NOT NULL DEFAULT 1,
   `hit_sound_id` int(11) NOT NULL DEFAULT 17802,
   `kill_sound_id` int(11) NOT NULL DEFAULT 1057,

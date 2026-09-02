@@ -300,6 +300,7 @@ public OnRegisterHash(playerid, accountname[])
     User[playerid][dmgFeedStyle] = 1;
     User[playerid][dmgFeedColorLeft] = -1;
     User[playerid][dmgFeedColorRight] = -1;
+    User[playerid][dmgFeedColorValue] = -1;
     SetDamageFeedForPlayer(playerid, 1);
     SetDamageFeedStyle(playerid, 1);
     ApplyDamageFeedColors(playerid);
@@ -362,6 +363,7 @@ stock ResetPlayerPreLoginState(playerid)
     User[playerid][dmgFeedStyle] = 1;
     User[playerid][dmgFeedColorLeft] = -1;
     User[playerid][dmgFeedColorRight] = -1;
+    User[playerid][dmgFeedColorValue] = -1;
     User[playerid][showRandomDeathTags] = true;
     User[playerid][showDamageInformer] = true;
     User[playerid][hitSoundID] = 17802;
@@ -599,6 +601,8 @@ public OnPlayerJoin(playerid)
         if(User[playerid][dmgFeedColorLeft] < -1 || User[playerid][dmgFeedColorLeft] >= sizeof(hudShades)) User[playerid][dmgFeedColorLeft] = -1;
         cache_get_value_int(0, "dmgfeed_color_right", User[playerid][dmgFeedColorRight]);
         if(User[playerid][dmgFeedColorRight] < -1 || User[playerid][dmgFeedColorRight] >= sizeof(hudShades)) User[playerid][dmgFeedColorRight] = -1;
+        cache_get_value_int(0, "dmgfeed_color_value", User[playerid][dmgFeedColorValue]);
+        if(User[playerid][dmgFeedColorValue] < -1 || User[playerid][dmgFeedColorValue] >= sizeof(hudShades)) User[playerid][dmgFeedColorValue] = -1;
         ApplyDamageFeedColors(playerid);
         cache_get_value_bool(0, "show_random_deathtag", User[playerid][showRandomDeathTags]);
         cache_get_value_bool(0, "hide_vip_tag", User[playerid][hideVipTag]);
@@ -849,6 +853,7 @@ UpdatePlayerData(playerid, disconnect = 0)
         `dmgfeed_style` = %d,\
 		`dmgfeed_color_left` = %d,\
 		`dmgfeed_color_right` = %d,\
+		`dmgfeed_color_value` = %d,\
         `show_random_deathtag` = %d,\
         `hide_vip_tag` = %d,\
         `hide_clan_tag` = %d,\
@@ -945,6 +950,7 @@ UpdatePlayerData(playerid, disconnect = 0)
         User[playerid][dmgFeedStyle],
         User[playerid][dmgFeedColorLeft],
         User[playerid][dmgFeedColorRight],
+        User[playerid][dmgFeedColorValue],
         User[playerid][showRandomDeathTags],
         User[playerid][hideVipTag],
         User[playerid][hideClanTag],

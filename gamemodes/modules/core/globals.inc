@@ -488,6 +488,7 @@ enum e_USER
     dmgFeedStyle,
     dmgFeedColorLeft,
     dmgFeedColorRight,
+    dmgFeedColorValue,
     bool:showRandomDeathTags,
     bool:isLogged,
     bool:isAlreadySpawned,
