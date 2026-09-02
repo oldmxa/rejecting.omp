@@ -11,52 +11,57 @@ stock SetupPlayerVehicle(vehicleid)
     return 1;
 }
 
-forward Lounge_CanSpawnLoungeVehicle(playerid);
-public Lounge_CanSpawnLoungeVehicle(playerid)
+stock bool:CanUseLoungeUtility(playerid, bool:adminBypass = false, const actionName[] = "use this command")
 {
     if (!IsPlayerLogged(playerid))
     {
         SendClientMessage(playerid, -1, "%s", CANNOT_DO_THIS);
-        return 0;
+        return false;
     }
 
-    if (!IsPlayerAFK(playerid))
+    if (!IsPlayerAFK(playerid) && (!adminBypass || User[playerid][adminLevel] < 1))
     {
         SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
-        return 0;
+        return false;
     }
 
     if (IsPlayerInMatch(playerid))
     {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle while in a match, training, practice or safehouse.");
-        return 0;
+        va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot %s while in a match, training, practice or safehouse.", actionName);
+        return false;
     }
 
     if (IsPlayerFrozen(playerid))
     {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle right now.");
-        return 0;
+        va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot %s right now.", actionName);
+        return false;
     }
 
     if (IsPlayerSpectating(playerid))
     {
         SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
-        return 0;
+        return false;
     }
 
     new PLAYER_STATE:pState = GetPlayerState(playerid);
     if (pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
     {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spawn a vehicle right now.");
-        return 0;
+        va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot %s right now.", actionName);
+        return false;
     }
 
-    return 1;
+    return true;
+}
+
+forward Lounge_CanSpawnLoungeVehicle(playerid);
+public Lounge_CanSpawnLoungeVehicle(playerid)
+{
+    return CanUseLoungeUtility(playerid, false, "spawn a vehicle") ? 1 : 0;
 }
 
 @cmd(.alts = {"b"}) bike(playerid, params[], help)
 {
-    if (!CanSpawnLoungeVehicle(playerid))
+    if (!CanUseLoungeUtility(playerid, false, "spawn a vehicle"))
         return true;
 
     if (pVehicle[playerid] != 999)
@@ -101,7 +106,7 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
 
 @cmd() car(playerid, params[], help)
 {
-    if (!CanSpawnLoungeVehicle(playerid))
+    if (!CanUseLoungeUtility(playerid, false, "spawn a vehicle"))
         return true;
 
     if (IsNull(params))
@@ -125,15 +130,8 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
 
 @cmd() getgun(playerid, params[], help)
 {
-    if(!IsPlayerAFK(playerid))
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
-
-    if(IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun while in a match, training, practice or safehouse.");
-
-    new PLAYER_STATE:pState = GetPlayerState(playerid);
-    if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /getgun right now.");
+    if(!CanUseLoungeUtility(playerid, false, "use /getgun"))
+        return true;
 
     new weaponInput[32], ammo, weapid = -1;
 
@@ -289,8 +287,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() lcmds(playerid, params[], help)
 {
-    if(!IsPlayerAFK(playerid))
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
+    if(!CanUseLoungeUtility(playerid, false, "view lounge commands"))
+        return true;
 
     ShowLoungeCommands(playerid, 0);
     return true;
@@ -298,8 +296,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() fix(playerid, params[], help)
 {
-    if(!IsPlayerAFK(playerid))
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
+    if(!CanUseLoungeUtility(playerid, true, "fix vehicles"))
+        return true;
 
     if(!IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need to be in a vehicle.");
@@ -317,11 +315,14 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd(.alts = {"msp"}) changelounge(playerid, params[], help)
 {
-    if(!IsPlayerAFK(playerid))
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
+    if(!CanUseLoungeUtility(playerid, false, "change lounge spawn"))
+        return true;
 
-    if(IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge while in a match, training, practice or safehouse.");
+    if(IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change your lounge spawn while inside a vehicle. Exit first.");
+
+    if(GetPlayerVirtualWorld(playerid) != LOUNGEVW || GetPlayerInterior(playerid) != 0)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You must be inside the official Lounge world to set your spawn.");
 
     if(User[playerid][spawnSafehouse])
     {
@@ -337,10 +338,6 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
         }
     }
 
-    new PLAYER_STATE:pState = GetPlayerState(playerid);
-    if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot change lounge right now.");
-
     new Float:x, Float:y, Float:z, Float:a;
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, a);
@@ -349,8 +346,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
     User[playerid][loungeY] = y;
     User[playerid][loungeZ] = z;
     User[playerid][loungeA] = a;
-    User[playerid][loungeVW] = GetPlayerVirtualWorld(playerid);
-    User[playerid][loungeINT] = GetPlayerInterior(playerid);
+    User[playerid][loungeVW] = LOUNGEVW;
+    User[playerid][loungeINT] = 0;
 
     UpdatePlayerData(playerid);
     SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}Your lounge spawn location has been updated!");
@@ -359,18 +356,11 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() jetpack(playerid, params[], help)
 {
-    if(!IsPlayerAFK(playerid) && User[playerid][adminLevel] < 1)
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
-
-    if(IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack while in a match, training, practice or safehouse.");
+    if(!CanUseLoungeUtility(playerid, true, "get a jetpack"))
+        return true;
 
     if(IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack while in a vehicle.");
-
-    new PLAYER_STATE:pState = GetPlayerState(playerid);
-    if(pState == PLAYER_STATE_NONE || pState == PLAYER_STATE_WASTED || pState == PLAYER_STATE_SPECTATING)
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot get a jetpack right now.");
 
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
     SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}You received a jetpack.");
@@ -379,11 +369,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() flip(playerid, params[], help)
 {
-    if(!IsPlayerAFK(playerid) && User[playerid][adminLevel] < 1)
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
-
-    if(IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot flip a vehicle while in a match, training, practice or safehouse.");
+    if(!CanUseLoungeUtility(playerid, true, "flip vehicles"))
+        return true;
 
     if(!IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not in a vehicle.");
@@ -401,11 +388,8 @@ public DIALOG_LCMDS(playerid, dialogid, response, listitem, string:inputtext[])
 
 @cmd() tune(playerid, params[], help)
 {
-    if(!IsPlayerAFK(playerid) && User[playerid][adminLevel] < 1)
-        return SendClientMessage(playerid, -1, "%s", NEED_BE_AFK);
-
-    if(IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot tune a vehicle while in a match, training, practice or safehouse.");
+    if(!CanUseLoungeUtility(playerid, true, "tune vehicles"))
+        return true;
 
     if(!IsPlayerInAnyVehicle(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You are not in a vehicle.");

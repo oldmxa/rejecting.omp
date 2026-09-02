@@ -205,7 +205,7 @@ forward DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtex
 stock ShowLoungeEditorMenu(playerid)
 {
     if(!IsAdmin(playerid, 5))
-        return SendClientMessage(playerid, -1, ADM_TAG_NORM"You must be an Administrator to edit the Lounge.");
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     new body[512], title[64];
     format(title, sizeof(title), "{MAIN}Lounge Editor - Main Menu");
@@ -634,7 +634,9 @@ public DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(!IsAdmin(playerid, 5))
-        return SendClientMessage(playerid, -1, ADM_TAG_NORM"You must be an Administrator to use this command.");
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
 
     return ShowLoungeEditorMenu(playerid);
 }
