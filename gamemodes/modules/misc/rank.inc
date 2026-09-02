@@ -110,35 +110,35 @@ stock RespawnLoungeBoard()
 	new Float:rightDx = floatcos(-A, degrees);
 	new Float:rightDy = -floatsin(-A, degrees);
 
-	// Top 10 Kills +3.3m or -3.3m
-	new Float:b1_x = g_LoungeBoardPos[0] + 3.3 * rightDx;
-	new Float:b1_y = g_LoungeBoardPos[1] + 3.3 * rightDy;
+	// Top 10 Kills
+	new Float:b1_x = g_LoungeBoardPos[0] + g_LoungeBoardSpacing * rightDx;
+	new Float:b1_y = g_LoungeBoardPos[1] + g_LoungeBoardSpacing * rightDy;
 	new Float:b1_z = g_LoungeBoardPos[2];
 
 	// Top 10 Damage
-	new Float:b2_x = g_LoungeBoardPos[0] - 3.3 * rightDx;
-	new Float:b2_y = g_LoungeBoardPos[1] - 3.3 * rightDy;
+	new Float:b2_x = g_LoungeBoardPos[0] - g_LoungeBoardSpacing * rightDx;
+	new Float:b2_y = g_LoungeBoardPos[1] - g_LoungeBoardSpacing * rightDy;
 	new Float:b2_z = g_LoungeBoardPos[2];
 
 	// TOP 10 KILLS
 	if (!IsValidDynamicObject(g_BoardKillsFront))
 	{
-		g_BoardKillsFront = CreateDynamicObject(3354, b1_x + 0.08 * frontDx, b1_y + 0.08 * frontDy, b1_z + 2.0, 0.0, 0.0, frontRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+		g_BoardKillsFront = CreateDynamicObject(3354, b1_x + g_LoungeBoardDepth * frontDx, b1_y + g_LoungeBoardDepth * frontDy, b1_z + g_LoungeBoardHeight, 0.0, 0.0, frontRot, LOUNGEVW, 0, -1, 300.0, 300.0);
 	}
 	else
 	{
-		SetDynamicObjectPos(g_BoardKillsFront, b1_x + 0.08 * frontDx, b1_y + 0.08 * frontDy, b1_z + 2.0);
+		SetDynamicObjectPos(g_BoardKillsFront, b1_x + g_LoungeBoardDepth * frontDx, b1_y + g_LoungeBoardDepth * frontDy, b1_z + g_LoungeBoardHeight);
 		SetDynamicObjectRot(g_BoardKillsFront, 0.0, 0.0, frontRot);
 	}
 	SetDynamicObjectMaterial(g_BoardKillsFront, 1, 19962, "samproadsigns", "materialtext1", 0);
 
 	if (!IsValidDynamicObject(g_BoardKillsBack))
 	{
-		g_BoardKillsBack = CreateDynamicObject(3354, b1_x - 0.08 * frontDx, b1_y - 0.08 * frontDy, b1_z + 2.0, 0.0, 0.0, backRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+		g_BoardKillsBack = CreateDynamicObject(3354, b1_x - g_LoungeBoardDepth * frontDx, b1_y - g_LoungeBoardDepth * frontDy, b1_z + g_LoungeBoardHeight, 0.0, 0.0, backRot, LOUNGEVW, 0, -1, 300.0, 300.0);
 	}
 	else
 	{
-		SetDynamicObjectPos(g_BoardKillsBack, b1_x - 0.08 * frontDx, b1_y - 0.08 * frontDy, b1_z + 2.0);
+		SetDynamicObjectPos(g_BoardKillsBack, b1_x - g_LoungeBoardDepth * frontDx, b1_y - g_LoungeBoardDepth * frontDy, b1_z + g_LoungeBoardHeight);
 		SetDynamicObjectRot(g_BoardKillsBack, 0.0, 0.0, backRot);
 	}
 	SetDynamicObjectMaterial(g_BoardKillsBack, 1, 19962, "samproadsigns", "materialtext1", 0);
@@ -159,22 +159,22 @@ stock RespawnLoungeBoard()
 	// TOP 10 DAMAGE
 	if (!IsValidDynamicObject(g_BoardDamageFront))
 	{
-		g_BoardDamageFront = CreateDynamicObject(3354, b2_x + 0.08 * frontDx, b2_y + 0.08 * frontDy, b2_z + 2.0, 0.0, 0.0, frontRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+		g_BoardDamageFront = CreateDynamicObject(3354, b2_x + g_LoungeBoardDepth * frontDx, b2_y + g_LoungeBoardDepth * frontDy, b2_z + g_LoungeBoardHeight, 0.0, 0.0, frontRot, LOUNGEVW, 0, -1, 300.0, 300.0);
 	}
 	else
 	{
-		SetDynamicObjectPos(g_BoardDamageFront, b2_x + 0.08 * frontDx, b2_y + 0.08 * frontDy, b2_z + 2.0);
+		SetDynamicObjectPos(g_BoardDamageFront, b2_x + g_LoungeBoardDepth * frontDx, b2_y + g_LoungeBoardDepth * frontDy, b2_z + g_LoungeBoardHeight);
 		SetDynamicObjectRot(g_BoardDamageFront, 0.0, 0.0, frontRot);
 	}
 	SetDynamicObjectMaterial(g_BoardDamageFront, 1, 19962, "samproadsigns", "materialtext1", 0);
 
 	if (!IsValidDynamicObject(g_BoardDamageBack))
 	{
-		g_BoardDamageBack = CreateDynamicObject(3354, b2_x - 0.08 * frontDx, b2_y - 0.08 * frontDy, b2_z + 2.0, 0.0, 0.0, backRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+		g_BoardDamageBack = CreateDynamicObject(3354, b2_x - g_LoungeBoardDepth * frontDx, b2_y - g_LoungeBoardDepth * frontDy, b2_z + g_LoungeBoardHeight, 0.0, 0.0, backRot, LOUNGEVW, 0, -1, 300.0, 300.0);
 	}
 	else
 	{
-		SetDynamicObjectPos(g_BoardDamageBack, b2_x - 0.08 * frontDx, b2_y - 0.08 * frontDy, b2_z + 2.0);
+		SetDynamicObjectPos(g_BoardDamageBack, b2_x - g_LoungeBoardDepth * frontDx, b2_y - g_LoungeBoardDepth * frontDy, b2_z + g_LoungeBoardHeight);
 		SetDynamicObjectRot(g_BoardDamageBack, 0.0, 0.0, backRot);
 	}
 	SetDynamicObjectMaterial(g_BoardDamageBack, 1, 19962, "samproadsigns", "materialtext1", 0);

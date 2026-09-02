@@ -54,6 +54,9 @@ stock LoadLoungeConfig()
         else if(!strcmp(key, "BoardY", true)) g_LoungeBoardPos[1] = floatstr(val);
         else if(!strcmp(key, "BoardZ", true)) g_LoungeBoardPos[2] = floatstr(val);
         else if(!strcmp(key, "BoardA", true)) g_LoungeBoardPos[3] = floatstr(val);
+        else if(!strcmp(key, "BoardSpacing", true)) g_LoungeBoardSpacing = floatstr(val);
+        else if(!strcmp(key, "BoardHeight", true)) g_LoungeBoardHeight = floatstr(val);
+        else if(!strcmp(key, "BoardDepth", true)) g_LoungeBoardDepth = floatstr(val);
 
         // Info / Tips NPC
         else if(!strcmp(key, "TipNPC_X", true)) g_LoungeTipPos[0] = floatstr(val);
@@ -106,15 +109,16 @@ stock SaveLoungeConfig()
     new File:file = fopen(LOUNGE_CONFIG_FILE, io_write);
     if(!file) return 0;
 
-    new str[128];
+    new str[160];
     // Spawn
     format(str, sizeof(str), "SpawnX=%.4f\r\nSpawnY=%.4f\r\nSpawnZ=%.4f\r\nSpawnA=%.4f\r\n",
         g_LoungeSpawnPos[0], g_LoungeSpawnPos[1], g_LoungeSpawnPos[2], g_LoungeSpawnPos[3]);
     fwrite(file, str);
 
     // Board
-    format(str, sizeof(str), "BoardX=%.4f\r\nBoardY=%.4f\r\nBoardZ=%.4f\r\nBoardA=%.4f\r\n",
-        g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2], g_LoungeBoardPos[3]);
+    format(str, sizeof(str), "BoardX=%.4f\r\nBoardY=%.4f\r\nBoardZ=%.4f\r\nBoardA=%.4f\r\nBoardSpacing=%.4f\r\nBoardHeight=%.4f\r\nBoardDepth=%.4f\r\n",
+        g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2], g_LoungeBoardPos[3],
+        g_LoungeBoardSpacing, g_LoungeBoardHeight, g_LoungeBoardDepth);
     fwrite(file, str);
 
     // Info / Tips NPC
@@ -145,6 +149,8 @@ stock SaveLoungeConfig()
 forward DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_SPAWN(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_BOARD(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EL_SPACING_MENU(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EL_SPACING_INPUT(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_TOP5KILLS_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_TOP5DMG_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -198,7 +204,7 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
         }
         case 1: // Board
         {
-            new body[350], title[64];
+            new body[450], title[64];
             format(title, sizeof(title), "{MAIN}Lounge Editor - Top 10 Boards (Kills & Damage)");
             format_MainColor(playerid, title);
 
@@ -207,7 +213,8 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
                 "{MAIN}3D Edit Mode (GUI)\t{FFFFFF}Adjust position/height/rotation with arrows\n"\
                 "{23C552}Move Boards to Me\t{FFFFFF}Position both boards at current location\n"\
                 "{FFFFFF}Teleport to Boards\t{B4B5B7}Teleport to current boards position\n"\
-                "{00EEFE}Reload Top 10 Data\t{B4B5B7}Refresh Top 10 Kills & Damage from database"
+                "{00EEFE}Reload Top 10 Data\t{B4B5B7}Refresh Top 10 Kills & Damage from database\n"\
+                "{MAIN}Edit Spacing & Offsets\t{FFFFFF}Adjust distance between boards, height & depth"
             );
             format_MainColor(playerid, body);
             Dialog_ShowCallback(playerid, using public DIALOG_EL_BOARD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
@@ -388,8 +395,165 @@ public DIALOG_EL_BOARD(playerid, dialogid, response, listitem, string:inputtext[
             new empty[1];
             return DIALOG_EL_MAIN(playerid, 0, 1, 1, empty);
         }
+        case 4: // Edit Spacing & Offsets
+        {
+            return ShowBoardSpacingDialog(playerid);
+        }
     }
     return ShowLoungeEditorMenu(playerid);
+}
+
+// BOARD SPACING & OFFSETS HANDLERS
+stock ShowBoardSpacingDialog(playerid)
+{
+    if(!IsAdmin(playerid, 5))
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    new body[600], title[64];
+    format(title, sizeof(title), "{MAIN}Lounge - Board Spacing & Offsets");
+    format_MainColor(playerid, title);
+
+    format(body, sizeof(body),
+        "{MAIN}Setting\t{MAIN}Current Value\t{MAIN}Default\n"\
+        "{FFFFFF}1. Lateral Spacing (Between Boards)\t{MAIN}%.2f m\t{B4B5B7}3.30 m\n"\
+        "{FFFFFF}2. Board Height Offset (On Iron Bar)\t{MAIN}%.2f m\t{B4B5B7}2.00 m\n"\
+        "{FFFFFF}3. Board Depth Offset (Encaixe)\t{MAIN}%.3f m\t{B4B5B7}0.045 m\n"\
+        "{F3230E}4. Reset to Default Spacing\t{FFFFFF}Restore defaults\t{B4B5B7}-\n"\
+        "{23C552}5. Save & Apply Changes\t{FFFFFF}Save to ini & reload\t{B4B5B7}-" ,
+        g_LoungeBoardSpacing, g_LoungeBoardHeight, g_LoungeBoardDepth
+    );
+
+    format_MainColor(playerid, body);
+    Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
+    return 1;
+}
+
+public DIALOG_EL_SPACING_MENU(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response)
+    {
+        new empty[1];
+        return DIALOG_EL_MAIN(playerid, 0, 1, 1, empty);
+    }
+
+    switch(listitem)
+    {
+        case 0: // Lateral Spacing
+        {
+            SetPVarInt(playerid, "EL_SpacingType", 1);
+            new body[300], title[64];
+            format(title, sizeof(title), "{MAIN}Lounge - Lateral Spacing");
+            format_MainColor(playerid, title);
+            format(body, sizeof(body), "{FFFFFF}Enter new lateral spacing between the boards/iron bars in meters:\n{B4B5B7}(Current: {MAIN}%.2f m{B4B5B7} | Default: {MAIN}3.30 m{B4B5B7} | Valid: {MAIN}0.5 - 20.0{B4B5B7})", g_LoungeBoardSpacing);
+            format_MainColor(playerid, body);
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Set", "Cancel");
+        }
+        case 1: // Height Offset
+        {
+            SetPVarInt(playerid, "EL_SpacingType", 2);
+            new body[300], title[64];
+            format(title, sizeof(title), "{MAIN}Lounge - Board Height Offset");
+            format_MainColor(playerid, title);
+            format(body, sizeof(body), "{FFFFFF}Enter new height offset of the board on the iron bar in meters:\n{B4B5B7}(Current: {MAIN}%.2f m{B4B5B7} | Default: {MAIN}2.00 m{B4B5B7} | Valid: {MAIN}-5.0 - 10.0{B4B5B7})", g_LoungeBoardHeight);
+            format_MainColor(playerid, body);
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Set", "Cancel");
+        }
+        case 2: // Depth Offset
+        {
+            SetPVarInt(playerid, "EL_SpacingType", 3);
+            new body[300], title[64];
+            format(title, sizeof(title), "{MAIN}Lounge - Board Depth Offset");
+            format_MainColor(playerid, title);
+            format(body, sizeof(body), "{FFFFFF}Enter new depth / encaixe offset of the board relative to the iron bar:\n{B4B5B7}(Current: {MAIN}%.3f m{B4B5B7} | Default: {MAIN}0.045 m{B4B5B7} | Valid: {MAIN}-2.0 - 5.0{B4B5B7})", g_LoungeBoardDepth);
+            format_MainColor(playerid, body);
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Set", "Cancel");
+        }
+        case 3: // Reset to Default
+        {
+            g_LoungeBoardSpacing = 3.3;
+            g_LoungeBoardHeight = 2.0;
+            g_LoungeBoardDepth = 0.045;
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board spacing and offsets reset to default values (Spacing: 3.30m, Height: 2.00m, Depth: 0.045m)!");
+            return ShowBoardSpacingDialog(playerid);
+        }
+        case 4: // Save & Apply
+        {
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board spacing & offsets saved and applied successfully!");
+            return ShowBoardSpacingDialog(playerid);
+        }
+    }
+    return 1;
+}
+
+public DIALOG_EL_SPACING_INPUT(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if(!response)
+    {
+        DeletePVar(playerid, "EL_SpacingType");
+        return ShowBoardSpacingDialog(playerid);
+    }
+
+    new type = GetPVarInt(playerid, "EL_SpacingType");
+    DeletePVar(playerid, "EL_SpacingType");
+
+    if(IsNull(inputtext))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You must enter a valid numeric value.");
+        return ShowBoardSpacingDialog(playerid);
+    }
+
+    new Float:val;
+    if(sscanf(inputtext, "f", val))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You must enter a valid numeric value.");
+        return ShowBoardSpacingDialog(playerid);
+    }
+
+    switch(type)
+    {
+        case 1: // Lateral Spacing
+        {
+            if(val < 0.1 || val > 50.0)
+            {
+                SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Spacing must be between 0.1 and 50.0 meters.");
+                return ShowBoardSpacingDialog(playerid);
+            }
+            g_LoungeBoardSpacing = val;
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Lateral board spacing updated to {MAIN}%.2f m{FFFFFF}.", val);
+        }
+        case 2: // Height Offset
+        {
+            if(val < -10.0 || val > 20.0)
+            {
+                SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Height offset must be between -10.0 and 20.0 meters.");
+                return ShowBoardSpacingDialog(playerid);
+            }
+            g_LoungeBoardHeight = val;
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board height offset updated to {MAIN}%.2f m{FFFFFF}.", val);
+        }
+        case 3: // Depth Offset
+        {
+            if(val < -5.0 || val > 10.0)
+            {
+                SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Depth offset must be between -5.0 and 10.0 meters.");
+                return ShowBoardSpacingDialog(playerid);
+            }
+            g_LoungeBoardDepth = val;
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board depth offset updated to {MAIN}%.3f m{FFFFFF}.", val);
+        }
+    }
+
+    return ShowBoardSpacingDialog(playerid);
 }
 
 // TOP 5 KILLS HANDLER
@@ -598,6 +762,111 @@ public DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext
     CheckAdminAuth(playerid);
 
     return ShowLoungeEditorMenu(playerid);
+}
+
+// /boardspacing
+@cmd(.alts = {"boardoffset", "quadrolounge", "editboardspacing", "espacamentoquadro", "espacamentolounge"}) boardspacing(playerid, params[], help)
+{
+    if(!IsPlayerLogged(playerid))
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    if(!IsAdmin(playerid, 5))
+        return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+
+    CheckAdminAuth(playerid);
+
+    if(IsNull(params))
+    {
+        return ShowBoardSpacingDialog(playerid);
+    }
+
+    new subcmd[32], Float:val1, Float:val2, Float:val3;
+    if(!strcmp(params, "reset", true))
+    {
+        g_LoungeBoardSpacing = 3.3;
+        g_LoungeBoardHeight = 2.0;
+        g_LoungeBoardDepth = 0.045;
+        SaveLoungeConfig();
+        RespawnLoungeBoard();
+        return SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board spacing and offsets reset to default (Spacing: 3.30m, Height: 2.00m, Depth: 0.045m)!");
+    }
+
+    if(!sscanf(params, "s[32]f", subcmd, val1))
+    {
+        if(!strcmp(subcmd, "lateral", true) || !strcmp(subcmd, "dist", true) || !strcmp(subcmd, "distancia", true) || !strcmp(subcmd, "spacing", true))
+        {
+            if(val1 < 0.1 || val1 > 50.0)
+                return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Spacing must be between 0.1 and 50.0 meters.");
+
+            g_LoungeBoardSpacing = val1;
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            return va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Lateral board spacing updated to {MAIN}%.2f m{FFFFFF}.", val1);
+        }
+        else if(!strcmp(subcmd, "altura", true) || !strcmp(subcmd, "z", true) || !strcmp(subcmd, "height", true))
+        {
+            if(val1 < -10.0 || val1 > 20.0)
+                return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Height offset must be between -10.0 and 20.0 meters.");
+
+            g_LoungeBoardHeight = val1;
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            return va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board height offset updated to {MAIN}%.2f m{FFFFFF}.", val1);
+        }
+        else if(!strcmp(subcmd, "profundidade", true) || !strcmp(subcmd, "depth", true) || !strcmp(subcmd, "offset", true) || !strcmp(subcmd, "encaixe", true))
+        {
+            if(val1 < -5.0 || val1 > 10.0)
+                return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Depth offset must be between -5.0 and 10.0 meters.");
+
+            g_LoungeBoardDepth = val1;
+            SaveLoungeConfig();
+            RespawnLoungeBoard();
+            return va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board depth offset updated to {MAIN}%.3f m{FFFFFF}.", val1);
+        }
+    }
+
+    // Direct numeric floats
+    if(!sscanf(params, "fff", val1, val2, val3))
+    {
+        if(val1 < 0.1 || val1 > 50.0)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Spacing must be between 0.1 and 50.0 meters.");
+        if(val2 < -10.0 || val2 > 20.0)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Height offset must be between -10.0 and 20.0 meters.");
+        if(val3 < -5.0 || val3 > 10.0)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Depth offset must be between -5.0 and 10.0 meters.");
+
+        g_LoungeBoardSpacing = val1;
+        g_LoungeBoardHeight = val2;
+        g_LoungeBoardDepth = val3;
+        SaveLoungeConfig();
+        RespawnLoungeBoard();
+        return va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board offsets updated: Spacing: {MAIN}%.2f m{FFFFFF} | Height: {MAIN}%.2f m{FFFFFF} | Depth: {MAIN}%.3f m{FFFFFF}.", g_LoungeBoardSpacing, g_LoungeBoardHeight, g_LoungeBoardDepth);
+    }
+    else if(!sscanf(params, "ff", val1, val2))
+    {
+        if(val1 < 0.1 || val1 > 50.0)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Spacing must be between 0.1 and 50.0 meters.");
+        if(val2 < -10.0 || val2 > 20.0)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Height offset must be between -10.0 and 20.0 meters.");
+
+        g_LoungeBoardSpacing = val1;
+        g_LoungeBoardHeight = val2;
+        SaveLoungeConfig();
+        RespawnLoungeBoard();
+        return va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board offsets updated: Spacing: {MAIN}%.2f m{FFFFFF} | Height: {MAIN}%.2f m{FFFFFF}.", g_LoungeBoardSpacing, g_LoungeBoardHeight);
+    }
+    else if(!sscanf(params, "f", val1))
+    {
+        if(val1 < 0.1 || val1 > 50.0)
+            return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Spacing must be between 0.1 and 50.0 meters.");
+
+        g_LoungeBoardSpacing = val1;
+        SaveLoungeConfig();
+        RespawnLoungeBoard();
+        return va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Lateral board spacing updated to {MAIN}%.2f m{FFFFFF}.", val1);
+    }
+
+    return SendClientMessage(playerid, -1, "{MAIN}[HELP] {FFFFFF}Usage: /boardspacing [spacing] (height) (depth) OR /boardspacing [lateral/altura/profundidade] [value]");
 }
 
 public OnGameModeInit()
