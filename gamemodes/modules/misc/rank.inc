@@ -6,8 +6,53 @@ public initTop5()
 	UpdateTOP5Kills();
 	CreateTOP5Damage();
 	UpdateTOP5Damage();
+	RespawnLoungeBoard();
 	updateKillRank();
+	updateDamageRank();
 	return true;
+}
+
+forward updateDamageRank();
+public updateDamageRank()
+{
+	inline const OnDamageRankLoad()
+	{
+		new str[1024];
+		strcat(str, "\n{B2C3FF}TOP 10 DAMAGE\n\n");
+
+		new rows = cache_num_rows();
+		if(rows > 0)
+		{
+			new username[MAX_PLAYER_NAME + 1], dmg;
+
+			for(new i; i < rows && i < 10; i++)
+			{
+				cache_get_value_name(i, "username", username, sizeof(username));
+				cache_get_value_int(i, "dmg_val", dmg);
+
+				if(dmg > 0)
+				{
+					strcat(str, sprintf("{B2C3FF}%d. {FFFFFF}%s: {FF6060}%s dmg\n", i + 1, username, FormatNumber(dmg)), sizeof(str));
+				}
+				else
+				{
+					strcat(str, "\n", sizeof(str));
+				}
+			}
+		}
+
+		format(g_LoungeDamageRankStr, sizeof(g_LoungeDamageRankStr), "%s", str);
+
+		if(IsValidDynamicObject(g_BoardDamageFront))
+		{
+			SetDynamicObjectMaterialText(g_BoardDamageFront, 0, g_LoungeDamageRankStr, 130, "Arial", 18, 1, 0xFFCCCCCC, 0xFF111111, 1);
+		}
+	}
+	MySQL_TQueryInline(dbHandle, using inline OnDamageRankLoad,
+		"SELECT `username`, IF(`damage_semanal` > 0, `damage_semanal`, `max_damage`) AS `dmg_val` FROM `accounts` \
+		WHERE (`damage_semanal` > 0 OR `max_damage` > 0) \
+		AND NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \
+		ORDER BY `dmg_val` DESC LIMIT 10");
 }
 
 forward updateKillRank();
@@ -15,72 +60,150 @@ public updateKillRank()
 {
 	inline const OnKillRankLoad()
 	{
-		const NAME_COL = 26;
-		const KILLS_COL = 10;
-
-		new str[1000];
-
-		strcat(str, "                  Top Kills\n\n");
-		strcat(str, " Pos"); strcat(str, "  Name                     ");strcat(str, "Kills    "); strcat(str, "K/D\n");
+		new str[1024];
+		strcat(str, "\n{B2C3FF}TOP 10 KILLS\n\n");
 
 		new rows = cache_num_rows();
 		if(rows > 0)
 		{
-			new useername[MAX_PLAYER_NAME + 1], kills, deaths;
-			new killsStr[KILLS_COL + 1], usernamee[NAME_COL + 1];
+			new username[MAX_PLAYER_NAME + 1], kills;
 
-			for(new i; i < rows; i++)
+			for(new i; i < rows && i < 10; i++)
 			{
-				cache_get_value_name(i, "username", useername, sizeof(useername));
+				cache_get_value_name(i, "username", username, sizeof(username));
 				cache_get_value_int(i, "kills", kills);
-				cache_get_value_int(i, "deaths", deaths);
 
 				if(kills > 0)
 				{
-					format(killsStr, sizeof(killsStr), "%d", kills);
-					format(usernamee, sizeof(usernamee), "%s", useername);
-
-					for(new g = strlen(usernamee); g < NAME_COL; g++)
-						strcat(usernamee, " ", sizeof(usernamee));
-
-					for(new k = strlen(killsStr); k < KILLS_COL; k++)
-						strcat(killsStr, " ", sizeof(killsStr));
-
-					strcat(str, sprintf(" %d  ", i+1), sizeof(str));
-					strcat(str, sprintf("%s%s", (i+1 > 9) ? (" ") : ("  "), usernamee), sizeof(str));
-					strcat(str, killsStr, sizeof(str));
-					strcat(str, sprintf("%0.2f\n", ratio(kills, deaths)), sizeof(str));
+					strcat(str, sprintf("{B2C3FF}%d. {FFFFFF}%s: {FF6060}%s kills\n", i + 1, username, FormatNumber(kills)), sizeof(str));
 				}
-				else strcat(str, "\n", sizeof(str));
+				else
+				{
+					strcat(str, "\n", sizeof(str));
+				}
 			}
 		}
 
+		format(g_LoungeKillsRankStr, sizeof(g_LoungeKillsRankStr), "%s", str);
 		format(g_LoungeRankStr, sizeof(g_LoungeRankStr), "%s", str);
 
-		new Float:frontX = g_LoungeBoardPos[0] + 0.015 * floatsin(-g_LoungeBoardPos[3], degrees);
-		new Float:frontY = g_LoungeBoardPos[1] + 0.015 * floatcos(-g_LoungeBoardPos[3], degrees);
-
-		if (!IsValidDynamicObject(g_BoardBaseObject))
+		if(IsValidDynamicObject(g_BoardKillsFront))
 		{
-			g_BoardBaseObject = CreateDynamicObject(3077, g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2], 0.0000, 0.0000, g_LoungeBoardPos[3], LOUNGEVW, 0, -1, 300.0, 300.0);
+			SetDynamicObjectMaterialText(g_BoardKillsFront, 0, g_LoungeKillsRankStr, 130, "Arial", 18, 1, 0xFFCCCCCC, 0xFF111111, 1);
 		}
-		else
-		{
-			SetDynamicObjectPos(g_BoardBaseObject, g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2]);
-			SetDynamicObjectRot(g_BoardBaseObject, 0.0000, 0.0000, g_LoungeBoardPos[3]);
-		}
-
-		if (!IsValidDynamicObject(g_Object))
-		{
-			g_Object = CreateDynamicObject(3077, frontX, frontY, g_LoungeBoardPos[2], 0.0000, 0.0000, g_LoungeBoardPos[3], LOUNGEVW, 0, -1, 300.0, 300.0);
-		}
-		else
-		{
-			SetDynamicObjectPos(g_Object, frontX, frontY, g_LoungeBoardPos[2]);
-			SetDynamicObjectRot(g_Object, 0.0000, 0.0000, g_LoungeBoardPos[3]);
-		}
-		SetDynamicObjectMaterialText(g_Object, 0, str, OBJECT_MATERIAL_SIZE_512x256, "Lucida Console", 18, false, 0xFFD9A0A9, 0, OBJECT_MATERIAL_TEXT_ALIGN_LEFT);
+		updateDamageRank();
 	}
 	MySQL_TQueryInline(dbHandle, using inline OnKillRankLoad,
-		"SELECT `username`, `kills`, `deaths` FROM `accounts` ORDER BY `kills` DESC LIMIT 10");
+		"SELECT `username`, `kills` FROM `accounts` \
+		WHERE `kills` > 0 \
+		AND NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \
+		ORDER BY `kills` DESC LIMIT 10");
 }
+
+stock RespawnLoungeBoard()
+{
+	new Float:A = g_LoungeBoardPos[3];
+	new Float:frontRot = A + 90.0;
+	new Float:backRot = A - 90.0;
+	new Float:frontDx = floatsin(-A, degrees);
+	new Float:frontDy = floatcos(-A, degrees);
+	new Float:rightDx = floatcos(-A, degrees);
+	new Float:rightDy = -floatsin(-A, degrees);
+
+	// Top 10 Kills +3.3m or -3.3m
+	new Float:b1_x = g_LoungeBoardPos[0] + 3.3 * rightDx;
+	new Float:b1_y = g_LoungeBoardPos[1] + 3.3 * rightDy;
+	new Float:b1_z = g_LoungeBoardPos[2];
+
+	// Top 10 Damage
+	new Float:b2_x = g_LoungeBoardPos[0] - 3.3 * rightDx;
+	new Float:b2_y = g_LoungeBoardPos[1] - 3.3 * rightDy;
+	new Float:b2_z = g_LoungeBoardPos[2];
+
+	// TOP 10 KILLS
+	if (!IsValidDynamicObject(g_BoardKillsFront))
+	{
+		g_BoardKillsFront = CreateDynamicObject(3354, b1_x + 0.08 * frontDx, b1_y + 0.08 * frontDy, b1_z + 2.0, 0.0, 0.0, frontRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+	}
+	else
+	{
+		SetDynamicObjectPos(g_BoardKillsFront, b1_x + 0.08 * frontDx, b1_y + 0.08 * frontDy, b1_z + 2.0);
+		SetDynamicObjectRot(g_BoardKillsFront, 0.0, 0.0, frontRot);
+	}
+	SetDynamicObjectMaterial(g_BoardKillsFront, 1, 19962, "samproadsigns", "materialtext1", 0);
+
+	if (!IsValidDynamicObject(g_BoardKillsBack))
+	{
+		g_BoardKillsBack = CreateDynamicObject(3354, b1_x - 0.08 * frontDx, b1_y - 0.08 * frontDy, b1_z + 2.0, 0.0, 0.0, backRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+	}
+	else
+	{
+		SetDynamicObjectPos(g_BoardKillsBack, b1_x - 0.08 * frontDx, b1_y - 0.08 * frontDy, b1_z + 2.0);
+		SetDynamicObjectRot(g_BoardKillsBack, 0.0, 0.0, backRot);
+	}
+	SetDynamicObjectMaterial(g_BoardKillsBack, 1, 19962, "samproadsigns", "materialtext1", 0);
+	SetDynamicObjectMaterialText(g_BoardKillsBack, 0, " ", 130, "Arial", 22, 1, 0xFFCCCCCC, 0xFF111111, 1);
+
+	if (!IsValidDynamicObject(g_BoardKillsPillar))
+	{
+		g_BoardKillsPillar = CreateDynamicObject(3077, b1_x, b1_y, b1_z, 0.0, 0.0, A, LOUNGEVW, 0, -1, 300.0, 300.0);
+	}
+	else
+	{
+		SetDynamicObjectPos(g_BoardKillsPillar, b1_x, b1_y, b1_z);
+		SetDynamicObjectRot(g_BoardKillsPillar, 0.0, 0.0, A);
+	}
+	SetDynamicObjectMaterial(g_BoardKillsPillar, 1, 3440, "airportpillar", "metalic_64", 0);
+	SetDynamicObjectMaterial(g_BoardKillsPillar, 0, 3440, "airportpillar", "metalic_64", 0);
+
+	// TOP 10 DAMAGE
+	if (!IsValidDynamicObject(g_BoardDamageFront))
+	{
+		g_BoardDamageFront = CreateDynamicObject(3354, b2_x + 0.08 * frontDx, b2_y + 0.08 * frontDy, b2_z + 2.0, 0.0, 0.0, frontRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+	}
+	else
+	{
+		SetDynamicObjectPos(g_BoardDamageFront, b2_x + 0.08 * frontDx, b2_y + 0.08 * frontDy, b2_z + 2.0);
+		SetDynamicObjectRot(g_BoardDamageFront, 0.0, 0.0, frontRot);
+	}
+	SetDynamicObjectMaterial(g_BoardDamageFront, 1, 19962, "samproadsigns", "materialtext1", 0);
+
+	if (!IsValidDynamicObject(g_BoardDamageBack))
+	{
+		g_BoardDamageBack = CreateDynamicObject(3354, b2_x - 0.08 * frontDx, b2_y - 0.08 * frontDy, b2_z + 2.0, 0.0, 0.0, backRot, LOUNGEVW, 0, -1, 300.0, 300.0);
+	}
+	else
+	{
+		SetDynamicObjectPos(g_BoardDamageBack, b2_x - 0.08 * frontDx, b2_y - 0.08 * frontDy, b2_z + 2.0);
+		SetDynamicObjectRot(g_BoardDamageBack, 0.0, 0.0, backRot);
+	}
+	SetDynamicObjectMaterial(g_BoardDamageBack, 1, 19962, "samproadsigns", "materialtext1", 0);
+	SetDynamicObjectMaterialText(g_BoardDamageBack, 0, " ", 130, "Arial", 22, 1, 0xFFCCCCCC, 0xFF111111, 1);
+
+	if (!IsValidDynamicObject(g_BoardDamagePillar))
+	{
+		g_BoardDamagePillar = CreateDynamicObject(3077, b2_x, b2_y, b2_z, 0.0, 0.0, A, LOUNGEVW, 0, -1, 300.0, 300.0);
+	}
+	else
+	{
+		SetDynamicObjectPos(g_BoardDamagePillar, b2_x, b2_y, b2_z);
+		SetDynamicObjectRot(g_BoardDamagePillar, 0.0, 0.0, A);
+	}
+	SetDynamicObjectMaterial(g_BoardDamagePillar, 1, 3440, "airportpillar", "metalic_64", 0);
+	SetDynamicObjectMaterial(g_BoardDamagePillar, 0, 3440, "airportpillar", "metalic_64", 0);
+
+	g_BoardBaseObject = g_BoardKillsPillar;
+	g_Object = g_BoardKillsFront;
+
+	if (g_LoungeKillsRankStr[0] != '\0')
+	{
+		SetDynamicObjectMaterialText(g_BoardKillsFront, 0, g_LoungeKillsRankStr, 130, "Arial", 18, 1, 0xFFCCCCCC, 0xFF111111, 1);
+	}
+
+	if (g_LoungeDamageRankStr[0] != '\0')
+	{
+		SetDynamicObjectMaterialText(g_BoardDamageFront, 0, g_LoungeDamageRankStr, 130, "Arial", 18, 1, 0xFFCCCCCC, 0xFF111111, 1);
+	}
+	return 1;
+}
+

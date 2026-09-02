@@ -14,62 +14,11 @@
 
 // Forward declarations
 forward updateKillRank();
+forward updateDamageRank();
 forward UpdateTOP5Kills();
 forward UpdateTOP5Damage();
 forward InitLoungeTipSystem();
 
-// Re-creates / repositions the lounge blackboard ranking board
-stock RespawnLoungeBoard()
-{
-    new Float:frontX = g_LoungeBoardPos[0] + 0.015 * floatsin(-g_LoungeBoardPos[3], degrees);
-    new Float:frontY = g_LoungeBoardPos[1] + 0.015 * floatcos(-g_LoungeBoardPos[3], degrees);
-
-    if (!IsValidDynamicObject(g_BoardBaseObject))
-    {
-        g_BoardBaseObject = CreateDynamicObject(
-            3077,
-            g_LoungeBoardPos[0],
-            g_LoungeBoardPos[1],
-            g_LoungeBoardPos[2],
-            0.0000, 0.0000,
-            g_LoungeBoardPos[3],
-            LOUNGEVW, 0, -1, 300.0, 300.0
-        );
-    }
-    else
-    {
-        SetDynamicObjectPos(g_BoardBaseObject, g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2]);
-        SetDynamicObjectRot(g_BoardBaseObject, 0.0000, 0.0000, g_LoungeBoardPos[3]);
-    }
-
-    if (!IsValidDynamicObject(g_Object))
-    {
-        g_Object = CreateDynamicObject(
-            3077,
-            frontX,
-            frontY,
-            g_LoungeBoardPos[2],
-            0.0000, 0.0000,
-            g_LoungeBoardPos[3],
-            LOUNGEVW, 0, -1, 300.0, 300.0
-        );
-    }
-    else
-    {
-        SetDynamicObjectPos(g_Object, frontX, frontY, g_LoungeBoardPos[2]);
-        SetDynamicObjectRot(g_Object, 0.0000, 0.0000, g_LoungeBoardPos[3]);
-    }
-
-    if (g_LoungeRankStr[0] != '\0')
-    {
-        SetDynamicObjectMaterialText(g_Object, 0, g_LoungeRankStr, OBJECT_MATERIAL_SIZE_512x256, "Lucida Console", 18, false, 0xFFD9A0A9, 0, OBJECT_MATERIAL_TEXT_ALIGN_LEFT);
-    }
-    else
-    {
-        updateKillRank();
-    }
-    return 1;
-}
 
 // Loads lounge configuration from lounge_config.ini
 stock LoadLoungeConfig()
@@ -214,7 +163,7 @@ stock ShowLoungeEditorMenu(playerid)
     format(body, sizeof(body),
         "{MAIN}Option\t{MAIN}Description\n"\
         "{FFFFFF}1. Main Spawn\t{B4B5B7}Configure lounge spawn position\n"\
-        "{FFFFFF}2. Kills Board\t{B4B5B7}Position, height and 3D mode for rank board\n"\
+        "{FFFFFF}2. Top 10 Boards (Kills & Damage)\t{B4B5B7}Position, height and 3D mode for rank boards\n"\
         "{FFFFFF}3. TOP 5 Kills Actors\t{B4B5B7}Position the 5 top kills actors\n"\
         "{FFFFFF}4. TOP 5 Damage Actors\t{B4B5B7}Position the 5 top damage actors\n"\
         "{FFFFFF}5. Info / Tips NPC\t{B4B5B7}Position server tips & info NPC\n"\
@@ -249,15 +198,16 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
         }
         case 1: // Board
         {
-            new body[256], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - Kills Board");
+            new body[350], title[64];
+            format(title, sizeof(title), "{MAIN}Lounge Editor - Top 10 Boards (Kills & Damage)");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body),
                 "{MAIN}Action\t{MAIN}Details\n"\
                 "{MAIN}3D Edit Mode (GUI)\t{FFFFFF}Adjust position/height/rotation with arrows\n"\
-                "{23C552}Move Board to Me\t{FFFFFF}Position board at current location and angle\n"\
-                "{FFFFFF}Teleport to Board\t{B4B5B7}Teleport to current board position"
+                "{23C552}Move Boards to Me\t{FFFFFF}Position both boards at current location\n"\
+                "{FFFFFF}Teleport to Boards\t{B4B5B7}Teleport to current boards position\n"\
+                "{00EEFE}Reload Top 10 Data\t{B4B5B7}Refresh Top 10 Kills & Damage from database"
             );
             format_MainColor(playerid, body);
             Dialog_ShowCallback(playerid, using public DIALOG_EL_BOARD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
@@ -397,12 +347,13 @@ public DIALOG_EL_BOARD(playerid, dialogid, response, listitem, string:inputtext[
     {
         case 0: // 3D Edit Mode
         {
-            if(!IsValidDynamicObject(g_BoardBaseObject)) RespawnLoungeBoard();
-            EditDynamicObject(playerid, g_BoardBaseObject);
-            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}3D Edit Mode enabled! Drag arrows to move/raise/rotate. Click the save icon to confirm.");
+            if(!IsValidDynamicObject(g_BoardKillsFront) && !IsValidDynamicObject(g_BoardBaseObject)) RespawnLoungeBoard();
+            new STREAMER_TAG_OBJECT:editObj = (IsValidDynamicObject(g_BoardKillsFront)) ? (g_BoardKillsFront) : (g_BoardBaseObject);
+            EditDynamicObject(playerid, editObj);
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}3D Edit Mode enabled for Top 10 Boards! Drag arrows to move/raise/rotate. Click the save icon to confirm.");
             return 1;
         }
-        case 1: // Move Board to Me
+        case 1: // Move Boards to Me
         {
             new Float:x, Float:y, Float:z, Float:a;
             GetPlayerPos(playerid, x, y, z);
@@ -415,17 +366,25 @@ public DIALOG_EL_BOARD(playerid, dialogid, response, listitem, string:inputtext[
 
             SaveLoungeConfig();
             RespawnLoungeBoard();
-            va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board repositioned at: {MAIN}%.2f, %.2f, %.2f (Rot: %.1f)", x, y, z, a);
+            va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Top 10 Boards (Kills & Damage) repositioned at: {MAIN}%.2f, %.2f, %.2f (Rot: %.1f)", x, y, z, a);
             new empty[1];
             return DIALOG_EL_MAIN(playerid, 0, 1, 1, empty);
         }
-        case 2: // Teleport to Board
+        case 2: // Teleport to Boards
         {
             SetPlayerPos(playerid, g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2]);
             SetPlayerFacingAngle(playerid, g_LoungeBoardPos[3]);
             SetPlayerVirtualWorld(playerid, LOUNGEVW);
             SetPlayerInterior(playerid, 0);
-            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Teleported to the Board position.");
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Teleported to Top 10 Boards position.");
+            new empty[1];
+            return DIALOG_EL_MAIN(playerid, 0, 1, 1, empty);
+        }
+        case 3: // Reload Top 10 Data
+        {
+            updateKillRank();
+            updateDamageRank();
+            SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Top 10 Kills and Top 10 Damage ranks reloaded from database!");
             new empty[1];
             return DIALOG_EL_MAIN(playerid, 0, 1, 1, empty);
         }
@@ -664,7 +623,7 @@ public OnGameModeInit()
 
 public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
-    if(objectid == g_BoardBaseObject || objectid == g_Object)
+    if(objectid == g_BoardBaseObject || objectid == g_Object || objectid == g_BoardKillsFront || objectid == g_BoardKillsPillar || objectid == g_BoardDamageFront || objectid == g_BoardDamagePillar)
     {
         if(response == _:EDIT_RESPONSE_FINAL)
         {
