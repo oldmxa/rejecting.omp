@@ -6593,6 +6593,16 @@ stock WC_ShowDamageFeedGiven(playerid, targetid, Float:amount, WEAPON:weapon, bo
 	return 1;
 }
 
+stock WC_ShowDamageFeedTaken(playerid, issuerid, Float:amount, WEAPON:weapon, bool:is_fatal = false)
+{
+	if (!IsPlayerConnected(playerid) || !IsDamageFeedActive(playerid)) {
+		return 0;
+	}
+
+	DamageFeedAddHitTaken(playerid, issuerid, amount, weapon, is_fatal);
+	return 1;
+}
+
 static DamageFeedRemoveHit(arr[WC_FEED_HEIGHT][E_DAMAGE_FEED_HIT], idx)
 {
 	for (new i = 0; i < WC_FEED_HEIGHT; i++) {

@@ -188,6 +188,26 @@ handleSpecTargetLeft(targetid)
 	}
 }
 
+// o weapon-config nao conhece spectate: espelha o feed de dano de quem esta sendo assistido
+hook OnPlayerDamageDone(playerid, Float:amount, issuerid, WEAPON:weapon, bodypart)
+{
+	new Float:hp;
+	GetPlayerHealth(playerid, hp);
+
+	new bool:fatal = (hp <= 0.0005);
+
+	if(issuerid != INVALID_PLAYER_ID)
+	{
+		foreach(new i : specWatchers[issuerid])
+			WC_ShowDamageFeedGiven(i, playerid, amount, weapon, fatal);
+	}
+
+	foreach(new i : specWatchers[playerid])
+		WC_ShowDamageFeedTaken(i, issuerid, amount, weapon, fatal);
+
+	return 1;
+}
+
 // publics
 
 forward reSpectate(playerid, specid);
