@@ -163,17 +163,17 @@ stock ShowLoungeEditorMenu(playerid)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     new body[512], title[64];
-    format(title, sizeof(title), "{MAIN}Lounge Editor - Main Menu");
+    format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Main Menu");
     format_MainColor(playerid, title);
 
     format(body, sizeof(body),
         "{MAIN}Option\t{MAIN}Description\n"\
-        "{FFFFFF}1. Main Spawn\t{B4B5B7}Configure lounge spawn position\n"\
-        "{FFFFFF}2. Top 10 Boards (Kills & Damage)\t{B4B5B7}Position, height, 3D mode & spacing for rank boards\n"\
-        "{FFFFFF}3. TOP 3 Kills Actors\t{B4B5B7}Position the 3 top kills actors\n"\
-        "{FFFFFF}4. TOP 3 Damage Actors\t{B4B5B7}Position the 3 top damage actors\n"\
-        "{FFFFFF}5. Info / Tips NPC\t{B4B5B7}Position server tips & info NPC\n"\
-        "{23C552}6. Save & Reload All\t{FFFFFF}Save configuration and reload all entities"
+        "{B4B5B7}\xBB {FFFFFF}Main Spawn\t{BEBEBE}Configure lounge spawn position\n"\
+        "{B4B5B7}\xBB {FFFFFF}Top 10 Boards\t{BEBEBE}Position, height & spacing for boards\n"\
+        "{B4B5B7}\xBB {FFFFFF}TOP 3 Kills Actors\t{BEBEBE}Position the 3 top kills actors\n"\
+        "{B4B5B7}\xBB {FFFFFF}TOP 3 Damage Actors\t{BEBEBE}Position the 3 top damage actors\n"\
+        "{B4B5B7}\xBB {FFFFFF}Info / Tips NPC\t{BEBEBE}Position server tips & info NPC\n"\
+        "{23C552}\xBB {FFFFFF}Save & Reload All\t{BEBEBE}Save and reload all settings"
     );
 
     format_MainColor(playerid, body);
@@ -190,83 +190,83 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
         case 0: // Main Spawn
         {
             new body[256], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - Main Spawn");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Main Spawn");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body),
                 "{MAIN}Action\t{MAIN}Details\n"\
-                "{23C552}Set Spawn Here\t{FFFFFF}Use current position and facing angle\n"\
-                "{FFFFFF}Teleport to Spawn\t{B4B5B7}Teleport to current lounge spawn\n"\
-                "{F3230E}Reset Default Spawn\t{B4B5B7}Restore default coordinates"
+                "{23C552}\xBB {FFFFFF}Set Spawn Here\t{BEBEBE}Use current position and facing angle\n"\
+                "{B4B5B7}\xBB {FFFFFF}Teleport to Spawn\t{BEBEBE}Teleport to current lounge spawn\n"\
+                "{F84F31}\xBB {FFFFFF}Reset Default Spawn\t{BEBEBE}Restore default spawn coordinates"
             );
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPAWN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPAWN<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
         }
         case 1: // Board
         {
             new body[450], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - Top 10 Boards (Kills & Damage)");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Top 10 Boards");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body),
                 "{MAIN}Action\t{MAIN}Details\n"\
-                "{MAIN}3D Edit Mode (GUI)\t{FFFFFF}Adjust position/height/rotation with arrows\n"\
-                "{23C552}Move Boards to Me\t{FFFFFF}Position both boards at current location\n"\
-                "{FFFFFF}Teleport to Boards\t{B4B5B7}Teleport to current boards position\n"\
-                "{00EEFE}Reload Top 10 Data\t{B4B5B7}Refresh Top 10 Kills & Damage from database\n"\
-                "{MAIN}Edit Spacing & Offsets\t{FFFFFF}Adjust distance between boards, height & depth"
+                "{00EEFE}\xBB {FFFFFF}3D Edit Mode (GUI)\t{BEBEBE}Adjust position/height/rotation with arrows\n"\
+                "{23C552}\xBB {FFFFFF}Move Boards to Me\t{BEBEBE}Position both boards at current location\n"\
+                "{B4B5B7}\xBB {FFFFFF}Teleport to Boards\t{BEBEBE}Teleport to current boards position\n"\
+                "{00EEFE}\xBB {FFFFFF}Reload Top 10 Data\t{BEBEBE}Refresh Top 10 Kills & Damage from database\n"\
+                "{MAIN}\xBB {FFFFFF}Edit Spacing & Offsets\t{BEBEBE}Adjust distance between boards, height & depth"
             );
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_BOARD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_BOARD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
         }
         case 2: // TOP 3 Kills
         {
             new body[512], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - TOP 3 Kills Actors");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}TOP 3 Kills Actors");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body), "{MAIN}Rank\t{MAIN}Coordinates\n");
             for(new k = 0; k < 3; k++)
             {
-                new line[96];
-                format(line, sizeof(line), "{FFFFFF}Top Kills #%d\t{BEBEBE}X: %.1f | Y: %.1f | Z: %.1f\n",
-                    k + 1, TOP3Kills[k][0], TOP3Kills[k][1], TOP3Kills[k][2]);
+                new line[128];
+                format(line, sizeof(line), "{B4B5B7}\xBB {FFFFFF}#%d Top Kills\t{BEBEBE}X: %.1f | Y: %.1f | Z: %.1f (A: %.1f)\n",
+                    k + 1, TOP3Kills[k][0], TOP3Kills[k][1], TOP3Kills[k][2], TOP3Kills[k][3]);
                 strcat(body, line);
             }
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3KILLS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3KILLS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
         }
         case 3: // TOP 3 Damage
         {
             new body[512], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - TOP 3 Damage Actors");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}TOP 3 Damage Actors");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body), "{MAIN}Rank\t{MAIN}Coordinates\n");
             for(new d = 0; d < 3; d++)
             {
-                new line[96];
-                format(line, sizeof(line), "{FFFFFF}Top Damage #%d\t{BEBEBE}X: %.1f | Y: %.1f | Z: %.1f\n",
-                    d + 1, TOP3Damage[d][0], TOP3Damage[d][1], TOP3Damage[d][2]);
+                new line[128];
+                format(line, sizeof(line), "{B4B5B7}\xBB {FFFFFF}#%d Top Damage\t{BEBEBE}X: %.1f | Y: %.1f | Z: %.1f (A: %.1f)\n",
+                    d + 1, TOP3Damage[d][0], TOP3Damage[d][1], TOP3Damage[d][2], TOP3Damage[d][3]);
                 strcat(body, line);
             }
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3DMG_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3DMG_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
         }
         case 4: // Info / Tips NPC
         {
             new body[256], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - Info / Tips NPC");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Info / Tips NPC");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body),
                 "{MAIN}Action\t{MAIN}Details\n"\
-                "{23C552}Move NPC to Me\t{FFFFFF}Position tips NPC at current location and angle\n"\
-                "{FFFFFF}Teleport to NPC\t{B4B5B7}Teleport to current tips NPC position\n"\
-                "{F3230E}Reset Default Position\t{B4B5B7}Restore default coordinates"
+                "{23C552}\xBB {FFFFFF}Move NPC to Me\t{BEBEBE}Position tips NPC at current location and angle\n"\
+                "{B4B5B7}\xBB {FFFFFF}Teleport to NPC\t{BEBEBE}Teleport to current tips NPC position\n"\
+                "{F84F31}\xBB {FFFFFF}Reset Default Position\t{BEBEBE}Restore default coordinates"
             );
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_TIPNPC<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_TIPNPC<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
         }
         case 5: // Save & Reload All
         {
@@ -410,16 +410,16 @@ stock ShowBoardSpacingDialog(playerid)
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     new body[600], title[64];
-    format(title, sizeof(title), "{MAIN}Lounge - Board Spacing & Offsets");
+    format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Board Spacing & Offsets");
     format_MainColor(playerid, title);
 
     format(body, sizeof(body),
         "{MAIN}Setting\t{MAIN}Current Value\t{MAIN}Default\n"\
-        "{FFFFFF}1. Lateral Spacing (Between Boards)\t{MAIN}%.2f m\t{B4B5B7}3.30 m\n"\
-        "{FFFFFF}2. Board Height Offset (On Iron Bar)\t{MAIN}%.2f m\t{B4B5B7}2.00 m\n"\
-        "{FFFFFF}3. Board Depth Offset (Encaixe)\t{MAIN}%.3f m\t{B4B5B7}0.045 m\n"\
-        "{F3230E}4. Reset to Default Spacing\t{FFFFFF}Restore defaults\t{B4B5B7}-\n"\
-        "{23C552}5. Save & Apply Changes\t{FFFFFF}Save to ini & reload\t{B4B5B7}-" ,
+        "{B4B5B7}\xBB {FFFFFF}Lateral Spacing (Between Boards)\t{MAIN}%.2f m\t{BEBEBE}3.30 m\n"\
+        "{B4B5B7}\xBB {FFFFFF}Board Height Offset (On Iron Bar)\t{MAIN}%.2f m\t{BEBEBE}2.00 m\n"\
+        "{B4B5B7}\xBB {FFFFFF}Board Depth Offset (Encaixe)\t{MAIN}%.3f m\t{BEBEBE}0.045 m\n"\
+        "{F84F31}\xBB {FFFFFF}Reset to Default Spacing\t{BEBEBE}Restore defaults\t{BEBEBE}-\n"\
+        "{23C552}\xBB {FFFFFF}Save & Apply Changes\t{BEBEBE}Save to INI & reload\t{BEBEBE}-",
         g_LoungeBoardSpacing, g_LoungeBoardHeight, g_LoungeBoardDepth
     );
 
@@ -442,31 +442,49 @@ public DIALOG_EL_SPACING_MENU(playerid, dialogid, response, listitem, string:inp
         {
             SetPVarInt(playerid, "EL_SpacingType", 1);
             new body[300], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge - Lateral Spacing");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Lateral Spacing");
             format_MainColor(playerid, title);
-            format(body, sizeof(body), "{FFFFFF}Enter new lateral spacing between the boards/iron bars in meters:\n{B4B5B7}(Current: {MAIN}%.2f m{B4B5B7} | Default: {MAIN}3.30 m{B4B5B7} | Valid: {MAIN}0.5 - 20.0{B4B5B7})", g_LoungeBoardSpacing);
+            format(body, sizeof(body),
+                "{FFFFFF}Enter new lateral spacing between the boards/iron bars in meters:\n\n"\
+                "{FFFFFF}\xBB {B4B5B7}Current: {MAIN}%.2f m\n"\
+                "{FFFFFF}\xBB {B4B5B7}Default: {MAIN}3.30 m\n"\
+                "{FFFFFF}\xBB {B4B5B7}Valid Range: {MAIN}0.5 - 20.0 m",
+                g_LoungeBoardSpacing
+            );
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Set", "Cancel");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
         }
         case 1: // Height Offset
         {
             SetPVarInt(playerid, "EL_SpacingType", 2);
             new body[300], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge - Board Height Offset");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Board Height Offset");
             format_MainColor(playerid, title);
-            format(body, sizeof(body), "{FFFFFF}Enter new height offset of the board on the iron bar in meters:\n{B4B5B7}(Current: {MAIN}%.2f m{B4B5B7} | Default: {MAIN}2.00 m{B4B5B7} | Valid: {MAIN}-5.0 - 10.0{B4B5B7})", g_LoungeBoardHeight);
+            format(body, sizeof(body),
+                "{FFFFFF}Enter new height offset of the board on the iron bar in meters:\n\n"\
+                "{FFFFFF}\xBB {B4B5B7}Current: {MAIN}%.2f m\n"\
+                "{FFFFFF}\xBB {B4B5B7}Default: {MAIN}2.00 m\n"\
+                "{FFFFFF}\xBB {B4B5B7}Valid Range: {MAIN}-5.0 - 10.0 m",
+                g_LoungeBoardHeight
+            );
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Set", "Cancel");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
         }
         case 2: // Depth Offset
         {
             SetPVarInt(playerid, "EL_SpacingType", 3);
             new body[300], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge - Board Depth Offset");
+            format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Board Depth Offset");
             format_MainColor(playerid, title);
-            format(body, sizeof(body), "{FFFFFF}Enter new depth / encaixe offset of the board relative to the iron bar:\n{B4B5B7}(Current: {MAIN}%.3f m{B4B5B7} | Default: {MAIN}0.045 m{B4B5B7} | Valid: {MAIN}-2.0 - 5.0{B4B5B7})", g_LoungeBoardDepth);
+            format(body, sizeof(body),
+                "{FFFFFF}Enter new depth / encaixe offset of the board relative to the iron bar:\n\n"\
+                "{FFFFFF}\xBB {B4B5B7}Current: {MAIN}%.3f m\n"\
+                "{FFFFFF}\xBB {B4B5B7}Default: {MAIN}0.045 m\n"\
+                "{FFFFFF}\xBB {B4B5B7}Valid Range: {MAIN}-2.0 - 5.0 m",
+                g_LoungeBoardDepth
+            );
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Set", "Cancel");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_SPACING_INPUT<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
         }
         case 3: // Reset to Default
         {
@@ -565,18 +583,18 @@ public DIALOG_EL_TOP3KILLS_LIST(playerid, dialogid, response, listitem, string:i
     SetPVarInt(playerid, "EL_SelectedTopKill", listitem);
 
     new body[256], title[64];
-    format(title, sizeof(title), "{MAIN}Lounge Editor - Top Kills #%d", listitem + 1);
+    format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Top Kills #%d", listitem + 1);
     format_MainColor(playerid, title);
 
     format(body, sizeof(body),
         "{MAIN}Action\t{MAIN}Details\n"\
-        "{23C552}Move Actor to Me\t{FFFFFF}Position actor #%d at current position and angle\n"\
-        "{FFFFFF}Teleport to Actor\t{B4B5B7}Teleport to current actor position",
+        "{23C552}\xBB {FFFFFF}Move Actor to Me\t{BEBEBE}Position actor #%d at current position and angle\n"\
+        "{B4B5B7}\xBB {FFFFFF}Teleport to Actor\t{BEBEBE}Teleport to current actor position",
         listitem + 1
     );
 
     format_MainColor(playerid, body);
-    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3KILLS_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3KILLS_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
 }
 
@@ -636,18 +654,18 @@ public DIALOG_EL_TOP3DMG_LIST(playerid, dialogid, response, listitem, string:inp
     SetPVarInt(playerid, "EL_SelectedTopDmg", listitem);
 
     new body[256], title[64];
-    format(title, sizeof(title), "{MAIN}Lounge Editor - Top Damage #%d", listitem + 1);
+    format(title, sizeof(title), "{MAIN}Lounge Editor: {FFFFFF}Top Damage #%d", listitem + 1);
     format_MainColor(playerid, title);
 
     format(body, sizeof(body),
         "{MAIN}Action\t{MAIN}Details\n"\
-        "{23C552}Move Actor to Me\t{FFFFFF}Position actor #%d at current position and angle\n"\
-        "{FFFFFF}Teleport to Actor\t{B4B5B7}Teleport to current actor position",
+        "{23C552}\xBB {FFFFFF}Move Actor to Me\t{BEBEBE}Position actor #%d at current position and angle\n"\
+        "{B4B5B7}\xBB {FFFFFF}Teleport to Actor\t{BEBEBE}Teleport to current actor position",
         listitem + 1
     );
 
     format_MainColor(playerid, body);
-    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3DMG_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3DMG_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
 }
 
