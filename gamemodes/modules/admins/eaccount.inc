@@ -77,12 +77,15 @@ static
     EAccSqlID[MAX_PLAYERS],
     EAccName[MAX_PLAYERS][MAX_PLAYER_NAME + 1],
     EAccCache[MAX_PLAYERS][EACC_FIELD_COUNT],
-    EAccClan[MAX_PLAYERS];
+    EAccClan[MAX_PLAYERS],
+    EAccMemberClan[MAX_PLAYERS],
+    EAccMemberRole[MAX_PLAYERS];
 
 forward DIALOG_EACC_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EACC_INPUT(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EACC_CLAN(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EACC_CLANINPUT(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EACC_CONFIRM_DELETE(playerid, dialogid, response, listitem, string:inputtext[]);
 
 static bool:EAcc_IsOffline(playerid)
 {
@@ -103,6 +106,8 @@ static EAcc_Clear(playerid)
 {
     EAccSqlID[playerid] = 0;
     EAccClan[playerid] = -1;
+    EAccMemberClan[playerid] = -1;
+    EAccMemberRole[playerid] = -1;
     EAccName[playerid][0] = EOS;
 
     DeletePVar(playerid, "EAccTarget");
@@ -256,6 +261,163 @@ static bool:EAcc_OwnsClan(playerid)
     return (clanid != -1 && IsValidClanID(clanid));
 }
 
+static bool:EAcc_IsDeleteOption(playerid, listitem)
+{
+    if (EAcc_OwnsClan(playerid))
+        return (listitem == EACC_FIELD_COUNT + 1);
+
+    return (listitem == EACC_FIELD_COUNT);
+}
+
+stock ShowEAccountDeleteConfirmDialog(playerid)
+{
+    if (!EAcc_Ready(playerid)) return 0;
+
+    new bool:isOffline = EAcc_IsOffline(playerid);
+    new targetid = EAcc_OnlineTarget(playerid);
+    new sqlid = isOffline ? EAccSqlID[playerid] : User[targetid][user_sqlid];
+
+    if ((!isOffline && targetid == playerid) || sqlid == User[playerid][user_sqlid])
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot delete your own active account.");
+        return ShowEAccountDialog(playerid);
+    }
+
+    new name[MAX_PLAYER_NAME + 1];
+    EAcc_TargetName(playerid, name);
+
+    new memberClanId = isOffline ? EAccMemberClan[playerid] : (targetid != INVALID_PLAYER_ID ? User[targetid][clanID] : -1);
+    new bool:ownsClan = EAcc_OwnsClan(playerid);
+
+    new targetClanName[MAX_CLAN_NAME + 32] = "None";
+    if (ownsClan)
+    {
+        format(targetClanName, sizeof(targetClanName), "%s [Founder, ID: %d]", ClanInfo[EAcc_ClanID(playerid)][clanName], EAcc_ClanID(playerid));
+    }
+    else if (memberClanId != -1 && IsValidClanID(memberClanId))
+    {
+        format(targetClanName, sizeof(targetClanName), "%s [Member, ID: %d]", ClanInfo[memberClanId][clanName], memberClanId);
+    }
+
+    new msg[768];
+    format(msg, sizeof(msg),
+        "{FFFFFF}Are you sure you want to {FF3333}DELETE {FFFFFF}this account?\n\n"\
+        "{FFFFFF}\x95 {B4B5B7}Username: {FFFFFF}%s\n"\
+        "{FFFFFF}\x95 {B4B5B7}Session: {FFFFFF}%s\n"\
+        "{FFFFFF}\x95 {B4B5B7}Clan Affiliation: {FFFFFF}%s\n\n"\
+        "{FF3333}[WARNING] {FFFFFF}This action is {FF3333}permanent and irreversible{FFFFFF}.\n"\
+        "All stats, currency and records will be deleted from database.\n",
+        name,
+        isOffline ? ("Offline") : ("Online"),
+        targetClanName
+    );
+
+    if (ownsClan)
+    {
+        strcat(msg, "{E26D5B}Notice: This user is the founder of a Clan.\nThe clan will be disbanded, and its Safehouse & Territories released.\n");
+    }
+    else if (memberClanId != -1 && IsValidClanID(memberClanId))
+    {
+        strcat(msg, fmat_return("{E26D5B}Notice: This user is a member of clan %s.\nTheir member slot will be freed up.\n", ClanInfo[memberClanId][clanName]));
+    }
+
+    strcat(msg, "\n{FFFFFF}Click {FF3333}'Delete'{FFFFFF} to confirm or {B4B5B7}'Cancel'{FFFFFF} to go back.");
+
+    Dialog_ShowCallback(playerid, using public DIALOG_EACC_CONFIRM_DELETE<iiiis>, DIALOG_STYLE_MSGBOX, "{FF3333}Confirm Account Deletion", msg, "Delete", "Cancel");
+    return 1;
+}
+
+public DIALOG_EACC_CONFIRM_DELETE(playerid, dialogid, response, listitem, string:inputtext[])
+{
+    if (!response)
+    {
+        return ShowEAccountDialog(playerid);
+    }
+
+    if (!EAcc_Ready(playerid)) return 1;
+
+    new name[MAX_PLAYER_NAME + 1];
+    EAcc_TargetName(playerid, name);
+
+    new bool:isOffline = EAcc_IsOffline(playerid);
+    new targetid = EAcc_OnlineTarget(playerid);
+    new sqlid = isOffline ? EAccSqlID[playerid] : User[targetid][user_sqlid];
+
+    if ((!isOffline && targetid == playerid) || sqlid == User[playerid][user_sqlid])
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot delete your own active account.");
+        return ShowEAccountDialog(playerid);
+    }
+
+    new ownedClanId = EAcc_ClanID(playerid);
+    new memberClanId = isOffline ? EAccMemberClan[playerid] : (targetid != INVALID_PLAYER_ID ? User[targetid][clanID] : -1);
+
+    new bool:clanDisbanded = false;
+    new bool:clanSlotFreed = false;
+
+    if (ownedClanId != -1 && IsValidClanID(ownedClanId))
+    {
+        DeleteClan(playerid, ownedClanId);
+        clanDisbanded = true;
+    }
+    else if (memberClanId != -1 && IsValidClanID(memberClanId))
+    {
+        for (new i = 0; i < MAX_MEMBERS; i++)
+        {
+            if (ClanMembers[memberClanId][i][member_slotused] && ClanMembers[memberClanId][i][member_id] == sqlid)
+            {
+                ResetClanMemberSlot(memberClanId, i);
+                if (ClanMembersCount[memberClanId] > 0) ClanMembersCount[memberClanId]--;
+                clanSlotFreed = true;
+                break;
+            }
+        }
+        ClearClanMemberAccount(sqlid);
+    }
+
+    if (!isOffline && targetid != INVALID_PLAYER_ID)
+    {
+        if (User[targetid][clanID] != -1)
+        {
+            User[targetid][clanID] = -1;
+            User[targetid][clanRole] = -1;
+            User[targetid][spawnSafehouse] = false;
+            SetClanColor(targetid);
+        }
+
+        SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}Your account has been deleted by an administrator.");
+        KickEx(targetid, 1000);
+    }
+
+    inline const OnAccountDeletedFromDB()
+    {
+        UpdateTOP5Kills();
+        UpdateTOP5Damage();
+        updateKillRank();
+        UpdateTOP10Clans();
+        UpdateServerStats();
+    }
+
+    new query[256];
+    mysql_format(dbHandle, query, sizeof(query), "DELETE FROM `accounts` WHERE `id` = %d LIMIT 1", sqlid);
+    MySQL_TQueryInline(dbHandle, using inline OnAccountDeletedFromDB, query);
+
+    new details[160];
+    format(details, sizeof(details), "Deleted account %s (SQL ID: %d, clan disbanded: %d, clan slot freed: %d)",
+        name, sqlid, clanDisbanded ? 1 : 0, clanSlotFreed ? 1 : 0);
+    LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "/eaccount", details);
+
+    new statusExtra[128];
+    if (clanDisbanded) format(statusExtra, sizeof(statusExtra), " Associated clan was disbanded and Safehouse released.");
+    else if (clanSlotFreed) format(statusExtra, sizeof(statusExtra), " Member slot was released from clan %s.", ClanInfo[memberClanId][clanName]);
+
+    va_SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FFFFFF}Account {MAIN}%s {FFFFFF}(ID: %d) was permanently deleted.%s",
+        name, sqlid, statusExtra);
+
+    EAcc_Clear(playerid);
+    return 1;
+}
+
 stock ShowEAccountDialog(playerid)
 {
     if (!EAcc_Ready(playerid)) return 0;
@@ -271,6 +433,8 @@ stock ShowEAccountDialog(playerid)
 
     if (EAcc_OwnsClan(playerid))
         strcat(body, fmat_return("{23C552}\x95 Clan Settings\t{BEBEBE}%s\n", ClanInfo[EAcc_ClanID(playerid)][clanName]));
+
+    strcat(body, "{FF3333}\x95 Delete Account\t{BEBEBE}Permanently remove account\n");
 
     if (EAcc_IsOffline(playerid)) format(title, sizeof(title), "{MAIN}Edit Account: {FFFFFF}%s (offline)", name);
     else format(title, sizeof(title), "{MAIN}Edit Account: {FFFFFF}%s [%d]", name, EAcc_OnlineTarget(playerid));
@@ -303,6 +467,9 @@ public DIALOG_EACC_LIST(playerid, dialogid, response, listitem, string:inputtext
     if (!response) return EAcc_Clear(playerid);
 
     if (!EAcc_Ready(playerid)) return 1;
+
+    if (EAcc_IsDeleteOption(playerid, listitem))
+        return ShowEAccountDeleteConfirmDialog(playerid);
 
     if (listitem == EACC_FIELD_COUNT && EAcc_OwnsClan(playerid))
         return ShowEAccountClanDialog(playerid);
@@ -358,6 +525,14 @@ public DIALOG_EACC_INPUT(playerid, dialogid, response, listitem, string:inputtex
     format(details, sizeof(details), "%s: %d -> %d (target %s%s)", EAccField[field][eaccLabel], before, value, name,
         EAcc_IsOffline(playerid) ? (", offline") : (""));
     LogServerAction(User[playerid][user_sqlid], User[playerid][userName], "admin_cmd", "/eaccount", details);
+
+    if (field == EACC_KILLS || field == EACC_WEEKKILLS || field == EACC_MAXDMG || field == EACC_WEEKDMG || field == EACC_DEATHS)
+    {
+        UpdateTOP5Kills();
+        UpdateTOP5Damage();
+        updateKillRank();
+        UpdateServerStats();
+    }
 
     return ShowEAccountDialog(playerid);
 }
@@ -418,6 +593,7 @@ public DIALOG_EACC_CLANINPUT(playerid, dialogid, response, listitem, string:inpu
     else ClanInfo[clanid][clanPoints] = value;
 
     SaveClanData(clanid);
+    UpdateTOP10Clans();
 
     va_SendClientMessage(playerid, -1, "{MAIN}[ADMIN] {FFFFFF}%s of clan {MAIN}%s {FFFFFF}changed from {MAIN}%d {FFFFFF}to {MAIN}%d{FFFFFF}.",
         EClanField[field][eaccLabel], ClanInfo[clanid][clanName], before, value);
@@ -456,6 +632,8 @@ stock LoadEAccountOffline(playerid, const name[])
         cache_get_value_int(0, "clanid", clanid);
         cache_get_value_int(0, "clanrole", clanrole);
 
+        EAccMemberClan[playerid] = (IsValidClanID(clanid)) ? clanid : -1;
+        EAccMemberRole[playerid] = clanrole;
         EAccClan[playerid] = (clanrole == RANK_FOUNDER && IsValidClanID(clanid)) ? clanid : -1;
 
         ShowEAccountDialog(playerid);

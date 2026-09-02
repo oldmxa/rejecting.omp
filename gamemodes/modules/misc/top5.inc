@@ -65,34 +65,43 @@ UpdateTOP5Kills()
     inline const OnTop5KillsLoad()
     {
         new rows = cache_num_rows();
-        if(rows > 0)
+        new nome[MAX_PLAYER_NAME + 1], t_skin, t_kills, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
+        new pColorHex[10], string[128], string2[128];
+
+        for(new i = 0; i < rows && i < 5; i++)
         {
-            new nome[MAX_PLAYER_NAME + 1], t_skin, t_kills, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
-            new pColorHex[10], string[128], string2[128];
-            for(new i = 0; i < rows; i++)
+            cache_get_value_name(i, "username", nome, sizeof(nome));
+            cache_get_value_name_int(i, "kills_semanais", t_kills);
+            cache_get_value_name_int(i, "skin_id", t_skin);
+            cache_get_value_name_int(i, "clanid", t_clanid);
+            cache_get_value_name_int(i, "chat_main_color", t_chatMainColor);
+            cache_get_value_name_int(i, "hud_shade_one", t_hudShadeOne);
+            cache_get_value_name_int(i, "hudcolor", t_hudColor);
+            t_clanColor = -1;
+            cache_get_value_name_int(i, "clan_color", t_clanColor);
+
+            GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
+
+            format(string, sizeof(string), "{F3230E}%s {B4B5B7}Kills", FormatNumber(t_kills));
+            UpdateDynamic3DTextLabelText(Top5Kills[i], -1, string);
+
+            format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
+            UpdateDynamic3DTextLabelText(Top5KillsNome[i], -1, string2);
+
+            if(IsValidDynamicActor(Top5KillsActor[i]))
+                DestroyDynamicActor(Top5KillsActor[i]);
+            Top5KillsActor[i] = CreateDynamicActor(t_skin, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2], TOP5Kills[i][3]);
+            SetDynamicActorVirtualWorld(Top5KillsActor[i], LOUNGEVW);
+        }
+
+        for(new j = rows; j < 5; j++)
+        {
+            UpdateDynamic3DTextLabelText(Top5Kills[j], -1, "");
+            UpdateDynamic3DTextLabelText(Top5KillsNome[j], -1, "");
+            if(IsValidDynamicActor(Top5KillsActor[j]))
             {
-                cache_get_value_name(i, "username", nome, sizeof(nome));
-                cache_get_value_name_int(i, "kills_semanais", t_kills);
-                cache_get_value_name_int(i, "skin_id", t_skin);
-                cache_get_value_name_int(i, "clanid", t_clanid);
-                cache_get_value_name_int(i, "chat_main_color", t_chatMainColor);
-                cache_get_value_name_int(i, "hud_shade_one", t_hudShadeOne);
-                cache_get_value_name_int(i, "hudcolor", t_hudColor);
-                t_clanColor = -1;
-                cache_get_value_name_int(i, "clan_color", t_clanColor);
-
-                GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
-
-                format(string, sizeof(string), "{F3230E}%s {B4B5B7}Kills", FormatNumber(t_kills));
-                UpdateDynamic3DTextLabelText(Top5Kills[i], -1, string);
-
-                format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
-                UpdateDynamic3DTextLabelText(Top5KillsNome[i], -1, string2);
-
-                if(IsValidDynamicActor(Top5KillsActor[i]))
-                    DestroyDynamicActor(Top5KillsActor[i]);
-                Top5KillsActor[i] = CreateDynamicActor(t_skin, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2], TOP5Kills[i][3]);
-                SetDynamicActorVirtualWorld(Top5KillsActor[i], LOUNGEVW);
+                DestroyDynamicActor(Top5KillsActor[j]);
+                Top5KillsActor[j] = 0;
             }
         }
     }
@@ -125,35 +134,44 @@ UpdateTOP5Damage()
     inline const OnTop5DamageLoad()
     {
         new rows = cache_num_rows();
-        if(rows > 0)
+        new nome[MAX_PLAYER_NAME + 1], t_skin, Float:t_dmgFloat, t_damage, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
+        new pColorHex[10], string[128], string2[128];
+
+        for(new i = 0; i < rows && i < 5; i++)
         {
-            new nome[MAX_PLAYER_NAME + 1], t_skin, Float:t_dmgFloat, t_damage, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
-            new pColorHex[10], string[128], string2[128];
-            for(new i = 0; i < rows; i++)
+            cache_get_value_name(i, "username", nome, sizeof(nome));
+            cache_get_value_name_float(i, "damage_semanal", t_dmgFloat);
+            t_damage = floatround(t_dmgFloat);
+            cache_get_value_name_int(i, "skin_id", t_skin);
+            cache_get_value_name_int(i, "clanid", t_clanid);
+            cache_get_value_name_int(i, "chat_main_color", t_chatMainColor);
+            cache_get_value_name_int(i, "hud_shade_one", t_hudShadeOne);
+            cache_get_value_name_int(i, "hudcolor", t_hudColor);
+            t_clanColor = -1;
+            cache_get_value_name_int(i, "clan_color", t_clanColor);
+
+            GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
+
+            format(string, sizeof(string), "{F3230E}%s {B4B5B7}Damage", FormatNumber(t_damage));
+            UpdateDynamic3DTextLabelText(Top5Damage[i], -1, string);
+
+            format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
+            UpdateDynamic3DTextLabelText(Top5DamageNome[i], -1, string2);
+
+            if(IsValidDynamicActor(Top5DamageActor[i]))
+                DestroyDynamicActor(Top5DamageActor[i]);
+            Top5DamageActor[i] = CreateDynamicActor(t_skin, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2], TOP5Damage[i][3]);
+            SetDynamicActorVirtualWorld(Top5DamageActor[i], LOUNGEVW);
+        }
+
+        for(new j = rows; j < 5; j++)
+        {
+            UpdateDynamic3DTextLabelText(Top5Damage[j], -1, "");
+            UpdateDynamic3DTextLabelText(Top5DamageNome[j], -1, "");
+            if(IsValidDynamicActor(Top5DamageActor[j]))
             {
-                cache_get_value_name(i, "username", nome, sizeof(nome));
-                cache_get_value_name_float(i, "damage_semanal", t_dmgFloat);
-                t_damage = floatround(t_dmgFloat);
-                cache_get_value_name_int(i, "skin_id", t_skin);
-                cache_get_value_name_int(i, "clanid", t_clanid);
-                cache_get_value_name_int(i, "chat_main_color", t_chatMainColor);
-                cache_get_value_name_int(i, "hud_shade_one", t_hudShadeOne);
-                cache_get_value_name_int(i, "hudcolor", t_hudColor);
-                t_clanColor = -1;
-                cache_get_value_name_int(i, "clan_color", t_clanColor);
-
-                GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
-
-                format(string, sizeof(string), "{F3230E}%s {B4B5B7}Damage", FormatNumber(t_damage));
-                UpdateDynamic3DTextLabelText(Top5Damage[i], -1, string);
-
-                format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
-                UpdateDynamic3DTextLabelText(Top5DamageNome[i], -1, string2);
-
-                if(IsValidDynamicActor(Top5DamageActor[i]))
-                    DestroyDynamicActor(Top5DamageActor[i]);
-                Top5DamageActor[i] = CreateDynamicActor(t_skin, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2], TOP5Damage[i][3]);
-                SetDynamicActorVirtualWorld(Top5DamageActor[i], LOUNGEVW);
+                DestroyDynamicActor(Top5DamageActor[j]);
+                Top5DamageActor[j] = 0;
             }
         }
     }
