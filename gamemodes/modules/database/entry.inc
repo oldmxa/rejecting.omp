@@ -34,7 +34,7 @@ initDatabase()
 
 	mysql_tquery(dbHandle, "UPDATE `accounts` SET `is_online` = 0");
 	deleteDuplicateRows();
-	initializeServer("rejecting.files");
+	initializeServer(SERVER_MODE);
 	return true;
 }
 
