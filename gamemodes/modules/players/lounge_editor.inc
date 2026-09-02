@@ -15,8 +15,8 @@
 // Forward declarations
 forward updateKillRank();
 forward updateDamageRank();
-forward UpdateTOP5Kills();
-forward UpdateTOP5Damage();
+forward UpdateTOP3Kills();
+forward UpdateTOP3Damage();
 forward InitLoungeTipSystem();
 
 
@@ -64,38 +64,38 @@ stock LoadLoungeConfig()
         else if(!strcmp(key, "TipNPC_Z", true)) g_LoungeTipPos[2] = floatstr(val);
         else if(!strcmp(key, "TipNPC_A", true)) g_LoungeTipPos[3] = floatstr(val);
 
-        // Top 5 Kills Actors
-        for(new k = 0; k < 5; k++)
+        // Top 3 Kills Actors
+        for(new k = 0; k < 3; k++)
         {
             new tempKey[32];
             format(tempKey, sizeof(tempKey), "TopKills%d_X", k);
-            if(!strcmp(key, tempKey, true)) { TOP5Kills[k][0] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Kills[k][0] = floatstr(val); break; }
 
             format(tempKey, sizeof(tempKey), "TopKills%d_Y", k);
-            if(!strcmp(key, tempKey, true)) { TOP5Kills[k][1] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Kills[k][1] = floatstr(val); break; }
 
             format(tempKey, sizeof(tempKey), "TopKills%d_Z", k);
-            if(!strcmp(key, tempKey, true)) { TOP5Kills[k][2] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Kills[k][2] = floatstr(val); break; }
 
             format(tempKey, sizeof(tempKey), "TopKills%d_A", k);
-            if(!strcmp(key, tempKey, true)) { TOP5Kills[k][3] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Kills[k][3] = floatstr(val); break; }
         }
 
-        // Top 5 Damage Actors
-        for(new d = 0; d < 5; d++)
+        // Top 3 Damage Actors
+        for(new d = 0; d < 3; d++)
         {
             new tempKey[32];
             format(tempKey, sizeof(tempKey), "TopDmg%d_X", d);
-            if(!strcmp(key, tempKey, true)) { TOP5Damage[d][0] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Damage[d][0] = floatstr(val); break; }
 
             format(tempKey, sizeof(tempKey), "TopDmg%d_Y", d);
-            if(!strcmp(key, tempKey, true)) { TOP5Damage[d][1] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Damage[d][1] = floatstr(val); break; }
 
             format(tempKey, sizeof(tempKey), "TopDmg%d_Z", d);
-            if(!strcmp(key, tempKey, true)) { TOP5Damage[d][2] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Damage[d][2] = floatstr(val); break; }
 
             format(tempKey, sizeof(tempKey), "TopDmg%d_A", d);
-            if(!strcmp(key, tempKey, true)) { TOP5Damage[d][3] = floatstr(val); break; }
+            if(!strcmp(key, tempKey, true)) { TOP3Damage[d][3] = floatstr(val); break; }
         }
     }
 
@@ -126,19 +126,19 @@ stock SaveLoungeConfig()
         g_LoungeTipPos[0], g_LoungeTipPos[1], g_LoungeTipPos[2], g_LoungeTipPos[3]);
     fwrite(file, str);
 
-    // Top 5 Kills
-    for(new k = 0; k < 5; k++)
+    // Top 3 Kills
+    for(new k = 0; k < 3; k++)
     {
         format(str, sizeof(str), "TopKills%d_X=%.4f\r\nTopKills%d_Y=%.4f\r\nTopKills%d_Z=%.4f\r\nTopKills%d_A=%.4f\r\n",
-            k, TOP5Kills[k][0], k, TOP5Kills[k][1], k, TOP5Kills[k][2], k, TOP5Kills[k][3]);
+            k, TOP3Kills[k][0], k, TOP3Kills[k][1], k, TOP3Kills[k][2], k, TOP3Kills[k][3]);
         fwrite(file, str);
     }
 
-    // Top 5 Damage
-    for(new d = 0; d < 5; d++)
+    // Top 3 Damage
+    for(new d = 0; d < 3; d++)
     {
         format(str, sizeof(str), "TopDmg%d_X=%.4f\r\nTopDmg%d_Y=%.4f\r\nTopDmg%d_Z=%.4f\r\nTopDmg%d_A=%.4f\r\n",
-            d, TOP5Damage[d][0], d, TOP5Damage[d][1], d, TOP5Damage[d][2], d, TOP5Damage[d][3]);
+            d, TOP3Damage[d][0], d, TOP3Damage[d][1], d, TOP3Damage[d][2], d, TOP3Damage[d][3]);
         fwrite(file, str);
     }
 
@@ -151,10 +151,10 @@ forward DIALOG_EL_SPAWN(playerid, dialogid, response, listitem, string:inputtext
 forward DIALOG_EL_BOARD(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_SPACING_MENU(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_SPACING_INPUT(playerid, dialogid, response, listitem, string:inputtext[]);
-forward DIALOG_EL_TOP5KILLS_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
-forward DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:inputtext[]);
-forward DIALOG_EL_TOP5DMG_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
-forward DIALOG_EL_TOP5DMG_OPT(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EL_TOP3KILLS_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EL_TOP3KILLS_OPT(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EL_TOP3DMG_LIST(playerid, dialogid, response, listitem, string:inputtext[]);
+forward DIALOG_EL_TOP3DMG_OPT(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext[]);
 
 stock ShowLoungeEditorMenu(playerid)
@@ -169,9 +169,9 @@ stock ShowLoungeEditorMenu(playerid)
     format(body, sizeof(body),
         "{MAIN}Option\t{MAIN}Description\n"\
         "{FFFFFF}1. Main Spawn\t{B4B5B7}Configure lounge spawn position\n"\
-        "{FFFFFF}2. Top 10 Boards (Kills & Damage)\t{B4B5B7}Position, height and 3D mode for rank boards\n"\
-        "{FFFFFF}3. TOP 5 Kills Actors\t{B4B5B7}Position the 5 top kills actors\n"\
-        "{FFFFFF}4. TOP 5 Damage Actors\t{B4B5B7}Position the 5 top damage actors\n"\
+        "{FFFFFF}2. Top 10 Boards (Kills & Damage)\t{B4B5B7}Position, height, 3D mode & spacing for rank boards\n"\
+        "{FFFFFF}3. TOP 3 Kills Actors\t{B4B5B7}Position the 3 top kills actors\n"\
+        "{FFFFFF}4. TOP 3 Damage Actors\t{B4B5B7}Position the 3 top damage actors\n"\
         "{FFFFFF}5. Info / Tips NPC\t{B4B5B7}Position server tips & info NPC\n"\
         "{23C552}6. Save & Reload All\t{FFFFFF}Save configuration and reload all entities"
     );
@@ -219,39 +219,39 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
             format_MainColor(playerid, body);
             Dialog_ShowCallback(playerid, using public DIALOG_EL_BOARD<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
         }
-        case 2: // TOP 5 Kills
+        case 2: // TOP 3 Kills
         {
             new body[512], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - TOP 5 Kills Actors");
+            format(title, sizeof(title), "{MAIN}Lounge Editor - TOP 3 Kills Actors");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body), "{MAIN}Rank\t{MAIN}Coordinates\n");
-            for(new k = 0; k < 5; k++)
+            for(new k = 0; k < 3; k++)
             {
                 new line[96];
                 format(line, sizeof(line), "{FFFFFF}Top Kills #%d\t{BEBEBE}X: %.1f | Y: %.1f | Z: %.1f\n",
-                    k + 1, TOP5Kills[k][0], TOP5Kills[k][1], TOP5Kills[k][2]);
+                    k + 1, TOP3Kills[k][0], TOP3Kills[k][1], TOP3Kills[k][2]);
                 strcat(body, line);
             }
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP5KILLS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3KILLS_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
         }
-        case 3: // TOP 5 Damage
+        case 3: // TOP 3 Damage
         {
             new body[512], title[64];
-            format(title, sizeof(title), "{MAIN}Lounge Editor - TOP 5 Damage Actors");
+            format(title, sizeof(title), "{MAIN}Lounge Editor - TOP 3 Damage Actors");
             format_MainColor(playerid, title);
 
             format(body, sizeof(body), "{MAIN}Rank\t{MAIN}Coordinates\n");
-            for(new d = 0; d < 5; d++)
+            for(new d = 0; d < 3; d++)
             {
                 new line[96];
                 format(line, sizeof(line), "{FFFFFF}Top Damage #%d\t{BEBEBE}X: %.1f | Y: %.1f | Z: %.1f\n",
-                    d + 1, TOP5Damage[d][0], TOP5Damage[d][1], TOP5Damage[d][2]);
+                    d + 1, TOP3Damage[d][0], TOP3Damage[d][1], TOP3Damage[d][2]);
                 strcat(body, line);
             }
             format_MainColor(playerid, body);
-            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP5DMG_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
+            Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3DMG_LIST<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Edit", "Back");
         }
         case 4: // Info / Tips NPC
         {
@@ -272,10 +272,10 @@ public DIALOG_EL_MAIN(playerid, dialogid, response, listitem, string:inputtext[]
         {
             SaveLoungeConfig();
             RespawnLoungeBoard();
-            CreateTOP5Kills();
-            UpdateTOP5Kills();
-            CreateTOP5Damage();
-            UpdateTOP5Damage();
+            CreateTOP3Kills();
+            UpdateTOP3Kills();
+            CreateTOP3Damage();
+            UpdateTOP3Damage();
             InitLoungeTipSystem();
 
             SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}All lounge settings saved to {MAIN}lounge_config.ini{FFFFFF} and reloaded!");
@@ -556,11 +556,11 @@ public DIALOG_EL_SPACING_INPUT(playerid, dialogid, response, listitem, string:in
     return ShowBoardSpacingDialog(playerid);
 }
 
-// TOP 5 KILLS HANDLER
-public DIALOG_EL_TOP5KILLS_LIST(playerid, dialogid, response, listitem, string:inputtext[])
+// TOP 3 KILLS HANDLER
+public DIALOG_EL_TOP3KILLS_LIST(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response) return ShowLoungeEditorMenu(playerid);
-    if(listitem < 0 || listitem >= 5) return ShowLoungeEditorMenu(playerid);
+    if(listitem < 0 || listitem >= 3) return ShowLoungeEditorMenu(playerid);
 
     SetPVarInt(playerid, "EL_SelectedTopKill", listitem);
 
@@ -576,11 +576,11 @@ public DIALOG_EL_TOP5KILLS_LIST(playerid, dialogid, response, listitem, string:i
     );
 
     format_MainColor(playerid, body);
-    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP5KILLS_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3KILLS_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
     return 1;
 }
 
-public DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:inputtext[])
+public DIALOG_EL_TOP3KILLS_OPT(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response)
     {
@@ -589,7 +589,7 @@ public DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:in
     }
 
     new kIdx = GetPVarInt(playerid, "EL_SelectedTopKill");
-    if(kIdx < 0 || kIdx >= 5) return ShowLoungeEditorMenu(playerid);
+    if(kIdx < 0 || kIdx >= 3) return ShowLoungeEditorMenu(playerid);
 
     switch(listitem)
     {
@@ -599,14 +599,14 @@ public DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:in
             GetPlayerPos(playerid, x, y, z);
             GetPlayerFacingAngle(playerid, a);
 
-            TOP5Kills[kIdx][0] = x;
-            TOP5Kills[kIdx][1] = y;
-            TOP5Kills[kIdx][2] = z;
-            TOP5Kills[kIdx][3] = a;
+            TOP3Kills[kIdx][0] = x;
+            TOP3Kills[kIdx][1] = y;
+            TOP3Kills[kIdx][2] = z;
+            TOP3Kills[kIdx][3] = a;
 
             SaveLoungeConfig();
-            CreateTOP5Kills();
-            UpdateTOP5Kills();
+            CreateTOP3Kills();
+            UpdateTOP3Kills();
 
             va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}TOP Kills Actor #{MAIN}%d{FFFFFF} repositioned successfully!", kIdx + 1);
             new empty[1];
@@ -614,8 +614,8 @@ public DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:in
         }
         case 1: // Teleport to Actor
         {
-            SetPlayerPos(playerid, TOP5Kills[kIdx][0], TOP5Kills[kIdx][1], TOP5Kills[kIdx][2]);
-            SetPlayerFacingAngle(playerid, TOP5Kills[kIdx][3]);
+            SetPlayerPos(playerid, TOP3Kills[kIdx][0], TOP3Kills[kIdx][1], TOP3Kills[kIdx][2]);
+            SetPlayerFacingAngle(playerid, TOP3Kills[kIdx][3]);
             SetPlayerVirtualWorld(playerid, LOUNGEVW);
             SetPlayerInterior(playerid, 0);
             va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Teleported to TOP Kills Actor #{MAIN}%d{FFFFFF}.", kIdx + 1);
@@ -626,12 +626,12 @@ public DIALOG_EL_TOP5KILLS_OPT(playerid, dialogid, response, listitem, string:in
     return 1;
 }
 
-// TOP 5 DAMAGE HANDLER
+// TOP 3 DAMAGE HANDLER
 
-public DIALOG_EL_TOP5DMG_LIST(playerid, dialogid, response, listitem, string:inputtext[])
+public DIALOG_EL_TOP3DMG_LIST(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response) return ShowLoungeEditorMenu(playerid);
-    if(listitem < 0 || listitem >= 5) return ShowLoungeEditorMenu(playerid);
+    if(listitem < 0 || listitem >= 3) return ShowLoungeEditorMenu(playerid);
 
     SetPVarInt(playerid, "EL_SelectedTopDmg", listitem);
 
@@ -647,11 +647,11 @@ public DIALOG_EL_TOP5DMG_LIST(playerid, dialogid, response, listitem, string:inp
     );
 
     format_MainColor(playerid, body);
-    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP5DMG_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
+    Dialog_ShowCallback(playerid, using public DIALOG_EL_TOP3DMG_OPT<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Confirm", "Back");
     return 1;
 }
 
-public DIALOG_EL_TOP5DMG_OPT(playerid, dialogid, response, listitem, string:inputtext[])
+public DIALOG_EL_TOP3DMG_OPT(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response)
     {
@@ -660,7 +660,7 @@ public DIALOG_EL_TOP5DMG_OPT(playerid, dialogid, response, listitem, string:inpu
     }
 
     new dIdx = GetPVarInt(playerid, "EL_SelectedTopDmg");
-    if(dIdx < 0 || dIdx >= 5) return ShowLoungeEditorMenu(playerid);
+    if(dIdx < 0 || dIdx >= 3) return ShowLoungeEditorMenu(playerid);
 
     switch(listitem)
     {
@@ -670,14 +670,14 @@ public DIALOG_EL_TOP5DMG_OPT(playerid, dialogid, response, listitem, string:inpu
             GetPlayerPos(playerid, x, y, z);
             GetPlayerFacingAngle(playerid, a);
 
-            TOP5Damage[dIdx][0] = x;
-            TOP5Damage[dIdx][1] = y;
-            TOP5Damage[dIdx][2] = z;
-            TOP5Damage[dIdx][3] = a;
+            TOP3Damage[dIdx][0] = x;
+            TOP3Damage[dIdx][1] = y;
+            TOP3Damage[dIdx][2] = z;
+            TOP3Damage[dIdx][3] = a;
 
             SaveLoungeConfig();
-            CreateTOP5Damage();
-            UpdateTOP5Damage();
+            CreateTOP3Damage();
+            UpdateTOP3Damage();
 
             va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}TOP Damage Actor #{MAIN}%d{FFFFFF} repositioned successfully!", dIdx + 1);
             new empty[1];
@@ -685,8 +685,8 @@ public DIALOG_EL_TOP5DMG_OPT(playerid, dialogid, response, listitem, string:inpu
         }
         case 1: // Teleport to Actor
         {
-            SetPlayerPos(playerid, TOP5Damage[dIdx][0], TOP5Damage[dIdx][1], TOP5Damage[dIdx][2]);
-            SetPlayerFacingAngle(playerid, TOP5Damage[dIdx][3]);
+            SetPlayerPos(playerid, TOP3Damage[dIdx][0], TOP3Damage[dIdx][1], TOP3Damage[dIdx][2]);
+            SetPlayerFacingAngle(playerid, TOP3Damage[dIdx][3]);
             SetPlayerVirtualWorld(playerid, LOUNGEVW);
             SetPlayerInterior(playerid, 0);
             va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Teleported to TOP Damage Actor #{MAIN}%d{FFFFFF}.", dIdx + 1);

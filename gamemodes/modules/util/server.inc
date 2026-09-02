@@ -346,8 +346,8 @@ public UpdateServerStats()
 	mysql_tquery(dbHandle, query);
 
 	updateKillRank();
-	UpdateTOP5Kills();
-	UpdateTOP5Damage();
+	UpdateTOP3Kills();
+	UpdateTOP3Damage();
 	//CLAN
 	for(new i = 0; i != MAX_CLANS; i++)
 	{
@@ -667,7 +667,7 @@ initializeServer(const gamemodeName[])
 	gmtextdraws();
 	createZones();
 	initArena();
-	initTop5();
+	initTop3();
 	updateKillRank();
 	SetTimer("updateKillRank", 300000, true);
 	LoadClans();

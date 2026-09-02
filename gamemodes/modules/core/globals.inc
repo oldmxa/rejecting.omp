@@ -867,28 +867,24 @@ enum DATE_TIME
 new ClockTime[DATE_TIME];
 
 //TOP SYSTEM
-new Top5KillsActor[5];
-new Text3D:Top5Kills[5];
-new Text3D:Top5KillsNome[5];
+new Top3KillsActor[3];
+new Text3D:Top3Kills[3];
+new Text3D:Top3KillsNome[3];
 
-new Float:TOP5Kills[5][4] = {
+new Float:TOP3Kills[3][4] = {
     { 1184.2400,-2032.3656,69.0078,123.0535 },
     { 1182.5326,-2029.8873,69.0078,123.0753 },
-    { 1180.1112,-2027.8939,69.0078,148.8109 },
-    { 1169.2753,-2028.4543,69.0006,230.1996 },
-    { 1165.3832,-2032.8639,69.0078,235.5392 }
+    { 1180.1112,-2027.8939,69.0078,148.8109 }
 };
 
-new Top5DamageActor[5];
-new Text3D:Top5Damage[5];
-new Text3D:Top5DamageNome[5];
+new Top3DamageActor[3];
+new Text3D:Top3Damage[3];
+new Text3D:Top3DamageNome[3];
 
-new Float:TOP5Damage[5][4] = {
+new Float:TOP3Damage[3][4] = {
     { 1184.4551,-2041.2717,69.0078,46.4216 },
     { 1182.9928,-2043.0415,69.0078,56.8577 },
-    { 1180.6578,-2045.7148,69.0078,34.9736 },
-    { 1169.7711,-2045.6019,69.0006,346.1958 },
-    { 1165.5803,-2041.0651,69.0078,320.7744 }
+    { 1180.6578,-2045.7148,69.0078,34.9736 }
 };
 
 new LoaderFreezer = 1;

@@ -1,16 +1,3 @@
-CreateTOP5Kills()
-{
-    for(new i = 0; i < 5; i++)
-    {
-        if(IsValidDynamic3DTextLabel(Top5Kills[i])) DestroyDynamic3DTextLabel(Top5Kills[i]);
-        if(IsValidDynamic3DTextLabel(Top5KillsNome[i])) DestroyDynamic3DTextLabel(Top5KillsNome[i]);
-
-        Top5Kills[i] = CreateDynamic3DTextLabel("", -1, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
-        Top5KillsNome[i] = CreateDynamic3DTextLabel("", -1, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2] + 1.0, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
-    }
-    return true;
-}
-
 stock GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, dest[], len = sizeof(dest))
 {
     if(t_clanid >= 0 && t_clanColor != -1 && t_clanColor != 0)
@@ -60,15 +47,28 @@ stock GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne,
     return 1;
 }
 
-UpdateTOP5Kills()
+CreateTOP3Kills()
 {
-    inline const OnTop5KillsLoad()
+    for(new i = 0; i < 3; i++)
+    {
+        if(IsValidDynamic3DTextLabel(Top3Kills[i])) DestroyDynamic3DTextLabel(Top3Kills[i]);
+        if(IsValidDynamic3DTextLabel(Top3KillsNome[i])) DestroyDynamic3DTextLabel(Top3KillsNome[i]);
+
+        Top3Kills[i] = CreateDynamic3DTextLabel("", -1, TOP3Kills[i][0], TOP3Kills[i][1], TOP3Kills[i][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
+        Top3KillsNome[i] = CreateDynamic3DTextLabel("", -1, TOP3Kills[i][0], TOP3Kills[i][1], TOP3Kills[i][2] + 1.0, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
+    }
+    return true;
+}
+
+UpdateTOP3Kills()
+{
+    inline const OnTop3KillsLoad()
     {
         new rows = cache_num_rows();
         new nome[MAX_PLAYER_NAME + 1], t_skin, t_kills, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
         new pColorHex[10], string[128], string2[128];
 
-        for(new i = 0; i < rows && i < 5; i++)
+        for(new i = 0; i < rows && i < 3; i++)
         {
             cache_get_value_name(i, "username", nome, sizeof(nome));
             cache_get_value_name_int(i, "kills_semanais", t_kills);
@@ -83,61 +83,61 @@ UpdateTOP5Kills()
             GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
 
             format(string, sizeof(string), "{F3230E}%s {B4B5B7}Kills", FormatNumber(t_kills));
-            UpdateDynamic3DTextLabelText(Top5Kills[i], -1, string);
+            UpdateDynamic3DTextLabelText(Top3Kills[i], -1, string);
 
             format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
-            UpdateDynamic3DTextLabelText(Top5KillsNome[i], -1, string2);
+            UpdateDynamic3DTextLabelText(Top3KillsNome[i], -1, string2);
 
-            if(IsValidDynamicActor(Top5KillsActor[i]))
-                DestroyDynamicActor(Top5KillsActor[i]);
-            Top5KillsActor[i] = CreateDynamicActor(t_skin, TOP5Kills[i][0], TOP5Kills[i][1], TOP5Kills[i][2], TOP5Kills[i][3]);
-            SetDynamicActorVirtualWorld(Top5KillsActor[i], LOUNGEVW);
+            if(IsValidDynamicActor(Top3KillsActor[i]))
+                DestroyDynamicActor(Top3KillsActor[i]);
+            Top3KillsActor[i] = CreateDynamicActor(t_skin, TOP3Kills[i][0], TOP3Kills[i][1], TOP3Kills[i][2], TOP3Kills[i][3]);
+            SetDynamicActorVirtualWorld(Top3KillsActor[i], LOUNGEVW);
         }
 
-        for(new j = rows; j < 5; j++)
+        for(new j = rows; j < 3; j++)
         {
-            UpdateDynamic3DTextLabelText(Top5Kills[j], -1, "");
-            UpdateDynamic3DTextLabelText(Top5KillsNome[j], -1, "");
-            if(IsValidDynamicActor(Top5KillsActor[j]))
+            UpdateDynamic3DTextLabelText(Top3Kills[j], -1, "");
+            UpdateDynamic3DTextLabelText(Top3KillsNome[j], -1, "");
+            if(IsValidDynamicActor(Top3KillsActor[j]))
             {
-                DestroyDynamicActor(Top5KillsActor[j]);
-                Top5KillsActor[j] = 0;
+                DestroyDynamicActor(Top3KillsActor[j]);
+                Top3KillsActor[j] = 0;
             }
         }
     }
-    MySQL_TQueryInline(dbHandle, using inline OnTop5KillsLoad,
+    MySQL_TQueryInline(dbHandle, using inline OnTop3KillsLoad,
         "SELECT `accounts`.`username`, `accounts`.`kills_semanais`, `accounts`.`skin_id`, `accounts`.`clanid`, \
         `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, `clans`.`clan_color` \
         FROM `accounts` \
         LEFT JOIN `clans` ON `accounts`.`clanid` = `clans`.`clan_id` \
         WHERE NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \
-        ORDER BY `accounts`.`kills_semanais` DESC LIMIT 5");
+        ORDER BY `accounts`.`kills_semanais` DESC LIMIT 3");
 
     return true;
 }
 
-CreateTOP5Damage()
+CreateTOP3Damage()
 {
-    for(new i = 0; i < 5; i++)
+    for(new i = 0; i < 3; i++)
     {
-        if(IsValidDynamic3DTextLabel(Top5Damage[i])) DestroyDynamic3DTextLabel(Top5Damage[i]);
-        if(IsValidDynamic3DTextLabel(Top5DamageNome[i])) DestroyDynamic3DTextLabel(Top5DamageNome[i]);
+        if(IsValidDynamic3DTextLabel(Top3Damage[i])) DestroyDynamic3DTextLabel(Top3Damage[i]);
+        if(IsValidDynamic3DTextLabel(Top3DamageNome[i])) DestroyDynamic3DTextLabel(Top3DamageNome[i]);
 
-        Top5Damage[i] = CreateDynamic3DTextLabel("", -1, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
-        Top5DamageNome[i] = CreateDynamic3DTextLabel("", -1, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2] + 1.0, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
+        Top3Damage[i] = CreateDynamic3DTextLabel("", -1, TOP3Damage[i][0], TOP3Damage[i][1], TOP3Damage[i][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
+        Top3DamageNome[i] = CreateDynamic3DTextLabel("", -1, TOP3Damage[i][0], TOP3Damage[i][1], TOP3Damage[i][2] + 1.0, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, LOUNGEVW, 0, -1, 25.0);
     }
     return true;
 }
 
-UpdateTOP5Damage()
+UpdateTOP3Damage()
 {
-    inline const OnTop5DamageLoad()
+    inline const OnTop3DamageLoad()
     {
         new rows = cache_num_rows();
         new nome[MAX_PLAYER_NAME + 1], t_skin, Float:t_dmgFloat, t_damage, t_clanid, t_chatMainColor, t_hudShadeOne, t_hudColor, t_clanColor;
         new pColorHex[10], string[128], string2[128];
 
-        for(new i = 0; i < rows && i < 5; i++)
+        for(new i = 0; i < rows && i < 3; i++)
         {
             cache_get_value_name(i, "username", nome, sizeof(nome));
             cache_get_value_name_float(i, "damage_semanal", t_dmgFloat);
@@ -153,35 +153,35 @@ UpdateTOP5Damage()
             GetTopActorColorHex(t_clanid, t_clanColor, t_chatMainColor, t_hudShadeOne, t_hudColor, pColorHex);
 
             format(string, sizeof(string), "{F3230E}%s {B4B5B7}Damage", FormatNumber(t_damage));
-            UpdateDynamic3DTextLabelText(Top5Damage[i], -1, string);
+            UpdateDynamic3DTextLabelText(Top3Damage[i], -1, string);
 
             format(string2, sizeof(string2), "{B4B5B7}#%d {%s}%s", i + 1, pColorHex, nome);
-            UpdateDynamic3DTextLabelText(Top5DamageNome[i], -1, string2);
+            UpdateDynamic3DTextLabelText(Top3DamageNome[i], -1, string2);
 
-            if(IsValidDynamicActor(Top5DamageActor[i]))
-                DestroyDynamicActor(Top5DamageActor[i]);
-            Top5DamageActor[i] = CreateDynamicActor(t_skin, TOP5Damage[i][0], TOP5Damage[i][1], TOP5Damage[i][2], TOP5Damage[i][3]);
-            SetDynamicActorVirtualWorld(Top5DamageActor[i], LOUNGEVW);
+            if(IsValidDynamicActor(Top3DamageActor[i]))
+                DestroyDynamicActor(Top3DamageActor[i]);
+            Top3DamageActor[i] = CreateDynamicActor(t_skin, TOP3Damage[i][0], TOP3Damage[i][1], TOP3Damage[i][2], TOP3Damage[i][3]);
+            SetDynamicActorVirtualWorld(Top3DamageActor[i], LOUNGEVW);
         }
 
-        for(new j = rows; j < 5; j++)
+        for(new j = rows; j < 3; j++)
         {
-            UpdateDynamic3DTextLabelText(Top5Damage[j], -1, "");
-            UpdateDynamic3DTextLabelText(Top5DamageNome[j], -1, "");
-            if(IsValidDynamicActor(Top5DamageActor[j]))
+            UpdateDynamic3DTextLabelText(Top3Damage[j], -1, "");
+            UpdateDynamic3DTextLabelText(Top3DamageNome[j], -1, "");
+            if(IsValidDynamicActor(Top3DamageActor[j]))
             {
-                DestroyDynamicActor(Top5DamageActor[j]);
-                Top5DamageActor[j] = 0;
+                DestroyDynamicActor(Top3DamageActor[j]);
+                Top3DamageActor[j] = 0;
             }
         }
     }
-    MySQL_TQueryInline(dbHandle, using inline OnTop5DamageLoad,
+    MySQL_TQueryInline(dbHandle, using inline OnTop3DamageLoad,
         "SELECT `accounts`.`username`, `accounts`.`damage_semanal`, `accounts`.`skin_id`, `accounts`.`clanid`, \
         `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, `clans`.`clan_color` \
         FROM `accounts` \
         LEFT JOIN `clans` ON `accounts`.`clanid` = `clans`.`clan_id` \
         WHERE NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \
-        ORDER BY `accounts`.`damage_semanal` DESC LIMIT 5");
+        ORDER BY `accounts`.`damage_semanal` DESC LIMIT 3");
 
     return true;
 }

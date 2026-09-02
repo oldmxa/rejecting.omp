@@ -391,8 +391,8 @@ public DIALOG_EACC_CONFIRM_DELETE(playerid, dialogid, response, listitem, string
 
     inline const OnAccountDeletedFromDB()
     {
-        UpdateTOP5Kills();
-        UpdateTOP5Damage();
+        UpdateTOP3Kills();
+        UpdateTOP3Damage();
         updateKillRank();
         UpdateTOP10Clans();
         UpdateServerStats();
@@ -528,8 +528,8 @@ public DIALOG_EACC_INPUT(playerid, dialogid, response, listitem, string:inputtex
 
     if (field == EACC_KILLS || field == EACC_WEEKKILLS || field == EACC_MAXDMG || field == EACC_WEEKDMG || field == EACC_DEATHS)
     {
-        UpdateTOP5Kills();
-        UpdateTOP5Damage();
+        UpdateTOP3Kills();
+        UpdateTOP3Damage();
         updateKillRank();
         UpdateServerStats();
     }

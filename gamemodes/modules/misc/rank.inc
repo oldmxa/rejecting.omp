@@ -1,11 +1,11 @@
 
-forward initTop5();
-public initTop5()
+forward initTop3();
+public initTop3()
 {
-	CreateTOP5Kills();
-	UpdateTOP5Kills();
-	CreateTOP5Damage();
-	UpdateTOP5Damage();
+	CreateTOP3Kills();
+	UpdateTOP3Kills();
+	CreateTOP3Damage();
+	UpdateTOP3Damage();
 	RespawnLoungeBoard();
 	updateKillRank();
 	updateDamageRank();

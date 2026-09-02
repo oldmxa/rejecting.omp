@@ -67,7 +67,7 @@
 #include "modules/admins/lookup.inc"
 
 #include "modules/admins/auth.inc"
-#include "modules/misc/top5.inc"
+#include "modules/misc/top3.inc"
 #include "modules/misc/tickets.inc"
 #include "modules/vip/core.inc"
 #include "modules/outposts/core.inc"
