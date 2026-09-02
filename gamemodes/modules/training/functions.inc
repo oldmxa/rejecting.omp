@@ -81,7 +81,7 @@ stock RegisterTrainingArena(
     g_TrainingArenas[id][tArena_IsRandomSpawning] = false;
 
     g_TotalTrainingArenas++;
-    printf("[TRN-DEBUG] registrada id=%d nome=%s total=%d", id, g_TrainingArenas[id][tArena_Name], g_TotalTrainingArenas);
+    //printf("[TRN-DEBUG] registrada id=%d nome=%s total=%d", id, g_TrainingArenas[id][tArena_Name], g_TotalTrainingArenas);
     return id;
 }
 

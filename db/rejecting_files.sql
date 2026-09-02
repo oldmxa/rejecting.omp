@@ -517,6 +517,70 @@ CREATE TABLE `player_tournament_tags` (
   `won_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `player_followers` (
+  `id` int(11) NOT NULL,
+  `follower_id` int(11) NOT NULL,
+  `following_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `video_comments` (
+  `id` int(11) NOT NULL,
+  `video_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by_id` int(11) DEFAULT NULL,
+  `deleted_by_name` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `video_ratings` (
+  `id` int(11) NOT NULL,
+  `video_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `rating` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `video_comment_likes` (
+  `comment_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `actor_id` int(11) NOT NULL,
+  `actor_name` varchar(100) NOT NULL,
+  `type` varchar(32) NOT NULL,
+  `entity_id` int(11) DEFAULT NULL,
+  `extra` varchar(255) DEFAULT NULL,
+  `is_read` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `profile_comments` (
+  `id` int(11) NOT NULL,
+  `profile_id` int(11) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by_id` int(11) DEFAULT NULL,
+  `deleted_by_name` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `profile_comment_likes` (
+  `comment_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `username` (`username`),
@@ -677,6 +741,39 @@ ALTER TABLE `player_tournament_tags`
   ADD UNIQUE KEY `idx_user_tag` (`user_id`,`tag_name`),
   ADD KEY `idx_tag_won_at` (`won_at`);
 
+ALTER TABLE `player_followers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_par` (`follower_id`,`following_id`),
+  ADD KEY `idx_following` (`following_id`),
+  ADD KEY `idx_follower` (`follower_id`);
+
+ALTER TABLE `video_comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_video` (`video_id`,`deleted_at`,`created_at`);
+
+ALTER TABLE `video_ratings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_video_user` (`video_id`,`user_id`),
+  ADD KEY `idx_video` (`video_id`);
+
+ALTER TABLE `video_comment_likes`
+  ADD PRIMARY KEY (`comment_id`,`user_id`),
+  ADD KEY `idx_user` (`user_id`);
+
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_user` (`user_id`,`is_read`,`created_at`),
+  ADD KEY `idx_actor` (`actor_id`);
+
+ALTER TABLE `profile_comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_profile` (`profile_id`,`deleted_at`,`created_at`),
+  ADD KEY `idx_parent` (`parent_id`);
+
+ALTER TABLE `profile_comment_likes`
+  ADD PRIMARY KEY (`comment_id`,`user_id`),
+  ADD KEY `idx_user` (`user_id`);
+
 ALTER TABLE `accounts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -762,6 +859,21 @@ ALTER TABLE `tournaments`
 
 ALTER TABLE `player_tournament_tags`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `player_followers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `video_comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `video_ratings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `profile_comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
