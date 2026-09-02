@@ -15,12 +15,12 @@
 #include "modules/training/commands.inc"
 
 // Arenas
-#include "modules/training/arenas/skinhit_sf.inc"
-#include "modules/training/arenas/skinhit_ls.inc"
-#include "modules/training/arenas/skinhit_commerce.inc"
-#include "modules/training/arenas/skinhit_marina.inc"
-#include "modules/training/arenas/skinhit_lv.inc"
-#include "modules/training/arenas/skinhit_ganton.inc"
+#include "modules/training/arenas/sf_skinhit.inc"
+#include "modules/training/arenas/ls_skinhit.inc"
+#include "modules/training/arenas/commerce_skinhit.inc"
+#include "modules/training/arenas/marina_skinhit.inc"
+#include "modules/training/arenas/vegas_skinhit.inc"
+#include "modules/training/arenas/ganton_skinhit.inc"
 #include "modules/training/arenas/reflex_bayside.inc"
 
 // Hooks
