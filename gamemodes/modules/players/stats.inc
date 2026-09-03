@@ -3,12 +3,18 @@ Respawn(playerid, timestamp)
     if(IsPlayerAFK(playerid))
         return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
 
+    if(IsPlayerInMatch(playerid) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use respawn while in a duel, match, training, practice or safehouse.");
+
     new duelState = GetPVarInt(playerid, "DuelS_State");
     if(duelState != DUELS_STATE_NONE)
         return SendClientMessage(playerid, -1, "%s", ERROR_RESPAWN_DUEL);
 
     new loc = User[playerid][locationId];
-    if(loc != ARENA_AFK && (loc < 0 || loc >= MAX_LOCATIONS || !arenaInfo[loc][isRunningArena]))
+    if(loc == ARENA_AFK)
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use respawn in the lounge.");
+
+    if(loc < 0 || loc >= MAX_LOCATIONS || !arenaInfo[loc][isRunningArena])
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot respawn while the round has ended.");
 
     if(IsAdmin(playerid, 4))

@@ -268,7 +268,7 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsPlayerInMatch(playerid))
+    if(IsPlayerInMatch(playerid) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /respawn while in a duel, match, training, practice or safehouse.");
 
     new timestampRespawn = gettime();

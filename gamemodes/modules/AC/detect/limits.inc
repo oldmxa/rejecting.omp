@@ -63,6 +63,7 @@ public AC_CheckLimits()
         if (IsPlayerNPC(playerid)) continue;
         if (!IsPlayerLogged(playerid) || IsPlayerAFK(playerid)) continue;
         if (IsPlayerInLounge(playerid)) continue;
+        if (IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid)) continue;
         if (GetPlayerState(playerid) == PLAYER_STATE_SPECTATING) continue;
 
         if (gettime() - User[playerid][timerRespawn] < AC_LIMIT_GRACE) continue;
@@ -75,7 +76,7 @@ public AC_CheckLimits()
         format(detail, sizeof(detail), "%.2f%%", packetLoss);
         if (ServerMaxPacketLoss > 0.0 && AC_CheckLimit(playerid, AC_LIMIT_PL, (packetLoss > ServerMaxPacketLoss), detail)) continue;
 
-        if (!IsFpsFreeArena(User[playerid][locationId]))
+        if (!IsFpsFreeArena(User[playerid][locationId]) && !IsPlayerInTraining(playerid) && !IsPlayerInPractice(playerid))
         {
             new fps = User[playerid][FPS];
             format(detail, sizeof(detail), "%d fps", fps);

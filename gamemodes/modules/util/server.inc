@@ -501,7 +501,7 @@ public OnScriptUpdate()
 
 		if(IsPlayerLogged(i) && User[i][isAlreadySpawned] && !IsPlayerAFK(i))
 		{
-			if(IsFpsFreeArena(User[i][locationId]))
+			if(IsFpsFreeArena(User[i][locationId]) || IsPlayerInTraining(i) || IsPlayerInPractice(i))
 			{
 				DeletePVar(i, "highFpsTicks");
 				DeletePVar(i, "lowFpsTicks");
@@ -533,7 +533,7 @@ public OnScriptUpdate()
 				else DeletePVar(i, "lowFpsTicks");
 			}
 
-			if(ArenaRequiresFpsLock(User[i][locationId]) && User[i][FPS] > ARENA_FPS_LOCK_VALUE)
+			if(!IsPlayerInTraining(i) && !IsPlayerInPractice(i) && ArenaRequiresFpsLock(User[i][locationId]) && User[i][FPS] > ARENA_FPS_LOCK_VALUE)
 			{
 				new count = GetPVarInt(i, "lock102Ticks") + 1;
 				SetPVarInt(i, "lock102Ticks", count);

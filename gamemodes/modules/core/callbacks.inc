@@ -1364,6 +1364,9 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 
 	if(PRESSED(KEY_CTRL_BACK))
 	{
+		if(IsPlayerInMatch(playerid) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid) || IsPlayerInLounge(playerid))
+			return true;
+
 		new timestampRespawn = gettime();
 		if(fullHealth == 200 && WC_IsPlayerSpawned(playerid))
 			Respawn(playerid, timestampRespawn);

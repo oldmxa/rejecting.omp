@@ -319,7 +319,7 @@ public Account_ShowPersonalizationMenu(playerid)
 
     format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Chat Color\t{%s}Main: #%s {FFFFFF}/ {%s}Text: #%s\n", pStr, mainHex, mainHex, textHex, textHex);
 
-    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Character Skin\t{FFFFFF}ID:%d\n", pStr, GetPlayerSkin(playerid));
+    format(pStr, sizeof(pStr), "%s{FFFFFF}\x95 {B4B5B7}Character Skin\t{FFFFFF}%d\n", pStr, GetPlayerSkin(playerid));
 
     new fightName[16] = "Normal";
     for(new i = 0; i < sizeof(fightStyles); i++)
