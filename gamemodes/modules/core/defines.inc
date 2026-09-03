@@ -239,6 +239,8 @@ forward bool:IsAdmin(playerid, minLevel = 1);
 forward GivePlayerCash(playerid, amount);
 forward GetPlayerCash(playerid);
 forward bool:HasPlayerCash(playerid, amount);
+forward bool:IsPlayerInCombat(playerid);
+forward StopPlayerAnimation(playerid);
 forward ResetPlayerCombat(playerid, Float:health = 100.0, Float:armour = 100.0);
 forward PlaySuccessSound(playerid);
 forward PlayErrorSound(playerid);

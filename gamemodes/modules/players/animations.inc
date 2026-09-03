@@ -24,6 +24,12 @@ stock PlayAnim(playerid, const animlib[], const animname[], Float:fDelta, loop, 
 {
     if(!IsPlayerLogged(playerid)) return 0;
 
+    if(IsPlayerInCombat(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
+        return 0;
+    }
+
     if(IsPlayerInAnyVehicle(playerid))
     {
         SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while inside a vehicle.");
@@ -71,6 +77,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 @cmd() handsup(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
     if(IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this in a vehicle.");
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_HANDSUP);
     SetPVarInt(playerid, "PlayingCustomAnim", 1);
@@ -80,6 +87,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 @cmd() piss(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
     if(IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use this in a vehicle.");
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION:68);
     SetPVarInt(playerid, "PlayingCustomAnim", 1);
@@ -89,6 +97,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 @cmd() cellin(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USECELLPHONE);
     SetPVarInt(playerid, "PlayingCustomAnim", 1);
     return true;
@@ -106,6 +115,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 @cmd(.alts = {"dance1"}) dance(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
     new danceid = 1;
     if(!IsNull(params) && IsNumeric(params))
     {
@@ -123,9 +133,9 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     return true;
 }
 
-@cmd() dance2(playerid, params[], help) { SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE2); SetPVarInt(playerid, "PlayingCustomAnim", 1); return true; }
-@cmd() dance3(playerid, params[], help) { SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE3); SetPVarInt(playerid, "PlayingCustomAnim", 1); return true; }
-@cmd() dance4(playerid, params[], help) { SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE4); SetPVarInt(playerid, "PlayingCustomAnim", 1); return true; }
+@cmd() dance2(playerid, params[], help) { if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED); if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat."); SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE2); SetPVarInt(playerid, "PlayingCustomAnim", 1); return true; }
+@cmd() dance3(playerid, params[], help) { if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED); if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat."); SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE3); SetPVarInt(playerid, "PlayingCustomAnim", 1); return true; }
+@cmd() dance4(playerid, params[], help) { if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED); if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat."); SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE4); SetPVarInt(playerid, "PlayingCustomAnim", 1); return true; }
 
 // Rap
 @cmd() rap(playerid, params[], help) { PlayAnim(playerid, "RAPPING", "RAP_A_Loop", 4.0, 1, 1, 1, 1, 0); return true; }
@@ -310,6 +320,7 @@ forward DIALOG_ANIM_LIST(playerid, dialogid, response, listitem, string:inputtex
 stock ShowAnimsCategoryMenu(playerid)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+    if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
 
     new title[64], body[512];
     format(title, sizeof(title), "{MAIN}Animations Menu");
@@ -335,6 +346,7 @@ stock ShowAnimsCategoryMenu(playerid)
 public DIALOG_ANIM_CATEGORIES(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response) return 1;
+    if(IsPlayerInCombat(playerid)) return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
 
     SetPVarInt(playerid, "AnimCategory", listitem);
     new title[64], body[1024];
@@ -475,6 +487,11 @@ public DIALOG_ANIM_LIST(playerid, dialogid, response, listitem, string:inputtext
     if(!response)
     {
         return ShowAnimsCategoryMenu(playerid);
+    }
+
+    if(IsPlayerInCombat(playerid))
+    {
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot perform animations while in combat.");
     }
 
     new animCategory = GetPVarInt(playerid, "AnimCategory");

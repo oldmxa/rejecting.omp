@@ -832,6 +832,15 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 
 	User[playerid][lastDamagerId] = issuerid;
 	User[playerid][lastDamageTime] = gettime()+10;
+	if(IsPlayerLogged(issuerid))
+	{
+		User[issuerid][lastDamageTime] = gettime()+10;
+	}
+
+	if(GetPVarInt(playerid, "PlayingCustomAnim") == 1 || GetPlayerSpecialAction(playerid) != SPECIAL_ACTION_NONE)
+	{
+		StopPlayerAnimation(playerid);
+	}
 
 	if(IsPlayerAFK(playerid) || IsPlayerAFK(issuerid))
 		return false;

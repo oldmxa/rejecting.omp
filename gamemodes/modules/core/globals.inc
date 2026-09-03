@@ -1146,6 +1146,12 @@ stock bool:HasPlayerCash(playerid, amount)
     return (User[playerid][playerMoney] >= amount);
 }
 
+stock bool:IsPlayerInCombat(playerid)
+{
+    if(!IsPlayerLogged(playerid)) return false;
+    return (gettime() < User[playerid][lastDamageTime]);
+}
+
 stock ResetPlayerCombat(playerid, Float:health = 100.0, Float:armour = 100.0)
 {
     if(!IsPlayerLogged(playerid)) return 0;
