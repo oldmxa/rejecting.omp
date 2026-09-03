@@ -143,12 +143,13 @@ ShowRankingsMenu(playerid)
     return true;
 }
 
-@cmd() menu(playerid, params[], help)
+@cmd(.alts = {"menu", "config", "personalization"}) settings(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    ShowMenu(playerid);
+    SetAppearanceSource(playerid, APPEARANCE_SRC_NONE);
+    ShowPersonalizationMenu(playerid);
     return true;
 }
 
@@ -377,7 +378,7 @@ ShowCommandCategory(playerid, catid)
         case 0:
         {
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changemode\t{FFFFFF}Select arena or change game mode\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/menu\t{FFFFFF}Show player settings menu\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/settings (/menu)\t{FFFFFF}Show player settings & personalization\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/l (/lounge, /afk)\t{FFFFFF}Teleport to the lounge room\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/respawn (/re)\t{FFFFFF}Respawn your character\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/gunmenu\t{FFFFFF}Open weapon selection menu in arena\n");
