@@ -1376,6 +1376,9 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 		if(IsPlayerInMatch(playerid) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid) || IsPlayerInLounge(playerid))
 			return true;
 
+		if(IsPlayerInCombat(playerid))
+			return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot respawn while in combat or having taken damage recently.");
+
 		new timestampRespawn = gettime();
 		if(fullHealth == 200 && WC_IsPlayerSpawned(playerid))
 			Respawn(playerid, timestampRespawn);

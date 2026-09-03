@@ -17,6 +17,9 @@ Respawn(playerid, timestamp)
     if(loc < 0 || loc >= MAX_LOCATIONS || !arenaInfo[loc][isRunningArena])
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot respawn while the round has ended.");
 
+    if(IsPlayerInCombat(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot respawn while in combat or having taken damage recently.");
+
     if(IsAdmin(playerid, 4))
     {
         SetPlayerPos(playerid, 0, 0, 0);
