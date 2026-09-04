@@ -1208,9 +1208,11 @@ public OnPlayerUpdate(playerid)
 		tagOne = GetPlayerHudTag(playerid, false);
 		tagTwo = GetPlayerHudTag(playerid, true);
 
-		format(strv, sizeof(strv), "%s%s~w~_%0.1f~n~%s%02d ~w~km/h",
-			tagOne, getVehicleName(vehicleid), vhealth,
-			tagTwo, GetVehicleSpeed(vehicleid));
+		format(strv, sizeof(strv), "%s%s %s_%0.1f~n~%s%02d %skm/h",
+			tagOne, getVehicleName(vehicleid),
+			tagTwo, vhealth,
+			tagTwo, GetVehicleSpeed(vehicleid),
+			tagOne);
 
 		PlayerTextDrawSetString(playerid, speedometer[playerid], strv);
 	}
