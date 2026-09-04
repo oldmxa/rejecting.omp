@@ -172,8 +172,8 @@ ShowChatColorDialog(playerid, source)
     new body[768];
     format(body, sizeof(body),
 "{BEBEBE}Option\t{BEBEBE}Preview\n\
-{B4B5B7}\xBB {FFFFFF}Main Accent Color ({MAIN})\t{%s}[MAIN] Sample Message\n\
-{B4B5B7}\xBB {FFFFFF}Color ID in chat\t{%s}[%d] Sample ID\n\
+{B4B5B7}\xBB {FFFFFF}Main Accent Color\t{%s}[MAIN] {FFFFFF}Sample Message\n\
+{B4B5B7}\xBB {FFFFFF}Color ID in chat\t{%s}[%d] {FFFFFF}Sample ID\n\
 {B4B5B7}\xBB {FFFFFF}Text color in chat\t{%s}Sample Chat Text",
         mainHex, idHex, playerid, textHex);
 
@@ -235,7 +235,7 @@ ShowChatColorSelectionDialog(playerid, color_type, source)
         for(new i; i < sizeof(hudShades); i++)
         {
             new bool:isSelected = (User[playerid][chatMainColor] == (i + 1));
-            strcat(body, fmat_return("%s{%06x}%s\t{%06x}[MAIN] Sample Message\n",
+            strcat(body, fmat_return("%s{%06x}%s\t{%06x}[MAIN] {FFFFFF}Sample Message\n",
                 isSelected ? ("{23C552}> ") : ("{B4B5B7}\x95 "), hudShades[i][shadeHex], hudShades[i][shadeName], hudShades[i][shadeHex]), sizeof(body));
         }
     }
@@ -273,7 +273,7 @@ ShowChatColorSelectionDialog(playerid, color_type, source)
     }
 
     new title[64];
-    if(color_type == 2) format(title, sizeof(title), "{MAIN}Chat Color - Main Accent ({MAIN})");
+    if(color_type == 2) format(title, sizeof(title), "{MAIN}Chat Color - Main Accent");
     else format(title, sizeof(title), "{MAIN}Chat Color - %s", (color_type == 0) ? ("Color ID") : ("Text Color"));
 
     format_MainColor(playerid, title);
@@ -293,7 +293,7 @@ ShowChatColorCustomHexDialog(playerid, color_type, source)
 
     new body[512];
     new typeName[16];
-    if(color_type == 2) format(typeName, sizeof(typeName), "Main {MAIN}");
+    if(color_type == 2) format(typeName, sizeof(typeName), "Main Accent");
     else format(typeName, sizeof(typeName), "%s", (color_type == 0) ? ("ID") : ("Text"));
 
     format(body, sizeof(body),
