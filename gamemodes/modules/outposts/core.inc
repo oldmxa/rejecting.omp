@@ -246,8 +246,7 @@ CreateOutpost(arenaid, outpost_idx, Float:x, Float:y)
     OutpostInfo[arenaid][outpost_idx][oCapturingClan] = -1;
     OutpostInfo[arenaid][outpost_idx][oCaptureProgress] = 0;
 
-    OutpostInfo[arenaid][outpost_idx][oObject] = CreateDynamicObject(OUTPOST_OBJECT_MODEL, x, y, z + OUTPOST_OBJECT_HEIGHT, 0.0, 0.0, 0.0, OUTPOST_HIDDEN_VW, -1, -1, 300.0);
-    SetDynamicObjectNoCameraCol(OutpostInfo[arenaid][outpost_idx][oObject]);
+    OutpostInfo[arenaid][outpost_idx][oObject] = CreateDynamicPickup(OUTPOST_OBJECT_MODEL, 1, x, y, z + OUTPOST_OBJECT_HEIGHT, OUTPOST_HIDDEN_VW, -1, -1, 300.0);
 
     new str[200];
     format(str, sizeof(str), "{FFFFFF}Location #%d (%s)\n{FFFFFF}Outpost #%d\n{FFFFFF}Owner: {F3230E}None", arenaid, arenaData[arenaid][arenaName], outpost_idx + 1);
@@ -283,13 +282,13 @@ public UpdateOutpostsVisibility()
         {
             if(zoneVWCount[z] > 0)
             {
-                Streamer_SetArrayData(STREAMER_TYPE_OBJECT, OutpostInfo[z][o][oObject], E_STREAMER_WORLD_ID, zoneVWs[z], zoneVWCount[z]);
+                Streamer_SetArrayData(STREAMER_TYPE_PICKUP, OutpostInfo[z][o][oObject], E_STREAMER_WORLD_ID, zoneVWs[z], zoneVWCount[z]);
                 Streamer_SetArrayData(STREAMER_TYPE_3D_TEXT_LABEL, OutpostInfo[z][o][oLabel], E_STREAMER_WORLD_ID, zoneVWs[z], zoneVWCount[z]);
                 Streamer_SetArrayData(STREAMER_TYPE_MAP_ICON, OutpostInfo[z][o][oMapIcon], E_STREAMER_WORLD_ID, zoneVWs[z], zoneVWCount[z]);
             }
             else
             {
-                Streamer_SetIntData(STREAMER_TYPE_OBJECT, OutpostInfo[z][o][oObject], E_STREAMER_WORLD_ID, OUTPOST_HIDDEN_VW);
+                Streamer_SetIntData(STREAMER_TYPE_PICKUP, OutpostInfo[z][o][oObject], E_STREAMER_WORLD_ID, OUTPOST_HIDDEN_VW);
                 Streamer_SetIntData(STREAMER_TYPE_3D_TEXT_LABEL, OutpostInfo[z][o][oLabel], E_STREAMER_WORLD_ID, OUTPOST_HIDDEN_VW);
                 Streamer_SetIntData(STREAMER_TYPE_MAP_ICON, OutpostInfo[z][o][oMapIcon], E_STREAMER_WORLD_ID, OUTPOST_HIDDEN_VW);
             }
