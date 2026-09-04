@@ -1061,12 +1061,12 @@ public OnPlayerText(playerid, text[])
 			new clanid = User[playerid][clanID];
 			new roleid = User[playerid][clanRole];
 			new string[256];
-        	format(string, sizeof(string), "{B4B5B7}| CHAT %s | {%06x}%s {CCCCCC}[{90C3D4}%s{CCCCCC}]: %s", ClanInfo[clanid][clanTag], GetPlayerColor(playerid) >>> 8, getPlayerName(playerid), ClanRoles[clanid][roleid], text[1]);
+        	format(string, sizeof(string), "{B4B5B7}| CHAT %s | {%06x}%s[%d]{FFFFFF} %s", ClanInfo[clanid][clanName], GetPlayerColor(playerid) >>> 8, getPlayerName(playerid), playerid, text[1]);
         	SendMessageToClan(clanid, -1, string);
 
 			foreach(new i : Player)
 				if(User[i][adminLevel] > 2 && IsPlayerLogged(i) && User[i][acfg_clanpm])
-					va_SendClientMessage(i, -1, ADMIN_SEE_CLANPM, ClanInfo[clanid][clanTag], User[playerid][userName], playerid, ClanRoles[clanid][roleid], text[1]);
+					va_SendClientMessage(i, -1, ADMIN_SEE_CLANPM, ClanInfo[clanid][clanName], clanid, User[playerid][userName], ClanRoles[clanid][roleid], text[1]);
 
             LogChatMessage(User[playerid][user_sqlid], User[playerid][userName], "clan", text[1]);
             LogDiscordClanChat(playerid, ClanInfo[clanid][clanTag], ClanInfo[clanid][clanName], ClanRoles[clanid][roleid], text[1]);

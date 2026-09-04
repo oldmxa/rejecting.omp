@@ -10,7 +10,7 @@
 #define CLAN_BASE_SLOTS         (5)
 
 #define MAX_CLAN_NAME           (20)
-#define MAX_CLAN_TAG            (5)
+#define MAX_CLAN_TAG            (6)
 #define MAX_ROLE_NAME           (20)
 
 #define CLAN_NAME_LEN           (MAX_CLAN_NAME + 1)
@@ -18,7 +18,7 @@
 #define CLAN_ROLE_LEN           (MAX_ROLE_NAME + 1)
 
 #define CLAN_NAME_MIN           (2)
-#define CLAN_TAG_MIN            (2)
+#define CLAN_TAG_MIN            (3)
 #define CLAN_ROLE_MIN           (2)
 
 #define CLAN_TEXT_FREE          (0)

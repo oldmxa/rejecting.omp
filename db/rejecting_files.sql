@@ -221,7 +221,7 @@ CREATE TABLE `clans` (
   `clan_id` int(11) NOT NULL,
   `clan_leader` int(11) NOT NULL,
   `clan_name` varchar(20) NOT NULL,
-  `clan_tag` varchar(5) NOT NULL,
+  `clan_tag` varchar(6) NOT NULL,
   `clan_roles` varchar(500) NOT NULL DEFAULT 'Trial,Member,Recruter,Co Founder,Founder',
   `clan_zone_points` int(11) NOT NULL DEFAULT 0,
   `clan_kills` int(11) NOT NULL DEFAULT 0,
