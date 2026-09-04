@@ -284,7 +284,9 @@ stock const g_AdminAccountMsgs[][] = {
     "{MAIN}**{FFFFFF} Administrative Access: {MAIN}%s{FFFFFF}.",
     "{MAIN}**{FFFFFF} Staff Privilege: {MAIN}%s{FFFFFF}.",
     "{MAIN}**{FFFFFF} Logged in as: {MAIN}%s{FFFFFF}.",
-    "{MAIN}**{FFFFFF} Staff Level: {MAIN}%s{FFFFFF}."
+    "{MAIN}**{FFFFFF} Staff Level: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Account Tier: {MAIN}%s{FFFFFF}.",
+    "{MAIN}**{FFFFFF} Account Status: {MAIN}%s{FFFFFF}."
 };
 
 stock const g_PlayerClanWelcomeMsgs[][] = {

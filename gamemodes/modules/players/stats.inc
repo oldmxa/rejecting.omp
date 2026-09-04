@@ -228,8 +228,11 @@ public Stats_ShowStats(playerid, targetid)
     new second = ontime % 60;
 
     new dc_str[64];
-    if(strequal(User[targetid][dc_username], "-1", true)) dc_str = "{F84F31}No Linked";
-    else format(dc_str, sizeof(dc_str), "{7289DA}%s#%s", User[targetid][dc_username], User[targetid][dc_discriminator]);
+    if(strequal(User[targetid][dc_username], "-1", true) || isnull(User[targetid][dc_username])) dc_str = "{F84F31}No Linked";
+    else if(isnull(User[targetid][dc_discriminator]) || !strcmp(User[targetid][dc_discriminator], "0") || !strcmp(User[targetid][dc_discriminator], "0000") || !strcmp(User[targetid][dc_discriminator], "-1"))
+        format(dc_str, sizeof(dc_str), "{7289DA}%s", User[targetid][dc_username]);
+    else
+        format(dc_str, sizeof(dc_str), "{7289DA}%s#%s", User[targetid][dc_username], User[targetid][dc_discriminator]);
 
     new regdate_str[32];
     if(isnull(User[targetid][user_regdate])) format(regdate_str, sizeof(regdate_str), "{BEBEBE}N/A");
@@ -437,7 +440,10 @@ public LookupOfflineStats(playerid, const targetName[])
         cache_get_value_name(0, "dc_username", off_dc_user, sizeof(off_dc_user));
         cache_get_value_name(0, "dc_discriminator", off_dc_disc, sizeof(off_dc_disc));
         if(strequal(off_dc_user, "-1", true) || isnull(off_dc_user)) format(off_dc_str, sizeof(off_dc_str), "{F84F31}No Linked");
-        else format(off_dc_str, sizeof(off_dc_str), "{7289DA}%s#%s", off_dc_user, off_dc_disc);
+        else if(isnull(off_dc_disc) || !strcmp(off_dc_disc, "0") || !strcmp(off_dc_disc, "0000") || !strcmp(off_dc_disc, "-1"))
+            format(off_dc_str, sizeof(off_dc_str), "{7289DA}%s", off_dc_user);
+        else
+            format(off_dc_str, sizeof(off_dc_str), "{7289DA}%s#%s", off_dc_user, off_dc_disc);
 
         cache_get_value_name_int(0, "level", off_level);
         cache_get_value_name_int(0, "player_money", off_money);

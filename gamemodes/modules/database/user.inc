@@ -100,6 +100,7 @@ public OnLoginVerify(playerid, bool:success)
 	{
         KillTimer(User[playerid][loginTimer]);
 		HideLoginScreen(playerid);
+		User[playerid][isLogged] = true;
 		new planeString[250];
 		strcopy(planeString, returnDate(User[playerid][lastLogin]-10800, 5), sizeof(planeString));
 
@@ -111,7 +112,7 @@ public OnLoginVerify(playerid, bool:success)
 
 			va_SendClientMessage(playerid, -1, GetRandomWelcomeGreeting(), coloredNick);
 
-			if (IsAdmin(playerid, 1))
+			if (User[playerid][adminLevel] >= 1 && User[playerid][adminLevel] < sizeof(adminnames))
 			{
 				va_SendClientMessage(playerid, -1, GetRandomAdminAccountMsg(), adminnames[User[playerid][adminLevel]][ingame]);
 			}
@@ -145,7 +146,6 @@ public OnLoginVerify(playerid, bool:success)
 			va_SendClientMessage(playerid, -1, GetRandomLastLoginMsg(), planeString);
 		}
 
-		User[playerid][isLogged] = true;
         User[playerid][isAfk] = true;
         User[playerid][locationId] = ARENA_AFK;
         User[playerid][lastLocation] = ARENA_AFK;

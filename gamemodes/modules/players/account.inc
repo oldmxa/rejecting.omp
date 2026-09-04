@@ -35,7 +35,12 @@
         return false;
         
     if(strcmp(User[playerid][dc_username], "-1", true))
-        return va_SendClientMessage(playerid, COLOR_TOMATO, DC_LINKED, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    {
+        if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
+            return va_SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[DISCORD] {FFFFFF}Your account is already linked to: {MAIN}%s", User[playerid][dc_username]);
+        else
+            return va_SendClientMessage(playerid, COLOR_TOMATO, DC_LINKED, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    }
 
     if(User[playerid][dc_codetimer] > gettime())
         return SendClientMessage(playerid, COLOR_TOMATO, "%s", DC_COOLDOWN);
@@ -79,7 +84,12 @@
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
     if(strcmp(User[playerid][dc_username], "-1", true) != 0)
-        return va_SendClientMessage(playerid, COLOR_TOMATO, DC_LINKED, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    {
+        if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
+            return va_SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[DISCORD] {FFFFFF}Your account is already linked to: {MAIN}%s", User[playerid][dc_username]);
+        else
+            return va_SendClientMessage(playerid, COLOR_TOMATO, DC_LINKED, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    }
 
     new code[32];
     if(sscanf(params, "s[32]", code))
@@ -177,7 +187,12 @@ public Account_ShowSecurityMenu(playerid)
         format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Auto-Login (IP & Serial)\t{BEBEBE}Requires Linked Discord\n", secStr);
 
     if(isLinked)
-        format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Discord Account\t{7289DA}%s#%s\n", secStr, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    {
+        if(isnull(User[playerid][dc_discriminator]) || !strcmp(User[playerid][dc_discriminator], "0") || !strcmp(User[playerid][dc_discriminator], "0000") || !strcmp(User[playerid][dc_discriminator], "-1"))
+            format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Discord Account\t{7289DA}%s\n", secStr, User[playerid][dc_username]);
+        else
+            format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Discord Account\t{7289DA}%s#%s\n", secStr, User[playerid][dc_username], User[playerid][dc_discriminator]);
+    }
     else
         format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Discord Account\t{F84F31}Not Linked\n", secStr);
 
