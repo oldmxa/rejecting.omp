@@ -1015,23 +1015,22 @@ public CHANGE1(playerid, dialogid, response, listitem, string:inputtext[])
 		"three",
 		"four"
 	};
-	switch(listitem)
+	if(listitem == (sizeof(gunmenuWInfo) - 1))
 	{
-		case 0, 1: User[playerid][playerWeapons][slotid] = listitemm;
-		case 2:
+		User[playerid][playerWeapons][slotid] = 0;
+	}
+	else
+	{
+		new chosenWeapon = gunmenuWInfo[listitemm][weaponID];
+		if(chosenWeapon == 34 && User[playerid][playerLevel] < 5)
 		{
-			if(User[playerid][playerLevel] < 5)
-				return Dialog_ShowCallback(playerid, using public CHANGE1<iiiis>, DIALOG_STYLE_LIST, fmat_return("Select weapon for slot %s", slotNum[slotid]), showAvailableWeapons(), "Select", "Back"), SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}This weapon will be available upon reaching level {MAIN}5{FFFFFF}.");
-			User[playerid][playerWeapons][slotid] = listitemm;
+			return Dialog_ShowCallback(playerid, using public CHANGE1<iiiis>, DIALOG_STYLE_LIST, fmat_return("Select weapon for slot %s", slotNum[slotid]), showAvailableWeapons(), "Select", "Back"), SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}This weapon will be available upon reaching level {MAIN}5{FFFFFF}.");
 		}
-		case 3:
+		if(chosenWeapon == 31 && User[playerid][playerLevel] < 10)
 		{
-			if(User[playerid][playerLevel] < 10)
-				return Dialog_ShowCallback(playerid, using public CHANGE1<iiiis>, DIALOG_STYLE_LIST, fmat_return("Select weapon for slot %s", slotNum[slotid]), showAvailableWeapons(), "Select", "Back"), SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}This weapon will be available upon reaching level {MAIN}10{FFFFFF}.");
-
-			User[playerid][playerWeapons][slotid] = listitemm;
+			return Dialog_ShowCallback(playerid, using public CHANGE1<iiiis>, DIALOG_STYLE_LIST, fmat_return("Select weapon for slot %s", slotNum[slotid]), showAvailableWeapons(), "Select", "Back"), SendClientMessage(playerid, -1, "{MAIN}[INFO] {FFFFFF}This weapon will be available upon reaching level {MAIN}10{FFFFFF}.");
 		}
-		case 4:	User[playerid][playerWeapons][slotid] = 0;
+		User[playerid][playerWeapons][slotid] = listitemm;
 	}
 
 	if(!IsPlayerInLounge(playerid) && !IsPlayerAFK(playerid))

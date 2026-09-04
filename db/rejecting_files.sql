@@ -584,7 +584,7 @@ CREATE TABLE `profile_comment_likes` (
 
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `username` (`username`),
+  ADD UNIQUE KEY `username` (`username`),
   ADD KEY `kills` (`kills`),
   ADD KEY `kills_semanais` (`kills_semanais`),
   ADD KEY `damage_semanal` (`damage_semanal`),

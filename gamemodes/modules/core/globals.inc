@@ -689,13 +689,14 @@ new CoresDoBglh[30][7] =
 	"db93cb", "db93cb", "db93cb", "db93cb", "db93cb"  // 25-29 (Pink base)
 };
 
-new gunmenuWInfo[5][gunmenuEnum] =
+new gunmenuWInfo[6][gunmenuEnum] =
 {
     {0, 0},
     {24, 900},
     {25, 20},
     {34, 30},
-    {31, 250}
+    {31, 250},
+    {5, 1}
 };
 
 #if !defined FIGHT_STYLE

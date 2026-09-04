@@ -827,7 +827,7 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &WEAPON:weapon, &body
 		return false;
 	}
 
-	if(weapon != WEAPON_FIST && weapon != WEAPON_DEAGLE && weapon != WEAPON_SHOTGUN && weapon != WEAPON_SNIPER && weapon != WEAPON_M4 && weapon != WEAPON_GRENADE && weapon != WEAPON_KATANA)
+	if(weapon != WEAPON_FIST && weapon != WEAPON_DEAGLE && weapon != WEAPON_SHOTGUN && weapon != WEAPON_SNIPER && weapon != WEAPON_M4 && weapon != WEAPON_GRENADE && weapon != WEAPON_BAT)
 		return false;
 
 	User[playerid][lastDamagerId] = issuerid;
