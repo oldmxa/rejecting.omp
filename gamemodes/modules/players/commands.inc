@@ -116,7 +116,7 @@ ShowRankingsMenu(playerid)
     return DIALOG_RANK1(playerid, 0, 1, 0, empty);
 }
 
-@cmd() changemode(playerid, params[], help)
+@cmd(.alts = {"dm", "mode"}) changemode(playerid, params[], help)
 {
     return StartChangeMode(playerid);
 }
