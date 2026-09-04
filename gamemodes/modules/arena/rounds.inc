@@ -236,6 +236,7 @@ public ChangeArena(location)
 
 	arenaInfo[location][roundMints] = RoundTime;
 	arenaInfo[location][isRunningArena] = true;
+	ClearRecentSpawns(location);
 
 	foreach(new i : Player)
 	{
@@ -339,6 +340,84 @@ getLocationPlayers(location)
 new SpawnProtectTimer[MAX_PLAYERS];
 new SpawnGuardTimer[MAX_PLAYERS];
 
+#define MAX_RECENT_SPAWNS (128)
+#define RECENT_SPAWN_BLOCK_TIME (5)
+
+enum E_RECENT_SPAWN_POINT {
+    bool:rsp_active,
+    rsp_playerid,
+    rsp_location,
+    Float:rsp_x,
+    Float:rsp_y,
+    Float:rsp_z,
+    rsp_spawnTime,
+    rsp_leftTime
+};
+
+static RecentSpawns[MAX_RECENT_SPAWNS][E_RECENT_SPAWN_POINT];
+static NextRecentSpawnSlot = 0;
+
+stock RegisterRecentSpawn(playerid, location, Float:x, Float:y, Float:z)
+{
+    if(location < 0 || location >= MAX_LOCATIONS) return 0;
+
+    new slot = NextRecentSpawnSlot;
+    NextRecentSpawnSlot = (NextRecentSpawnSlot + 1) % MAX_RECENT_SPAWNS;
+
+    RecentSpawns[slot][rsp_active] = true;
+    RecentSpawns[slot][rsp_playerid] = playerid;
+    RecentSpawns[slot][rsp_location] = location;
+    RecentSpawns[slot][rsp_x] = x;
+    RecentSpawns[slot][rsp_y] = y;
+    RecentSpawns[slot][rsp_z] = z;
+    RecentSpawns[slot][rsp_spawnTime] = gettime();
+    RecentSpawns[slot][rsp_leftTime] = 0;
+    return 1;
+}
+
+stock ClearRecentSpawns(location)
+{
+    for(new i = 0; i < MAX_RECENT_SPAWNS; i++)
+    {
+        if(RecentSpawns[i][rsp_active] && RecentSpawns[i][rsp_location] == location)
+        {
+            RecentSpawns[i][rsp_active] = false;
+        }
+    }
+}
+
+static stock bool:IsValidSpawnSurface(modelid, Float:posX, Float:posY, Float:posZ, Float:baseFloorZ, bool:isCustom)
+{
+    if(!modelid || modelid == WATER_OBJECT) return false;
+
+    if(!isCustom && IsModelBuilding(modelid)) return false;
+
+    if((615 <= modelid <= 792) || (1200 <= modelid <= 1360) || (3440 <= modelid <= 3510) || (3850 <= modelid <= 3900))
+        return false;
+
+    if(!isCustom && baseFloorZ > 0.0 && (posZ - baseFloorZ) > 8.0)
+        return false;
+
+    new Float:gX, Float:gY, Float:gZ;
+    new Float:offsets[4][2] = {
+        {0.45, 0.0},
+        {-0.45, 0.0},
+        {0.0, 0.45},
+        {0.0, -0.45}
+    };
+
+    for(new o = 0; o < 4; o++)
+    {
+        new hit = CA_RayCastLine(posX + offsets[o][0], posY + offsets[o][1], posZ + 0.5,
+                                posX + offsets[o][0], posY + offsets[o][1], posZ - 1.2,
+                                gX, gY, gZ);
+        if(!hit || floatabs(gZ - posZ) > 0.8)
+            return false;
+    }
+
+    return true;
+}
+
 static
     Float:CustomSpawnPos[MAX_CUSTOM_ARENAS][MAX_CUSTOM_SPAWNS][3],
     Float:CustomSpawnFloor[MAX_CUSTOM_ARENAS],
@@ -351,16 +430,67 @@ forward WarmCustomSpawns();
 static stock Float:GetSpawnClearance(playerid, Float:x, Float:y, Float:z)
 {
     new Float:closest = 99999.0;
+    new location = User[playerid][locationId];
+    new currentTime = gettime();
 
     foreach(new i : Player)
     {
         if(i == playerid) continue;
         if(!IsPlayerLogged(i) || IsPlayerAFK(i)) continue;
-        if(User[i][locationId] != User[playerid][locationId]) continue;
+        if(User[i][locationId] != location) continue;
 
         new Float:d = GetPlayerDistanceFromPoint(i, x, y, z);
         if(d < closest) closest = d;
     }
+
+    for(new s = 0; s < MAX_RECENT_SPAWNS; s++)
+    {
+        if(!RecentSpawns[s][rsp_active]) continue;
+        if(RecentSpawns[s][rsp_location] != location) continue;
+
+        new origPlayer = RecentSpawns[s][rsp_playerid];
+
+        if(IsPlayerConnected(origPlayer) && IsPlayerLogged(origPlayer) && User[origPlayer][locationId] == location)
+        {
+            new Float:distFromSpawn = GetPlayerDistanceFromPoint(origPlayer, RecentSpawns[s][rsp_x], RecentSpawns[s][rsp_y], RecentSpawns[s][rsp_z]);
+
+            if(distFromSpawn >= SPAWN_MIN_DISTANCE)
+            {
+                if(RecentSpawns[s][rsp_leftTime] == 0)
+                {
+                    RecentSpawns[s][rsp_leftTime] = currentTime;
+                }
+
+                if((currentTime - RecentSpawns[s][rsp_leftTime]) <= RECENT_SPAWN_BLOCK_TIME)
+                {
+                    new Float:d = VectorSize(x - RecentSpawns[s][rsp_x], y - RecentSpawns[s][rsp_y], z - RecentSpawns[s][rsp_z]);
+                    if(d < closest) closest = d;
+                }
+                else
+                {
+                    RecentSpawns[s][rsp_active] = false;
+                }
+            }
+        }
+        else
+        {
+            if(RecentSpawns[s][rsp_leftTime] == 0)
+            {
+                RecentSpawns[s][rsp_leftTime] = currentTime;
+            }
+
+            if((currentTime - RecentSpawns[s][rsp_leftTime]) <= RECENT_SPAWN_BLOCK_TIME)
+            {
+                new Float:d = VectorSize(x - RecentSpawns[s][rsp_x], y - RecentSpawns[s][rsp_y], z - RecentSpawns[s][rsp_z]);
+                if(d < closest) closest = d;
+            }
+            else
+            {
+                RecentSpawns[s][rsp_active] = false;
+            }
+        }
+    }
+
     return closest;
 }
 
@@ -603,7 +733,7 @@ spawnOnLocation(playerid)
 	new Float:posX, Float:posY, Float:posZ;
 	new Float:bestX, Float:bestY, Float:bestZ, Float:bestClearance = -1.0;
 
-	new customArena = IsCustomArena(zone);
+	new bool:customArena = bool:IsCustomArena(zone);
 
 	new Float:floorZ = arenaData[zone][arenaFloorZ];
 
@@ -632,13 +762,11 @@ spawnOnLocation(playerid)
 
 		new modelid = CA_RayCastLine(posX, posY, ceiling, posX, posY, -1000.0, posX, posY, posZ);
 
-		if(!modelid || modelid == WATER_OBJECT) continue;
+		if(!IsValidSpawnSurface(modelid, posX, posY, posZ, floorZ, customArena))
+			continue;
 
-		if(customArena)
-		{
-			if(posZ < floorLimit) continue;
-		}
-		else if(IsModelBuilding(modelid)) continue;
+		if(customArena && posZ < floorLimit)
+			continue;
 
 		new Float:cx, Float:cy, Float:cz;
 		if(CA_RayCastLine(posX, posY, posZ + 0.3, posX, posY, posZ + 2.1, cx, cy, cz))
@@ -672,6 +800,10 @@ spawnOnLocation(playerid)
 
 		if(customArena && (!fallbackModel || fallbackModel == WATER_OBJECT || bestZ < floorLimit))
 			bestZ = floorZ;
+		else if(!IsValidSpawnSurface(fallbackModel, bestX, bestY, bestZ, floorZ, customArena))
+		{
+			if(floorZ > 0.0) bestZ = floorZ;
+		}
 	}
 
 	SetPlayerInterior(playerid, arenaData[zone][arenaInterior]);
@@ -688,6 +820,8 @@ spawnOnLocation(playerid)
 	new Float:spawnAngle = GetOptimalSpawnFacingAngle(playerid, zone, bestX, bestY, bestZ);
 	SetPlayerFacingAngle(playerid, spawnAngle);
 	SetCameraBehindPlayer(playerid);
+
+	RegisterRecentSpawn(playerid, loc, bestX, bestY, bestZ);
 
 	KillTimer(SpawnGuardTimer[playerid]);
 	SpawnGuardTimer[playerid] = 0;
