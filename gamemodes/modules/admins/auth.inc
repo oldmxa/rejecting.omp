@@ -266,10 +266,10 @@ public DIALOG_ADMIN_LOGIN_PASS(playerid, dialogid, response, listitem, string:in
 stock SendAdminLoginWelcome(playerid)
 {
     new const adminWelcomeMsgs[][] = {
-        "{MAIN}[ADMIN] {FFFFFF}Welcome back, {MAIN}%s{FFFFFF}! Your administrator commands are now unlocked and ready.",
-        "{MAIN}[ADMIN] {FFFFFF}Access granted, Administrator {MAIN}%s{FFFFFF}. Staff permissions have been loaded successfully.",
-        "{MAIN}[ADMIN] {FFFFFF}Welcome {MAIN}%s{FFFFFF}! Authenticated as Administrator \x97 all admin tools are active.",
-        "{MAIN}[ADMIN] {FFFFFF}Welcome back {MAIN}%s{FFFFFF}, your administrator commands and monitoring systems are online."
+        "{MAIN}** {FFFFFF}Welcome back, {MAIN}%s{FFFFFF}! Your administrator commands are now unlocked and ready.",
+        "{MAIN}** {FFFFFF}Access granted, Administrator {MAIN}%s{FFFFFF}. Staff permissions have been loaded successfully.",
+        "{MAIN}** {FFFFFF}Welcome {MAIN}%s{FFFFFF}! Authenticated as Administrator \x97 all admin tools are active.",
+        "{MAIN}** {FFFFFF}Welcome back {MAIN}%s{FFFFFF}, your administrator commands and monitoring systems are online."
     };
 
     new randIdx = random(sizeof(adminWelcomeMsgs));
