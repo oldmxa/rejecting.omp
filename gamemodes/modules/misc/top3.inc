@@ -107,7 +107,7 @@ UpdateTOP3Kills()
     }
     MySQL_TQueryInline(dbHandle, using inline OnTop3KillsLoad,
         "SELECT `accounts`.`username`, `accounts`.`kills_semanais`, `accounts`.`skin_id`, `accounts`.`clanid`, \
-        `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, `clans`.`clan_color` \
+        `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, IFNULL(`clans`.`clan_color`, -1) AS `clan_color` \
         FROM `accounts` \
         LEFT JOIN `clans` ON `accounts`.`clanid` = `clans`.`clan_id` \
         WHERE NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \
@@ -177,7 +177,7 @@ UpdateTOP3Damage()
     }
     MySQL_TQueryInline(dbHandle, using inline OnTop3DamageLoad,
         "SELECT `accounts`.`username`, `accounts`.`damage_semanal`, `accounts`.`skin_id`, `accounts`.`clanid`, \
-        `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, `clans`.`clan_color` \
+        `accounts`.`chat_main_color`, `accounts`.`hud_shade_one`, `accounts`.`hudcolor`, IFNULL(`clans`.`clan_color`, -1) AS `clan_color` \
         FROM `accounts` \
         LEFT JOIN `clans` ON `accounts`.`clanid` = `clans`.`clan_id` \
         WHERE NOT EXISTS(SELECT 1 FROM `banimentos` WHERE `accounts`.`username` = `banimentos`.`username`) \

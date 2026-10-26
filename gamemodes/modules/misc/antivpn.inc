@@ -126,6 +126,12 @@ public OnGetAntiVPN(Request:id, E_HTTP_STATUS:status, Node:node)
 
             if(User[playerid][Proxy] || User[playerid][VPN])
             {
+                if(!IsPlayerLogged(playerid))
+                {
+                    SendClientMessage(playerid, -1, ""COL_ABACATE"You are using a Proxy/VPN. Disable it before connecting to the server.");
+                    KickEx(playerid, 1500);
+                    return 1;
+                }
                 mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "SELECT `warnings` FROM `accounts` WHERE `username` = '%e' LIMIT 1", User[playerid][userName]);
                 mysql_tquery(dbHandle, queryGlobal, "OnAntiVpnWarn", "i", playerid);
             }
@@ -144,7 +150,7 @@ public OnGetAntiVPN(Request:id, E_HTTP_STATUS:status, Node:node)
 forward OnAntiVpnWarn(playerid);
 public OnAntiVpnWarn(playerid)
 {
-    if(!IsPlayerConnected(playerid))
+    if(!IsPlayerLogged(playerid))
         return 1;
 
     if(!cache_num_rows())

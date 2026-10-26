@@ -85,7 +85,7 @@ stock updatePlayerHud(playerid)
 
 		if (User[playerid][hudType] == HUD_UNDERLINE || User[playerid][hudType] == HUD_RL)
 		{
-			new netLine[144];
+			new netLine[384];
 
 			if (User[playerid][hudType] == HUD_RL)
 			{

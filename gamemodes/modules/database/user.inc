@@ -101,6 +101,35 @@ public OnLoginVerify(playerid, bool:success)
         KillTimer(User[playerid][loginTimer]);
 		HideLoginScreen(playerid);
 		User[playerid][isLogged] = true;
+
+		ResetPlayerMoney(playerid);
+		GivePlayerMoney(playerid, User[playerid][playerMoney]);
+
+		new current_gpci[42];
+		gpci(playerid, current_gpci, sizeof(current_gpci));
+		if(strcmp(current_gpci, User[playerid][user_gpci]) != 0)
+		{
+			foreach(new i : Player)
+			{
+				if(IsAdmin(i))
+				{
+					va_SendClientMessage(i, -1, "{MAIN}[SECURITY] {FFFFFF}Player %s[%d] logged in with a different Serial (GPCI).", User[playerid][userName], playerid);
+				}
+			}
+			printf("[SECURITY] Player %s logged in with different Serial. Old: %s, New: %s", User[playerid][userName], User[playerid][user_gpci], current_gpci);
+		}
+
+		SyncPlayerDiscordRoles(playerid);
+
+		if(strcmp(User[playerid][dc_uid], "-1", true) != 0)
+		{
+			new DCC_User:dcUser = DCC_FindUserById(User[playerid][dc_uid]);
+			if(dcUser != DCC_INVALID_USER)
+			{
+				DCC_SetGuildMemberNickname(guildaid, dcUser, getPlayerName(playerid));
+			}
+		}
+
 		new planeString[250];
 		strcopy(planeString, returnDate(User[playerid][lastLogin]-10800, 5), sizeof(planeString));
 
@@ -672,8 +701,6 @@ public OnPlayerJoin(playerid)
 
         UpdateRoundStatsColors(playerid);
         UpdateVipHeadTag(playerid);
-        SyncPlayerDiscordRoles(playerid);
-        CheckPlayerVipOnLogin(playerid);
 
         // load achievements directly from the account (uses a global buffer to avoid stack overflow)
         g_achSerialBuf[0] = '\0';
@@ -682,20 +709,6 @@ public OnPlayerJoin(playerid)
 
         new current_gpci[42];
         gpci(playerid, current_gpci, sizeof(current_gpci));
-        if(strcmp(current_gpci, User[playerid][user_gpci]) != 0)
-        {
-            foreach(new i : Player)
-            {
-                if(IsAdmin(i))
-                {
-                    va_SendClientMessage(i, -1, "{MAIN}[SECURITY] {FFFFFF}Player %s[%d] logged in with a different Serial (GPCI).", User[playerid][userName], playerid);
-                }
-            }
-            printf("[SECURITY] Player %s logged in with different Serial. Old: %s, New: %s", User[playerid][userName], User[playerid][user_gpci], current_gpci);
-        }
-
-		ResetPlayerMoney(playerid);
-		GivePlayerMoney(playerid, User[playerid][playerMoney]);
 
 		cache_get_value(0, "player_weapons", strweaps, sizeof(strweaps));
 		sscanf(strweaps, "p<,>a<i>[4]", User[playerid][playerWeapons]);
@@ -742,29 +755,6 @@ public OnPlayerJoin(playerid)
                 SendClientMessage(i, 0xC4C4C4FF, "%s", string);
             }
         }
-
-		new DCC_User:user, userid[20 + 1];
-		user = DCC_FindUserById(User[playerid][dc_uid]);
-		if (user != DCC_INVALID_USER)
-		{
-			DCC_GetUserId(user, userid);
-			DCC_SetGuildMemberNickname(guildaid, user, getPlayerName(playerid));
-		}
-		else
-		{
-			if(!strequal(User[playerid][dc_username], "-1"))
-			{
-				mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `dc_username` = '-1', `dc_discriminator` = '-1', `dc_uid` = '-1' WHERE `id` = %d", User[playerid][user_sqlid]);
-				mysql_tquery(dbHandle, queryGlobal);
-
-				format(User[playerid][dc_username], 100, "-1");
-				format(User[playerid][dc_discriminator], 100, "-1");
-				format(User[playerid][dc_uid], 100, "-1");
-				format(User[playerid][dc_code], 100, "-1");
-
-				SendClientMessage(playerid, -1, "%s", DC_LEFT);
-			}
-		}
 		return true;
 	}
 

@@ -109,7 +109,7 @@ stock SaveLoungeConfig()
     new File:file = fopen(LOUNGE_CONFIG_FILE, io_write);
     if(!file) return 0;
 
-    new str[160];
+    new str[256];
     // Spawn
     format(str, sizeof(str), "SpawnX=%.4f\r\nSpawnY=%.4f\r\nSpawnZ=%.4f\r\nSpawnA=%.4f\r\n",
         g_LoungeSpawnPos[0], g_LoungeSpawnPos[1], g_LoungeSpawnPos[2], g_LoungeSpawnPos[3]);

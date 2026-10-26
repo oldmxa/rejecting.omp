@@ -499,24 +499,27 @@ DSLASH:kick(user, params[])
 	if(!IsPlayerConnected(targetid))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, the player is not online!", username));
 
-	if(strequal(User[targetid][userName], SERVER_OWNER, true))
+	new targetName[MAX_PLAYER_NAME + 1];
+	GetPlayerName(targetid, targetName, sizeof(targetName));
+
+	if(strequal(targetName, SERVER_OWNER, true))
 		return SendDiscordResponse(comandos, sprintf(" **%s**, you cannot do that with the owners.", username));
 
-	SendDiscordResponse(comandos, sprintf(":white_check_mark: The player **%s** has been kicked!", User[targetid][userName]));
-	va_SendClientMessageToAll(COLOR_ADM_PUNISH, KICK_REASON, username, User[targetid][userName], targetid, reason);
+	SendDiscordResponse(comandos, sprintf(":white_check_mark: The player **%s** has been kicked!", targetName));
+	va_SendClientMessageToAll(COLOR_ADM_PUNISH, KICK_REASON, username, targetName, targetid, reason);
 
 	KickEx(targetid, 300);
 
 	new string[1024];
 	format(string, sizeof(string), "**Admin:** %s\n**Target:** %s\n**Reason:** %s",
 		username,
-		User[targetid][userName],
+		targetName,
 		reason);
 
 	SendDiscordEmbed(logs_kick, "New Kick", string, DISCORD_COLOR_WARNING);
 
     new log_details[256];
-    format(log_details, sizeof(log_details), "Discord Admin %s kicked player %s (ID: %d). Reason: %s", username, User[targetid][userName], targetid, reason);
+    format(log_details, sizeof(log_details), "Discord Admin %s kicked player %s (ID: %d). Reason: %s", username, targetName, targetid, reason);
     LogServerAction(0, username, "kicks", "Kick (Discord)", log_details);
 
 	return true;
@@ -740,7 +743,7 @@ DSLASH:changebanreason(user, params[])
 
     mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `banimentos` SET `reason` = '%e' WHERE `username` = '%e'", reason, target);
     mysql_tquery(dbHandle, queryGlobal);
-    SendDiscordResponse(comandos, sprintf(COL_ADM_CMD":white_check_mark: Reason for banning **%s** changed!", target));
+    SendDiscordResponse(comandos, sprintf(":white_check_mark: Reason for banning **%s** changed!", target));
     return true;
 }
 
@@ -751,14 +754,26 @@ DSLASH:changebantime(user, params[])
     if(!DSC_RequireLevel(user, 4)) return 1;
 
     new target[24], amount, unit[2];
-    if(sscanf(params, "s[24]is[2]", target, amount, unit))
+    if(sscanf(params, "s[24]is[2]", target, amount, unit) || amount <= 0)
         return SendDiscordResponse(comandos, "/changebantime [nick] [amount] [h/d]");
 
-    if(unit[0] == 'h' || unit[0] == 'H') { /* hours logic */ }
-    else if(unit[0] == 'd' || unit[0] == 'D') { /* days logic */ }
+    new newUnbanTs;
+    if(unit[0] == 'h' || unit[0] == 'H')
+    {
+        newUnbanTs = gettime() + (amount * 3600);
+    }
+    else if(unit[0] == 'd' || unit[0] == 'D')
+    {
+        newUnbanTs = gettime() + (amount * 86400);
+    }
     else return SendDiscordResponse(comandos, "Invalid unit. Use 'h' or 'd'.");
 
-    SendDiscordResponse(comandos, sprintf(COL_ADM_CMD":white_check_mark: Banishment expiry date for **%s** changed! New unban in **%d** **%s**.", target, amount, (unit[0] == 'h' ? "hours" : "days")));
+    mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
+        "UPDATE `banimentos` SET `unban_timestamp` = %d WHERE `username` = '%e'",
+        newUnbanTs, target);
+    mysql_tquery(dbHandle, queryGlobal);
+
+    SendDiscordResponse(comandos, sprintf(":white_check_mark: Banishment expiry date for **%s** changed! New unban in **%d** **%s**.", target, amount, ((unit[0] == 'h' || unit[0] == 'H') ? "hours" : "days")));
     return true;
 }
 

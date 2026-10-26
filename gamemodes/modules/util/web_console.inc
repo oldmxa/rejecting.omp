@@ -25,11 +25,17 @@ static WebConsoleFinish(id, const status[], const response[])
 
 static WebConsoleRun(id, const command[], const adminName[], nivelExigido)
 {
+    if (strfind(command, "\n", true) != -1 || strfind(command, "\r", true) != -1 || strfind(command, ";", true) != -1)
+    {
+        WebConsoleFinish(id, "failed", "Command contains invalid control characters.");
+        return;
+    }
+
     new playerid = INVALID_PLAYER_ID;
 
     foreach (new i : Player)
     {
-        if (!strcmp(User[i][userName], adminName, true))
+        if (IsPlayerLogged(i) && !strcmp(User[i][userName], adminName, true))
         {
             playerid = i;
             break;

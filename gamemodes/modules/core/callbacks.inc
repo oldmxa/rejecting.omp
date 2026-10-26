@@ -1200,7 +1200,7 @@ public OnPlayerUpdate(playerid)
 
 	if(playerState == PLAYER_STATE_DRIVER)
 	{
-		new strv[128], tagOne[20], tagTwo[20];
+		new strv[192], tagOne[20], tagTwo[20];
 		new vehicleid = GetPlayerVehicleID(playerid);
 		new Float:vhealth;
 		GetVehicleHealth(vehicleid, vhealth);
@@ -1419,12 +1419,15 @@ public OnRconLoginAttempt(ip[], password[], success)
 		{
 			static const ALLOWED_RCONS[][] = {SERVER_OWNER};
 
-			for (new i; i < sizeof(ALLOWED_RCONS); i ++)
+			if (IsPlayerLogged(playerid))
 			{
-				if (strequal(User[playerid][userName], ALLOWED_RCONS[i]))
+				for (new i; i < sizeof(ALLOWED_RCONS); i ++)
 				{
-					va_SendClientMessage(playerid, COLOR_ABACATE, "{MAIN}[RCON] {FFFFFF}Login successful. Welcome {MAIN}%s{FFFFFF}!", getPlayerName(playerid));
-					return true;
+					if (strequal(User[playerid][userName], ALLOWED_RCONS[i]))
+					{
+						va_SendClientMessage(playerid, COLOR_ABACATE, "{MAIN}[RCON] {FFFFFF}Login successful. Welcome {MAIN}%s{FFFFFF}!", getPlayerName(playerid));
+						return true;
+					}
 				}
 			}
 

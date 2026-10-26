@@ -305,11 +305,11 @@ stock UpdateTrainingHud(playerid, secondsLeft)
     if (secondsLeft < 0) secondsLeft = 0;
 
     new bool:lowTime = (secondsLeft <= 5);
-    new fString[300];
+    new fString[512];
 
     if (User[playerid][hudType] == HUD_UNDERLINE || User[playerid][hudType] == HUD_RL)
     {
-        new netLine[144];
+        new netLine[384];
 
         if (User[playerid][hudType] == HUD_RL)
             format(netLine, sizeof(netLine), "%sFPS: %s%d %sPing: %s%d~n~%sPL: %s%.1f%% %sSpeed: %s%d",
