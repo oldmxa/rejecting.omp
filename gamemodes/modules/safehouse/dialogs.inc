@@ -56,9 +56,6 @@ stock ShowSafehouseMenu(playerid)
 
     new clanid = SafehouseData[index][sh_ClanID];
 
-    new levelName[24];
-    GetSafehouseLevelName(SafehouseData[index][sh_Level], levelName);
-
     new title[128];
     format(title, sizeof(title), "{MAIN}Safehouse: {FFFFFF}%s", SafehouseData[index][sh_Name]);
 
@@ -67,7 +64,7 @@ stock ShowSafehouseMenu(playerid)
     format(buf, sizeof(buf), "{BEBEBE}Option\t{BEBEBE}Details\t{BEBEBE}Action\n");
 
     if (IsValidClanID(clanid))
-        strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Clan Info\t{%06x}%s {BEBEBE}[%s]\t{BEBEBE}[View]\n", ClanInfo[clanid][clanColor] >>> 8, ClanInfo[clanid][clanName], ClanInfo[clanid][clanTag]));
+        strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Clan Info\t{%06x}%s\t{BEBEBE}[View]\n", ClanInfo[clanid][clanColor] >>> 8, ClanInfo[clanid][clanName]));
     else
         strcat(buf, "{B4B5B7}\x95 {FFFFFF}Clan Info\t{BEBEBE}None\t{BEBEBE}[None]\n");
 
@@ -76,18 +73,18 @@ stock ShowSafehouseMenu(playerid)
     if (SafehouseData[index][sh_Password][0] != '\0')
         strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Password\t{23C552}%s\t{3CCFFA}[Edit]\n", SafehouseData[index][sh_Password]));
     else
-        strcat(buf, "{B4B5B7}\x95 {FFFFFF}Password\t{BEBEBE}None (Public)\t{3CCFFA}[Set]\n");
+        strcat(buf, "{B4B5B7}\x95 {FFFFFF}Password\t{BEBEBE}None\t{3CCFFA}[Set]\n");
 
     strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Clan Vault\t{23C552}%s\t{3CCFFA}[Manage]\n", FormatMoney(SafehouseData[index][sh_Vault])));
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Upgrade Base\t{FFFFFF}Level %d ({BEBEBE}%s{FFFFFF})\t{3CCFFA}[Upgrade]\n", SafehouseData[index][sh_Level], levelName));
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Clan Members\t{FFFFFF}%d / %d Slots\t{3CCFFA}[View]\n", ClanMembersCount[clanid], GetClanMemberSlots(clanid)));
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Upgrade Base\t{FFFFFF}Level %d\t{3CCFFA}[Upgrade]\n", SafehouseData[index][sh_Level]));
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Clan Members\t{FFFFFF}%d/%d\t{3CCFFA}[View]\n", ClanMembersCount[clanid], GetClanMemberSlots(clanid)));
 
     new leftStr[24];
     FormatSafehouseTime(GetSafehouseTimeLeft(index), leftStr);
     strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Contract Expiry\t{FFFFFF}%s left\t{3CCFFA}[Extend]\n", leftStr));
 
     new refund = (SH_BUY_PRICE / 100) * SH_REFUND_PCT + ((SH_BUY_PRICE % 100) * SH_REFUND_PCT) / 100;
-    strcat(buf, fmat_return("{F84F31}\x95 Sell Safehouse\t{BEBEBE}%d%% Refund (%s)\t{F84F31}[Sell]\n", SH_REFUND_PCT, FormatMoney(refund)));
+    strcat(buf, fmat_return("{F84F31}\x95 Sell Safehouse\t{23C552}%s\t{F84F31}[Sell]\n", FormatMoney(refund)));
 
     format_MainColor(playerid, buf);
     return Dialog_ShowCallback(playerid, using public DIALOG_SAFE_MAIN<iiiis>,
