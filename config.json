@@ -118,8 +118,8 @@
     },
     "rcon": {
         "allow_teleport": false,
-        "enable": false,
-        "password": "rcon_disabled_8f9d2a7b4c1e6f3a9d0b"
+        "enable": true,
+        "password": "password"
     },
     "sleep": 5,
     "use_dyn_ticks": true,
