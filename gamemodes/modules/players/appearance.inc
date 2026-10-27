@@ -385,7 +385,7 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     return 1;
 }
 
-@cmd(.alts = {"maincolor", "corchat", "chatcor"}) chatcolor(playerid, params[], help)
+@cmd(.alts = {"maincolor"}) chatcolor(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     ShowChatColorDialog(playerid, APPEARANCE_SRC_NONE);
@@ -406,14 +406,14 @@ public DIALOG_KILL_SOUND_LIST(playerid, dialogid, response, listitem, string:inp
     return 1;
 }
 
-@cmd(.alts = {"feedcolor", "corfeed", "feedcol"}) dmgfeedcolor(playerid, params[], help)
+@cmd(.alts = {"feedcolor", "feedcol"}) dmgfeedcolor(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     ShowDamageFeedColorMenu(playerid, APPEARANCE_SRC_NONE);
     return 1;
 }
 
-@cmd(.alts = {"hitmarkcolor", "hitcolor", "dmginformercolor", "cordano"}) hitmarkcol(playerid, params[], help)
+@cmd(.alts = {"hitmarkcolor", "hitcolor", "dmginformercolor"}) hitmarkcol(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     ShowHitmarkColorDialog(playerid, APPEARANCE_SRC_NONE);

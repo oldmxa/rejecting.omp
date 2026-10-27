@@ -231,7 +231,7 @@ stock ShowCoinsMenu(playerid) return CallLocalFunction("Coinshop_ShowCoinsMenu",
 forward bool:IsPlayerLogged(playerid);
 forward bool:IsPlayerAFK(playerid);
 forward bool:IsPlayerInLounge(playerid);
-forward bool:IsPlayerInMatch(playerid);
+forward bool:IsPlayerInMatch(playerid, bool:checkSafehouse = true);
 forward bool:IsPlayerSpectating(playerid);
 forward bool:IsPlayerSpawnProtected(playerid);
 forward bool:IsAdminCamouflaged(playerid);

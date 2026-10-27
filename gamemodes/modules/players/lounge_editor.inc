@@ -757,7 +757,7 @@ public DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext
 
     return ShowLoungeEditorMenu(playerid);
 }
-@cmd(.alts = {"boardoffset", "quadrolounge", "editboardspacing", "espacamentoquadro", "espacamentolounge"}) boardspacing(playerid, params[], help)
+@cmd(.alts = {"boardoffset", "editboardspacing"}) boardspacing(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);

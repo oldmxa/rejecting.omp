@@ -197,11 +197,11 @@ public Account_ShowSecurityMenu(playerid)
         format(secStr, sizeof(secStr), "%s{MAIN}\xBB {B4B5B7}Discord Account\t{F84F31}Not Linked\n", secStr);
 
     if(isLinked && User[playerid][autoLogin])
-        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{23C552}Maximum Protected\n", secStr);
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{23C552}Maximum\n", secStr);
     else if(isLinked)
-        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{23C552}High Discord Verified\n", secStr);
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{23C552}Discord Verified\n", secStr);
     else
-        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{F84F31}Basic Unverified\n", secStr);
+        format(secStr, sizeof(secStr), "%s{FFFFFF}\x95 {B4B5B7}Security Rating\t{F84F31}Basic\n", secStr);
 
     new title[64] = "{MAIN}Security Settings";
 
@@ -496,6 +496,11 @@ public DIALOG_HELP_SECURITY(playerid, dialogid, response, listitem, string:input
 forward DIALOG_HELP_RULES(playerid, dialogid, response, listitem, string:inputtext[]);
 public DIALOG_HELP_RULES(playerid, dialogid, response, listitem, string:inputtext[])
 {
+    if (GetPVarInt(playerid, "rules_from_cmd"))
+    {
+        DeletePVar(playerid, "rules_from_cmd");
+        return 1;
+    }
     return ShowHelpMainMenu(playerid);
 }
 
@@ -524,22 +529,7 @@ public DIALOG_HELP_MAIN(playerid, dialogid, response, listitem, string:inputtext
             ShowVipMenu(playerid);
         }
         case 5: ShowRankingsMenu(playerid);
-        case 6:
-        {
-            new rulesStr[2048];
-            strcat(rulesStr, "{MAIN}RULES\n\n{FFFFFF}", sizeof(rulesStr));
-
-            for(new r = 0; r < sizeof(g_ServerRules); r++)
-                strcat(rulesStr, fmat_return("{B4B5B7}%d. {FFFFFF}%s\n", r + 1, g_ServerRules[r]), sizeof(rulesStr));
-
-            strcat(rulesStr, "\n{MAIN}Note:\n\n{B4B5B7}", sizeof(rulesStr));
-            strcat(rulesStr, g_ServerRulesNote, sizeof(rulesStr));
-
-            new rulesTitle[64] = "{MAIN}Server Rules & Guidelines";
-            format_MainColor(playerid, rulesTitle);
-            format_MainColor(playerid, rulesStr);
-            Dialog_ShowCallback(playerid, using public DIALOG_HELP_RULES<iiiis>, DIALOG_STYLE_MSGBOX, rulesTitle, rulesStr, "Back", "");
-        }
+        case 6: ShowServerRules(playerid, true);
         case 7: ShowPlayerCommands(playerid);
     }
     return 1;

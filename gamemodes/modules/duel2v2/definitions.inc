@@ -75,7 +75,7 @@ stock bool:IsPlayerBusy(playerid)
     return false;
 }
 
-stock bool:IsPlayerInMatch(playerid)
+stock bool:IsPlayerInMatch(playerid, bool:checkSafehouse = true)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return false;
     if(GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_NONE && GetPVarInt(playerid, "DuelS_State") != DUELS_STATE_WAITING) return true;
@@ -83,7 +83,7 @@ stock bool:IsPlayerInMatch(playerid)
     if(g_PlayerTourneyMatch[playerid] != -1 || g_PlayerTourneySlot[playerid] != -1) return true;
     if(g_PlayerTraining[playerid][pTrain_Active]) return true;
     if(g_Practice[playerid][pracActive]) return true;
-    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid])) return true;
+    if(checkSafehouse && IsValidSafehouseIndex(g_PlayerInSafehouse[playerid])) return true;
     return false;
 }
 

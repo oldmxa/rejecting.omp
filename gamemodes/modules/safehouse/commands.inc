@@ -302,7 +302,7 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
     if (!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if (IsPlayerInMatch(playerid))
+    if (IsPlayerInMatch(playerid, false))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot access safehouse while in a match, duel, training or practice.");
 
     new index = GetPlayerSafehouse(playerid);

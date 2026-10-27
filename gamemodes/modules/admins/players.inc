@@ -339,7 +339,7 @@
     return true;
 }
 
-@cmd(.alts = {"camu", "hidetab", "tabhide"}) camouflage(playerid, params[], help)
+@cmd(.alts = {"camo", "hidetab", "tabhide"}) camouflage(playerid, params[], help)
 {
     if (!IsAdmin(playerid, 4)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 

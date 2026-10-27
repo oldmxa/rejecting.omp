@@ -285,6 +285,43 @@ ShowRankingsMenu(playerid)
     return ShowHelpMainMenu(playerid);
 }
 
+stock ShowServerRules(playerid, bool:fromHelp = false)
+{
+    new rulesStr[2048];
+    strcat(rulesStr, "{MAIN}RULES\n\n{FFFFFF}", sizeof(rulesStr));
+
+    for(new r = 0; r < sizeof(g_ServerRules); r++)
+        strcat(rulesStr, fmat_return("{B4B5B7}%d. {FFFFFF}%s\n", r + 1, g_ServerRules[r]), sizeof(rulesStr));
+
+    strcat(rulesStr, "\n{MAIN}Note:\n\n{B4B5B7}", sizeof(rulesStr));
+    strcat(rulesStr, g_ServerRulesNote, sizeof(rulesStr));
+
+    new rulesTitle[64] = "{MAIN}Server Rules & Guidelines";
+    format_MainColor(playerid, rulesTitle);
+    format_MainColor(playerid, rulesStr);
+
+    if (fromHelp)
+    {
+        DeletePVar(playerid, "rules_from_cmd");
+        Dialog_ShowCallback(playerid, using public DIALOG_HELP_RULES<iiiis>, DIALOG_STYLE_MSGBOX, rulesTitle, rulesStr, "Back", "");
+    }
+    else
+    {
+        SetPVarInt(playerid, "rules_from_cmd", 1);
+        Dialog_ShowCallback(playerid, using public DIALOG_HELP_RULES<iiiis>, DIALOG_STYLE_MSGBOX, rulesTitle, rulesStr, "Close", "");
+    }
+    return 1;
+}
+
+@cmd(.alts = {"rule"}) rules(playerid, params[], help)
+{
+    if(!IsPlayerLogged(playerid))
+        return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
+
+    ShowServerRules(playerid, false);
+    return true;
+}
+
 ShowHelpMainMenu(playerid)
 {
     new helpStr[1024], title[64];
@@ -377,6 +414,7 @@ ShowCommandCategory(playerid, catid)
     {
         case 0:
         {
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/rules\t{FFFFFF}Read official server rules & guidelines\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changemode\t{FFFFFF}Select arena or change game mode\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/settings\t{FFFFFF}Show player settings & personalization\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/lounge\t{FFFFFF}Teleport to the lounge room\n");
@@ -384,6 +422,8 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/gunmenu\t{FFFFFF}Open weapon selection menu in arena\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/spec\t{FFFFFF}Spectate a player\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specoff\t{FFFFFF}Stop spectating\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specnext or /sn\t{FFFFFF}Spectate next player\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specprev or /sp\t{FFFFFF}Spectate previous player\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/stats [id/nick]\t{FFFFFF}View online or offline player stats\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/ach\t{FFFFFF}View your achievements & progress\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/coins\t{FFFFFF}Balance, buy Coins, history & VIP\n");
@@ -400,6 +440,13 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/time\t{FFFFFF}Change your local time\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/anims\t{FFFFFF}Open animations & gestures menu\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/stopanim\t{FFFFFF}Stop active animation (or press 'F')\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/chatcolor\t{FFFFFF}Personalize main chat text color\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dmginformer\t{FFFFFF}Configure hitmarker floating damage numbers\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dmgfeed\t{FFFFFF}Toggle and customize combat damage feed\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dmgfeedcolor\t{FFFFFF}Set custom colors for damage feed\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/hitmarkcol\t{FFFFFF}Change crosshair hitmarker color\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/testdmgfeed\t{FFFFFF}Test floating damage feed numbers\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tag\t{FFFFFF}Manage 3D head tag visibility\n");
         }
         case 2:
         {
@@ -432,6 +479,10 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/duel2v2\t{FFFFFF}Create a 2v2 team duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/accept2v2\t{FFFFFF}Accept a 2v2 team duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/cancel2v2\t{FFFFFF}Cancel a 2v2 duel challenge\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tourney\t{FFFFFF}View active tournament details\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/jointourney\t{FFFFFF}Register for the active tournament\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tourneybracket\t{FFFFFF}View current tournament bracket\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tourneyspec\t{FFFFFF}Spectate tournament matches\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/safemenu\t{FFFFFF}Open Clan Safehouse base menu\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/exitsafehouse\t{FFFFFF}Exit Clan Safehouse base\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/training\t{FFFFFF}Open training arena & challenges menu\n");
@@ -466,6 +517,7 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tag\t{FFFFFF}Manage tag visibility (VIP, Clan, Admin, Custom)\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vipcmds\t{FFFFFF}View full list of VIP commands\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/discord\t{FFFFFF}Link your Discord account\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/discordid (/dcid)\t{FFFFFF}View your linked Discord ID\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dcode [code]\t{FFFFFF}Enter verification code received from Discord\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/udiscord\t{FFFFFF}Unlink your Discord account\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changepass\t{FFFFFF}Change your account password\n");
