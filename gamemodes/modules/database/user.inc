@@ -618,7 +618,6 @@ public OnPlayerJoin(playerid)
         cache_get_value_bool(0, "show_connect_msg", User[playerid][showConnectMsg]);
         cache_get_value_bool(0, "hide_global_msg", User[playerid][hideGlobalMsg]);
         cache_get_value_bool(0, "hide_welcome_msg", User[playerid][hideWelcomeMsg]);
-        // "Welcome to server" It only appears for new accounts. (OnRegisterHash);
         cache_get_value_bool(0, "show_3d_deathtag", User[playerid][show3DDeathTag]);
         User[playerid][showDamageFeed] = true;
         cache_get_value_bool(0, "show_dmgfeed", User[playerid][showDamageFeed]);

@@ -1,5 +1,4 @@
 
-// Dialogs Settings e Personalization.
 
 SetAppearanceSource(playerid, source)
 {
@@ -1926,8 +1925,6 @@ stock ShowTagMenu(playerid)
             adminnames[User[playerid][adminLevel]][ingame],
             User[playerid][hideAdminTag] ? "{FF6347}[Hidden]" : "{23C552}[Visible]");
     }
-
-    // 4. Custom Tag
     g_PlayerTagMenu[playerid][count++] = TAG_TYPE_CUSTOM;
     new customPreview[64];
     if(User[playerid][customTag][0] != '\0')
@@ -1947,15 +1944,11 @@ stock ShowTagMenu(playerid)
         tagList,
         customPreview,
         customStatus);
-
-    // 5. Configure Custom Tag
     if(CanPlayerUseCustomTag(playerid))
     {
         g_PlayerTagMenu[playerid][count++] = TAG_TYPE_EDIT_CUSTOM;
         format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}Configure Custom Tag\t{BEBEBE}Presets or Custom Text\t{3CCFFA}[Configure]\n", tagList);
     }
-
-    // 6. Manage Tournament Tags
     g_PlayerTagMenu[playerid][count++] = TAG_TYPE_TOURNAMENT;
     format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}Tournament Tags\t{BEBEBE}Manage won champion tags\t{3CCFFA}[Select]\n", tagList);
 

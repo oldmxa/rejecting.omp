@@ -130,7 +130,6 @@ new const g_AchievementsData[][E_ACHIEVEMENT_DATA] = {
 
 #define ACH_BITSET_CELLS        (3)
 
-// Arenas in the desert region (Bone County and surroundings), used for "Highway to Hell".
 new const g_AchDesertArenas[] = {
     1,  // Valle Ocultado
     2,  // Las Paysadas

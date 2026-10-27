@@ -113,7 +113,6 @@ new const g_TourneyCustomArenaNames[MAX_TOURNEY_CUSTOM_ARENAS][32] =
 #assert MAX_TOURNEY_DUEL_ARENAS == sizeof(DuelS_ArenaNames)
 #assert MAX_TOURNEY_SLOTS <= MAX_TOURNEY_MATCHES
 
-// Tournament Configuration & Global State
 enum e_TOURNAMENT_DATA
 {
     bool:t_Active,

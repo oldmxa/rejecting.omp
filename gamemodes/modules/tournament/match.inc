@@ -236,7 +236,6 @@ stock StartTourneyMatch(matchid)
 
     if(!teamA_Present && teamB_Present)
     {
-        // Start WO countdown or immediate WO
         va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT] {FFFFFF}%s is offline! %s wins by W.O.!", nameA, nameB);
         FinishTourneyMatch(matchid, slotB, true);
         return 1;

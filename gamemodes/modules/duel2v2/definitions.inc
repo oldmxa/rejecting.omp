@@ -3,7 +3,6 @@
 #endif
 #define _duel2v2_definitions_included
 
-// Duel 2v2 Definitions
 
 #define MAX_DUELS_2V2               (16)
 #define DUEL2V2_VW_BASE             (60000)
@@ -37,8 +36,6 @@ enum e_DUEL2V2_MATCH_DATA
     d2_WeaponSet,       // 0: Deagle, 1: Deagle+M4, 2: Deagle+Shotgun, 3: Deagle+Sniper, 4: All Weapons
     d2_MaxRounds,       // 1, 3, 5, 7
     d2_CurrentRound,
-    
-    // Team A: Creator & Teammate
     d2_TeamA_Player1,
     d2_TeamA_Player2,
     bool:d2_TeamA_P1_Accepted,
@@ -46,8 +43,6 @@ enum e_DUEL2V2_MATCH_DATA
     bool:d2_TeamA_P1_Alive,
     bool:d2_TeamA_P2_Alive,
     d2_TeamA_Score,
-    
-    // Team B: Opponent 1 & Opponent 2
     d2_TeamB_Player1,
     d2_TeamB_Player2,
     bool:d2_TeamB_P1_Accepted,
@@ -109,8 +104,6 @@ stock bool:IsDuel2v2PlayerAlive(playerid)
 new g_Duel2v2Wiz_Arena[MAX_PLAYERS];
 new g_Duel2v2Wiz_Weapons[MAX_PLAYERS];
 new g_Duel2v2Wiz_Rounds[MAX_PLAYERS];
-
-// Weapon configuration
 enum e_DUEL2V2_WEAPON_SET
 {
     d2w_Name[48],

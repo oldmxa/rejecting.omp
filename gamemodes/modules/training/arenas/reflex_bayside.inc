@@ -3,23 +3,15 @@
 #endif
 #define _training_reflex_bayside_incl
 
-// Arena: Reflex Bayside (M4 Reflex Arena)
-
 #define REFLEX_BAYSIDE_NAME           "Reflex Bayside"
 #define REFLEX_BAYSIDE_TYPE           "Reflex M4"
-
-// Player Spawn Point
 #define REFLEX_BAYSIDE_SPAWN_X        (-2256.7156)
 #define REFLEX_BAYSIDE_SPAWN_Y        (2394.7266)
 #define REFLEX_BAYSIDE_SPAWN_Z        (5.1050)
 #define REFLEX_BAYSIDE_SPAWN_A        (316.3068)
-
-// Target Ball Details (Random Spawning)
 #define REFLEX_BAYSIDE_TARGET_MODEL   (19059)
 #define REFLEX_BAYSIDE_SPEED          (1.0)
 #define REFLEX_BAYSIDE_TARGET_HP      (10.0)
-
-// Target random spawn coordinates
 static const Float:g_ReflexBaysideWaypoints[4][3] = {
     { -2233.6565, 2402.7510, 2.4899 },
     { -2251.4111, 2419.4490, 2.4939 },
@@ -30,7 +22,7 @@ static const Float:g_ReflexBaysideWaypoints[4][3] = {
 forward Init_ReflexBayside();
 public Init_ReflexBayside()
 {
-    new weapons[1] = { 31 }; // M4 only
+    new weapons[1] = { 31 };
 
     new arenaid = RegisterTrainingArena(
         REFLEX_BAYSIDE_NAME,

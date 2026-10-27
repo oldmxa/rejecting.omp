@@ -328,7 +328,6 @@ SpawnPlayerEx(playerid)
 #define PICKUP_MODEL_M4     (356)
 #define PICKUP_MODEL_SNIPER (358)
 
-// time for the weapon to disappear from the ground
 #define WEAPON_DROP_LIFETIME (15)
 
 static stock CreateWeaponDrop(playerid, WEAPON:weap, ammo, model)

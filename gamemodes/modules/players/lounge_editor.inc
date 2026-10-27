@@ -48,14 +48,10 @@ stock LoadLoungeConfig()
         else if(!strcmp(key, "BoardSpacing", true)) g_LoungeBoardSpacing = floatstr(val);
         else if(!strcmp(key, "BoardHeight", true)) g_LoungeBoardHeight = floatstr(val);
         else if(!strcmp(key, "BoardDepth", true)) g_LoungeBoardDepth = floatstr(val);
-
-        // Info / Tips NPC
         else if(!strcmp(key, "TipNPC_X", true)) g_LoungeTipPos[0] = floatstr(val);
         else if(!strcmp(key, "TipNPC_Y", true)) g_LoungeTipPos[1] = floatstr(val);
         else if(!strcmp(key, "TipNPC_Z", true)) g_LoungeTipPos[2] = floatstr(val);
         else if(!strcmp(key, "TipNPC_A", true)) g_LoungeTipPos[3] = floatstr(val);
-
-        // Top 3 Kills Actors
         for(new k = 0; k < 3; k++)
         {
             new tempKey[32];
@@ -71,8 +67,6 @@ stock LoadLoungeConfig()
             format(tempKey, sizeof(tempKey), "TopKills%d_A", k);
             if(!strcmp(key, tempKey, true)) { TOP3Kills[k][3] = floatstr(val); break; }
         }
-
-        // Top 3 Damage Actors
         for(new d = 0; d < 3; d++)
         {
             new tempKey[32];
@@ -110,8 +104,6 @@ stock SaveLoungeConfig()
         g_LoungeBoardPos[0], g_LoungeBoardPos[1], g_LoungeBoardPos[2], g_LoungeBoardPos[3],
         g_LoungeBoardSpacing, g_LoungeBoardHeight, g_LoungeBoardDepth);
     fwrite(file, str);
-
-    // Info / Tips NPC
     format(str, sizeof(str), "TipNPC_X=%.4f\r\nTipNPC_Y=%.4f\r\nTipNPC_Z=%.4f\r\nTipNPC_A=%.4f\r\n",
         g_LoungeTipPos[0], g_LoungeTipPos[1], g_LoungeTipPos[2], g_LoungeTipPos[3]);
     fwrite(file, str);
@@ -393,7 +385,6 @@ public DIALOG_EL_BOARD(playerid, dialogid, response, listitem, string:inputtext[
     return ShowLoungeEditorMenu(playerid);
 }
 
-// BOARD SPACING & OFFSETS HANDLERS
 stock ShowBoardSpacingDialog(playerid)
 {
     if(!IsAdmin(playerid, 5))
@@ -563,8 +554,6 @@ public DIALOG_EL_SPACING_INPUT(playerid, dialogid, response, listitem, string:in
 
     return ShowBoardSpacingDialog(playerid);
 }
-
-// TOP 3 KILLS HANDLER
 public DIALOG_EL_TOP3KILLS_LIST(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response) return ShowLoungeEditorMenu(playerid);
@@ -633,8 +622,6 @@ public DIALOG_EL_TOP3KILLS_OPT(playerid, dialogid, response, listitem, string:in
     }
     return 1;
 }
-
-// TOP 3 DAMAGE HANDLER
 
 public DIALOG_EL_TOP3DMG_LIST(playerid, dialogid, response, listitem, string:inputtext[])
 {
@@ -705,7 +692,6 @@ public DIALOG_EL_TOP3DMG_OPT(playerid, dialogid, response, listitem, string:inpu
     return 1;
 }
 
-// INFO / TIPS NPC HANDLER
 public DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(!response) return ShowLoungeEditorMenu(playerid);
@@ -771,8 +757,6 @@ public DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext
 
     return ShowLoungeEditorMenu(playerid);
 }
-
-// /boardspacing
 @cmd(.alts = {"boardoffset", "quadrolounge", "editboardspacing", "espacamentoquadro", "espacamentolounge"}) boardspacing(playerid, params[], help)
 {
     if(!IsPlayerLogged(playerid))
@@ -832,8 +816,6 @@ public DIALOG_EL_TIPNPC(playerid, dialogid, response, listitem, string:inputtext
             return va_SendClientMessage(playerid, -1, "{MAIN}[LOUNGE] {FFFFFF}Board depth offset updated to {MAIN}%.3f m{FFFFFF}.", val1);
         }
     }
-
-    // Direct numeric floats
     if(!sscanf(params, "fff", val1, val2, val3))
     {
         if(val1 < 0.1 || val1 > 50.0)

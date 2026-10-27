@@ -3,22 +3,14 @@
 #endif
 #define _training_skinhit_lv_incl
 
-// Arena: Skinhit Aero LV
-
 #define SKINHIT_LV_NAME           "Skinhit Airport LV"
 #define SKINHIT_LV_TYPE           "Double hit"
-
-// Player Spawn Point
 #define SKINHIT_LV_SPAWN_X        (1384.5424)
 #define SKINHIT_LV_SPAWN_Y        (1654.1525)
 #define SKINHIT_LV_SPAWN_Z        (10.8125)
 #define SKINHIT_LV_SPAWN_A        (95.2027)
-
-// Target Ball Details
 #define SKINHIT_LV_TARGET_MODEL   (19059) // XmasOrb1
 #define SKINHIT_LV_SPEED          (8.5)
-
-// Waypoints exact trajectory matching ramp & container elevation
 static const Float:g_SkinhitLVWaypoints[6][3] = {
     { 1348.5349, 1671.9773, 10.8203 },
     { 1349.0098, 1665.1542, 10.9240 },
@@ -31,7 +23,7 @@ static const Float:g_SkinhitLVWaypoints[6][3] = {
 forward Init_SkinhitLV();
 public Init_SkinhitLV()
 {
-    new weapons[2] = { 24, 25 }; // Desert Eagle & Shotgun only
+    new weapons[2] = { 24, 25 };
 
     new arenaid = RegisterTrainingArena(
         SKINHIT_LV_NAME,

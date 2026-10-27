@@ -5,24 +5,16 @@
 
 #define SKINHIT_GANTON_NAME         "Skinhit Ganton"
 #define SKINHIT_GANTON_TYPE         "Skinhit"
-
-// Player Spawn Point
 #define SKINHIT_GANTON_SPAWN_X      (2429.4163)
 #define SKINHIT_GANTON_SPAWN_Y      (-1655.9668)
 #define SKINHIT_GANTON_SPAWN_Z      (13.3828)
 #define SKINHIT_GANTON_SPAWN_A      (183.2217)
-
-// Target Ball Details
 #define SKINHIT_GANTON_TARGET_MODEL (19063)
 #define SKINHIT_GANTON_SPEED        (8.5)
-
-// Waypoint Start
 #define SKINHIT_GANTON_START_X      (2439.6333)
 #define SKINHIT_GANTON_START_Y      (-1680.3707)
 #define SKINHIT_GANTON_START_Z      (13.7759)
 #define SKINHIT_GANTON_START_A      (88.0319)
-
-// Waypoint End
 #define SKINHIT_GANTON_END_X        (2422.3071)
 #define SKINHIT_GANTON_END_Y        (-1680.2498)
 #define SKINHIT_GANTON_END_Z        (13.7819)
@@ -31,7 +23,7 @@
 forward Init_SkinhitGanton();
 public Init_SkinhitGanton()
 {
-    new weapons[2] = { 24, 25 }; // Desert Eagle & Shotgun only
+    new weapons[2] = { 24, 25 };
 
     RegisterTrainingArena(
         SKINHIT_GANTON_NAME,

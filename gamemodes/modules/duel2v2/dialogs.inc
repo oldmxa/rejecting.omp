@@ -5,7 +5,6 @@
 
 #include <YSI_Coding/y_hooks>
 
-// Duel 2v2 Dialogs
 
 forward DIALOG_DUEL2V2_ARENA(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_DUEL2V2_WEAPONS(playerid, dialogid, response, listitem, string:inputtext[]);

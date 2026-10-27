@@ -255,8 +255,6 @@ public Stats_ShowStats(playerid, targetid)
     }
 
     format(strstts, sizeof(strstts), "{MAIN}Parameter\t{MAIN}Data\n");
-
-    // Section 1: Overall Information
     strcat(strstts, "{MAIN}> Overall & Connection\t \n");
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Account ID\t{FFFFFF}#%d\n", strstts, User[targetid][user_sqlid]);
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Created At\t%s\n", strstts, regdate_str);
@@ -312,8 +310,6 @@ public Stats_ShowStats(playerid, targetid)
     {
         strcat(strstts, "{FFFFFF}\x95 {B4B5B7}Mute Status\t{23C552}Clean\n");
     }
-
-    // Section 2: Global Records
     strcat(strstts, "{MAIN}> Combat Records\t \n");
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Level\t{FFFFFF}%d\n", strstts, User[targetid][playerLevel]);
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Total Kills / Deaths\t{23C552}%d {FFFFFF}/ {F84F31}%d\n", strstts, User[targetid][playerKills], User[targetid][playerDeaths]);
@@ -325,8 +321,6 @@ public Stats_ShowStats(playerid, targetid)
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Duel Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, User[targetid][duelWins], User[targetid][duelLosses], ratio(User[targetid][duelWins], User[targetid][duelLosses]));
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}2v2 Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, User[targetid][duel2v2Wins], User[targetid][duel2v2Losses], ratio(User[targetid][duel2v2Wins], User[targetid][duel2v2Losses]));
     format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Achievements\t{23C552}%d {FFFFFF}/ {BEBEBE}%d {B4B5B7}(%d%%)\n", strstts, achUnlocked, ACH_COUNT, (achUnlocked * 100) / ACH_COUNT);
-
-    // Section 3: Clan
     strcat(strstts, "{MAIN}> Clan Information\t \n");
     if(IsPlayerInClan(targetid))
     {
@@ -346,8 +340,6 @@ public Stats_ShowStats(playerid, targetid)
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Clan Kills / Points\t{FFFFFF}%d kills {B4B5B7}| {FFFFFF}%d pts\n", strstts, ClanInfo[cid][clanKills], ClanInfo[cid][clanPoints]);
     }
     else strcat(strstts, "{FFFFFF}\x95 {B4B5B7}Clan Status\t{F84F31}No Clan\n");
-
-    // Section 4: Current Session
     strcat(strstts, "{MAIN}> Current Session\t \n");
     if (User[targetid][locationId] != -1)
     {
@@ -502,8 +494,6 @@ public LookupOfflineStats(playerid, const targetName[])
         new achUnlocked = CountUnlockedAchFromStr(off_achData);
 
         format(strstts, sizeof(strstts), "{MAIN}Parameter\t{MAIN}Data\n");
-
-        // Section 1: Overall Information
         strcat(strstts, "{MAIN}> Overall & Status (Offline)\t \n");
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Account ID\t{FFFFFF}#%d\n", strstts, off_sqlid);
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Status\t{F84F31}Offline\n", strstts);
@@ -564,8 +554,6 @@ public LookupOfflineStats(playerid, const targetName[])
         {
             strcat(strstts, "{FFFFFF}\x95 {B4B5B7}Mute Status\t{23C552}Clean\n");
         }
-
-        // Section 2: Global Records
         strcat(strstts, "{MAIN}> Combat Records\t \n");
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Level\t{FFFFFF}%d\n", strstts, off_level);
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Total Kills / Deaths\t{23C552}%d {FFFFFF}/ {F84F31}%d\n", strstts, off_kills, off_deaths);
@@ -577,8 +565,6 @@ public LookupOfflineStats(playerid, const targetName[])
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Duel Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, off_duel_w, off_duel_l, ratio(off_duel_w, off_duel_l));
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}2v2 Record (W/L)\t{23C552}%d W {FFFFFF}/ {F84F31}%d L {B4B5B7}(%.2f W/L)\n", strstts, off_duel2_w, off_duel2_l, ratio(off_duel2_w, off_duel2_l));
         format(strstts, sizeof(strstts), "%s{FFFFFF}\x95 {B4B5B7}Achievements\t{23C552}%d {FFFFFF}/ {BEBEBE}%d {B4B5B7}(%d%%)\n", strstts, achUnlocked, ACH_COUNT, (achUnlocked * 100) / ACH_COUNT);
-
-        // Section 3: Clan
         strcat(strstts, "{MAIN}> Clan Information\t \n");
         if(off_clanid != -1 && !isnull(off_clan_name))
         {

@@ -3,7 +3,6 @@
 #endif
 #define _tourney_dialogs_included
 
-// Tournament Dialogs & Configuration Interface
 
 forward DIALOG_TOURNEY_ADMIN(playerid, dialogid, response, listitem, string:inputtext[]);
 forward DIALOG_TOURNEY_NAME(playerid, dialogid, response, listitem, string:inputtext[]);
@@ -120,8 +119,6 @@ stock ShowTournamentAdminMenu(playerid)
 
     new body[2048];
     format(body, sizeof(body), "{BEBEBE}Setting\t{BEBEBE}Current Value\n");
-
-    // 0: Status
     new statusStr[64];
     switch(g_TourneyData[t_State])
     {
@@ -132,11 +129,7 @@ stock ShowTournamentAdminMenu(playerid)
         case TOURNAMENT_STATE_FINISHED: format(statusStr, sizeof(statusStr), "{FFD700}Finished (Winner: %s)", g_TourneyData[t_WinnerName]);
     }
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Tournament Status\t%s\n", statusStr));
-
-    // 1: Tournament Name
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Tournament Name\t{00B6F6}%s\n", g_TourneyData[t_Name]));
-
-    // 2: Modality
     new modeStr[32];
     switch(g_TourneyData[t_Mode])
     {
@@ -145,59 +138,29 @@ stock ShowTournamentAdminMenu(playerid)
         case TOURNAMENT_MODE_CLAN: strcopy(modeStr, "{FFFFFF}Clan War");
     }
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Modality\t%s\n", modeStr));
-
-    // 3: Max Slots
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Bracket Size (Slots)\t{23C552}%d Participants\n", g_TourneyData[t_MaxSlots]));
-
-    // 4: Prize Coins
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Prize (Coins)\t{FFD700}%d Coins\n", g_TourneyData[t_PrizeCoins]));
-
-    // 5: Prize Money
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Prize (Money)\t{23C552}%s\n", FormatMoney(g_TourneyData[t_PrizeMoney])));
-
-    // 6: Prize Achievement / Tag
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Prize (Achievement / Tag)\t{FF4500}%s\n", g_TourneyData[t_AchievementTag]));
-
-    // 7: Entry Fee
     if(g_TourneyData[t_EntryFee] > 0)
         strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Entry Fee\t{FF6347}%s\n", FormatMoney(g_TourneyData[t_EntryFee])));
     else
         strcat(body, "{MAIN}\xBB {B4B5B7}Entry Fee\t{23C552}FREE\n");
-
-    // 8: Weapon Set
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Weapon Loadout\t{FFFFFF}%s\n", g_TourneyWeaponSets[g_TourneyData[t_WeaponSet]][twi_Name]));
-
-    // 9: Armour Config
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Armour Setting\t%s\n", g_TourneyData[t_GiveArmour] ? "{23C552}100% Armour + 100 HP" : "{FF6347}No Armour (100 HP Only)"));
-
-    // 10: Arena Selection
     new arenaDisplay[64];
     GetTourneyArenaDisplayName(g_TourneyData[t_ArenaCategory], g_TourneyData[t_ArenaID], arenaDisplay, sizeof(arenaDisplay));
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Arena Selection\t{00B6F6}%s\n", arenaDisplay));
-
-    // 11: Match Format
     new matchFmtStr[32];
     if(g_TourneyData[t_RoundsPerMatch] == 1) strcopy(matchFmtStr, "Best of 1 (1 Round)");
     else if(g_TourneyData[t_RoundsPerMatch] == 3) strcopy(matchFmtStr, "Best of 3 (Bo3)");
     else format(matchFmtStr, sizeof(matchFmtStr), "Best of %d (Bo%d)", g_TourneyData[t_RoundsPerMatch], g_TourneyData[t_RoundsPerMatch]);
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Match Format\t{FFFFFF}%s\n", matchFmtStr));
-
-    // 12: Round Time Limit
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Round Time Limit\t{FFFFFF}%d seconds\n", g_TourneyData[t_RoundTimeLimit]));
-
-    // 13: Event Date & Time (Schedule)
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Event Date & Time\t{00B6F6}%s\n", g_TourneyData[t_Schedule]));
-
-    // 14: Discord Requirement
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Discord App Requirement\t%s\n", g_TourneyData[t_RequireDiscord] ? "{23C552}Required" : "{FF6347}Optional (Direct In-Game)"));
-
-    // 15: Auto-Start
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Auto-Start on Full\t%s\n", g_TourneyData[t_AutoStart] ? "{23C552}[Enabled]" : "{FF6347}[Disabled]"));
-
-    // 16: Manage Participants
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Manage Participants\t{00B6F6}View & Kick {B4B5B7}({FFFFFF}%d/%d{B4B5B7})\n", g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]));
-
-    // Action buttons based on state
     if(g_TourneyData[t_State] == TOURNAMENT_STATE_NONE || g_TourneyData[t_State] == TOURNAMENT_STATE_FINISHED)
     {
         strcat(body, "{MAIN}\xBB {23C552}Start Registration\t{BEBEBE}Open tournament registrations\n");
