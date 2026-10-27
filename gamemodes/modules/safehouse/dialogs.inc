@@ -481,14 +481,14 @@ stock ShowSafehouseExpiry(playerid)
     format(vaultStr, sizeof(vaultStr), "%s", FormatMoney(SafehouseData[index][sh_Vault]));
     format(coinStr, sizeof(coinStr), "%s", FormatCoins(SH_RENEW_COINS));
 
-    new buf[768];
-    format(buf, sizeof(buf), "{BEBEBE}Parameter\t{BEBEBE}Details\t{BEBEBE}Value\n");
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Time Left\t{BEBEBE}Current active contract\t{FFFFFF}%s\n", leftStr));
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Next Charge\t{BEBEBE}Automatic deduction in\t{FFFFFF}%s\n", nextStr));
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Charge Value\t{BEBEBE}Deducted every %d days\t{23C552}%s\n", SH_CHARGE_EVERY / 86400, chargeStr));
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Vault Balance\t{BEBEBE}Funds available for rent\t{23C552}%s\n", vaultStr));
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Extend Contract\t{BEBEBE}Add +%d days contract\t{FFD700}+%d Days {BEBEBE}(%s Coins)\n", SH_RENEW_DAYS, SH_RENEW_DAYS, coinStr));
-    strcat(buf, "{B4B5B7}\x95 {FFFFFF}History\t{BEBEBE}View maintenance records\t{3CCFFA}[Logs]\n");
+    new buf[512];
+    format(buf, sizeof(buf), "{BEBEBE}Parameter\t{BEBEBE}Value\n");
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Time Left\t{FFFFFF}%s\n", leftStr));
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Next Charge\t{FFFFFF}%s\n", nextStr));
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Charge Value\t{23C552}%s\n", chargeStr));
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Vault Balance\t{23C552}%s\n", vaultStr));
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Extend Contract\t{FFD700}+%d Days {BEBEBE}(%s Coins)\n", SH_RENEW_DAYS, coinStr));
+    strcat(buf, "{B4B5B7}\x95 {FFFFFF}History\t{3CCFFA}[Logs]\n");
 
 
     format_MainColor(playerid, buf);

@@ -3,8 +3,11 @@ Respawn(playerid, timestamp)
     if(IsPlayerAFK(playerid))
         return SendClientMessage(playerid, -1, "%s", AFK_ERROR_MSG);
 
-    if(IsPlayerInMatch(playerid) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use respawn while in a duel, match, training, practice or safehouse.");
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use respawn while inside a safehouse. Use /exitsafehouse.");
+
+    if(IsPlayerInMatch(playerid, false) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use respawn while in a duel, match, training or practice.");
 
     new duelState = GetPVarInt(playerid, "DuelS_State");
     if(duelState != DUELS_STATE_NONE)

@@ -163,7 +163,7 @@ static stock HandleSafehouseAltKey(playerid)
         return 1;
     }
 
-    if (IsPlayerInMatch(playerid) || IsPlayerFrozen(playerid) || IsPlayerSpectating(playerid))
+    if (IsPlayerInMatch(playerid, false) || IsPlayerFrozen(playerid) || IsPlayerSpectating(playerid))
         return 0;
 
     new index = GetSafehouseAtPosition(playerid);

@@ -185,10 +185,10 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /gunmenu while in a match, training, practice or safehouse.");
+    if(IsPlayerInMatch(playerid, false))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /gunmenu while in a match, duel, training or practice.");
 
-    if(!IsPlayerInLounge(playerid))
+    if(!IsPlayerInLounge(playerid) && !IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
     {
         if(gettime() - User[playerid][timerRespawn] > 15)
         {
@@ -206,8 +206,8 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spectate while in a duel, match, training, practice or safehouse.");
+    if(IsPlayerInMatch(playerid, false))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot spectate while in a duel, match, training or practice.");
 
     new PLAYER_STATE:playerState = GetPlayerState(playerid);
 
@@ -269,8 +269,11 @@ ShowRankingsMenu(playerid)
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsPlayerInMatch(playerid) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /respawn while in a duel, match, training, practice or safehouse.");
+    if(IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot respawn while inside a safehouse. Use /exitsafehouse.");
+
+    if(IsPlayerInMatch(playerid, false) || IsPlayerInTraining(playerid) || IsPlayerInPractice(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /respawn while in a duel, match, training or practice.");
 
     new timestampRespawn = gettime();
     Respawn(playerid, timestampRespawn);

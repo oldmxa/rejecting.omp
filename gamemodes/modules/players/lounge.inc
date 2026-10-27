@@ -25,9 +25,9 @@ stock bool:CanUseLoungeUtility(playerid, bool:adminBypass = false, const actionN
         return false;
     }
 
-    if (IsPlayerInMatch(playerid))
+    if (IsPlayerInMatch(playerid, false))
     {
-        va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot %s while in a match, training, practice or safehouse.", actionName);
+        va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot %s while in a match, duel, training or practice.", actionName);
         return false;
     }
 
@@ -177,8 +177,13 @@ public Lounge_SpawnLoungeVehicle(playerid, vehicle, color1, color2)
     if(playerState == PLAYER_STATE_SPECTATING || IsPlayerSpectating(playerid))
         return SendClientMessage(playerid, -1, "%s", IN_SPEC_MODE);
 
-    if (IsPlayerInMatch(playerid))
-        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /lounge while in a match, training, practice or safehouse.");
+    if (IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]))
+    {
+        ExitSafehouse(playerid);
+    }
+
+    if (IsPlayerInMatch(playerid, false))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot use /lounge while in a match, duel, training or practice.");
 
     if (IsPlayerAFK(playerid))
     {

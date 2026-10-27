@@ -177,7 +177,7 @@
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsPlayerInMatch(playerid))
+    if(IsPlayerInMatch(playerid, false))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot start a votekick while in a match.");
 
     new targetid;
@@ -229,7 +229,7 @@
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
-    if(IsPlayerInMatch(playerid))
+    if(IsPlayerInMatch(playerid, false))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot transfer money while in a match.");
 
     new targetid, money;
