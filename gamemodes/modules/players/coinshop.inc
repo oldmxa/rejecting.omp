@@ -29,31 +29,18 @@ stock GetCoinsPrice(coins)
 forward Coinshop_ShowCoinsMenu(playerid);
 public Coinshop_ShowCoinsMenu(playerid)
 {
-    new body[640], title[64] = "{MAIN}Coins";
+    new body[256], title[64] = "{MAIN}Coins";
 
-    strcat(body, "{A29582}Option\t{A29582}Details\n");
-
-    strcat(body, fmat_return("{FFFFFF}My Balance\t{FFFF00}%s\n", FormatCoins(User[playerid][playerCoins])));
-    strcat(body, fmat_return("{FFFFFF}Buy Coins\t{23C552}%s {BEBEBE}\xbb {FFFF00}%s\n",
-        FormatMoney(COINSHOP_MONEY), FormatCoins(COINSHOP_COINS)));
-    strcat(body, fmat_return("{FFFFFF}Buy VIP\t{BEBEBE}From {FFFF00}%s\n", FormatCoins(GetVipPackageCoins(0))));
-
-    if (IsPlayerVip(playerid))
-        strcat(body, "{FFFFFF}VIP Perks\t{23C552}Active\n");
-    else
-        strcat(body, "{FFFFFF}VIP Perks\t{BEBEBE}View perks\n");
-
-    if (strcmp(User[playerid][dc_username], "-1", true) != 0)
-        strcat(body, "{FFFFFF}Discord Reward\t{23C552}Linked\n");
-    else
-        strcat(body, "{FFFFFF}Discord Reward\t{23C552}+$100k {B4B5B7}& {FFFF00}+5k Coins\n");
-
-    strcat(body, "{FFFFFF}History\t{BEBEBE}Recent transactions\n");
-
+    strcat(body, "{FFFFFF}My Balance\n");
+    strcat(body, "{FFFFFF}Buy Coins\n");
+    strcat(body, "{FFFFFF}Buy VIP\n");
+    strcat(body, "{FFFFFF}VIP Perks\n");
+    strcat(body, "{FFFFFF}Discord Reward\n");
+    strcat(body, "{FFFFFF}History\n");
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-    return Dialog_ShowCallback(playerid, using public DIALOG_COINS_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS,
+    return Dialog_ShowCallback(playerid, using public DIALOG_COINS_MENU<iiiis>, DIALOG_STYLE_LIST,
         title, body, "Select", "Close");
 }
 
