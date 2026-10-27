@@ -2,18 +2,14 @@ new PlayerText:LoginRC[MAX_PLAYERS][17];
 new bool:IsPlayerInLogin[MAX_PLAYERS];
 new CameraLoginTimer[MAX_PLAYERS];
 
-// login box: each definition adjusts one side independently, without affecting the others
-#define LOGIN_PANEL_LEFT      (243.0) // left edge: lower = further left
-#define LOGIN_PANEL_RIGHT     (397.0) // right edge: higher = further right
-#define LOGIN_PANEL_TOP       (110.0) // top edge: lower = further up
-#define LOGIN_PANEL_BOTTOM    (244.0) // bottom edge: higher = further down
-#define LOGIN_PANEL_R          (12.5) // corner radius: higher = more rounded
+#define LOGIN_PANEL_LEFT      (243.0)
+#define LOGIN_PANEL_RIGHT     (397.0)
+#define LOGIN_PANEL_TOP       (110.0)
+#define LOGIN_PANEL_BOTTOM    (244.0)
+#define LOGIN_PANEL_R          (12.5)
 
-// the LD_BEAT:chit disc has a transparent margin around it: its bounding box expands
-// this clearance on all four sides allows the design to touch the edge of the panel
-#define LOGIN_CORNER_FIT       (6.0) // there's straight fabric left over at any corner: increase.
+#define LOGIN_CORNER_FIT       (6.0)
 
-// Nickname/password field highlight color
 #define LOGIN_HOVER_COLOR (0xFFD700FF)
 
 #define LOGIN_PANEL_W (LOGIN_PANEL_RIGHT - LOGIN_PANEL_LEFT)

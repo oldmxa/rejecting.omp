@@ -88,7 +88,7 @@ stock AnnounceOutpostCaptureStart(zoneid, outpost_idx, clanid)
         if(arenaInfo[User[i][locationId]][arenaId] != zoneid) continue;
         if(User[i][hideGlobalMsg]) continue;
 
-        va_SendClientMessage(i, -1, "{MAIN}[OUTPOST] %s {FFFFFF}is capturing Outpost #%d! Defend it or claim it yourself.", clanNameColor, outpost_idx + 1);
+        va_SendClientMessage(i, -1, "{MAIN}[OUTPOST] %s {FFFFFF}started capturing Outpost #%d!", clanNameColor, outpost_idx + 1);
     }
     return 1;
 }
@@ -108,7 +108,7 @@ stock AnnounceOutpostCaptureLost(zoneid, outpost_idx, clanid, progress)
         if(loc < 0 || loc >= MAX_LOCATIONS || loc == ARENA_AFK) continue;
         if(arenaInfo[loc][arenaId] != zoneid) continue;
 
-        va_SendClientMessage(i, -1, "{MAIN}[OUTPOST] {FFFFFF}Capture of Outpost #%d stopped: no clan member inside the area. {F84F31}%d%% {FFFFFF}lost.", outpost_idx + 1, pct);
+        va_SendClientMessage(i, -1, "{MAIN}[OUTPOST] {FFFFFF}Outpost #%d capture stopped: area empty ({F84F31}%d%% {FFFFFF}lost).", outpost_idx + 1, pct);
         PlayErrorSound(i);
     }
     return 1;
@@ -469,7 +469,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                     new clan = User[playerid][clanID];
                     if(clan == -1) {
                          if(gettime() > User[playerid][outpostWarnCooldown]) {
-                             SendClientMessage(playerid, -1, "{MAIN}[OUTPOST] {FFFFFF}You need a clan to capture this outpost!");
+                             SendClientMessage(playerid, -1, "{MAIN}[OUTPOST] {FFFFFF}You must be in a clan to capture this outpost.");
                              User[playerid][outpostWarnCooldown] = gettime() + 10;
                          }
                          return 1;
@@ -491,7 +491,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                     if(OutpostInfo[arena][o][oCapturingClan] != clan && IsClanCapturingAnyOutpost(clan))
                     {
                         if(gettime() > User[playerid][outpostWarnCooldown]) {
-                            SendClientMessage(playerid, -1, "{MAIN}[OUTPOST] {FFFFFF}Your clan is already capturing another outpost!");
+                            SendClientMessage(playerid, -1, "{MAIN}[OUTPOST] {FFFFFF}Your clan is already capturing another outpost.");
                             User[playerid][outpostWarnCooldown] = gettime() + 10;
                         }
                         return 1;
@@ -509,7 +509,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                     {
                         if(gettime() > User[playerid][outpostWarnCooldown])
                         {
-                            va_SendClientMessage(playerid, -1, "{MAIN}[OUTPOST] {FFFFFF}You are helping to capture Outpost #%d.", o + 1);
+                            va_SendClientMessage(playerid, -1, "{MAIN}[OUTPOST] {FFFFFF}Assisting in capturing Outpost #%d.", o + 1);
                             User[playerid][outpostWarnCooldown] = gettime() + 10;
                         }
                     }

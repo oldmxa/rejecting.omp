@@ -568,8 +568,6 @@ static stock GetCustomArenaIndex(zone)
     return -1;
 }
 
-// Standing surfaces under (x, y), from the highest down: a roof answers first,
-// so the walk has to keep going to reach the floor the round is played on.
 static stock CollectSurfaces(Float:x, Float:y, Float:top, Float:bottom, Float:out[], size)
 {
     new count = 0;
@@ -592,9 +590,6 @@ static stock CollectSurfaces(Float:x, Float:y, Float:top, Float:bottom, Float:ou
     return count;
 }
 
-// Spawns are measured once against the ColAndreas copy of the map: the grid
-// keeps every surface a player fits on, and the height shared by most of them
-// is taken as the arena floor, so a wrong Z in the table cannot drop anyone.
 static stock BuildCustomSpawns(index, zone)
 {
     new Float:floorZ = arenaData[zone][arenaFloorZ];
@@ -809,9 +804,6 @@ spawnOnLocation(playerid)
 	SetPlayerInterior(playerid, arenaData[zone][arenaInterior]);
 
 	bestZ += 1.0;
-
-	// Must run before the teleport: the floor is streamed objects, and arriving
-	// first means falling through while they are still being created.
 	if(customArena)
 		Streamer_UpdateEx(playerid, bestX, bestY, bestZ, -1, arenaData[zone][arenaInterior], STREAMER_TYPE_OBJECT);
 
@@ -874,9 +866,6 @@ static StopSpawnFloorGuard(playerid)
 	return 1;
 }
 
-// The arena floor is made of streamed objects: if the client has not created
-// them yet the player drops through it, so the first seconds after the spawn
-// put anyone who falls below the floor back on the spawn point.
 public SpawnFloorGuard(playerid)
 {
 	new ticks = GetPVarInt(playerid, "spawn_guard_ticks") - 1;

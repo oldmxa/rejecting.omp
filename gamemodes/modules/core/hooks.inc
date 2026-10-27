@@ -6,7 +6,6 @@
 #include <YSI_Coding/y_hooks>
 #include <YSI_Coding/y_va>
 
-// CoresDoBglh Global Processor
 
 stock GetPlayerMainHex(playerid, dest[], len = sizeof(dest))
 {
@@ -73,7 +72,6 @@ public CB_ProcessMessage(playerid, buffer[], len)
     return 1;
 }
 
-// Hook SendClientMessage
 stock CB_SendClientMessage(playerid, color, const fmat[], va_args<>)
 {
     if(!IsPlayerConnected(playerid)) return 0;
@@ -96,7 +94,6 @@ stock CB_SendClientMessage(playerid, color, const fmat[], va_args<>)
 #endif
 #define SendClientMessage CB_SendClientMessage
 
-// Hook SendClientMessageToAll
 stock CB_SendClientMessageToAll(color, const fmat[], va_args<>)
 {
     new buffer[1024];
@@ -115,7 +112,6 @@ stock CB_SendClientMessageToAll(color, const fmat[], va_args<>)
 #endif
 #define SendClientMessageToAll CB_SendClientMessageToAll
 
-// Hook ShowPlayerDialog
 stock CB_ShowPlayerDialog(playerid, dialogid, style, const title[], const body[], const button1[], const button2[])
 {
     if(!IsPlayerConnected(playerid)) return 0;
@@ -284,7 +280,6 @@ stock SendWrappedClientMessageToAll(color, const message[])
     return 1;
 }
 
-// Hook va_SendClientMessage (YSI)
 stock CB_va_SendClientMessage(playerid, color, const fmat[], va_args<>)
 {
     new buffer[1024];
@@ -299,7 +294,6 @@ stock CB_va_SendClientMessage(playerid, color, const fmat[], va_args<>)
 #endif
 #define va_SendClientMessage CB_va_SendClientMessage
 
-// Hook va_SendClientMessageToAll (YSI)
 stock CB_va_SendClientMessageToAll(color, const fmat[], va_args<>)
 {
     new buffer[1024];
@@ -314,7 +308,6 @@ stock CB_va_SendClientMessageToAll(color, const fmat[], va_args<>)
 #endif
 #define va_SendClientMessageToAll CB_va_SendClientMessageToAll
 
-// Hook va_ShowPlayerDialog (YSI)
 stock CB_va_ShowPlayerDialog(playerid, dialogid, style, const title[], const body[], const button1[], const button2[], va_args<>)
 {
     new b[4096];
@@ -396,9 +389,6 @@ hook OnGameModeInit()
     format(User[MAX_PLAYERS][dc_discriminator], 100, "-1");
     format(User[MAX_PLAYERS][dc_uid], 100, "-1");
     format(User[MAX_PLAYERS][dc_code], 100, "-1");
-    // dc_codetimer is an int (timestamp), not one of the 100-cell dc_* arrays: a
-    // format() call here writes 3 cells and corrupts acfg_pm/acfg_clanpm, which
-    // come immediately after it in the enum and are copied to every player.
     User[MAX_PLAYERS][dc_codetimer] = -1;
     playerSpecID[MAX_PLAYERS] = INVALID_PLAYER_ID;
     return 1;

@@ -410,7 +410,7 @@ static const g_LoungeTips[][] =
     "{FFFFFF}Clan leaders can customize and edit base furniture with {MAIN}/editsafehouse{FFFFFF}.",
     "{FFFFFF}Access {MAIN}/settings {FFFFFF}to customize HUD, sounds, PMs and fighting styles.",
     "{FFFFFF}Enable or disable the combat hit sound (bell) inside {MAIN}/settings{FFFFFF}.",
-    "{FFFFFF}Toggle spawn protection on/off to suit your combat style in {MAIN}/settings{FFFFFF}.",
+    "{FFFFFF}Toggle spawn protection on or off inside {MAIN}/settings{FFFFFF}.",
     "{FFFFFF}Change your melee fighting style using {MAIN}/fight {FFFFFF}or via {MAIN}/settings{FFFFFF}.",
     "{FFFFFF}Toggle private messages on or off anytime inside the {MAIN}/settings {FFFFFF}menu.",
     "{FFFFFF}Toggle connect and disconnect chat notifications inside {MAIN}/settings{FFFFFF}.",

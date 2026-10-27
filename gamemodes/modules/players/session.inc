@@ -302,9 +302,6 @@ setAfk(playerid)
 	LoadMap(playerid, 0);
 	updatePlayerHud(playerid);
 	CallLocalFunction("ResetPlayerOutpostCapture", "i", playerid);
-
-	// modules/safehouse: while the toggle is on the base replaces the lounge,
-	// custom or not, so the move happens after everything else is applied
 	if(User[playerid][spawnSafehouse])
 	{
 		new safehouse = GetPlayerSafehouse(playerid);
