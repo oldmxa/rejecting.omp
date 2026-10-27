@@ -980,7 +980,6 @@ public OnTrainingChallengeTick(playerid)
 {
     if (!g_PlayerTraining[playerid][pTrain_Active] || !g_PlayerTraining[playerid][pTrain_ChallengeOn])
     {
-        // stale timer: the session ended somewhere else
         if (g_PlayerTraining[playerid][pTrain_ChallengeTimer] != 0)
         {
             KillTimer(g_PlayerTraining[playerid][pTrain_ChallengeTimer]);

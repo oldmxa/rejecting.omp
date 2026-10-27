@@ -131,7 +131,7 @@
 
         CallLocalFunction("Ach_OnDiscordLink", "i", playerid);
 
-        SendClientMessage(playerid, COLOR_KGREEN, "{MAIN}[DISCORD] {FFFFFF}Your account has been successfully verified and linked with Discord!");
+        SendClientMessage(playerid, COLOR_KGREEN, "{MAIN}[DISCORD] {FFFFFF}Account verified and linked with Discord.");
         RemovePendingDCVerify(slot);
         return 1;
     }

@@ -68,8 +68,6 @@ attachSpecCamera(playerid, targetid)
 	else
 		PlayerSpectatePlayer(playerid, targetid, SPECTATE_MODE_NORMAL);
 }
-
-// varre a partir do alvo atual, dando a volta na faixa de ids
 findSpecTarget(playerid, exclude = INVALID_PLAYER_ID, bool:ascending = true)
 {
 	new id = playerSpecID[playerid];
@@ -187,8 +185,6 @@ handleSpecTargetLeft(targetid)
 		setPlayerSpectate(watchers[i], next);
 	}
 }
-
-// o weapon-config nao conhece spectate: espelha o feed de dano de quem esta sendo assistido
 hook OnPlayerDamageDone(playerid, Float:amount, issuerid, WEAPON:weapon, bodypart)
 {
 	new Float:hp;

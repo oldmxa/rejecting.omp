@@ -701,8 +701,6 @@ public OnPlayerJoin(playerid)
 
         UpdateRoundStatsColors(playerid);
         UpdateVipHeadTag(playerid);
-
-        // load achievements directly from the account (uses a global buffer to avoid stack overflow)
         g_achSerialBuf[0] = '\0';
         cache_get_value_name(0, "achievements_data", g_achSerialBuf, ACH_SERIAL_BUF_SIZE);
         LoadPlayerAchievements(playerid, g_achSerialBuf);

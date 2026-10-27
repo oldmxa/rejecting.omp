@@ -50,7 +50,6 @@ stock PlayAnim(playerid, const animlib[], const animname[], Float:fDelta, loop, 
     return 1;
 }
 
-// Hook 'F' / ENTER key (KEY_SECONDARY_ATTACK) to cancel animation on foot
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if((newkeys & KEY_SECONDARY_ATTACK) && !IsPlayerInAnyVehicle(playerid))

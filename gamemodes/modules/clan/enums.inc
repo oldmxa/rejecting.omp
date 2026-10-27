@@ -103,9 +103,5 @@ new const DefaultClanColorNames[][] = {
     "Yellow",
     "Purple"
 };
-
-// clans listed in the last /clans dialog, indexed by list item
 new g_PlayerClansList[MAX_PLAYERS][MAX_CLANS];
-
-// clan whose recruitment dialog the player is looking at, -1 when none
 new g_PlayerSelectedClan[MAX_PLAYERS] = {-1, ...};

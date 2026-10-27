@@ -3,7 +3,6 @@
 #endif
 #define _safehouse_config_included
 
-// one safehouse per map zone declared in arenaData
 #define MAX_SAFEHOUSES          MAX_ZONES
 
 #define SAFEHOUSE_NAME_LEN      (32)
@@ -19,13 +18,10 @@
 #define SAFEHOUSE_CHARGE_DAYS   (4)
 #define SAFEHOUSE_CHARGE_VALUE  (50000)
 
-// gives setAfk and the gamemode spawn time to finish before the base move
 #define SAFEHOUSE_SPAWN_DELAY   (500)
 
-// how often the server looks for due charges and expirations
 #define SAFEHOUSE_TICK_INTERVAL (60000)
 
-// property_green / property_locked / property_orange
 #define SAFEHOUSE_PICKUP_FREE     (1273)
 #define SAFEHOUSE_PICKUP_OWNED    (1272)
 #define SAFEHOUSE_PICKUP_EXPIRING (19523)
@@ -33,7 +29,6 @@
 #define SAFEHOUSE_EXPIRING_WINDOW (86400)
 #define SAFEHOUSE_VW_BASE       (70000)
 
-// radar_propertyG (green house) / radar_propertyR (red house)
 #define SAFEHOUSE_ICON_FREE      (31)
 #define SAFEHOUSE_ICON_OWNED     (32)
 #define SAFEHOUSE_ICON_EXPIRING  (52)

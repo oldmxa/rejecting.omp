@@ -11,8 +11,6 @@ new g_TotalTrainingArenas = 0;
 
 // per-player training state
 new g_PlayerTraining[MAX_PLAYERS][E_PLAYER_TRAINING];
-
-// challenge timer textdraw (created on demand, same slot role as the duel one)
 new PlayerText:g_TrainingTimerTD[MAX_PLAYERS];
 new PlayerText:g_TrainingCountdownTD[MAX_PLAYERS];
 

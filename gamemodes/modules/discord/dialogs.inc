@@ -30,7 +30,7 @@ public DIALOG_LINK_DISCORD(playerid, dialogid, response, listitem, string:inputt
     {
         if(IsNull(inputtext))
 		{
-			SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}Username cannot be empty. Please enter your Discord username.");
+			SendClientMessage(playerid, COLOR_TOMATO, "{MAIN}[ERROR] {FFFFFF}Username cannot be empty.");
             ShowDiscordLinkDialog(playerid);
 			return true;
 		}

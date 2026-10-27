@@ -798,8 +798,6 @@ new ServerDefaultHpBarColor = -1;
 
 new MySQL: dbHandle;
 new queryGlobal[4096];
-
-// global buffers (avoids stack overflow)
 #define ACH_SERIAL_BUF_SIZE (MAX_ACHIEVEMENTS * 48 + 16)
 new g_achSerialBuf[ACH_SERIAL_BUF_SIZE];
 new g_achQueryBuf[ACH_SERIAL_BUF_SIZE + 80];

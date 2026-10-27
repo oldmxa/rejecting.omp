@@ -1090,7 +1090,6 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
 {
     if(response)
     {
-        // training challenges: served from the training module caches, no query
         if(listitem == 10)
         {
             CallLocalFunction("ShowTrainingChallengeDialog", "i", playerid);

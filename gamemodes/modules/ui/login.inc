@@ -314,8 +314,6 @@ ShowLoginScreen(playerid, type)
     PlayerTextDrawBackgroundColor(playerid, LoginRC[playerid][8], 255);
     PlayerTextDrawFont(playerid, LoginRC[playerid][8], TEXT_DRAW_FONT_1);
     PlayerTextDrawSetProportional(playerid, LoginRC[playerid][8], 1);
-
-    // INPUT FIELD 2 ICON BOX (Gray box behind the padlock)
     LoginRC[playerid][9] = CreatePlayerTextDraw(playerid, 258.609008, 181.833175, "box");
     PlayerTextDrawLetterSize(playerid, LoginRC[playerid][9], 0.000000, 1.183246);
     PlayerTextDrawTextSize(playerid, LoginRC[playerid][9], 269.339538, 0.000000);
@@ -407,8 +405,6 @@ ShowLoginScreen(playerid, type)
     PlayerTextDrawBoxColor(playerid, LoginRC[playerid][14], 0x00000000);
     PlayerTextDrawUseBox(playerid, LoginRC[playerid][14], 0);
     PlayerTextDrawSetSelectable(playerid, LoginRC[playerid][14], true);
-
-    // LOGO SPRITE (ld_shtr:ufo right next to ServerHostname in header)
     LoginRC[playerid][15] = CreatePlayerTextDraw(playerid, 278.000000, 117.000000, "ld_shtr:ufo");
     PlayerTextDrawLetterSize(playerid, LoginRC[playerid][15], 0.000000, 0.000000);
     PlayerTextDrawTextSize(playerid, LoginRC[playerid][15], 20.000000, 20.000000);

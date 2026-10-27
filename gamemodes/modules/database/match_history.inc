@@ -59,8 +59,6 @@ SaveArenaMatchHistory(location, finishingArenaId, const sortedPlayers[], sortedC
         {
             strcat(query, ",");
         }
-
-        // mysql_format (not format) so the arena name goes through %e.
         mysql_format(dbHandle, row, sizeof(row), "(%d,%d,'%e',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
             User[playerid][user_sqlid],
             finishingArenaId,

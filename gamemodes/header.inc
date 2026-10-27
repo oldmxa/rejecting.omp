@@ -1,4 +1,3 @@
-// Constants, globals and hooks. Everything depends on this block, nothing enters before it.
 #include "modules/core/defines.inc"
 #include "modules/core/globals.inc"
 #include "modules/core/hooks.inc"
@@ -10,7 +9,7 @@
 // logs
 #include "modules/logs/logs_entry.inc"
 
-// Interface: HUD, textdraws and the login screen.
+// UI
 #include "modules/ui/style_picker.inc"
 #include "modules/ui/hud_styles.inc"
 #include "modules/ui/life_styles.inc"
@@ -26,10 +25,9 @@
 #include "modules/core/messages.inc"
 #include "modules/util/buildings.inc"
 
-// Arenas: the arenaData table is used by the dialogs.
+// Arenas
 #include "modules/arena/data.inc"
 
-// object-built arenas: each file self-registers through hook OnGameModeInit()
 #include "modules/arena/arena_object.inc"
 #include "modules/arena/maps/chinese-garden.inc"
 #include "modules/arena/maps/desert.inc"
@@ -37,11 +35,10 @@
 #include "modules/arena/maps/urbex.inc"
 #include "modules/arena/maps/zoo.inc"
 
-// Clan: its enums and globals are used by almost every module below.
+// Clan
 #include "modules/clan/clan.inc"
 
-// dialogs. they all go here, in the position the single file previously occupied,
-// so as not to alter the resolution order of the `using public` statements further down.
+// dialogs
 #include "modules/players/dialogs.inc"
 #include "modules/arena/dialogs.inc"
 #include "modules/admins/dialogs.inc"
@@ -78,8 +75,6 @@
 #include "modules/training/training.pwn"
 #include "modules/practice/practice.inc"
 
-// duel, safehouse and random_death_tag hook OnPlayerDeath via ALS:
-// they must come before the base.pwn callbacks.
 #include "modules/safehouse/safehouse.inc"
 #include "modules/duel/core.inc"
 #include "modules/duel2v2/entry.inc"

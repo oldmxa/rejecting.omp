@@ -342,8 +342,6 @@ public DIALOG_SAFE_EDIT_LIST(playerid, dialogid, response, listitem, string:inpu
     {
         index = IsValidSafehouseIndex(g_PlayerInSafehouse[playerid]) ?
             g_PlayerInSafehouse[playerid] : GetSafehouseAtPosition(playerid, 5.0);
-
-        // nothing nearby: open the system panel instead of failing
         if (!IsValidSafehouseIndex(index))
             return ShowSafehouseAdminMenu(playerid);
     }

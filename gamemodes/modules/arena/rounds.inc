@@ -309,9 +309,7 @@ getLocationPlayers(location)
 	return playerCounter;
 }
 
-// minimum distance between spawn and other players in the arena
 #define SPAWN_MIN_DISTANCE (25.0)
-// how many points to test before accepting the best one found
 #define SPAWN_MAX_ATTEMPTS (15)
 
 #define SPAWN_RAYCAST_CEILING (700.0)
@@ -334,7 +332,6 @@ getLocationPlayers(location)
 #define CUSTOM_SPAWN_LAYERS (3)
 #define CUSTOM_SPAWN_STEPS  (10)
 
-// synchronize with other players 500ms
 #define SPAWN_PROTECT_TIME (500)
 
 new SpawnProtectTimer[MAX_PLAYERS];

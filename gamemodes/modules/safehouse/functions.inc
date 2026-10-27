@@ -444,8 +444,6 @@ stock SellSafehouse(playerid, index)
     ReleaseSafehouse(index, "sold by leader");
     return 1;
 }
-
-// hands the safehouse back to the pool, kicking anyone still inside
 stock ReleaseSafehouse(index, const reason[])
 {
     if (!IsValidSafehouseIndex(index)) return 0;

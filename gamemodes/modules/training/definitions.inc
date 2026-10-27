@@ -3,7 +3,6 @@
 #endif
 #define _training_definitions_included
 
-// Defines, enums and constants training system
 
 forward Ach_OnTrainingChallengeFinish(playerid, Float:damage, Float:accuracy, recordType);
 
@@ -25,7 +24,6 @@ forward Ach_OnTrainingChallengeFinish(playerid, Float:damage, Float:accuracy, re
 // hit feedback
 #define TRAINING_HIT_SOUND          (17802)
 
-// damage per weapon, mirroring the arena balance used in OnPlayerDamage
 #define TRAINING_DMG_DEFAULT        (10.0)
 #define TRAINING_DMG_DEAGLE         (35.0)
 #define TRAINING_DMG_SHOTGUN        (15.0)

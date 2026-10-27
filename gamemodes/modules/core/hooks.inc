@@ -31,8 +31,6 @@ stock GetPlayerMainHex(playerid, dest[], len = sizeof(dest))
         format(dest, len, "%06x", mainVal & 0xFFFFFF);
         return 1;
     }
-
-    // Default / 0 / -1: Follows HUD primary shade or HUD preset color
     new shade = User[playerid][hudShadeOne];
     if(shade < 0 && ServerDefaultHudShadeOne >= 0)
     {

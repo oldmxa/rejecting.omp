@@ -27,23 +27,15 @@
 
 #define CLAN_PRICE              (500000)
 #define CLAN_COLOR_PRICE        (3000000)
-
-// alpha applied to the clan color so the tab list stays readable
 #define CLAN_COLOR_ALPHA        (0xAA)
 #define CLAN_COLOR_ALPHA_CMD    (0x59)
 #define CLAN_COLOR_DEFAULT      (0xa4aba865)
-
-// an invite is only redeemable by /accept inside this window
 #define CLAN_INVITE_TIMEOUT     (20)
 
 #define CLAN_MEMBERS_PER_PAGE   (10)
 #define CLAN_TERRITORY_PER_PAGE (20)
 #define CLAN_LOG_ROWS           (20)
-
-// points the clan that dealt most damage takes from a finished round
 #define CLAN_ROUND_POINTS       (50)
-
-// hourly payout per owned zone, by zone category
 #define CLAN_REWARD_BIG         (5000)
 #define CLAN_REWARD_MEDIUM      (2500)
 #define CLAN_REWARD_SMALL       (1500)

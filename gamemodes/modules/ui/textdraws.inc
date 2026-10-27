@@ -471,22 +471,22 @@ playertextdraws(playerid)
     PlayerTextDrawFont(playerid, ClanHUD[playerid][3], TEXT_DRAW_FONT_1);
     PlayerTextDrawSetProportional(playerid, ClanHUD[playerid][3], 1);
 
-    OutpostBar[playerid][0] = CreatePlayerTextDraw(playerid, 235.0, 340.0, "LD_POKE:cd9s"); // Outer Rounded Card Frame (Round Results sprite)
+    OutpostBar[playerid][0] = CreatePlayerTextDraw(playerid, 235.0, 340.0, "LD_POKE:cd9s");
     PlayerTextDrawFont(playerid, OutpostBar[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
     PlayerTextDrawColor(playerid, OutpostBar[playerid][0], 0x00000066);
     PlayerTextDrawTextSize(playerid, OutpostBar[playerid][0], 170.0, 34.0);
 
-    OutpostBar[playerid][1] = CreatePlayerTextDraw(playerid, 245.0, 362.0, "LD_POKE:cd9s"); // Rounded Track Background
+    OutpostBar[playerid][1] = CreatePlayerTextDraw(playerid, 245.0, 362.0, "LD_POKE:cd9s");
     PlayerTextDrawFont(playerid, OutpostBar[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
     PlayerTextDrawColor(playerid, OutpostBar[playerid][1], 0x000000A0);
     PlayerTextDrawTextSize(playerid, OutpostBar[playerid][1], 150.0, 6.0);
 
-    OutpostBar[playerid][2] = CreatePlayerTextDraw(playerid, 245.0, 362.0, "LD_POKE:cd9s"); // Rounded Fill Bar (Progress)
+    OutpostBar[playerid][2] = CreatePlayerTextDraw(playerid, 245.0, 362.0, "LD_POKE:cd9s");
     PlayerTextDrawFont(playerid, OutpostBar[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
     PlayerTextDrawColor(playerid, OutpostBar[playerid][2], 0x23C552FF);
     PlayerTextDrawTextSize(playerid, OutpostBar[playerid][2], 2.0, 6.0);
 
-    OutpostBar[playerid][3] = CreatePlayerTextDraw(playerid, 320.0, 345.0, "CAPTURING OUTPOST [ ~g~0%~w~ ]"); // Header (Font 2)
+    OutpostBar[playerid][3] = CreatePlayerTextDraw(playerid, 320.0, 345.0, "CAPTURING OUTPOST [ ~g~0%~w~ ]");
     PlayerTextDrawFont(playerid, OutpostBar[playerid][3], TEXT_DRAW_FONT_2);
     PlayerTextDrawLetterSize(playerid, OutpostBar[playerid][3], 0.22, 1.00);
     PlayerTextDrawAlignment(playerid, OutpostBar[playerid][3], TEXT_DRAW_ALIGN_CENTRE);
@@ -496,7 +496,7 @@ playertextdraws(playerid)
     PlayerTextDrawBackgroundColor(playerid, OutpostBar[playerid][3], 0x0000004B);
     PlayerTextDrawSetProportional(playerid, OutpostBar[playerid][3], 1);
 
-    OutpostBar[playerid][4] = CreatePlayerTextDraw(playerid, 320.0, 355.0, "HOLD POSITION WITHIN ~y~70M ~w~RANGE"); // Subtitle
+    OutpostBar[playerid][4] = CreatePlayerTextDraw(playerid, 320.0, 355.0, "HOLD POSITION WITHIN ~y~70M ~w~RANGE");
     PlayerTextDrawFont(playerid, OutpostBar[playerid][4], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, OutpostBar[playerid][4], 0.16, 0.75);
     PlayerTextDrawAlignment(playerid, OutpostBar[playerid][4], TEXT_DRAW_ALIGN_CENTRE);

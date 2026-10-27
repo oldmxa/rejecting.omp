@@ -83,8 +83,6 @@
     if (IsPlayerInClan(targetid)) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN1);
 
     new clanid = User[playerid][clanID];
-
-    // slots come from the base allowance plus whatever the safehouse level adds
     if (ClanMembersCount[clanid] >= GetClanMemberSlots(clanid))
         return va_SendClientMessage(playerid, -1, CLAN_PREFIX"Your clan reached its %d member slots. Buy or upgrade a safehouse to get more.", GetClanMemberSlots(clanid));
 

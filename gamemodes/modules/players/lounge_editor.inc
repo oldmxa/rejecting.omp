@@ -3,16 +3,8 @@
 #endif
 #define _lounge_editor_included
 
-/*
-    Lounge Editor Module (/elounge)
-    Allows authorized administrators to customize lounge spawn, blackboard rank board (with height & 3D editing),
-    and TOP 5 ranking actors (Kills & Damage) dynamically in-game.
-    Persists configuration into lounge_config.ini.
-*/
-
 #define LOUNGE_CONFIG_FILE "lounge_config.ini"
 
-// Forward declarations
 forward updateKillRank();
 forward updateDamageRank();
 forward UpdateTOP3Kills();
@@ -20,7 +12,6 @@ forward UpdateTOP3Damage();
 forward InitLoungeTipSystem();
 
 
-// Loads lounge configuration from lounge_config.ini
 stock LoadLoungeConfig()
 {
     if(!fexist(LOUNGE_CONFIG_FILE))
@@ -103,7 +94,6 @@ stock LoadLoungeConfig()
     return 1;
 }
 
-// Saves lounge configuration to lounge_config.ini
 stock SaveLoungeConfig()
 {
     new File:file = fopen(LOUNGE_CONFIG_FILE, io_write);

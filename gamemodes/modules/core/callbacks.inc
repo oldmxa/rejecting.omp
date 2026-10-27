@@ -993,8 +993,6 @@ public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hi
 			{
 				playerArenaInfo[loc][playerid][firedShots]++;
 				SetPVarInt(playerid, "CurrentShotId", GetPVarInt(playerid, "CurrentShotId") + 1);
-				
-				// Logic safety: hits cannot exceed shots
 				if(playerArenaInfo[loc][playerid][hitedShots] > playerArenaInfo[loc][playerid][firedShots])
 					playerArenaInfo[loc][playerid][hitedShots] = playerArenaInfo[loc][playerid][firedShots];
 			}
