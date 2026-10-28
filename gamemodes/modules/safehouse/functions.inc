@@ -333,7 +333,10 @@ stock RefreshSafehousePickup(index)
             SH_CHARGE_EVERY / 86400);
     }
 
-    SafehouseData[index][sh_Label] = CreateDynamic3DTextLabel(label, -1, x, y, z + 0.7, SH_LABEL_DISTANCE);
+    SafehouseData[index][sh_Label] = CreateDynamic3DTextLabel(
+        label, -1, x, y, z + 0.7, SH_LABEL_DISTANCE,
+        .testlos = 1
+    );
 
     foreach (new i : Player)
     {
@@ -341,6 +344,7 @@ stock RefreshSafehousePickup(index)
 
         Streamer_Update(i, STREAMER_TYPE_PICKUP);
         Streamer_Update(i, STREAMER_TYPE_MAP_ICON);
+        Streamer_Update(i, STREAMER_TYPE_3D_TEXT_LABEL);
     }
 
     return 1;
