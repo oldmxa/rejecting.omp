@@ -99,7 +99,7 @@ stock RenewSafehouse(playerid, index)
         return SendClientMessage(playerid, -1, "%s", SH_NOT_MEMBER);
 
     if (User[playerid][playerCoins] < SH_RENEW_COINS)
-        return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s coins to extend the contract.", FormatCoins(SH_RENEW_COINS));
+        return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s to extend the contract.", FormatCoins(SH_RENEW_COINS));
 
     new extra = SH_RENEW_DAYS * 86400;
     if (GetSafehouseTimeLeft(index) + extra > SH_DURATION)
@@ -112,7 +112,7 @@ stock RenewSafehouse(playerid, index)
     SaveSafehouse(index);
 
     new detail[96];
-    format(detail, sizeof(detail), "+%d days for %d coins", SH_RENEW_DAYS, SH_RENEW_COINS);
+    format(detail, sizeof(detail), "+%d days for C$%d", SH_RENEW_DAYS, SH_RENEW_COINS);
     LogSafehouse(index, playerid, "renew", detail);
 
     new leftStr[24];
@@ -323,7 +323,7 @@ stock RefreshSafehousePickup(index)
 
         format(label, sizeof(label),
             "{2ECC71}Safehouse For Sale (ID: %d)\n\n{FFFFFF}%s\n{FFFFFF}Interior: {3498DB}%s\n\
-{2ECC71}%s {FFFFFF}+ {2ECC71}%s {FFFFFF}coins\n\
+{2ECC71}%s {FFFFFF}+ {2ECC71}%s\n\
 {FFFFFF}Upkeep {2ECC71}%s {FFFFFF}every {2ECC71}%d {FFFFFF}days.",
             index,
             SafehouseData[index][sh_Name],
@@ -395,7 +395,7 @@ stock BuySafehouse(playerid, index)
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s to buy this safehouse.", FormatMoney(SH_BUY_PRICE));
 
     if (!HasPlayerCoins(playerid, SH_BUY_COINS))
-        return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s coins to buy this safehouse.", FormatCoins(SH_BUY_COINS));
+        return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s to buy this safehouse.", FormatCoins(SH_BUY_COINS));
 
     GivePlayerCash(playerid, -SH_BUY_PRICE);
     GivePlayerCoins(playerid, -SH_BUY_COINS, "Safehouse purchase");
@@ -418,7 +418,7 @@ stock BuySafehouse(playerid, index)
     RefreshSafehousePickup(index);
 
     new detail[96];
-    format(detail, sizeof(detail), "price %d money + %d coins", SH_BUY_PRICE, SH_BUY_COINS);
+    format(detail, sizeof(detail), "price $%d + C$%d", SH_BUY_PRICE, SH_BUY_COINS);
     LogSafehouse(index, playerid, "buy", detail);
 
     SendSafehouseClanMessage(index, SAFEHOUSE_PREFIX"Your clan bought the safehouse at {MAIN}%s{FFFFFF}!", SafehouseData[index][sh_Name]);
@@ -655,7 +655,7 @@ stock UpgradeSafehouse(playerid, index)
         return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s for this upgrade.", FormatMoney(price));
 
     if (!HasPlayerCoins(playerid, coins))
-        return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s coins for this upgrade.", FormatCoins(coins));
+        return va_SendClientMessage(playerid, -1, SAFEHOUSE_PREFIX"You need %s for this upgrade.", FormatCoins(coins));
 
     GivePlayerCash(playerid, -price);
     GivePlayerCoins(playerid, -coins, "Safehouse upgrade");
@@ -675,7 +675,7 @@ stock UpgradeSafehouse(playerid, index)
     GetSafehouseLevelName(next, levelName);
 
     new detail[96];
-    format(detail, sizeof(detail), "level %d (%s), cost %d + %d coins", next, levelName, price, coins);
+    format(detail, sizeof(detail), "level %d (%s), cost $%d + C$%d", next, levelName, price, coins);
     LogSafehouse(index, playerid, "upgrade", detail);
 
     SendSafehouseClanMessage(index, SAFEHOUSE_PREFIX"The safehouse was upgraded to {MAIN}%s{FFFFFF} ({MAIN}%d{FFFFFF} member slots).",

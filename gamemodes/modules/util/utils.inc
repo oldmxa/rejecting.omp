@@ -62,11 +62,11 @@ stock FormatCoins(amount)
     new result[36];
     if (amount < 0)
     {
-        format(result, sizeof(result), "-%s Coins", FormatNumber(-amount, '.'));
+        format(result, sizeof(result), "-C$%s", FormatNumber(-amount, '.'));
     }
     else
     {
-        format(result, sizeof(result), "%s Coins", FormatNumber(amount, '.'));
+        format(result, sizeof(result), "C$%s", FormatNumber(amount, '.'));
     }
     return result;
 }
@@ -75,8 +75,8 @@ stock FormatCoinsDelta(amount)
 {
     new result[40];
 
-    if (amount < 0) format(result, sizeof(result), "{F84F31}-R$%s", FormatNumber(-amount, '.'));
-    else format(result, sizeof(result), "{23C552}+R$%s", FormatNumber(amount, '.'));
+    if (amount < 0) format(result, sizeof(result), "{F84F31}-C$%s", FormatNumber(-amount, '.'));
+    else format(result, sizeof(result), "{23C552}+C$%s", FormatNumber(amount, '.'));
 
     return result;
 }

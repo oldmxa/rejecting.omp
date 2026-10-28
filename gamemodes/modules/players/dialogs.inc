@@ -1123,21 +1123,12 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
 
                 for(new i; i < rows; i++)
                 {
-                    new pos_color[16], trophy[8];
-                    switch(i)
-                    {
-                        case 0: { pos_color = "{FFFF00}"; trophy = " (G)"; } // Gold
-                        case 1: { pos_color = "{C0C0C0}"; trophy = " (S)"; } // Silver
-                        case 2: { pos_color = "{CD7F32}"; trophy = " (B)"; } // Bronze
-                        default: { pos_color = "{B4B5B7}"; trophy = ""; }
-                    }
-
                     if(listitem == 2) // Clan Rank
                     {
                         cache_get_value_name(i, "clan_name", clanName_);
                         cache_get_value_name_int(i, "clan_zone_points", clanzp);
                         cache_get_value_name_int(i, "clan_kills", clankills);
-                        strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{23C552}%d pts\t{FFFFFF}%d kills\n", pos_color, i+1, clanName_, trophy, clanzp, clankills));
+                        strcat(liststr, fmat_return("{B4B5B7}%d\xBA\t{FFFFFF}%s\t{23C552}%d pts\t{FFFFFF}%d kills\n", i+1, clanName_, clanzp, clankills));
                     }
                     else // Player Ranks
                     {
@@ -1147,7 +1138,7 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                         {
                             cache_get_value_name_int(i, "played_time", value);
                             new hour = value/3600, minute = (value%3600)/60, second = value%60;
-                            strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{FFFFFF}%02dh %02dm %02ds\n", pos_color, i+1, usernamee, trophy, hour, minute, second));
+                            strcat(liststr, fmat_return("{B4B5B7}%d\xBA\t{FFFFFF}%s\t{FFFFFF}%02dh %02dm %02ds\n", i+1, usernamee, hour, minute, second));
                         }
                         else
                         {
@@ -1164,7 +1155,7 @@ public DIALOG_RANK(playerid, dialogid, response, listitem, string:inputtext[])
                                 case 9: { col_name = "duel_wins"; unit = " wins"; }
                             }
                             cache_get_value_name_int(i, col_name, value);
-                            strcat(liststr, fmat_return("%s%02d.\t{FFFFFF}%s%s\t{FFFFFF}%d%s\n", pos_color, i+1, usernamee, trophy, value, unit));
+                            strcat(liststr, fmat_return("{B4B5B7}%d\xBA\t{FFFFFF}%s\t{FFFFFF}%d%s\n", i+1, usernamee, value, unit));
                         }
                     }
                 }

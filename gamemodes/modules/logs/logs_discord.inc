@@ -191,13 +191,12 @@ stock LogDiscordCoins(user_id, const username[], const reason[], amount, balance
 {
     new desc[512];
     format(desc, sizeof(desc),
-        "**Player:** %s [SQL ID: %d]\n**Action / Reason:** %s\n**Amount:** %s%d Coins\n**New Balance:** %d Coins",
+        "**Player:** %s [SQL ID: %d]\n**Action / Reason:** %s\n**Amount:** %s\n**New Balance:** %s",
         username,
         user_id,
         reason,
-        (amount > 0) ? ("+") : (""),
-        amount,
-        balance
+        FormatCoinsDelta(amount),
+        FormatCoins(balance)
     );
 
     new color = (amount > 0) ? DISCORD_COLOR_SUCCESS : DISCORD_COLOR_WARNING;

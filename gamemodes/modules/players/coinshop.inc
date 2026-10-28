@@ -14,7 +14,6 @@ enum
     COINS_ROW_BUY,
     COINS_ROW_VIP_BUY,
     COINS_ROW_VIP_PERKS,
-    COINS_ROW_DISCORD,
     COINS_ROW_HISTORY
 }
 
@@ -29,18 +28,18 @@ stock GetCoinsPrice(coins)
 forward Coinshop_ShowCoinsMenu(playerid);
 public Coinshop_ShowCoinsMenu(playerid)
 {
-    new body[256], title[64] = "{MAIN}Coins";
+    new body[1024], title[64] = "{MAIN}Coins & Store";
 
-    strcat(body, "{FFFFFF}My Balance\n");
-    strcat(body, "{FFFFFF}Buy Coins\n");
-    strcat(body, "{FFFFFF}Buy VIP\n");
-    strcat(body, "{FFFFFF}VIP Perks\n");
-    strcat(body, "{FFFFFF}Discord Reward\n");
-    strcat(body, "{FFFFFF}History\n");
+    format(body, sizeof(body), "{MAIN}Option\t{MAIN}Description\n");
+    strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}My Balance\t{FFFF00}%s\n", FormatCoins(User[playerid][playerCoins])));
+    strcat(body, "{MAIN}\xBB {B4B5B7}Buy Coins\t{FFFFFF}Exchange cash for Coins\n");
+    strcat(body, "{MAIN}\xBB {B4B5B7}Buy VIP\t{FFFFFF}Purchase VIP packages with Coins\n");
+    strcat(body, "{MAIN}\xBB {B4B5B7}VIP Perks\t{FFFFFF}View all VIP features & perks\n");
+    strcat(body, "{MAIN}\xBB {B4B5B7}History\t{FFFFFF}View Coins transactions log");
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-    return Dialog_ShowCallback(playerid, using public DIALOG_COINS_MENU<iiiis>, DIALOG_STYLE_LIST,
+    return Dialog_ShowCallback(playerid, using public DIALOG_COINS_MENU<iiiis>, DIALOG_STYLE_TABLIST_HEADERS,
         title, body, "Select", "Close");
 }
 
@@ -60,14 +59,15 @@ public DIALOG_COINS_MENU(playerid, dialogid, response, listitem, string:inputtex
         {
             new body[384], title[64] = "{MAIN}Buy Coins";
             format(body, sizeof(body),
-                "{FFFFFF}\x95 {B4B5B7}Rate: {23C552}%s {B4B5B7}buys {FFFF00}%s\n"\
-                "{FFFFFF}\x95 {B4B5B7}Your Cash: {23C552}%s\n"\
-                "{FFFFFF}\x95 {B4B5B7}Order Limit: {FFFF00}%s\n\n"\
+                "{MAIN}\xBB {B4B5B7}Rate: {23C552}%s {B4B5B7}buys {FFFF00}%s\n"\
+                "{MAIN}\xBB {B4B5B7}Your Cash: {23C552}%s\n"\
+                "{MAIN}\xBB {B4B5B7}Order Limit: {FFFF00}%s\n\n"\
                 "{FFFFFF}Enter the amount of {FFFF00}Coins {FFFFFF}you want to buy:",
                 FormatMoney(COINSHOP_MONEY), FormatCoins(COINSHOP_COINS),
                 FormatMoney(User[playerid][playerMoney]), FormatCoins(COINSHOP_MAX));
 
             format_MainColor(playerid, title);
+            format_MainColor(playerid, body);
             return Dialog_ShowCallback(playerid, using public DIALOG_COINS_BUY<iiiis>, DIALOG_STYLE_INPUT,
                 title, body, "Buy", "Back");
         }
@@ -86,14 +86,6 @@ public DIALOG_COINS_MENU(playerid, dialogid, response, listitem, string:inputtex
             return 1;
         }
 
-        case COINS_ROW_DISCORD:
-        {
-            new cmd[16];
-            strcopy(cmd, "/discord");
-            Command_ReProcess(playerid, cmd, 0);
-            return 1;
-        }
-
         case COINS_ROW_HISTORY: return ShowCoinsHistory(playerid);
     }
 
@@ -103,7 +95,7 @@ public DIALOG_COINS_MENU(playerid, dialogid, response, listitem, string:inputtex
 stock DoBuyCoins(playerid, coins)
 {
     if (coins < 1 || coins > COINSHOP_MAX)
-        return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Buy between {FFFF00}1 {FFFFFF}and {FFFF00}%s {FFFFFF}per order.", FormatCoins(COINSHOP_MAX));
+        return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Buy between {FFFF00}%s {FFFFFF}and {FFFF00}%s {FFFFFF}per order.", FormatCoins(1), FormatCoins(COINSHOP_MAX));
 
     new price = GetCoinsPrice(coins);
 

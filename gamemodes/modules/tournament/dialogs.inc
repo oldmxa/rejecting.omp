@@ -139,7 +139,7 @@ stock ShowTournamentAdminMenu(playerid)
     }
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Modality\t%s\n", modeStr));
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Bracket Size (Slots)\t{23C552}%d Participants\n", g_TourneyData[t_MaxSlots]));
-    strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Prize (Coins)\t{FFD700}%d Coins\n", g_TourneyData[t_PrizeCoins]));
+    strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Prize (Coins)\t{FFD700}%s\n", FormatCoins(g_TourneyData[t_PrizeCoins])));
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Prize (Money)\t{23C552}%s\n", FormatMoney(g_TourneyData[t_PrizeMoney])));
     strcat(body, fmat_return("{MAIN}\xBB {B4B5B7}Prize (Achievement / Tag)\t{FF4500}%s\n", g_TourneyData[t_AchievementTag]));
     if(g_TourneyData[t_EntryFee] > 0)
@@ -644,7 +644,7 @@ stock ShowTourneyBracketDialog(playerid)
             "{MAIN}\xBB {B4B5B7}Event Date & Time:\t{00B6F6}%s\n"\
             "{MAIN}\xBB {B4B5B7}Registered Participants:\t{FFFFFF}%d / %d\n"\
             "{MAIN}\xBB {B4B5B7}Modality:\t{FFFFFF}%s\n"\
-            "{MAIN}\xBB {B4B5B7}Prize:\t{FFD700}%d Coins {B4B5B7}+ {23C552}%s\n"\
+            "{MAIN}\xBB {B4B5B7}Prize:\t{FFD700}%s {B4B5B7}+ {23C552}%s\n"\
             "{MAIN}\xBB {B4B5B7}Winner Achievement:\t{FF4500}%s\n"\
             "{MAIN}\xBB {B4B5B7}Entry Fee:\t{FFFFFF}%s\n"\
             "{MAIN}\xBB {B4B5B7}Weapon Loadout:\t{FFFFFF}%s\n"\
@@ -656,7 +656,7 @@ stock ShowTourneyBracketDialog(playerid)
             g_TourneyData[t_RegisteredCount],
             g_TourneyData[t_MaxSlots],
             (g_TourneyData[t_Mode] == TOURNAMENT_MODE_1V1) ? "1v1 Elimination" : (g_TourneyData[t_Mode] == TOURNAMENT_MODE_2V2 ? "2v2 Team Battle" : "Clan War"),
-            g_TourneyData[t_PrizeCoins],
+            FormatCoins(g_TourneyData[t_PrizeCoins]),
             FormatMoney(g_TourneyData[t_PrizeMoney]),
             g_TourneyData[t_AchievementTag],
             (g_TourneyData[t_EntryFee] > 0) ? FormatMoney(g_TourneyData[t_EntryFee]) : "FREE",

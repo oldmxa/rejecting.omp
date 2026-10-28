@@ -396,7 +396,7 @@ stock StartTournamentRegistration(adminid)
     else strcopy(feeStr, "FREE");
 
     new prizeStr[64];
-    format(prizeStr, sizeof(prizeStr), "{FFD700}%d Coins {FFFFFF}+ {23C552}%s", g_TourneyData[t_PrizeCoins], FormatMoney(g_TourneyData[t_PrizeMoney]));
+    format(prizeStr, sizeof(prizeStr), "{FFD700}%s {FFFFFF}+ {23C552}%s", FormatCoins(g_TourneyData[t_PrizeCoins]), FormatMoney(g_TourneyData[t_PrizeMoney]));
 
     va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT OPEN] {FFFFFF}Administrator {MAIN}%s {FFFFFF}opened registrations for {MAIN}%s{FFFFFF}!", g_TourneyData[t_StartedBy], g_TourneyData[t_Name]);
     va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT] {B4B5B7}For full information, schedule, prizes and registration, check our {00B6F6}Discord{B4B5B7} server!");
@@ -409,13 +409,13 @@ stock StartTournamentRegistration(adminid)
         "- **Modality:** `%s` (%d Slots)\n\n"\
         "**Prizes & Rewards**\n"\
         "- **Champion Tag:** `%s`\n"\
-        "- **Grand Prize:** `%d Coins` + `%s`\n"\
+        "- **Grand Prize:** `%s` + `%s`\n"\
         "- **Entry Fee:** `%s`\n"\
         "- **Weapon Loadout:** `%s`\n\n"\
         "**How to Participate**\n"\
         "Use `/tournament <InGame_Nick>` in <#" CH_TOURNEY_REGISTER "> to apply!",
         g_TourneyData[t_Name], g_TourneyData[t_Schedule], modeName, g_TourneyData[t_MaxSlots],
-        g_TourneyData[t_AchievementTag], g_TourneyData[t_PrizeCoins], FormatMoney(g_TourneyData[t_PrizeMoney]),
+        g_TourneyData[t_AchievementTag], FormatCoins(g_TourneyData[t_PrizeCoins]), FormatMoney(g_TourneyData[t_PrizeMoney]),
         feeStr, g_TourneyWeaponSets[g_TourneyData[t_WeaponSet]][twi_Name]
     );
     utf8encode(msgencoded, discordAnnounce, sizeof(msgencoded));
@@ -440,7 +440,7 @@ stock StartTournamentRegistration(adminid)
         "- **Weapon Loadout:** `%s`\n"\
         "- **Arena:** `%s`\n\n"\
         "**Rewards & Settings**\n"\
-        "- **Prize:** `%d Coins` + `%s`\n"\
+        "- **Prize:** `%s` + `%s`\n"\
         "- **Achievement:** `%s`\n"\
         "- **Entry Fee:** `%s`\n"\
         "- **Auto-Start:** `%s`\n"\
@@ -449,7 +449,7 @@ stock StartTournamentRegistration(adminid)
         modeName, g_TourneyData[t_MaxSlots],
         (g_TourneyData[t_RoundsPerMatch] == 1) ? "Best of 1" : "Best of 3 (Bo3)", g_TourneyData[t_RoundTimeLimit],
         g_TourneyWeaponSets[g_TourneyData[t_WeaponSet]][twi_Name], arenaNameStr,
-        g_TourneyData[t_PrizeCoins], FormatMoney(g_TourneyData[t_PrizeMoney]),
+        FormatCoins(g_TourneyData[t_PrizeCoins]), FormatMoney(g_TourneyData[t_PrizeMoney]),
         g_TourneyData[t_AchievementTag], feeStr,
         g_TourneyData[t_AutoStart] ? "Enabled" : "Disabled",
         returnDate(gettime())

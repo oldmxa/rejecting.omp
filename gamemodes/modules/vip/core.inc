@@ -310,8 +310,8 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
 
     new vipEmbedStr[512];
     format(vipEmbedStr, sizeof(vipEmbedStr),
-        "**Player:** %s [ID: %d | SQL ID: %d]\n**Package:** VIP %d Days\n**Cost:** %d Coins\n**Remaining Balance:** %d Coins\n**Expires:** %s",
-        User[playerid][userName], playerid, User[playerid][user_sqlid], days, coins, User[playerid][playerCoins], returnDate(User[playerid][vipExpire]));
+        "**Player:** %s [ID: %d | SQL ID: %d]\n**Package:** VIP %d Days\n**Cost:** %s\n**Remaining Balance:** %s\n**Expires:** %s",
+        User[playerid][userName], playerid, User[playerid][user_sqlid], days, FormatCoins(coins), FormatCoins(User[playerid][playerCoins]), returnDate(User[playerid][vipExpire]));
     LogDiscordVipAction("VIP Activated", vipEmbedStr, DISCORD_COLOR_SUCCESS);
 
     va_SendClientMessageToAll(-1, "{MAIN}[VIP] {FFFFFF}Player {MAIN}%s{FFFFFF} has just activated a {MAIN}VIP Package %d Days{FFFFFF}! Enjoy the perks!", User[playerid][userName], days);
@@ -323,7 +323,7 @@ public DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputte
     if(!IsPlayerLogged(playerid)) return true;
 
     new string2[768], line[128];
-    format(string2, sizeof(string2), "{MAIN}Package / Duration\t{MAIN}Price (Coins)\t{MAIN}Your balance\n");
+    format(string2, sizeof(string2), "{MAIN}Package / Duration\t{MAIN}Price\t{MAIN}Your balance\n");
 
     for(new i = 0; i < sizeof(VipPackages); i++)
     {

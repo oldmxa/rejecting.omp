@@ -31,12 +31,12 @@ stock DeclareTournamentChampion(winnerSlot)
         "**Event Summary**\n"\
         "- **Tournament:** `%s`\n"\
         "- **Bracket Size:** `%d Participants`\n"\
-        "- **Prizes Awarded:** `%d Coins` + `%s`\n"\
+        "- **Prizes Awarded:** `%s` + `%s`\n"\
         "- **Achievement Tag:** `%s`",
         winnerDisplayName,
         g_TourneyData[t_Name],
         g_TourneyData[t_MaxSlots],
-        g_TourneyData[t_PrizeCoins],
+        FormatCoins(g_TourneyData[t_PrizeCoins]),
         FormatMoney(g_TourneyData[t_PrizeMoney]),
         g_TourneyData[t_AchievementTag]
     );
@@ -85,8 +85,8 @@ stock GiveTournamentChampionRewards(winnerSlot)
         Ach_OnTournamentWin(p1);
         UpdatePlayerData(p1);
 
-        va_SendClientMessage(p1, -1, "{MAIN}[REWARD] {FFFFFF}You received {FFD700}%d Coins{FFFFFF}, {23C552}%s{FFFFFF} and the {FF4500}%s{FFFFFF} Achievement & Tag!",
-            prizeCoins, FormatMoney(prizeMoney), g_TourneyData[t_AchievementTag]);
+        va_SendClientMessage(p1, -1, "{MAIN}[REWARD] {FFFFFF}You received {FFD700}%s{FFFFFF}, {23C552}%s{FFFFFF} and the {FF4500}%s{FFFFFF} Achievement & Tag!",
+            FormatCoins(prizeCoins), FormatMoney(prizeMoney), g_TourneyData[t_AchievementTag]);
         PlaySuccessSound(p1);
     }
 
@@ -107,8 +107,8 @@ stock GiveTournamentChampionRewards(winnerSlot)
         Ach_OnTournamentWin(p2);
         UpdatePlayerData(p2);
 
-        va_SendClientMessage(p2, -1, "{MAIN}[REWARD] {FFFFFF}You received {FFD700}%d Coins{FFFFFF}, {23C552}%s{FFFFFF} and the {FF4500}%s{FFFFFF} Achievement & Tag!",
-            prizeCoins, FormatMoney(prizeMoney), g_TourneyData[t_AchievementTag]);
+        va_SendClientMessage(p2, -1, "{MAIN}[REWARD] {FFFFFF}You received {FFD700}%s{FFFFFF}, {23C552}%s{FFFFFF} and the {FF4500}%s{FFFFFF} Achievement & Tag!",
+            FormatCoins(prizeCoins), FormatMoney(prizeMoney), g_TourneyData[t_AchievementTag]);
         PlaySuccessSound(p2);
     }
 

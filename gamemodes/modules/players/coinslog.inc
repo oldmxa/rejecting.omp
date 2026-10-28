@@ -15,14 +15,16 @@ stock ShowCoinsHistory(playerid)
 
         if (!rows)
         {
+            new title[64] = "{MAIN}Coins History";
+            new msg[256] = "{FFFFFF}You have no Coins movement recorded yet.\n\n{B4B5B7}Every purchase and reward shows up here from now on.";
+            format_MainColor(playerid, title);
+            format_MainColor(playerid, msg);
             return Dialog_ShowCallback(playerid, using public DIALOG_COINS_HISTORY<iiiis>, DIALOG_STYLE_MSGBOX,
-                "{FFFF00}Coins History",
-                "{FFFFFF}You have no Coins movement recorded yet.\n\n{B4B5B7}Every purchase and reward shows up here from now on.",
-                "Back", "");
+                title, msg, "Back", "");
         }
 
-        new body[1600];
-        strcat(body, "{A29582}Nick\t{A29582}Transaction\t{A29582}Coins\t{A29582}Date\n");
+        new body[1600], title[64] = "{MAIN}Coins History";
+        strcat(body, "{MAIN}Nick\t{MAIN}Transaction\t{MAIN}Coins\t{MAIN}Date\n");
 
         for (new i; i < rows; i++)
         {
@@ -37,8 +39,10 @@ stock ShowCoinsHistory(playerid)
                 username, reason, FormatCoinsDelta(amount), date));
         }
 
+        format_MainColor(playerid, title);
+        format_MainColor(playerid, body);
         return Dialog_ShowCallback(playerid, using public DIALOG_COINS_HISTORY<iiiis>, DIALOG_STYLE_TABLIST_HEADERS,
-            "{FFFF00}Coins History", body, "Back", "");
+            title, body, "Back", "");
     }
 
     MySQL_TQueryInline(dbHandle, using inline OnCoinsLog,

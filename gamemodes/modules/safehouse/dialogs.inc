@@ -391,7 +391,7 @@ stock ShowSafehouseUpgrade(playerid)
         "{FFFFFF}Upgrade your clan safehouse to unlock more capacity and a new interior:\n\n"\
         "{MAIN}\x95 {B4B5B7}Current Tier: {FFFFFF}Level %d - %s\n"\
         "{MAIN}\x95 {B4B5B7}Next Tier: {MAIN}Level %d - %s\n"\
-        "{MAIN}\x95 {B4B5B7}Upgrade Cost: {23C552}%s {FFFFFF}+ {FFD700}%s Coins\n"\
+        "{MAIN}\x95 {B4B5B7}Upgrade Cost: {23C552}%s {FFFFFF}+ {FFD700}%s\n"\
         "{MAIN}\x95 {B4B5B7}Member Slots: {FFFFFF}%d {23C552}-> %d Members\n"\
         "{MAIN}\x95 {B4B5B7}New Interior ID: {FFFFFF}%d\n\n"\
         "{BEBEBE}Upgrading updates the safehouse interior immediately.",
@@ -484,7 +484,7 @@ stock ShowSafehouseExpiry(playerid)
     strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Next Charge\t{FFFFFF}%s\n", nextStr));
     strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Charge Value\t{23C552}%s\n", chargeStr));
     strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Vault Balance\t{23C552}%s\n", vaultStr));
-    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Extend Contract\t{FFD700}+%d Days {BEBEBE}(%s Coins)\n", SH_RENEW_DAYS, coinStr));
+    strcat(buf, fmat_return("{B4B5B7}\x95 {FFFFFF}Extend Contract\t{FFD700}+%d Days {BEBEBE}(%s)\n", SH_RENEW_DAYS, coinStr));
     strcat(buf, "{B4B5B7}\x95 {FFFFFF}History\t{3CCFFA}[Logs]\n");
 
 
@@ -517,7 +517,7 @@ public DIALOG_SAFE_EXPIRY(playerid, dialogid, response, listitem, string:inputte
         "{FFFFFF}Extend the rental contract of {MAIN}%s{FFFFFF}?\n\n"\
         "{MAIN}\x95 {B4B5B7}Current Time: {FFFFFF}%s\n"\
         "{MAIN}\x95 {B4B5B7}Extension: {23C552}+%d Day(s)\n"\
-        "{MAIN}\x95 {B4B5B7}Cost: {FFD700}%s Coins\n"\
+        "{MAIN}\x95 {B4B5B7}Cost: {FFD700}%s\n"\
         "{MAIN}\x95 {B4B5B7}Your Coins: {FFD700}%s\n\n"\
         "{BEBEBE}The contract cannot exceed %d days in total.",
         SafehouseData[index][sh_Name],
@@ -565,7 +565,7 @@ stock ShowSafehouseBuyDialog(playerid, index)
     new body[640];
     format(body, sizeof(body),
         "{FFFFFF}Purchase {MAIN}%s{FFFFFF} for your clan?\n\n"\
-        "{MAIN}\x95 {B4B5B7}Price: {23C552}%s {FFFFFF}+ {FFD700}%s Coins\n"\
+        "{MAIN}\x95 {B4B5B7}Price: {23C552}%s {FFFFFF}+ {FFD700}%s\n"\
         "{MAIN}\x95 {B4B5B7}Initial Contract: {FFFFFF}%d Days\n"\
         "{MAIN}\x95 {B4B5B7}Maintenance: {23C552}%s {B4B5B7}every {FFFFFF}%d Days\n"\
         "{MAIN}\x95 {B4B5B7}Starting Slots: {23C552}%d Members\n\n"\

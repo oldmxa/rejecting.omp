@@ -1859,8 +1859,8 @@ DSLASH:vip(user, params[])
 	format(body, sizeof(body), "**VIP packages**\n\nActivate in-game with `/buyvip`.\n\n");
 
 	for(new i = 0; i < GetVipPackageCount(); i++)
-		strcat(body, fmat_return("**%d days** - $%d or %d coins\n",
-			GetVipPackageDays(i), GetVipPackageMoney(i), GetVipPackageCoins(i)), sizeof(body));
+		strcat(body, fmat_return("**%d days** - %s or %s\n",
+			GetVipPackageDays(i), FormatMoney(GetVipPackageMoney(i)), FormatCoins(GetVipPackageCoins(i))), sizeof(body));
 
 	strcat(body, "\n**Perks**\n", sizeof(body));
 	strcat(body, "- 2x money on kills and outpost captures\n", sizeof(body));
