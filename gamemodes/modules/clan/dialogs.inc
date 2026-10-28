@@ -230,23 +230,23 @@ public DIALOG_CLAN_SETTINGS(playerid, dialogid, response, listitem, string:input
         case CLAN_SET_ROLES: ShowClanRolesDialog(playerid, clanid);
         case CLAN_SET_NAME:
         {
-            new body[512];
-            format(body, sizeof(body), "{B4B5B7}Current name: "COL_WHITE"%s\n\n{B4B5B7}Requirements: "COL_WHITE"min %d and max %d characters", ClanInfo[clanid][clanName], CLAN_NAME_MIN, MAX_CLAN_NAME);
-            Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_NAME<iiiis>, DIALOG_STYLE_INPUT, "Clan Settings - Edit Clan Name", body, "Confirm", "Cancel");
+            new body[512], title[128];
+            format(title, sizeof(title), "{MAIN}Clan Settings: {FFFFFF}Edit Clan Name");
+            format_MainColor(playerid, title);
+            format(body, sizeof(body), "{B4B5B7}\x95 Current name: "COL_WHITE"%s\n\n{B4B5B7}\x95 Requirements: "COL_WHITE"min %d and max %d characters", ClanInfo[clanid][clanName], CLAN_NAME_MIN, MAX_CLAN_NAME);
+            format_MainColor(playerid, body);
+            Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_NAME<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
         }
         case CLAN_SET_TAG:
         {
-            new body[512];
-            format(body, sizeof(body), "{B4B5B7}Current tag: "COL_WHITE"%s\n\n{B4B5B7}Requirements: "COL_WHITE"min %d and max %d characters", ClanInfo[clanid][clanTag], CLAN_TAG_MIN, MAX_CLAN_TAG);
-            Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_TAG<iiiis>, DIALOG_STYLE_INPUT, "Clan Settings - Edit Clan Tag", body, "Confirm", "Cancel");
+            new body[512], title[128];
+            format(title, sizeof(title), "{MAIN}Clan Settings: {FFFFFF}Edit Clan Tag");
+            format_MainColor(playerid, title);
+            format(body, sizeof(body), "{B4B5B7}\x95 Current tag: "COL_WHITE"%s\n\n{B4B5B7}\x95 Requirements: "COL_WHITE"min %d and max %d characters", ClanInfo[clanid][clanTag], CLAN_TAG_MIN, MAX_CLAN_TAG);
+            format_MainColor(playerid, body);
+            Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_TAG<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
         }
-        case CLAN_SET_COLOR:
-        {
-            new body[200];
-            strcat(body, "Default Colors\n");
-            strcat(body, fmat_return("Custom HEX Color (%s)\n", FormatMoney(CLAN_COLOR_PRICE)));
-            Dialog_ShowCallback(playerid, using public DIALOG_CLAN_COLOR_TYPE<iiiis>, DIALOG_STYLE_LIST, "Clan Settings - Choose Color Type", body, "Select", "Back");
-        }
+        case CLAN_SET_COLOR: ShowClanColorTypeDialog(playerid, clanid);
         case CLAN_SET_LEAVE:
         {
             if (IsClanLeader(playerid))
@@ -255,6 +255,24 @@ public DIALOG_CLAN_SETTINGS(playerid, dialogid, response, listitem, string:input
                 LeaveClan(playerid);
         }
     }
+    return 1;
+}
+
+stock ShowClanColorTypeDialog(playerid, clanid)
+{
+    if (!IsValidClanID(clanid)) return 0;
+
+    new body[512];
+    format(body, sizeof(body), "{BEBEBE}Color Type\t{BEBEBE}Details\n");
+    strcat(body, "{B4B5B7}\x95 {FFFFFF}Default Colors\t{23C552}Free\n");
+    strcat(body, fmat_return("{B4B5B7}\x95 {FFFFFF}Custom HEX Color\t{FFD700}%s\n", FormatMoney(CLAN_COLOR_PRICE)));
+
+    new title[128];
+    format(title, sizeof(title), "{MAIN}Clan Settings - Choose Color Type: {FFFFFF}%s", ClanInfo[clanid][clanName]);
+
+    format_MainColor(playerid, title);
+    format_MainColor(playerid, body);
+    Dialog_ShowCallback(playerid, using public DIALOG_CLAN_COLOR_TYPE<iiiis>, DIALOG_STYLE_TABLIST_HEADERS, title, body, "Select", "Back");
     return 1;
 }
 
@@ -291,16 +309,19 @@ public DIALOG_CLAN_ROLES(playerid, dialogid, response, listitem, string:inputtex
 
     SetPVarInt(playerid, "EditingRoleID", listitem);
 
-    new body[512];
-    format(body, sizeof(body), "{B4B5B7}Current name: "COL_WHITE"%s\n\n{B4B5B7}Requirements: "COL_WHITE"min %d and max %d characters", ClanRoles[clanid][listitem], CLAN_ROLE_MIN, MAX_ROLE_NAME);
+    new body[512], title[128];
+    format(title, sizeof(title), "{MAIN}Clan - Edit Role Name");
+    format_MainColor(playerid, title);
+    format(body, sizeof(body), "{B4B5B7}\x95 Current name: "COL_WHITE"%s\n\n{B4B5B7}\x95 Requirements: "COL_WHITE"min %d and max %d characters", ClanRoles[clanid][listitem], CLAN_ROLE_MIN, MAX_ROLE_NAME);
+    format_MainColor(playerid, body);
 
-    Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_ROLE<iiiis>, DIALOG_STYLE_INPUT, "{MAIN}Clan - Edit Role Name", body, "Confirm", "Cancel");
+    Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_ROLE<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
     return 1;
 }
 
 public DIALOG_CLAN_EDIT_ROLE(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response) return 1;
+    if (!response) return ShowClanRolesDialog(playerid, User[playerid][clanID]);
 
     EditRoleName(playerid, User[playerid][clanID], GetPVarInt(playerid, "EditingRoleID"), inputtext);
     return 1;
@@ -308,7 +329,7 @@ public DIALOG_CLAN_EDIT_ROLE(playerid, dialogid, response, listitem, string:inpu
 
 public DIALOG_CLAN_EDIT_NAME(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response) return 1;
+    if (!response) return ShowClanSettingsDialog(playerid, User[playerid][clanID]);
 
     EditClanName(playerid, User[playerid][clanID], inputtext);
     return 1;
@@ -316,7 +337,7 @@ public DIALOG_CLAN_EDIT_NAME(playerid, dialogid, response, listitem, string:inpu
 
 public DIALOG_CLAN_EDIT_TAG(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response) return 1;
+    if (!response) return ShowClanSettingsDialog(playerid, User[playerid][clanID]);
 
     EditClanTag(playerid, User[playerid][clanID], inputtext);
     return 1;
@@ -324,7 +345,7 @@ public DIALOG_CLAN_EDIT_TAG(playerid, dialogid, response, listitem, string:input
 
 public DIALOG_CLAN_COLOR_TYPE(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response) return ShowClanMenu(playerid);
+    if (!response) return ShowClanSettingsDialog(playerid, User[playerid][clanID]);
 
     new clanid = User[playerid][clanID];
     if (!IsValidClanID(clanid)) return 1;
@@ -335,7 +356,7 @@ public DIALOG_CLAN_COLOR_TYPE(playerid, dialogid, response, listitem, string:inp
         format(body, sizeof(body), "{BEBEBE}Color Preview\t{BEBEBE}Color Name\n");
 
         for (new i = 0; i < sizeof(DefaultClanColors); i++)
-            strcat(body, fmat_return("{%06x}==========\t{FFFFFF}%s\n", DefaultClanColors[i] >>> 8, DefaultClanColorNames[i]));
+            strcat(body, fmat_return("{%06x}\x95\t{FFFFFF}%s\n", DefaultClanColors[i] >>> 8, DefaultClanColorNames[i]));
 
         new title[128];
         format(title, sizeof(title), "{MAIN}Default Clan Colors: {FFFFFF}%s", ClanInfo[clanid][clanName]);
@@ -347,37 +368,37 @@ public DIALOG_CLAN_COLOR_TYPE(playerid, dialogid, response, listitem, string:inp
     }
 
     new body[512];
-    format(body, sizeof(body), "{FFFFFF}Current Color: {%06x}#%06x\n\n{BEBEBE}Enter your new 6-digit or 8-digit HEX color code below (e.g. {MAIN}FF0000{BEBEBE} or {MAIN}FF0000AA{BEBEBE}).\n{FFD700}Cost: %s",
-        ClanInfo[clanid][clanColor] >>> 8, ClanInfo[clanid][clanColor] >>> 8, FormatMoney(CLAN_COLOR_PRICE));
+    format(body, sizeof(body), "{B4B5B7}\x95 Current color: {%06x}#%06x\n\n{B4B5B7}\x95 Requirements: {FFFFFF}min 6 and max 8 HEX characters (e.g. {MAIN}FF0000{FFFFFF} or {MAIN}FF0000AA{FFFFFF})",
+        ClanInfo[clanid][clanColor] >>> 8, ClanInfo[clanid][clanColor] >>> 8);
 
     new title[128];
     format(title, sizeof(title), "{MAIN}Custom Clan Color: {FFFFFF}%s", ClanInfo[clanid][clanName]);
 
     format_MainColor(playerid, title);
     format_MainColor(playerid, body);
-    Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_COLOR<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Cancel");
+    Dialog_ShowCallback(playerid, using public DIALOG_CLAN_EDIT_COLOR<iiiis>, DIALOG_STYLE_INPUT, title, body, "Confirm", "Back");
     return 1;
 }
 
 public DIALOG_CLAN_DEFAULT_COLORS(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response) return ShowClanMenu(playerid);
+    if (!response) return ShowClanColorTypeDialog(playerid, User[playerid][clanID]);
 
     new clanid = User[playerid][clanID];
     if (!IsValidClanID(clanid)) return 1;
-    if (!(0 <= listitem < sizeof(DefaultClanColors))) return ShowClanMenu(playerid);
+    if (!(0 <= listitem < sizeof(DefaultClanColors))) return ShowClanColorTypeDialog(playerid, clanid);
     if (!HasClanRank(playerid, RANK_COFOUNDER)) return SendClientMessage(playerid, -1, "%s", CLAN_LOWRANK);
 
     SetClanColorValue(playerid, clanid, DefaultClanColors[listitem]);
     SendClientMessage(playerid, -1, CLAN_PREFIX"Default color applied successfully!");
 
-    ShowClanMenu(playerid);
+    ShowClanSettingsDialog(playerid, clanid);
     return 1;
 }
 
 public DIALOG_CLAN_EDIT_COLOR(playerid, dialogid, response, listitem, string:inputtext[])
 {
-    if (!response) return 1;
+    if (!response) return ShowClanColorTypeDialog(playerid, User[playerid][clanID]);
 
     new clanid = User[playerid][clanID];
     if (!IsValidClanID(clanid)) return SendClientMessage(playerid, -1, "%s", CLAN_NOTAMEMBER);
@@ -394,6 +415,7 @@ public DIALOG_CLAN_EDIT_COLOR(playerid, dialogid, response, listitem, string:inp
 
     SetClanColorValue(playerid, clanid, parsedColor);
     SendClientMessage(playerid, -1, CLAN_PREFIX"Custom color applied successfully!");
+    ShowClanSettingsDialog(playerid, clanid);
     return 1;
 }
 
