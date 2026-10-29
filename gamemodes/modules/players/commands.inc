@@ -417,6 +417,7 @@ ShowCommandCategory(playerid, catid)
     {
         case 0:
         {
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/cmds\t{FFFFFF}Open server guide and command list\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/rules\t{FFFFFF}Read official server rules & guidelines\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changemode\t{FFFFFF}Select arena or change game mode\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/settings\t{FFFFFF}Show player settings & personalization\n");
@@ -425,8 +426,8 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/gunmenu\t{FFFFFF}Open weapon selection menu in arena\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/spec\t{FFFFFF}Spectate a player\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specoff\t{FFFFFF}Stop spectating\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specnext or /sn\t{FFFFFF}Spectate next player\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specprev or /sp\t{FFFFFF}Spectate previous player\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specnext\t{FFFFFF}Spectate next player\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/specprev\t{FFFFFF}Spectate previous player\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/stats [id/nick]\t{FFFFFF}View online or offline player stats\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/ach\t{FFFFFF}View your achievements & progress\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/coins\t{FFFFFF}Balance, buy Coins, history & VIP\n");
@@ -437,8 +438,8 @@ ShowCommandCategory(playerid, catid)
         }
         case 1:
         {
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/skin\t{FFFFFF}Change your character skin\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/fightstyle\t{FFFFFF}Change your fighting style\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changeskin\t{FFFFFF}Change your character skin\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/fight\t{FFFFFF}Change your fighting style\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/weather\t{FFFFFF}Change your local weather\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/time\t{FFFFFF}Change your local time\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/anims\t{FFFFFF}Open animations & gestures menu\n");
@@ -473,6 +474,8 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/clans\t{FFFFFF}View global Clans ranking list\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/territories\t{FFFFFF}View Outpost & territory status\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/clancmds\t{FFFFFF}View full list of Clan commands\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/safemenu\t{FFFFFF}Open Clan Safehouse base menu\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/exitsafehouse\t{FFFFFF}Exit Clan Safehouse base\n");
         }
         case 4:
         {
@@ -482,17 +485,18 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/duel2v2\t{FFFFFF}Create a 2v2 team duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/accept2v2\t{FFFFFF}Accept a 2v2 team duel challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/cancel2v2\t{FFFFFF}Cancel a 2v2 duel challenge\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tourney\t{FFFFFF}View active tournament details\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/jointourney\t{FFFFFF}Register for the active tournament\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tourneybracket\t{FFFFFF}View current tournament bracket\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tourneyspec\t{FFFFFF}Spectate tournament matches\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tournament\t{FFFFFF}View active tournament details\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/jointournament\t{FFFFFF}Register for the active tournament\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/accepttournament\t{FFFFFF}Accept tournament match invitation\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/leavetournament\t{FFFFFF}Leave the active tournament\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/bracket\t{FFFFFF}View current tournament bracket\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/spectournament\t{FFFFFF}Spectate tournament matches\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/safemenu\t{FFFFFF}Open Clan Safehouse base menu\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/exitsafehouse\t{FFFFFF}Exit Clan Safehouse base\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/training\t{FFFFFF}Open training arena & challenges menu\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/rt or 'N'\t{FFFFFF}Restart current training challenge\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/restarttraining or 'N'\t{FFFFFF}Restart current training challenge\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/exittraining\t{FFFFFF}Exit current training arena\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/prac\t{FFFFFF}Private aim practice with NPC (level 5+)\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/prac exit\t{FFFFFF}Leave the practice world\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/prac\t{FFFFFF}Private aim practice with NPC\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/showagain\t{FFFFFF}Show last round results\n");
         }
         case 5:
@@ -503,7 +507,8 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/report [id] [reason]\t{FFFFFF}Report a player to admins\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/ask [question]\t{FFFFFF}Ask a question to online staff\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/votekick [id]\t{FFFFFF}Initiate a votekick poll\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/yes (/no)\t{FFFFFF}Vote YES or NO in active votekick poll\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/yes\t{FFFFFF}Vote YES in active votekick poll\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/no\t{FFFFFF}Vote NO in active votekick poll\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/admins\t{FFFFFF}View online administrators\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/ranks\t{FFFFFF}View server rankings\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/credits\t{FFFFFF}Show server credits\n");
@@ -514,13 +519,14 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vip\t{FFFFFF}View VIP perks & status\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vips\t{FFFFFF}View online VIP members\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/v [message]\t{FFFFFF}Send a message in VIP chat\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/von (/voff)\t{FFFFFF}Turn ON or OFF VIP chat channel\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/von\t{FFFFFF}Enable receiving messages from VIP Chat\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/voff\t{FFFFFF}Disable receiving messages from VIP Chat\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vtag\t{FFFFFF}Customize 3D VIP Head Tag\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/highlight [on/off]\t{FFFFFF}Toggle flashing radar and name color\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tag\t{FFFFFF}Manage tag visibility (VIP, Clan, Admin, Custom)\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/tag\t{FFFFFF}Manage tag visibility\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/vipcmds\t{FFFFFF}View full list of VIP commands\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/discord\t{FFFFFF}Link your Discord account\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/discordid (/dcid)\t{FFFFFF}View your linked Discord ID\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/linkdiscord\t{FFFFFF}Link your Discord account\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/discordid\t{FFFFFF}View your linked Discord ID\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/dcode [code]\t{FFFFFF}Enter verification code received from Discord\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/udiscord\t{FFFFFF}Unlink your Discord account\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/changepass\t{FFFFFF}Change your account password\n");
