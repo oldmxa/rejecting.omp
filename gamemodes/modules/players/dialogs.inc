@@ -1889,7 +1889,7 @@ stock ShowTagMenu(playerid)
         if(0 <= tagIdx < 10) format(vipPreview, sizeof(vipPreview), "{%s}[VIP]", vipColorListStr[tagIdx]);
         else if(tagIdx >= 0x10000000) format(vipPreview, sizeof(vipPreview), "{%06x}[VIP]", tagIdx & 0xFFFFFF);
 
-        format(tagList, sizeof(tagList), "%s{FFFFFF}VIP Tag\t%s\t%s\n",
+        format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}VIP Tag\t%s\t%s\n",
             tagList,
             vipPreview,
             User[playerid][hideVipTag] ? "{FF6347}[Hidden]" : "{23C552}[Visible]");
@@ -1900,7 +1900,7 @@ stock ShowTagMenu(playerid)
     {
         g_PlayerTagMenu[playerid][count++] = TAG_TYPE_CLAN;
         new clanid = User[playerid][clanID];
-        format(tagList, sizeof(tagList), "%s{FFFFFF}Clan Tag\t{%06x}[%s]\t%s\n",
+        format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}Clan Tag\t{%06x}[%s]\t%s\n",
             tagList,
             (ClanInfo[clanid][clanColor] >>> 8),
             ClanInfo[clanid][clanName],
@@ -1911,7 +1911,7 @@ stock ShowTagMenu(playerid)
     if(IsAdmin(playerid))
     {
         g_PlayerTagMenu[playerid][count++] = TAG_TYPE_ADMIN;
-        format(tagList, sizeof(tagList), "%s{FFFFFF}Admin Tag\t{FFFFFF}[{FF4500}%s{FFFFFF}]\t%s\n",
+        format(tagList, sizeof(tagList), "%s{B4B5B7}\x95 {FFFFFF}Admin Tag\t{FFFFFF}[{FF4500}%s{FFFFFF}]\t%s\n",
             tagList,
             adminnames[User[playerid][adminLevel]][ingame],
             User[playerid][hideAdminTag] ? "{FF6347}[Hidden]" : "{23C552}[Visible]");
