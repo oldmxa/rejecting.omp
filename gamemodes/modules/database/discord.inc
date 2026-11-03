@@ -104,7 +104,7 @@ public UnBanPlayerDiscord(admin[])
     	{
     		if(IsAdmin(i))
     		{
-    			va_SendClientMessage(i, -1, ADM_TAG_NORM"[Discord] Admin "COL_WHITE"%s "COL_ADM_CMD"unbanned player "COL_WHITE"%s"COL_ADM_CMD".", admin, username);
+    			va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}unbanned player {MAIN}%s{FFFFFF}.", admin, username);
     		}
     	}
 
@@ -340,7 +340,7 @@ public ForceOMPDiscord(admin[], targetid, targetname[])
 	mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 1 WHERE `username` = '%e'", targetname);
 	mysql_tquery(dbHandle, queryGlobal);
 
-	va_SendClientMessageToAll(-1, FORCED_OMP_BAN, admin, targetname);
+	va_SendClientMessageToAll(-1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}forced open.mp launcher on {MAIN}%s{FFFFFF}.", admin, targetname);
 
 	SendDiscordResponse( comandos, sprintf(":white_check_mark: **%s**, the player %s got forced to play with open.mp launcher.", admin, targetname));
 

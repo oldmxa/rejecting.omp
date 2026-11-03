@@ -506,7 +506,7 @@ DSLASH:kick(user, params[])
 		return SendDiscordResponse(comandos, sprintf(" **%s**, you cannot do that with the owners.", username));
 
 	SendDiscordResponse(comandos, sprintf(":white_check_mark: The player **%s** has been kicked!", targetName));
-	va_SendClientMessageToAll(COLOR_ADM_PUNISH, KICK_REASON, username, targetName, targetid, reason);
+	va_SendClientMessageToAll(-1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}kicked {MAIN}%s {FFFFFF}(ID: %d). Reason: %s", username, targetName, targetid, reason);
 
 	KickEx(targetid, 300);
 
@@ -534,7 +534,7 @@ DSLASH:a(user, params[])
     if(IsNull(params)) return 1;
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
-    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[DISCORD] {FFFFFF}%s: %s", username, params);
+    va_SendClientMessageToAll(-1, "{MAIN}[DISCORD] {FFFFFF}%s: %s", username, params);
     SendDiscordResponse(comandos, ":white_check_mark: Global message sent!");
     return true;
 }
@@ -637,9 +637,9 @@ DSLASH:mute(user, params[])
     foreach(new i : Player)
     {
         if(i != targetid)
-            va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s muted %s[%d] for %d minutes. Reason: %s", username, User[targetid][userName], targetid, minutes, reason);
+            va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}muted {MAIN}%s{FFFFFF}[%d] for %d minutes. Reason: %s", username, User[targetid][userName], targetid, minutes, reason);
     }
-    va_SendClientMessage(targetid, -1, "{MAIN}[MUTE] {FFFFFF}You have been muted by [Discord] Admin %s for %d minutes. Reason: %s", username, minutes, reason);
+    va_SendClientMessage(targetid, -1, "{MAIN}[MUTE] {FFFFFF}You have been muted by [Discord] Admin {MAIN}%s {FFFFFF}for %d minutes. Reason: %s", username, minutes, reason);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s muted player %s (ID %d) for %d minutes. Reason: %s", username, User[targetid][userName], targetid, minutes, reason);
@@ -688,9 +688,9 @@ DSLASH:unmute(user, params[])
     foreach(new i : Player)
     {
         if(IsAdmin(i))
-            va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s unmuted player %s[%d].", username, User[targetid][userName], targetid);
+            va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}unmuted player {MAIN}%s{FFFFFF}[%d].", username, User[targetid][userName], targetid);
     }
-    va_SendClientMessage(targetid, -1, "{MAIN}[MUTE] {FFFFFF}You have been unmuted by [Discord] Admin %s.", username);
+    va_SendClientMessage(targetid, -1, "{MAIN}[MUTE] {FFFFFF}You have been unmuted by [Discord] Admin {MAIN}%s{FFFFFF}.", username);
 
     new log_details[256];
     format(log_details, sizeof(log_details), "Discord Admin %s unmuted player %s (ID %d)", username, User[targetid][userName], targetid);
@@ -1409,7 +1409,7 @@ DSLASH:banomp(user, params[])
 
 DSLASH:unbanomp(user, params[])
 {
-	if(!DSC_RequireLevel(user, 2)) return 1;
+	if(!DSC_RequireLevel(user, 3)) return 1;
 
 	new bool:isBot;
 	DCC_IsUserBot(user, isBot);
@@ -1704,7 +1704,7 @@ DSLASH:d(user, params[])
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
 
-    va_SendClientMessage(targetid, 0xA478E6FF, "{MAIN}[ASK] {FFFFFF}[Discord] Admin %s answered: %s", username, message);
+    va_SendClientMessage(targetid, -1, "{MAIN}[ASK] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}answered: %s", username, message);
     GameTextForPlayer(targetid, "~p~~h~Ask Answered", 1500, 1);
     PlayErrorSound(targetid);
 
@@ -1735,7 +1735,7 @@ DSLASH:r(user, params[])
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
 
-    va_SendClientMessage(targetid, 0x91BFCCFF, "{MAIN}[REPORT] {FFFFFF}[Discord] Admin %s replied: %s", username, message);
+    va_SendClientMessage(targetid, -1, "{MAIN}[REPORT] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}replied: %s", username, message);
     GameTextForPlayer(targetid, "~b~~h~Report Answered", 1500, 1);
     PlayErrorSound(targetid);
 
@@ -1805,39 +1805,78 @@ DSLASH:online(user, params[])
 	#pragma unused params
 	if(!DSC_RequirePlayer(user)) return 1;
 
-	new body[1800], count = 0;
-	format(body, sizeof(body), "**Players online**\n\n");
+	new pstr[2000];
+	new pstr2[2000];
+	new pcount;
+	new sampVERSION[24];
+	new locationName[15];
+	new tempUsername[MAX_PLAYER_NAME + 1];
+	new locationid;
+
+	pstr[0] = EOS;
+	strcat(pstr, "**Online players:** \n");
 
 	foreach(new i : Player)
 	{
-		if(!IsPlayerLogged(i)) continue;
-
-		new where[48];
-		new loc = User[i][locationId];
-
-		if(IsPlayerInLounge(i))
+		if(IsPlayerLogged(i))
 		{
-			format(where, sizeof(where), "Lounge");
-		}
-		else if(0 <= loc < MAX_LOCATIONS)
-		{
-			new zone = arenaInfo[loc][arenaId];
-			if(0 <= zone < MAX_ZONES) format(where, sizeof(where), "%s", arenaData[zone][arenaName]);
-			else format(where, sizeof(where), "Arena");
-		}
-		else format(where, sizeof(where), "Lounge");
+			pcount++;
+			GetPlayerVersion(i, sampVERSION, sizeof(sampVERSION));
 
-		if(strlen(body) < 1600)
-			strcat(body, fmat_return("`%-20s` %s - %d ms\n", User[i][userName], where, GetPlayerPing(i)), sizeof(body));
+			format(tempUsername, sizeof(tempUsername), "%s", User[i][userName]);
+			DCC_EscapeMarkdown(tempUsername, tempUsername, sizeof(tempUsername));
 
-		count++;
+			if ((locationid = User[i][locationId]) != -1)
+			{
+				strcopy(locationName, ROOM_NAME[locationid][E_ROOM_NAME_DISCORD]);
+			}
+			else
+			{
+				strcopy(locationName, "N/A");
+			}
+
+			if(pcount <= 12)
+			{
+				format(pstr, sizeof(pstr), "%s`[%d]` **_%s_** - `(Location: %s, K/D: %d/%d, Accuracy: %d%%, SAMP: %s, FPS: %d, Ping: %d, PL: %.2f, Mobile: %s)`\n",
+							pstr, i,
+							tempUsername,
+							locationName,
+							locationid == -1 ? 0 : playerArenaInfo[locationid][i][arenaKills],
+							locationid == -1 ? 0 : playerArenaInfo[locationid][i][arenaDeaths],
+							locationid == -1 ? 0 : floatround(GetPlayerAccuracy(i, locationid), floatround_round),
+							sampVERSION,
+							User[i][FPS],
+							GetPlayerPing(i),
+							NetStats_PacketLossPercent(i),
+							User[i][isMobile] ? "Yes" : "No");
+			}
+			else
+			{
+				format(pstr2, sizeof(pstr2), "%s`[%d]` **_%s_** - `(Location: %s, K/D: %d/%d, Accuracy: %d%%, SAMP: %s, FPS: %d, Ping: %d, PL: %.2f, Mobile: %s)`\n",
+							pstr2, i,
+							tempUsername,
+							locationName,
+							locationid == -1 ? 0 : playerArenaInfo[locationid][i][arenaKills],
+							locationid == -1 ? 0 : playerArenaInfo[locationid][i][arenaDeaths],
+							locationid == -1 ? 0 : floatround(GetPlayerAccuracy(i, locationid), floatround_round),
+							sampVERSION,
+							User[i][FPS],
+							GetPlayerPing(i),
+							NetStats_PacketLossPercent(i),
+							User[i][isMobile] ? "Yes" : "No");
+			}
+		}
 	}
 
-	if(!count)
-		return SendDiscordResponse(comandos, ":zzz: Nobody is online right now.");
+	if(pcount < 1)
+		format(pstr, sizeof(pstr), "*The server is empty!*");
 
-	strcat(body, fmat_return("\n**%d/%d** connected.", count, GetMaxPlayers()), sizeof(body));
-	return SendDiscordResponse(comandos, body);
+	SendDiscordResponse(comandos, pstr);
+
+	if(strlen(pstr2) > 0)
+		SendDiscordResponse(comandos, pstr2);
+
+	return true;
 }
 
 DSLASH:howtolink(user, params[])
