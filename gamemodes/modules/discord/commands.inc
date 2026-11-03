@@ -549,7 +549,7 @@ DSLASH:lc(user, params[])
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
     for(new j = 0; j < 100; j++) SendClientMessageToAll(-1, " ");
-    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s cleared the chat.", username);
+    va_SendClientMessageToAll(-1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}cleared the chat.", username);
     SendDiscordResponse(comandos, ":white_check_mark: Chat successfully cleared!");
     return true;
 }
@@ -572,7 +572,7 @@ DSLASH:warn(user, params[])
     if(targetid != INVALID_PLAYER_ID)
     {
         User[targetid][warnings]++;
-        va_SendClientMessageToAll(COLOR_ADM_PUNISH, "{MAIN}[ADMIN] [Discord] Admin %s gave a warning to %s [%d/%d]. Reason: %s", username, User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
+        va_SendClientMessageToAll(-1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}gave a warning to {MAIN}%s {FFFFFF}[%d/%d]. Reason: %s", username, User[targetid][userName], User[targetid][warnings], ServerMaxWarnings, reason);
         if(User[targetid][warnings] >= ServerMaxWarnings)
         {
             new hours = 9999;
@@ -784,10 +784,12 @@ DSLASH:hostname(user, params[])
     if(!DSC_RequireLevel(user, 4)) return 1;
 
     if(IsNull(params)) return SendDiscordResponse(comandos, "/hostname [name]");
+    new username[33];
+    DCC_GetUserName(user, username, sizeof(username));
     new str[144];
     format(str, sizeof(str), "hostname %s", params);
     SendRconCommand(str);
-    va_SendClientMessageToAll(COLOR_ADM_CMD, "{MAIN}[ADMIN] [Discord] Server renamed to: %s", params);
+    va_SendClientMessageToAll(-1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}renamed the server to: %s", username, params);
     SendDiscordResponse(comandos, ":white_check_mark: Hostname successfully updated!");
     return true;
 }
@@ -1261,6 +1263,7 @@ DSLASH:gmx(user, params[])
 	{
 		if(!DSC_RequireLevel(user, 4)) return 1;
 
+		va_SendClientMessageToAll(-1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}is restarting the server.", username);
 		RestartServerSafe();
 		SendDiscordResponse(comandos, sprintf(":white_check_mark: **%s**, server will be restarted.", username));
 		return true;
@@ -1271,10 +1274,8 @@ DSLASH:gmx(user, params[])
 
 static stock DiscordStartTempRec(targetid, const adminName[])
 {
-	new stringa[250];
-	format(stringa, sizeof(stringa), "%s, you have 5 minutes to start recording your screen, after that time passes you will be banned from the server.", User[targetid][userName]);
-
-	SendClientMessage(targetid, COLOR_LIGHT_BLUE, "%s", stringa);
+	new stringa[256];
+	va_SendClientMessage(targetid, -1, "{MAIN}[TEMPREC] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}demanded you to record your screen! You have 5 minutes.", adminName);
 	GameTextForPlayer(targetid, " ~n~~b~~h~start recording", 12000, 0);
 
 	format(stringa, sizeof(stringa), ":white_check_mark: **%s**, message sent to the player %s, now u just have to wait until he is banned.", adminName, User[targetid][userName]);
@@ -1509,10 +1510,7 @@ DSLASH:turnoff(user, params[])
 	{
 		if(!DSC_RequireLevel(user, 5)) return 1;
 
-		for(new j; j < 20; j++)
-		{
-			SendClientMessageToAll(randomcolor[random(sizeof(randomcolor))], "Server will be turned off for maintenance.");
-		}
+		va_SendClientMessageToAll(-1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}is shutting down the server for maintenance.", username);
 
 		foreach(new k: Player)
 		{

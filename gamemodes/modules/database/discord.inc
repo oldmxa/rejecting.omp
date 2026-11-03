@@ -155,10 +155,14 @@ public SetAdminDiscord(admin[], username[], role[], level, actorLevel)
 				{
 					if(IsAdmin(i))
 					{
-						format(string, sizeof(string), "{MAIN}[Admin] {E63114} Administrator %s %s {FFFFFF}%s{E63114} to %s.",
+						format(string, sizeof(string), "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}%s {MAIN}%s {FFFFFF}to %s.",
 							admin, (level > User[targetid][adminLevel]) ? ("promoted") : ("demoted"), User[targetid][userName], adminnames[level][ingame]);
-						SendClientMessage(i, 0x01A2F8AA, "%s", string);
+						SendClientMessage(i, -1, "%s", string);
 					}
+				}
+				if(targetid != INVALID_PLAYER_ID && !IsAdmin(targetid))
+				{
+					va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}%s you to %s.", admin, (level > User[targetid][adminLevel]) ? ("promoted") : ("demoted"), adminnames[level][ingame]);
 				}
 
 				User[targetid][adminLevel] = level;
@@ -363,6 +367,14 @@ public UnBanOMPDiscord(admin[], player[])
 	{
 		mysql_format(dbHandle, queryGlobal, sizeof queryGlobal, "UPDATE `accounts` SET `forced_omp` = 0 WHERE `username` = '%e'", player);
 		mysql_tquery(dbHandle, queryGlobal);
+
+		foreach(new i : Player)
+		{
+			if(IsAdmin(i))
+			{
+				va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}unbanned open.mp lock for {MAIN}%s{FFFFFF}.", admin, player);
+			}
+		}
 
 		SendDiscordResponse( comandos, sprintf(":white_check_mark: **%s**, the player %s won't be forced to play with open.mp launcher no more.", admin, player));
 
