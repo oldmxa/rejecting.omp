@@ -206,7 +206,7 @@ stock RegisterParticipant(playerid, teammateid = INVALID_PLAYER_ID)
         }
     }
 
-    // Auto-start check
+
     if(g_TourneyData[t_AutoStart] && g_TourneyData[t_RegisteredCount] == g_TourneyData[t_MaxSlots])
     {
         SendTourneyBroadcast("All registration slots are filled! Tournament will begin in 10 seconds!");
@@ -478,7 +478,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
     {
         new notVerifiedMsg[256];
         format(notVerifiedMsg, sizeof(notVerifiedMsg), "<@%s> :no_entry: Only **verified members** can register for tournaments!\nPlease link your account using `/verify` on Discord or `/linkdiscord` in-game to get verified.", userid);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, notVerifiedMsg);
+        if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, notVerifiedMsg);
         return 0;
     }
 
@@ -486,7 +486,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
     {
         new failMsg[192];
         format(failMsg, sizeof(failMsg), "<@%s> :warning: There are no open tournament registrations right now.", userid);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, failMsg);
+        if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, failMsg);
         return 0;
     }
 
@@ -498,7 +498,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         else strcopy(modeName, "Clan War", sizeof(modeName));
 
         format(modeMsg, sizeof(modeMsg), "<@%s> :warning: This tournament is **%s**. Discord registration is only available for **1v1** - please register in-game with `/jointournament`.", userid, modeName);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, modeMsg);
+        if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, modeMsg);
         return 0;
     }
 
@@ -520,7 +520,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
     {
         new usageMsg[256];
         format(usageMsg, sizeof(usageMsg), "<@%s> :x: Invalid format!\n**Usage:** `/tournament <InGame_Nick>`\n*Example:* `/tournament Nick_Silva`", userid);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, usageMsg);
+        if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, usageMsg);
         return 0;
     }
 
@@ -532,7 +532,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
             {
                 new alreadyMsg[256];
                 format(alreadyMsg, sizeof(alreadyMsg), "<@%s> :warning: Nick **%s** is already registered in the tournament!", userid, nick);
-                if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, alreadyMsg);
+                if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, alreadyMsg);
                 return 0;
             }
         }
@@ -552,7 +552,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
     {
         new fullMsg[192];
         format(fullMsg, sizeof(fullMsg), "<@%s> :warning: The tournament registration slots are currently full (%d/%d)!", userid, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, fullMsg);
+        if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, fullMsg);
         return 0;
     }
 
@@ -575,7 +575,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         {
             new feeMsg[256];
             format(feeMsg, sizeof(feeMsg), "<@%s> :x: **%s** does not have enough money for the entry fee (%s).", userid, nick, FormatMoney(g_TourneyData[t_EntryFee]));
-            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, feeMsg);
+            if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, feeMsg);
             return 0;
         }
 
@@ -583,7 +583,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         {
             new busyMsg[256];
             format(busyMsg, sizeof(busyMsg), "<@%s> :warning: **%s** is busy in another activity right now and cannot be registered.", userid, nick);
-            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, busyMsg);
+            if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, busyMsg);
             return 0;
         }
 
@@ -656,7 +656,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
 
         new confirmMsg[256];
         format(confirmMsg, sizeof(confirmMsg), ":white_check_mark: <@%s> Your registration with nick **%s** is confirmed! (Slot #%02d - **%d/%d** slots filled).", userid, nick, slot + 1, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, confirmMsg);
+        if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, confirmMsg);
 
         va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT] {FFFFFF}%s joined the tournament via Discord! ({MAIN}%d/%d {FFFFFF}slots filled).",
             nick, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
@@ -675,7 +675,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         {
             new notFoundMsg[256];
             format(notFoundMsg, sizeof(notFoundMsg), "<@%s> :x: The account **%s** does not exist on the server! Please make sure you registered this account in-game.", userid, nick);
-            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, notFoundMsg);
+            if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, notFoundMsg);
             return 1;
         }
 
@@ -683,7 +683,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         {
             new failMsg[192];
             format(failMsg, sizeof(failMsg), "<@%s> :warning: Tournament registrations closed in the meantime.", userid);
-            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, failMsg);
+            if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, failMsg);
             return 1;
         }
 
@@ -695,7 +695,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
                 {
                     new alreadyMsg[256];
                     format(alreadyMsg, sizeof(alreadyMsg), "<@%s> :warning: Nick **%s** is already registered in the tournament!", userid, nick);
-                    if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, alreadyMsg);
+                    if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, alreadyMsg);
                     return 1;
                 }
             }
@@ -715,7 +715,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
         {
             new fullMsg[192];
             format(fullMsg, sizeof(fullMsg), "<@%s> :warning: The tournament registration slots are currently full (%d/%d)!", userid, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
-            if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, fullMsg);
+            if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, fullMsg);
             return 1;
         }
 
@@ -788,7 +788,7 @@ stock ProcessDiscordTourneyApp(DCC_User:user, DCC_Channel:channel, const params[
 
         new confirmMsg2[256];
         format(confirmMsg2, sizeof(confirmMsg2), ":white_check_mark: <@%s> Your registration with nick **%s** is confirmed! (Slot #%02d - **%d/%d** slots filled).", userid, acc_name, slotIdx + 1, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
-        if(channel != DCC_INVALID_CHANNEL) DCC_SendChannelMessage(channel, confirmMsg2);
+        if(channel != DCC_INVALID_CHANNEL) SendDiscordResponse(channel, confirmMsg2);
 
         va_SendClientMessageToAll(-1, "{MAIN}[TOURNAMENT] {FFFFFF}%s joined the tournament via Discord! ({MAIN}%d/%d {FFFFFF}slots filled).",
             acc_name, g_TourneyData[t_RegisteredCount], g_TourneyData[t_MaxSlots]);
