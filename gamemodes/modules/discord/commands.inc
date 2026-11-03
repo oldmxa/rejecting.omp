@@ -305,7 +305,7 @@ enum E_SLASH_CMD
 static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"setadmin",        "Set a player admin level",      4},
 	{"ban",             "Ban a player",                  2},
-	{"unban",           "Unban a player or IP",          2},
+	{"unban",           "Unban a player or IP",          3},
 	{"kick",            "Kick an online player",         1},
 	{"mute",            "Mute an online player",         1},
 	{"unmute",          "Unmute a player",               1},
@@ -330,7 +330,7 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"gtemp",           "Demand a player recording",     1},
 	{"temprec",         "Demand a player recording",     1},
 	{"banomp",          "Force open.mp launcher",        1},
-	{"unbanomp",        "Unban open.mp launcher",        2},
+	{"unbanomp",        "Unban open.mp launcher",        3},
 	{"unbanip",         "Unban an IP address",           2},
 	{"dox",             "Show IP and ISP data",          2},
 	{"turnoff",         "Shut the server down",          5},
@@ -466,7 +466,7 @@ DSLASH:unban(user, params[])
     new userid[DCC_ID_SIZE];
     DCC_GetUserId(user, userid, sizeof(userid));
 
-    if(!DSC_RequireLevel(user, 2)) return 1;
+    if(!DSC_RequireLevel(user, 3)) return 1;
 
 	new nameIP[28];
 	if(sscanf(params, "s[28]", nameIP))

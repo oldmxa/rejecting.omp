@@ -157,7 +157,7 @@ ShowVipMenu(playerid)
 
     if(!IsPlayerVip(playerid))
     {
-        format(status, sizeof(status), "{F84F31}Not active {B4B5B7}(free account)");
+        format(status, sizeof(status), "{F84F31}Not active");
     }
     else if(User[playerid][vipExpire] == 0)
     {
@@ -353,9 +353,9 @@ public DIALOG_VIP_TAG(playerid, dialogid, response, listitem, string:inputtext[]
 
     if(response)
     {
-        if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
+        if(!IsPlayerVip(playerid))
         {
-            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only VIP or Staff players have permission to change the VIP tag.");
+            SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only players with an active VIP subscription can customize the VIP tag.");
             return 1;
         }
 
@@ -440,9 +440,9 @@ public DIALOG_VIP_CUSTOM_HEX(playerid, dialogid, response, listitem, string:inpu
         return ShowVipTagDialog(playerid);
     }
 
-    if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
+    if(!IsPlayerVip(playerid))
     {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only VIP or Staff players have permission to change the VIP tag.");
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only players with an active VIP subscription can customize the VIP tag.");
         return 1;
     }
 
@@ -659,9 +659,9 @@ ShowVipTagDialog(playerid)
 {
     if(!IsPlayerLogged(playerid)) return 0;
 
-    if(!IsPlayerVip(playerid) && User[playerid][adminLevel] < 1)
+    if(!IsPlayerVip(playerid))
     {
-        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only VIP or Staff players have permission to change the VIP tag.");
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only players with an active VIP subscription can customize the VIP tag.");
         return 0;
     }
 
@@ -699,6 +699,14 @@ ShowVipTagDialog(playerid)
 
 @cmd() vtag(playerid, params[], help)
 {
+    if(!IsPlayerLogged(playerid)) return true;
+
+    if(!IsPlayerVip(playerid))
+    {
+        SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only players with an active VIP subscription can use this command.");
+        return true;
+    }
+
     ShowVipTagDialog(playerid);
     return true;
 }

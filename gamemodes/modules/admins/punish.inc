@@ -145,7 +145,7 @@
 
 @cmd(.alts = {"unbanopenmp", "unbanr2"}) unbanomp(playerid, params[], help)
 {
-	if (!IsAdmin(playerid, 2))
+	if (!IsAdmin(playerid, 3))
 	    return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
 	CheckAdminAuth(playerid);
@@ -268,7 +268,7 @@
 
 @cmd() unban(playerid, params[], help)
 {
-    if (!IsAdmin(playerid, 2))
+    if (!IsAdmin(playerid, 3))
         return SendClientMessage(playerid,-1, "%s", NEED_ADMIN_LEVEL);
 
     CheckAdminAuth(playerid);

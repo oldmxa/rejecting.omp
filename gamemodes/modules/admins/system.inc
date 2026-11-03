@@ -117,7 +117,7 @@
 
 @cmd() changearena(playerid, params[], help)
 {
-    if (!IsAdmin(playerid, 2))
+    if (!IsAdmin(playerid, 3))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -169,7 +169,7 @@
 
 @cmd() maplist(playerid, params[], help)
 {
-    if (!IsAdmin(playerid, 2))
+    if (!IsAdmin(playerid, 3))
         return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
@@ -269,7 +269,7 @@ public AdminCountdown(count)
 
 @cmd() avtn(playerid, params[], help)
 {
-    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 3)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new text[128], str[144];
@@ -281,7 +281,7 @@ public AdminCountdown(count)
 
 @cmd() cnn(playerid, params[], help)
 {
-    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 3)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new text[128], str[144];

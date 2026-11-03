@@ -7,13 +7,13 @@ enum E_ADMIN_CMD_DATA {
 
 static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/alogin [code]", "Authenticate as admin (Use without code to generate).", 0},
-    {"/a [message]", "Global administrative message.", 1},
+    {"/a [message]", "Global administrative message.", 3},
     {"/aka [id/name]", "Check possible accounts of a player, online or offline.", 1},
     {"/al [id] [message]", "Send an anonymous alert to a player.", 1},
-    {"/avtn [message]", "Send an on-screen notification to everyone.", 1},
+    {"/avtn [message]", "Send an on-screen notification to everyone.", 3},
     {"/baninfo [nick/ip]", "Check details of a banned account or IP.", 1},
     {"/banomp [id]", "Force open.mp launcher on a player.", 1},
-    {"/cnn [text]", "Send an on-screen announcement (# ~p~Nick~p~: ~w~Text #).", 1},
+    {"/cnn [text]", "Send an on-screen announcement (# ~p~Nick~p~: ~w~Text #).", 3},
     {"/nickcolor [color]", "Change nickname color.", 1},
     {"/count", "Global administrative message.", 1},
     {"/d [id] [message]", "Answer a player question (/ask).", 1},
@@ -37,17 +37,17 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/unmute [id]", "Unmute a player.", 1},
     {"/acinfo [id/nickname]", "Anti cheat report of a player, with history.", 2},
     {"/ban [id] [hours] [reason]", "Ban a player.", 2},
-    {"/changearena [id]", "Change one to a specified arena id.", 2},
+    {"/changearena [id]", "Change one to a specified arena id.", 3},
     {"/clist", "Map list of the Custom Room (used in place of /maplist there).", 2},
     {"/freeze [id]", "Freezes a player.", 2},
     {"/logins", "View the list of most recent player logins.", 2},
     {"/lookup [id/nickname/ip]", "IP and ISP info of a player, online or offline.", 2},
-    {"/maplist", "List of the current arenas.", 2},
+    {"/maplist", "List of the current arenas.", 3},
     {"/offban [id] [hours] [reason]", "Ban a offline player.", 2},
     {"/randomchangearena", "Change to a random id arena.", 2},
     {"/spawn [id]", "Spawn a player.", 2},
-    {"/unban [player/ip]", "Unban a player.", 2},
-    {"/unbanomp [name]", "Unban a forced open.mp player.", 2},
+    {"/unban [player/ip]", "Unban a player.", 3},
+    {"/unbanomp [name]", "Unban a forced open.mp player.", 3},
     {"/unfreeze [id]", "Unfreeze a player.", 2},
     {"/aconfig", "Admin settings.", 3},
     {"/fakeban [id/nickname] [hours] [reason]", "Fake ban a player.", 3},
@@ -502,7 +502,7 @@ ShowAdminCmds(playerid)
 
 @cmd() a(playerid, params[], help)
 {
-    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 3)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
     new text[128];
