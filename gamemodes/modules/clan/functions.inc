@@ -3,6 +3,11 @@
 #endif
 #define _clan_functions_included
 
+stock GetClanPrice(playerid)
+{
+    return (IsPlayerVip(playerid) ? CLAN_PRICE_VIP : CLAN_PRICE);
+}
+
 stock bool:IsValidClanID(clanid)
 {
     if (!(0 <= clanid < MAX_CLANS)) return false;
@@ -202,7 +207,7 @@ stock CreateClan(playerid, const tag[], const name[])
     for (new i = 0; i < MAX_ROLES; i++)
         format(ClanRoles[clanid][i], CLAN_ROLE_LEN, "%s", ClanDefaultRoles[i]);
 
-    GivePlayerCash(playerid, -CLAN_PRICE);
+    GivePlayerCash(playerid, -GetClanPrice(playerid));
     User[playerid][clanID] = clanid;
     User[playerid][clanRole] = RANK_FOUNDER;
 

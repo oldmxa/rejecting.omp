@@ -31,7 +31,6 @@ stock GetVipPackageCoins(idx)   return (0 <= idx < sizeof(VipPackages)) ? VipPac
 
 forward DIALOG_VIP_PAYMENT(playerid, dialogid, response, listitem, string:inputtext[]);
 
-
 stock IsPlayerVip(playerid)
 {
     if(playerid < 0 || playerid >= MAX_PLAYERS) return 0;
@@ -68,6 +67,12 @@ stock IsPlayerVip(playerid)
         return 1;
     }
     return 0;
+}
+
+stock bool:IsPlayerPermanentVip(playerid)
+{
+    if(!IsPlayerVip(playerid)) return false;
+    return (User[playerid][vipExpire] == 0);
 }
 
 stock CheckPlayerVipOnLogin(playerid)
@@ -189,6 +194,10 @@ ShowVipMenu(playerid)
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}VIP role and private channels on Discord, synced automatically\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Your connection is announced to everyone on the server\n");
 
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Create a Clan for {23C552}$500.000 {B4B5B7}(50% off regular $1.000.000)\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Practice mode access ( "VIP_CMD_COLOR"/prac"COL_VIP_TEXT" ) regardless of level (Level 5 bypass)\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Priority access: enter combat arenas even when full\n");
+    strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Permanent VIP access to ( "VIP_CMD_COLOR"/votekick"COL_VIP_TEXT" ) to start votekicks\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/vtag"COL_VIP_TEXT" ) to change the colour of the "VIP_CMD_COLOR"[VIP]"COL_VIP_TEXT" Tag\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/v"COL_VIP_TEXT" ) to talk in the private VIP chat\n");
     strcat(strVip, "{FFFFFF}\x95 {B4B5B7}Access to command ( "VIP_CMD_COLOR"/von"COL_VIP_TEXT" ) and ( "VIP_CMD_COLOR"/voff"COL_VIP_TEXT" ) to turn the VIP chat on or off\n");
@@ -477,6 +486,8 @@ ShowVipCommandsMenu(playerid)
     strcat(strCmds, "{BEBEBE}/vips\t{FFFFFF}View the list of all online VIP members\n");
     strcat(strCmds, "{BEBEBE}/vtag\t{FFFFFF}Customize or toggle your 3D VIP Head Tag color\n");
     strcat(strCmds, "{BEBEBE}/highlight [on/off]\t{FFFFFF}Toggle flashing radar and nickname color\n");
+    strcat(strCmds, "{BEBEBE}/prac\t{FFFFFF}Enter practice arena without Level 5 requirement\n");
+    strcat(strCmds, "{BEBEBE}/votekick [id]\t{FFFFFF}Initiate a votekick poll (Permanent VIP only)\n");
     strcat(strCmds, "{BEBEBE}/buyvip\t{FFFFFF}Activate or renew your VIP package\n");
     strcat(strCmds, "{BEBEBE}/vip\t{FFFFFF}View all VIP Perks, status & subscription details\n");
 

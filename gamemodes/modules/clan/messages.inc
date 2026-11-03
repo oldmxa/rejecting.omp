@@ -6,7 +6,7 @@
 #define CLAN_PREFIX         "{MAIN}[CLAN] {FFFFFF}"
 
 #define CLAN_INVITE			"{MAIN}[ERROR] {FFFFFF}/inviteclan [id]"
-#define CLAN_NOMONEY		"{MAIN}**{FFFFFF} You need {MAIN}$500.000 {FFFFFF}to create a clan!"
+#define CLAN_NOMONEY		"{MAIN}**{FFFFFF} You need {MAIN}%s {FFFFFF}to create a clan!"
 #define CLAN_INACLAN        "{MAIN}**{FFFFFF} You are a member of a clan!"
 #define CLAN_TAGFAIL        "{MAIN}**{FFFFFF} The clan tag must be between 3 and 6 characters!"
 #define CLAN_NAMEFAIL       "{MAIN}**{FFFFFF} The clan name must be between 2 and 20 characters!"

@@ -506,7 +506,7 @@ ShowCommandCategory(playerid, catid)
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/transfer [id/name] [amt]\t{FFFFFF}Transfer money to a player\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/report [id] [reason]\t{FFFFFF}Report a player to admins\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/ask [question]\t{FFFFFF}Ask a question to online staff\n");
-            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/votekick [id]\t{FFFFFF}Initiate a votekick poll\n");
+            strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/votekick [id]\t{FFFFFF}Initiate a votekick poll (Permanent VIP / Admin)\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/yes\t{FFFFFF}Vote YES in active votekick poll\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/no\t{FFFFFF}Vote NO in active votekick poll\n");
             strcat(cmdsstr, "{FFFFFF}\x95 {B4B5B7}/admins\t{FFFFFF}View online administrators\n");

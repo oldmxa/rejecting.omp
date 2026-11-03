@@ -7,7 +7,8 @@
 {
     if (!IsPlayerLogged(playerid)) return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
     if (IsPlayerInClan(playerid)) return SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
-    if (!HasPlayerCash(playerid, CLAN_PRICE)) return SendClientMessage(playerid, -1, "%s", CLAN_NOMONEY);
+    new clanPrice = GetClanPrice(playerid);
+    if (!HasPlayerCash(playerid, clanPrice)) return va_SendClientMessage(playerid, -1, CLAN_NOMONEY, FormatMoney(clanPrice));
 
     new rawTag[100], rawName[100];
     if (sscanf(params, "s[100]s[100]", rawTag, rawName))
@@ -21,10 +22,11 @@
     {
         if (taken == CLAN_TEXT_FREE)
         {
+            new price = GetClanPrice(playerid);
             if (IsPlayerInClan(playerid))
                 SendClientMessage(playerid, -1, "%s", CLAN_INACLAN);
-            else if (!HasPlayerCash(playerid, CLAN_PRICE))
-                SendClientMessage(playerid, -1, "%s", CLAN_NOMONEY);
+            else if (!HasPlayerCash(playerid, price))
+                va_SendClientMessage(playerid, -1, CLAN_NOMONEY, FormatMoney(price));
             else
             {
                 new clanid = CreateClan(playerid, tag, name);
@@ -182,7 +184,7 @@
     strcat(body, "{A29582}Command\t{A29582}Description\n");
 
     strcat(body, "{FFFFFF}/clan\t{BEBEBE}Open Clan management dashboard\n");
-    strcat(body, fmat_return("{FFFFFF}/createclan [tag] [name]\t{BEBEBE}Create a new Clan (%s)\n", FormatMoney(CLAN_PRICE)));
+    strcat(body, fmat_return("{FFFFFF}/createclan [tag] [name]\t{BEBEBE}Create a new Clan (%s)\n", FormatMoney(GetClanPrice(playerid))));
     strcat(body, "{FFFFFF}/invite [id/name]\t{BEBEBE}Invite a player to your clan\n");
     strcat(body, "{FFFFFF}/accept\t{BEBEBE}Accept a clan invitation\n");
     strcat(body, "{FFFFFF}/leaveclan\t{BEBEBE}Leave your current clan\n");

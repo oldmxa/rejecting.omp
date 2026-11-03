@@ -228,6 +228,8 @@ stock ShowBanDialog(playerid, const adminname[], const reason[], const banDate[]
 stock ShowSecurityMenu(playerid) return CallLocalFunction("Account_ShowSecurityMenu", "d", playerid);
 stock ShowCoinsMenu(playerid) return CallLocalFunction("Coinshop_ShowCoinsMenu", "d", playerid);
 
+forward IsPlayerVip(playerid);
+forward bool:IsPlayerPermanentVip(playerid);
 forward bool:IsPlayerLogged(playerid);
 forward bool:IsPlayerAFK(playerid);
 forward bool:IsPlayerInLounge(playerid);

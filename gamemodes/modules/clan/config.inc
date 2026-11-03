@@ -25,7 +25,8 @@
 #define CLAN_TEXT_TAG_TAKEN     (1)
 #define CLAN_TEXT_NAME_TAKEN    (2)
 
-#define CLAN_PRICE              (500000)
+#define CLAN_PRICE              (1000000)
+#define CLAN_PRICE_VIP          (500000)
 #define CLAN_COLOR_PRICE        (3000000)
 #define CLAN_COLOR_ALPHA        (0xAA)
 #define CLAN_COLOR_ALPHA_CMD    (0x59)

@@ -177,6 +177,9 @@
     if(!IsPlayerLogged(playerid))
         return SendClientMessage(playerid, -1, "%s", IS_NOT_CONNECTED);
 
+    if(!IsAdmin(playerid) && !IsPlayerPermanentVip(playerid))
+        return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}Only Permanent VIP members or Administrators can start a votekick.");
+
     if(IsPlayerInMatch(playerid, false))
         return SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You cannot start a votekick while in a match.");
 

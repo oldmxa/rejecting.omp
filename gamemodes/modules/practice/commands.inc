@@ -14,7 +14,7 @@
     if (IsPlayerInTournamentMatch(playerid))
         return SendClientMessage(playerid, -1, "{MAIN}[TOURNAMENT] {FFFFFF}You cannot use practice mode while playing a tournament match.");
 
-    if (User[playerid][playerLevel] < PRACTICE_MIN_LEVEL)
+    if (!IsPlayerVip(playerid) && User[playerid][playerLevel] < PRACTICE_MIN_LEVEL)
     {
         return va_SendClientMessage(playerid, -1, "{MAIN}[ERROR] {FFFFFF}You need level {MAIN}%d {FFFFFF}to use the practice mode.", PRACTICE_MIN_LEVEL);
     }

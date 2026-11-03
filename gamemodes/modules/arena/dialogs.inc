@@ -28,7 +28,7 @@ public Location(playerid, dialogid, response, listitem, string:inputtext[])
         return true;
     }
 
-    if(getLocationPlayers(listitem) >= arenaInfo[listitem][maxPlayers])
+    if(!IsPlayerVip(playerid) && getLocationPlayers(listitem) >= arenaInfo[listitem][maxPlayers])
     {
         SendClientMessage(playerid, 0xa4aba7ff, "%s", NOT_EMPTY_SPACES);
         showLocationSelectDialog(playerid);

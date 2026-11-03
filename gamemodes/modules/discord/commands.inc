@@ -839,6 +839,9 @@ DSLASH:setmoney(user, params[])
     if(amount < 0 || amount > 1000000000)
         return SendDiscordResponse(comandos, "Error: Amount must be between 0 and 1,000,000,000.");
 
+    new username[DCC_USERNAME_SIZE];
+    DCC_GetUserName(user, username, sizeof(username));
+
     new targetid = GetOnlinePlayerIDByName(target_nick);
 
     if(targetid != INVALID_PLAYER_ID)
@@ -846,13 +849,17 @@ DSLASH:setmoney(user, params[])
         ResetPlayerMoney(targetid);
         GivePlayerMoney(targetid, amount);
         User[targetid][playerMoney] = amount;
-        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Your money was set to %s.", FormatMoney(amount));
-        
+        UpdatePlayerData(targetid);
+        va_SendClientMessage(targetid, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin {MAIN}%s {FFFFFF}set your money to {MAIN}%s{FFFFFF}.", username, FormatMoney(amount));
+
+        foreach(new i : Player)
+        {
+            if(IsAdmin(i) && i != targetid)
+                va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s set the money of %s to %s.", username, User[targetid][userName], FormatMoney(amount));
+        }
+
         mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `player_money` = %d WHERE `username` = '%e'", amount, target_nick);
         mysql_tquery(dbHandle, queryGlobal);
-        
-        new username[DCC_USERNAME_SIZE];
-        DCC_GetUserName(user, username, sizeof(username));
 
         new mLog[256];
         format(mLog, sizeof(mLog), "**Admin:** %s (Discord)\n**Player:** %s\n**New Balance:** $%s",
@@ -867,8 +874,11 @@ DSLASH:setmoney(user, params[])
         mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal), "UPDATE `accounts` SET `player_money` = %d WHERE `username` = '%e'", amount, target_nick);
         mysql_tquery(dbHandle, queryGlobal);
 
-        new username[DCC_USERNAME_SIZE];
-        DCC_GetUserName(user, username, sizeof(username));
+        foreach(new i : Player)
+        {
+            if(IsAdmin(i))
+                va_SendClientMessage(i, -1, "{MAIN}[ADMIN] {FFFFFF}[Discord] Admin %s set the money of %s (offline) to %s.", username, target_nick, FormatMoney(amount));
+        }
 
         new mLog[256];
         format(mLog, sizeof(mLog), "**Admin:** %s (Discord)\n**Player:** %s (Offline)\n**New Balance:** $%s",
