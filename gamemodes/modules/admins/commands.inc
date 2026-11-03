@@ -22,7 +22,7 @@ static const AdminCmdsList[][E_ADMIN_CMD_DATA] = {
     {"/inject [id]", "Giving a ride to a player (Put in vehicle).", 1},
     {"/interiors", "Interiors viewer.", 1},
     {"/kick [id] [reason]", "Kick a player.", 1},
-    {"/lc", "Clear the chat.", 1},
+    {"/lc", "Clear the chat.", 2},
     {"/mute [id] [reason]", "Mute a player.", 1},
     {"/names [id]", "Check a player's name history.", 1},
     {"/players", "List online players stats.", 1},
@@ -513,7 +513,7 @@ ShowAdminCmds(playerid)
 
 @cmd() lc(playerid, params[], help)
 {
-    if (!IsAdmin(playerid, 1)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
+    if (!IsAdmin(playerid, 2)) return SendClientMessage(playerid, -1, "%s", NOT_ADMIN_MSG);
 
     CheckAdminAuth(playerid);
 

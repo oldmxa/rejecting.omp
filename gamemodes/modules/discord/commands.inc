@@ -309,15 +309,15 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"kick",            "Kick an online player",         1},
 	{"mute",            "Mute an online player",         1},
 	{"unmute",          "Unmute a player",               1},
-	{"a",               "Global admin message",          1},
-	{"lc",              "Clear the in-game chat",        1},
+	{"a",               "Global admin message",          3},
+	{"lc",              "Clear the in-game chat",        2},
 	{"warn",            "Warn a player",                 4},
 	{"banserial",       "Ban a player serial (GPCI)",    4},
 	{"changebanreason", "Change a ban reason",           4},
 	{"changebantime",   "Change a ban expiry time",      4},
 	{"hostname",        "Change the server name",        4},
 	{"penalties",       "Show penalty history",          4},
-	{"setmoney",        "Set a player money",            2},
+	{"setmoney",        "Set a player money",            4},
 	{"resetpassword",   "Reset a player account password", 5},
 	{"players",         "List online players",           1},
 	{"baninfo",         "Show ban details",              1},
@@ -331,7 +331,7 @@ static const g_SlashCommands[][E_SLASH_CMD] = {
 	{"temprec",         "Demand a player recording",     1},
 	{"banomp",          "Force open.mp launcher",        1},
 	{"unbanomp",        "Unban open.mp launcher",        3},
-	{"unbanip",         "Unban an IP address",           2},
+	{"unbanip",         "Unban an IP address",           3},
 	{"dox",             "Show IP and ISP data",          2},
 	{"turnoff",         "Shut the server down",          5},
 	{"reloadbans",      "Reload the ban list",           4},
@@ -529,7 +529,7 @@ DSLASH:a(user, params[])
 {
     new userid[DCC_ID_SIZE];
     DCC_GetUserId(user, userid, sizeof(userid));
-    if(!DSC_RequireLevel(user, 1)) return 1;
+    if(!DSC_RequireLevel(user, 3)) return 1;
 
     if(IsNull(params)) return 1;
     new username[33];
@@ -544,7 +544,7 @@ DSLASH:lc(user, params[])
 	#pragma unused params
     new userid[DCC_ID_SIZE];
     DCC_GetUserId(user, userid, sizeof(userid));
-    if(!DSC_RequireLevel(user, 1)) return 1;
+    if(!DSC_RequireLevel(user, 2)) return 1;
 
     new username[33];
     DCC_GetUserName(user, username, sizeof(username));
@@ -832,7 +832,7 @@ DSLASH:setmoney(user, params[])
 {
     new userid[DCC_ID_SIZE];
     DCC_GetUserId(user, userid, sizeof(userid));
-    if(!DSC_RequireLevel(user, 2)) return 1;
+    if(!DSC_RequireLevel(user, 4)) return 1;
 
     new target_nick[24], amount;
     if(sscanf(params, "s[24]d", target_nick, amount))
@@ -1468,7 +1468,7 @@ DSLASH:unbanip(user, params[])
 
 	if(user != DCC_INVALID_USER)
 	{
-		if(!DSC_RequireLevel(user, 2)) return 1;
+		if(!DSC_RequireLevel(user, 3)) return 1;
 
 		mysql_format(dbHandle, queryGlobal, sizeof(queryGlobal),
 		"UPDATE `banimentos` SET `ip` = NULL WHERE `ip` = '%e'", playerip);
